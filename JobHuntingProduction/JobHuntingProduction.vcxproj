@@ -98,11 +98,13 @@
     <ClCompile Include="camera\DebugCamera.cpp" />
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="FbxLoader\FbxLoader.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXTex\DirectXTex_Desktop_2017_Win10.vcxproj">
@@ -128,11 +130,13 @@
     <ClInclude Include="camera\DebugCamera.h" />
     <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="base\DirectXCommon.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="FbxLoader\FbxLoader.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="SafeDelete.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\FBXPS.hlsl">
