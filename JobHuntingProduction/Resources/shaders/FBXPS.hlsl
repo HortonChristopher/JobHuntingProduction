@@ -8,8 +8,7 @@ SamplerState smp : register(s0);
 
 struct PSOutput
 {
-	float4 target0 : SV_TARGET0;
-	float4 target1 : SV_TARGET1;
+	float4 target : SV_TARGET;
 };
 
 // Entry point
@@ -23,8 +22,7 @@ PSOutput main(VSOutput input) : SV_TARGET
 	float diffuse = saturate(dot(-light, input.normal));
 	float brightness = diffuse + 0.3f;
 	float4 shadecolor = float4(brightness, brightness, brightness, 1.0f);
-	output.target0 = shadecolor * texcolor;
-	output.target1 = float4(1 - (shadecolor * texcolor).rgb, 1);
+	output.target = shadecolor * texcolor;
 	// Combine the color of the shader color and texture
 	return output;
 }

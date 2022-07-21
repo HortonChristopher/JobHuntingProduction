@@ -1,6 +1,5 @@
 #include "PostEffect.h"
 #include "WinApp.h"
-#include "Input.h"
 
 #include <d3dx12.h>
 #include <d3dcompiler.h>
@@ -9,7 +8,7 @@
 using namespace DirectX;
 
 // Member change entity
-const float PostEffect::clearColor[4] = { 0.25f, 0.5f, 0.1f, 0.0f }; // RGBA
+const float PostEffect::clearColor[4] = { 0.0f, 0.0f, 1.0f, 0.0f }; // RGBA
 
 PostEffect::PostEffect() : Sprite(
 	100, // Texture number
@@ -45,10 +44,10 @@ void PostEffect::Initialize()
 	// Vertex Data
 	VertexPosUv vertices[vertNum] =
 	{
-		{{-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f}}, // Lower Left
-		{{-0.5f, +0.5f, 0.0f}, {0.0f, 0.0f}}, // Upper Left
-		{{+0.5f, -0.5f, 0.0f}, {1.0f, 1.0f}}, // Lower Right
-		{{+0.5f, +0.5f, 0.0f}, {1.0f, 0.0f}}, // Upper right
+		{{-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f}}, // Lower Left
+		{{-1.0f, +1.0f, 0.0f}, {0.0f, 0.0f}}, // Upper Left
+		{{+1.0f, -1.0f, 0.0f}, {1.0f, 1.0f}}, // Lower Right
+		{{+1.0f, +1.0f, 0.0f}, {1.0f, 0.0f}}, // Upper right
 	};
 
 	// Transfer data to the vertex buffer
@@ -83,43 +82,41 @@ void PostEffect::Initialize()
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
 
-	for (int i = 0; i < 2; i++)
-	{
-		// Texture Buffer generation
-		result = device->CreateCommittedResource(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
-			D3D12_HEAP_FLAG_NONE,
-			&texresDesc,
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-			&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor),
-			IID_PPV_ARGS(&texBuff[i]));
-		assert(SUCCEEDED(result));
+	// Texture Buffer generation
+	result = device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
+		D3D12_HEAP_FLAG_NONE,
+		&texresDesc,
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor),
+		IID_PPV_ARGS(&texBuff));
 
-		// Clear texture in red
+	assert(SUCCEEDED(result));
+
+	// Clear texture in red
 	//Number of pixels (1280 x 720 = 921600 pixels)
-		const UINT pixelCount = WinApp::window_width * WinApp::window_height;
+	const UINT pixelCount = WinApp::window_width * WinApp::window_height;
 
-		// Data size for one line of image
-		const UINT rowPitch = sizeof(UINT) * WinApp::window_width;
+	// Data size for one line of image
+	const UINT rowPitch = sizeof(UINT) * WinApp::window_width;
 
-		// Data size of the whole image
-		const UINT depthPitch = rowPitch * WinApp::window_height;
+	// Data size of the whole image
+	const UINT depthPitch = rowPitch * WinApp::window_height;
 
-		// Image
-		UINT* img = new UINT[pixelCount];
-		for (int j = 0; j < pixelCount; j++) { img[j] = 0xff0000ff; }
+	// Image
+	UINT* img = new UINT[pixelCount];
+	for (int i = 0; i < pixelCount; i++) { img[i] = 0xff0000ff; }
 
-		// Transfer data to texture buffer
-		result = texBuff[i]->WriteToSubresource(0, nullptr, img, rowPitch, depthPitch);
-		assert(SUCCEEDED(result));
-		delete[] img;
-	}
+	// Transfer data to texture buffer
+	result = texBuff->WriteToSubresource(0, nullptr, img, rowPitch, depthPitch);
+	assert(SUCCEEDED(result));
+	delete[] img;
 
 	// Descriptor heap setting for SRV
 	D3D12_DESCRIPTOR_HEAP_DESC srvDescHeapDesc = {};
 	srvDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvDescHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	srvDescHeapDesc.NumDescriptors = 2;
+	srvDescHeapDesc.NumDescriptors = 1;
 
 	// Generate descriptor heap for SRV
 	result = device->CreateDescriptorHeap(&srvDescHeapDesc, IID_PPV_ARGS(&descHeapSRV));
@@ -132,37 +129,26 @@ void PostEffect::Initialize()
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2D texture
 	srvDesc.Texture2D.MipLevels = 1;
 
-	for (int i = 0; i < 2; i++)
-	{
-		// Create SRV in descriptor heap
-		device->CreateShaderResourceView(texBuff[i].Get(), // Buffer associated with view
-			&srvDesc,
-			CD3DX12_CPU_DESCRIPTOR_HANDLE(
-				descHeapSRV->GetCPUDescriptorHandleForHeapStart(), i,
-				device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
-			)
-		);
-	}
+	// Create SRV in descriptor heap
+	device->CreateShaderResourceView(texBuff.Get(), // Buffer associated with view
+		&srvDesc,
+		descHeapSRV->GetCPUDescriptorHandleForHeapStart()
+	);
 
 	// Descriptor heap settings for RTV
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescHeapDesc{};
 	rtvDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvDescHeapDesc.NumDescriptors = 2;
+	rtvDescHeapDesc.NumDescriptors = 1;
 
 	// Generate descriptor heap for RTV
 	result = device->CreateDescriptorHeap(&rtvDescHeapDesc, IID_PPV_ARGS(&descHeapRTV));
 	assert(SUCCEEDED(result));
 
-	for (int i = 0; i < 2; i++)
-	{
-		// Create RTV as descriptor heap
-		device->CreateRenderTargetView(texBuff[i].Get(),
-			nullptr,
-			CD3DX12_CPU_DESCRIPTOR_HANDLE(
-				descHeapRTV->GetCPUDescriptorHandleForHeapStart(), i,
-				device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV))
-		);
-	}
+	// Create RTV as descriptor heap
+	device->CreateRenderTargetView(texBuff.Get(),
+		nullptr,
+		descHeapRTV->GetCPUDescriptorHandleForHeapStart()
+	);
 
 	// Depth buffer resource settings
 	CD3DX12_RESOURCE_DESC depthResDesc =
@@ -316,16 +302,13 @@ void PostEffect::CreateGraphicsPipelineState()
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
-	CD3DX12_DESCRIPTOR_RANGE descRangeSRV0;
-	descRangeSRV0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
-	CD3DX12_DESCRIPTOR_RANGE descRangeSRV1;
-	descRangeSRV1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); // t1 レジスタ
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
+	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[2];
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_POINT); // s0 レジスタ
@@ -351,51 +334,31 @@ void PostEffect::CreateGraphicsPipelineState()
 
 void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 {
-	for (int i = 0; i < 2; i++)
-	{
-		// Change resource barrier (shader resource->drawable)
-		cmdList->ResourceBarrier(1,
-			&CD3DX12_RESOURCE_BARRIER::Transition(texBuff[i].Get(),
-				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-				D3D12_RESOURCE_STATE_RENDER_TARGET));
-	}
+	// Change resource barrier (shader resource->drawable)
+	cmdList->ResourceBarrier(1,
+		&CD3DX12_RESOURCE_BARRIER::Transition(texBuff.Get(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	// Get handle of descriptor heap for render target view
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHs[2];
-	for (int i = 0; i < 2; i++)
-	{
-		rtvHs[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(
-			descHeapRTV->GetCPUDescriptorHandleForHeapStart(), i,
-			device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
-		);
-	}
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvH = descHeapRTV->GetCPUDescriptorHandleForHeapStart();
 
 	// Get handle of depth stencil view descriptor heap
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvH = descHeapDSV->GetCPUDescriptorHandleForHeapStart();
 
 	// Set render target
-	cmdList->OMSetRenderTargets(2, rtvHs, false, &dsvH);
-
-	CD3DX12_VIEWPORT viewports[2];
-	CD3DX12_RECT scissorRects[2];
-
-	for (int i = 0; i < 2; i++)
-	{
-		viewports[i] = CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::window_width, WinApp::window_height);
-		scissorRects[i] = CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height);
-	}
+	cmdList->OMSetRenderTargets(1, &rtvH, false, &dsvH);
 
 	// Viewport settings
-	cmdList->RSSetViewports(2, viewports);
+	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f,
+		WinApp::window_width, WinApp::window_height));
 
 	// Scissoring short form setting
-	cmdList->RSSetScissorRects(2, scissorRects);
+	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width,
+		WinApp::window_height));
 
-	for (int i = 0; i < 2; i++)
-	{
-		// Clear full screen
-		cmdList->ClearRenderTargetView(rtvHs[i], clearColor, 0, nullptr);
-	}
+	// Clear full screen
+	cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
 
 	// Clear depth buffer
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0,
@@ -439,29 +402,14 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->SetGraphicsRootConstantBufferView(0, this->constBuff->GetGPUVirtualAddress());
 	// Set shader resource view
 	//cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
-	//cmdList->SetGraphicsRootDescriptorTable(1, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
-	cmdList->SetGraphicsRootDescriptorTable(1,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 0,
-			device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
-		)
-	);
-	cmdList->SetGraphicsRootDescriptorTable(2,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 1,
-			device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
-		)
-	);
+	cmdList->SetGraphicsRootDescriptorTable(1, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
 	// Drawing command
 	cmdList->DrawInstanced(4, 1, 0, 0);
 }
 
 void PostEffect::PostDrawScene(ID3D12GraphicsCommandList* cmdList)
 {
-	for (int i = 0; i < 2; i++)
-	{
-		// Change resource barrier (Drawable->Shader resource)
-		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texBuff[i].Get(),
-			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
-	}
+	// Change resource barrier (Drawable->Shader resource)
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texBuff.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 }

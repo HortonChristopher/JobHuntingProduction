@@ -10,7 +10,7 @@
 #include "Audio.h"
 #include "DebugCamera.h"
 #include "LightGroup.h"
-#include "Object3d.h"
+#include "FBXGeneration.h"
 
 #include <vector>
 
@@ -75,6 +75,15 @@ private: // メンバ変数
 	LightGroup* lightGroup = nullptr;
 
 	Model* model1 = nullptr;
-	Object3d* object1 = nullptr;
+	Object3D* object1 = nullptr;
+
+	Model* model2 = nullptr;
+	Object3D* object2 = nullptr;
+	Object3D* object3 = nullptr;
+	Object3D* object4 = nullptr;
+	Object3D* object5 = nullptr;
+	Object3D* object6 = nullptr;
+
+	float movement = 1.0f;
 };
 

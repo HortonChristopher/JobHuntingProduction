@@ -1,5 +1,5 @@
 ﻿#include "GameScene.h"
-#include "Object3d.h"
+#include "FBXGeneration.h"
 #include "FbxLoader/FbxLoader.h"
 
 #include <cassert>
@@ -7,6 +7,9 @@
 #include <iomanip>
 
 using namespace DirectX;
+
+extern XMFLOAT3 objectPosition = { 0, -10, 0 };
+extern XMFLOAT3 objectRotation = { 0, 0, 0 };
 
 GameScene::GameScene()
 {
@@ -35,9 +38,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
 	// Device set
-	Object3d::SetDevice(dxCommon->GetDevice());
+	Object3D::SetDevice(dxCommon->GetDevice());
 	// Camera set
-	Object3d::SetCamera(camera);
+	Object3D::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -60,13 +63,32 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	particleMan->SetCamera(camera);
 
 	// Specify the FBX model and read the file
-	//FbxLoader::GetInstance()->LoadModelFromFile("cube");
-	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("cube");
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRunning");
+	model2 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStanding");
 
-	object1 = new Object3d;
+	object1 = new Object3D;
 	object1->Initialize();
 	object1->SetModel(model1);
+
+	object2 = new Object3D;
+	object2->Initialize();
+	object2->SetModel(model2);
+
+	object3 = new Object3D;
+	object3->Initialize();
+	object3->SetModel(model2);
+
+	object4 = new Object3D;
+	object4->Initialize();
+	object4->SetModel(model2);
+
+	object5 = new Object3D;
+	object5->Initialize();
+	object5->SetModel(model2);
+
+	object6 = new Object3D;
+	object6->Initialize();
+	object6->SetModel(model2);
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -77,9 +99,26 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// カメラ注視点をセット
 	//camera->SetTarget({0, 20, 0});
 	//camera->SetDistance(100.0f);
-	camera->SetTarget({0, 2.5f, 0});
-	camera->SetDistance(8.0f);
-	object1->SetRotation({ 0, 90, 0 });
+	camera->SetTarget({0, 0.0f, 0});
+	camera->SetUp({ 0,1,0 });
+	camera->SetDistance(32.0f);
+
+	object1->SetPosition(objectPosition);
+	object1->SetRotation(objectRotation);
+	object6->SetPosition(objectPosition);
+	object6->SetRotation(objectRotation);
+
+	object2->SetPosition({ 0, -10, 100 });
+	object2->SetRotation({ 0, 180, 0 });
+
+	object3->SetPosition({ 100, -10, 0 });
+	object3->SetRotation({ 0, 90, 0 });
+
+	object4->SetPosition({ 0, -10, -100 });
+	object4->SetRotation({ 0, 0, 0 });
+	
+	object5->SetPosition({ -100, -10, 0 });
+	object5->SetRotation({ 0, 270, 0 });
 }
 
 void GameScene::Update()
@@ -88,7 +127,55 @@ void GameScene::Update()
 	camera->Update();
 	particleMan->Update();
 
+	// A,Dで旋回
+	/*if (input->PushKey(DIK_A)) {
+		objectRotation.y -= 2.0f;
+	}
+	else if (input->PushKey(DIK_D)) {
+		objectRotation.y += 2.0f;
+	}*/
+
+	// 移動ベクトルをY軸周りの角度で回転
+	XMVECTOR move = { 0,0,1.0f,0 };
+	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(objectRotation.y));
+	move = XMVector3TransformNormal(move, matRot);
+
+	// 向いている方向に移動
+	if (input->PushKey(DIK_S)) {
+		objectPosition.x -= move.m128_f32[0];
+		objectPosition.y -= move.m128_f32[1];
+		objectPosition.z -= move.m128_f32[2];
+	}
+	else if (input->PushKey(DIK_W)) {
+		objectPosition.x += move.m128_f32[0];
+		objectPosition.y += move.m128_f32[1];
+		objectPosition.z += move.m128_f32[2];
+	}
+
+	object1->SetPosition(objectPosition);
+	object1->SetRotation(objectRotation);
+	object6->SetPosition(objectPosition);
+	object6->SetRotation(objectRotation);
+
 	object1->Update();
+	object2->Update();
+	object3->Update();
+	object4->Update();
+	object5->Update();
+	object6->Update();
+
+	//Debug Start
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+
+	//sprintf_s(msgbuf, 256, "B: %d\n", objectRotation.y);
+	//sprintf_s(msgbuf2, 256, "LB: %d\n", why3);
+	//sprintf_s(msgbuf3, 256, "RB: %d\n", why4);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 }
 
 void GameScene::Draw()
@@ -115,7 +202,18 @@ void GameScene::Draw()
 #pragma region 3D描画
 
 	// 3D Object Drawing
-	object1->Draw(cmdList);
+	if (input->PushKey(DIK_W) || input->PushKey(DIK_S))
+	{
+		object1->Draw(cmdList);
+	}
+	else
+	{
+		object6->Draw(cmdList);
+	}
+	object2->Draw(cmdList);
+	object3->Draw(cmdList);
+	object4->Draw(cmdList);
+	object5->Draw(cmdList);
 
 	// パーティクルの描画
 	particleMan->Draw(cmdList);

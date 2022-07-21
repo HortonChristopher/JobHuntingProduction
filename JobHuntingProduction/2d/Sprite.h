@@ -10,9 +10,11 @@
 /// </summary>
 class Sprite
 {
-private: // エイリアス
+public:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+private: // エイリアス
+	
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;

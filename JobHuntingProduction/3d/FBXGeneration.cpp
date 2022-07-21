@@ -1,4 +1,4 @@
-#include "Object3d.h"
+#include "FBXGeneration.h"
 #include "FbxLoader/FbxLoader.h"
 
 #include <d3dcompiler.h>
@@ -10,13 +10,13 @@ using namespace DirectX;
 ///<summary>
 /// Static Member Variable Entity
 ///</summary>
-ID3D12Device* Object3d::device = nullptr;
-Camera* Object3d::camera = nullptr;
+ID3D12Device* Object3D::device = nullptr;
+Camera* Object3D::camera = nullptr;
 
-ComPtr<ID3D12RootSignature> Object3d::rootsignature;
-ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
+ComPtr<ID3D12RootSignature> Object3D::rootsignature;
+ComPtr<ID3D12PipelineState> Object3D::pipelinestate;
 
-void Object3d::Initialize()
+void Object3D::Initialize()
 {
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -47,13 +47,13 @@ void Object3d::Initialize()
 	constBuffSkin->Unmap(0, nullptr);
 
 	// Create graphics pipeline
-	Object3d::CreateGraphicsPipeline();
+	Object3D::CreateGraphicsPipeline();
 
 	// Set time for 1 frame at 60fps
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 }
 
-void Object3d::Update()
+void Object3D::Update()
 {
 	XMMATRIX matScale, matRot, matTrans;
 
@@ -131,7 +131,7 @@ void Object3d::Update()
 	constBuffSkin->Unmap(0, nullptr);
 }
 
-void Object3d::CreateGraphicsPipeline()
+void Object3D::CreateGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // Vertex shader object
@@ -243,7 +243,6 @@ void Object3d::CreateGraphicsPipeline()
 
 	// Blend state setting
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	gpipeline.BlendState.RenderTarget[1] = blenddesc;
 
 	// Depth buffer format
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
@@ -255,9 +254,8 @@ void Object3d::CreateGraphicsPipeline()
 	// Shape setting (triangle)
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
-	gpipeline.NumRenderTargets = 2;    // Two drawing targets
+	gpipeline.NumRenderTargets = 1;    // Two drawing targets
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // RGBA specified from 0 to 255
-	gpipeline.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM; // RGBA specified from 0 to 255
 	gpipeline.SampleDesc.Count = 1; // Sampling once per pixel
 
 	// Descriptor range
@@ -295,7 +293,7 @@ void Object3d::CreateGraphicsPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
-void Object3d::Draw(ID3D12GraphicsCommandList* cmdList)
+void Object3D::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	// Return if no model
 	if (model == nullptr)
@@ -322,7 +320,7 @@ void Object3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	model->Draw(cmdList);
 }
 
-void Object3d::PlayAnimation()
+void Object3D::PlayAnimation()
 {
 	FbxScene* fbxScene = model->GetFbxScene();
 

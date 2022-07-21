@@ -143,6 +143,17 @@ bool Input::PushMouseMiddle()
 	return false;
 }
 
+bool Input::PushMouseRight()
+{
+	// 0でなければ押している
+	if (mouseState.rgbButtons[1]) {
+		return true;
+	}
+
+	// 押していない
+	return false;
+}
+
 bool Input::TriggerMouseLeft()
 {
 	// 前回が0で、今回が0でなければトリガー

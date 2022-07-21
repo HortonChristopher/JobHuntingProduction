@@ -1,7 +1,12 @@
 ﻿#include "DebugCamera.h"
 #include <cassert>
+#include <sstream>
+#include <iomanip>
 
 using namespace DirectX;
+
+extern XMFLOAT3 objectPosition;
+extern XMFLOAT3 objectRotation;
 
 DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 	: Camera(window_width, window_height)
@@ -9,7 +14,7 @@ DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 	assert(input);
 
 	this->input = input;
-	// 画面サイズに対する相対的なスケールに調整
+	// Adjust to scale relative to screen size
 	scaleX = 1.0f / (float)window_width;
 	scaleY = 1.0f / (float)window_height;
 }
@@ -20,21 +25,23 @@ void DebugCamera::Update()
 	float angleX = 0;
 	float angleY = 0;
 
-	// マウスの入力を取得
+	// Get mouse input
 	Input::MouseMove mouseMove = input->GetMouseMove();
 
-	// マウスの左ボタンが押されていたらカメラを回転させる
-	if (input->PushMouseLeft())
+	// Rotate the camera if the left mouse button is pressed
+	if (input->PushMouseRight())
 	{
 		float dy = mouseMove.lX * scaleY;
-		float dx = mouseMove.lY * scaleX;
+		//float dx = mouseMove.lY * scaleX;
 
-		angleX = -dx * XM_PI;
-		angleY = -dy * XM_PI;
+		//angleX = dx * XM_PI;
+		angleY = dy * XM_PI;
+		objectRotation.y -= angleY * 57.3f;
+
 		dirty = true;
 	}
 
-	// マウスの中ボタンが押されていたらカメラを並行移動させる
+	// Translate the camera if the middle mouse button is pressed
 	if (input->PushMouseMiddle())
 	{
 		float dx = mouseMove.lX / 100.0f;
@@ -47,7 +54,45 @@ void DebugCamera::Update()
 		dirty = true;
 	}
 
-	// ホイール入力で距離を変更
+	if (input->PushKey(DIK_W))
+	{
+		float dz = 1.0f;
+
+		XMVECTOR move = { 0, 0, +dz };
+		move = XMVector3Transform(move, matRot);
+
+		MoveVector(move);
+		dirty = true;
+	}
+
+	if (input->PushKey(DIK_S))
+	{
+		float dz = 1.0f;
+
+		XMVECTOR move = { 0, 0, -dz };
+		move = XMVector3Transform(move, matRot);
+
+		MoveVector(move);
+		dirty = true;
+	}
+
+	if (input->PushKey(DIK_A))
+	{
+		float dy = 2.0f;
+
+		angleY = dy * XM_PI;
+		dirty = true;
+	}
+
+	if (input->PushKey(DIK_D))
+	{
+		float dy = 2.0f;
+
+		angleY = -dy * XM_PI;
+		dirty = true;
+	}
+
+	// Change the distance with wheel input
 	if (mouseMove.lZ != 0) {
 		distance -= mouseMove.lZ / 100.0f;
 		distance = max(distance, 1.0f);
@@ -75,7 +120,7 @@ void DebugCamera::Update()
 		// 注視点からずらした位置に視点座標を決定
 		const XMFLOAT3& target = GetTarget();
 		SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1], target.z + vTargetEye.m128_f32[2] });
-		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });		
+		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });
 	}
 
 	Camera::Update();

@@ -60,7 +60,7 @@
     <ClCompile Include="3d\Model.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="3d\Object3d.cpp">
+    <ClCompile Include="3d\FBXGeneration.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="2d\PostEffect.cpp">
@@ -74,9 +74,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SafeDelete.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="3d\ParticleManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -128,7 +125,7 @@
     <ClInclude Include="3d\Model.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="3d\Object3d.h">
+    <ClInclude Include="3d\FBXGeneration.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="2d\PostEffect.h">
@@ -138,6 +135,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Easing.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\CG4\CG4_Start\DirectXGame\base\SafeDelete.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

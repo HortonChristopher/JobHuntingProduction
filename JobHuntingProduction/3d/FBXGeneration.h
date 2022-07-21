@@ -10,7 +10,7 @@
 #include <DirectXMath.h>
 #include <string>
 
-class Object3d
+class Object3D
 {
 protected: // Alias
 	// using Microsoft::WRL
@@ -85,8 +85,8 @@ protected:
 
 public:
 	// setter
-	static void SetDevice(ID3D12Device* device) { Object3d::device = device; }
-	static void SetCamera(Camera* camera) { Object3d::camera = camera; }
+	static void SetDevice(ID3D12Device* device) { Object3D::device = device; }
+	static void SetCamera(Camera* camera) { Object3D::camera = camera; }
 
 	// Root signature
 	static ComPtr<ID3D12RootSignature> rootsignature;

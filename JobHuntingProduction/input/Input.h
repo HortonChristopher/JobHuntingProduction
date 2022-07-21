@@ -63,6 +63,8 @@ public: // メンバ関数
 	/// <returns>押されているか</returns>
 	bool PushMouseMiddle();
 
+	bool PushMouseRight();
+
 	/// <summary>
 	/// キーの左ボタントリガーをチェック
 	/// </summary>
