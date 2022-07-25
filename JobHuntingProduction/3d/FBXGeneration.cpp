@@ -10,13 +10,13 @@ using namespace DirectX;
 ///<summary>
 /// Static Member Variable Entity
 ///</summary>
-ID3D12Device* Object3D::device = nullptr;
-Camera* Object3D::camera = nullptr;
+ID3D12Device* FBXGeneration::device = nullptr;
+Camera* FBXGeneration::camera = nullptr;
 
-ComPtr<ID3D12RootSignature> Object3D::rootsignature;
-ComPtr<ID3D12PipelineState> Object3D::pipelinestate;
+ComPtr<ID3D12RootSignature> FBXGeneration::rootsignature;
+ComPtr<ID3D12PipelineState> FBXGeneration::pipelinestate;
 
-void Object3D::Initialize()
+void FBXGeneration::Initialize()
 {
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -47,13 +47,13 @@ void Object3D::Initialize()
 	constBuffSkin->Unmap(0, nullptr);
 
 	// Create graphics pipeline
-	Object3D::CreateGraphicsPipeline();
+	FBXGeneration::CreateGraphicsPipeline();
 
 	// Set time for 1 frame at 60fps
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 }
 
-void Object3D::Update()
+void FBXGeneration::Update()
 {
 	XMMATRIX matScale, matRot, matTrans;
 
@@ -131,7 +131,7 @@ void Object3D::Update()
 	constBuffSkin->Unmap(0, nullptr);
 }
 
-void Object3D::CreateGraphicsPipeline()
+void FBXGeneration::CreateGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // Vertex shader object
@@ -293,7 +293,7 @@ void Object3D::CreateGraphicsPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
-void Object3D::Draw(ID3D12GraphicsCommandList* cmdList)
+void FBXGeneration::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	// Return if no model
 	if (model == nullptr)
@@ -320,7 +320,7 @@ void Object3D::Draw(ID3D12GraphicsCommandList* cmdList)
 	model->Draw(cmdList);
 }
 
-void Object3D::PlayAnimation()
+void FBXGeneration::PlayAnimation()
 {
 	FbxScene* fbxScene = model->GetFbxScene();
 

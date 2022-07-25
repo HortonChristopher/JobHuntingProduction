@@ -76,21 +76,21 @@ void DebugCamera::Update()
 		dirty = true;
 	}
 
-	if (input->PushKey(DIK_A))
-	{
-		float dy = 2.0f;
+	//if (input->PushKey(DIK_A))
+	//{
+	//	float dy = 2.0f;
 
-		angleY = dy * XM_PI;
-		dirty = true;
-	}
+	//	angleY = dy * XM_PI;
+	//	dirty = true;
+	//}
 
-	if (input->PushKey(DIK_D))
-	{
-		float dy = 2.0f;
+	//if (input->PushKey(DIK_D))
+	//{
+	//	float dy = 2.0f;
 
-		angleY = -dy * XM_PI;
-		dirty = true;
-	}
+	//	angleY = -dy * XM_PI;
+	//	dirty = true;
+	//}
 
 	// Change the distance with wheel input
 	if (mouseMove.lZ != 0) {

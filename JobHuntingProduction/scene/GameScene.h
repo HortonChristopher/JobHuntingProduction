@@ -75,14 +75,14 @@ private: // メンバ変数
 	LightGroup* lightGroup = nullptr;
 
 	Model* model1 = nullptr;
-	Object3D* object1 = nullptr;
+	FBXGeneration* object1 = nullptr;
 
 	Model* model2 = nullptr;
-	Object3D* object2 = nullptr;
-	Object3D* object3 = nullptr;
-	Object3D* object4 = nullptr;
-	Object3D* object5 = nullptr;
-	Object3D* object6 = nullptr;
+	FBXGeneration* object2 = nullptr;
+	FBXGeneration* object3 = nullptr;
+	FBXGeneration* object4 = nullptr;
+	FBXGeneration* object5 = nullptr;
+	FBXGeneration* object6 = nullptr;
 
 	float movement = 1.0f;
 };

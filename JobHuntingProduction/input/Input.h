@@ -77,6 +77,8 @@ public: // メンバ関数
 	/// <returns>トリガーか</returns>
 	bool TriggerMouseMiddle();
 
+	bool TriggerMouseRight();
+
 	/// <summary>
 	/// マウス移動量を取得
 	/// </summary>

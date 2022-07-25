@@ -38,9 +38,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
 	// Device set
-	Object3D::SetDevice(dxCommon->GetDevice());
+	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	// Camera set
-	Object3D::SetCamera(camera);
+	FBXGeneration::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -66,27 +66,27 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRunning");
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStanding");
 
-	object1 = new Object3D;
+	object1 = new FBXGeneration;
 	object1->Initialize();
 	object1->SetModel(model1);
 
-	object2 = new Object3D;
+	object2 = new FBXGeneration;
 	object2->Initialize();
 	object2->SetModel(model2);
 
-	object3 = new Object3D;
+	object3 = new FBXGeneration;
 	object3->Initialize();
 	object3->SetModel(model2);
 
-	object4 = new Object3D;
+	object4 = new FBXGeneration;
 	object4->Initialize();
 	object4->SetModel(model2);
 
-	object5 = new Object3D;
+	object5 = new FBXGeneration;
 	object5->Initialize();
 	object5->SetModel(model2);
 
-	object6 = new Object3D;
+	object6 = new FBXGeneration;
 	object6->Initialize();
 	object6->SetModel(model2);
 

@@ -10,7 +10,7 @@
 #include <DirectXMath.h>
 #include <string>
 
-class Object3D
+class FBXGeneration
 {
 protected: // Alias
 	// using Microsoft::WRL
@@ -85,8 +85,8 @@ protected:
 
 public:
 	// setter
-	static void SetDevice(ID3D12Device* device) { Object3D::device = device; }
-	static void SetCamera(Camera* camera) { Object3D::camera = camera; }
+	static void SetDevice(ID3D12Device* device) { FBXGeneration::device = device; }
+	static void SetCamera(Camera* camera) { FBXGeneration::camera = camera; }
 
 	// Root signature
 	static ComPtr<ID3D12RootSignature> rootsignature;

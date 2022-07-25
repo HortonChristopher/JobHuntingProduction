@@ -10,6 +10,23 @@
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 {
+#ifdef _Debug
+	ID3D12Debug1* debugController;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		debugController->EnableDebugLayer();
+		debugController->SetEnableGPUBasedValidation(TRUE);
+	}
+#endif
+
+#ifdef _Debug
+	ID3D12InfoQueue* infoQueue;
+	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->Release();
+	}
+#endif
+
 	// 汎用機能
 	WinApp* win = nullptr;
 	DirectXCommon* dxCommon = nullptr;
