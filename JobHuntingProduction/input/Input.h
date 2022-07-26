@@ -2,9 +2,14 @@
 
 #include <Windows.h>
 #include <wrl.h>
-
+#include <array>
 #define DIRECTINPUT_VERSION     0x0800          // DirectInputのバージョン指定
 #include <dinput.h>
+#include <DirectXMath.h>
+#include <Xinput.h>
+
+#pragma comment(lib, "xinput.lib")
+//https://docs.microsoft.com/en-us/windows/win32/api/xinput/ns-xinput-xinput_gamepad
 
 /// <summary>
 /// 入力
@@ -12,6 +17,12 @@
 class Input
 {
 public:
+	struct float2
+	{
+		float x;
+		float y;
+	};
+
 	struct MouseMove {
 		LONG    lX;
 		LONG    lY;
@@ -85,6 +96,50 @@ public: // メンバ関数
 	/// <returns>マウス移動量</returns>
 	MouseMove GetMouseMove();
 
+#pragma region Controller
+	// GamePad/Controller
+	bool PushControllerButton(int button);
+	bool TriggerControllerButton(int button);
+	bool UpControllerButton(int button);
+
+	// Triggers
+	bool PushRightTrigger();
+	bool PushLeftTrigger();
+	bool TriggerRightTrigger();
+	bool TriggerLeftTrigger();
+
+	// Right Stick
+	bool PushRStickRight();
+	bool PushRStickLeft();
+	bool PushRStickUp();
+	bool PushRStickDown();
+	bool TriggerRStickRight();
+	bool TriggerRStickLeft();
+	bool TriggerRStickUp();
+	bool TriggerRStickDown();
+
+	// Left Stick
+	bool PushLStickRight();
+	bool PushLStickLeft();
+	bool PushLStickUp();
+	bool PushLStickDown();
+	bool TriggerLStickRight();
+	bool TriggerLStickLeft();
+	bool TriggerLStickUp();
+	bool TriggerLStickDown();
+
+	float2 GetLStickDirection();
+	float2 GetRStickDirection();
+
+	// Controller Vibration
+	void LeftVibration(unsigned int power, int setTime);
+	void RightVibration(unsigned int power, int setTime);
+	void Vibration(unsigned int power, int setTime);
+
+	// If any button is pressed, return true
+	int CheckControllerButton();
+#pragma endregion
+
 private: // メンバ関数
 	Input() = default;
 	Input(const Input&) = delete;
@@ -93,11 +148,23 @@ private: // メンバ関数
 
 private: // メンバ変数
 	ComPtr<IDirectInput8> dinput;
+	ComPtr<IDirectInputDevice8> devController;
 	ComPtr<IDirectInputDevice8> devKeyboard;
 	BYTE key[256] = {};
 	BYTE keyPre[256] = {};
 	ComPtr<IDirectInputDevice8> devMouse;
 	DIMOUSESTATE2 mouseState = {};
 	DIMOUSESTATE2 mouseStatePre = {};
+	int num = 0; // Controller initialization
+	int controller_LStickX = 0;
+	int controller_LStickY = 0;
+	int controller_RStickX = 0;
+	int controller_RStickY = 0;
+	XINPUT_STATE controllerState = {};
+	XINPUT_STATE prevControllerState = {};
+	XINPUT_VIBRATION controllerVibration = {};
+	int time = 0;
+	int screenW = 0;
+	int screenH = 0;
 };
 

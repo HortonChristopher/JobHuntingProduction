@@ -6,6 +6,7 @@
 #include "ParticleManager.h"
 #include "FbxLoader/FbxLoader.h"
 #include "2d/PostEffect.h"
+#include "input/Input.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
@@ -15,15 +16,6 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
 		debugController->EnableDebugLayer();
 		debugController->SetEnableGPUBasedValidation(TRUE);
-	}
-#endif
-
-#ifdef _Debug
-	ID3D12InfoQueue* infoQueue;
-	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		infoQueue->Release();
 	}
 #endif
 
@@ -42,6 +34,15 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	//DirectX初期化処理
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(win);
+
+#ifdef _Debug
+	ID3D12InfoQueue* infoQueue;
+	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->Release();
+	}
+#endif
 
 #pragma region 汎用機能初期化
 	// 入力の初期化

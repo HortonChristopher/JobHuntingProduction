@@ -27,8 +27,9 @@ void DebugCamera::Update()
 
 	// Get mouse input
 	Input::MouseMove mouseMove = input->GetMouseMove();
+	Input::float2 stickMove = input->GetRStickDirection();
 
-	// Rotate the camera if the left mouse button is pressed
+	// Rotate the camera if the right mouse button is pressed
 	if (input->PushMouseRight())
 	{
 		float dy = mouseMove.lX * scaleY;
@@ -54,7 +55,7 @@ void DebugCamera::Update()
 		dirty = true;
 	}
 
-	if (input->PushKey(DIK_W))
+	if (input->PushKey(DIK_W) || input->PushLStickUp())
 	{
 		float dz = 1.0f;
 
@@ -65,7 +66,7 @@ void DebugCamera::Update()
 		dirty = true;
 	}
 
-	if (input->PushKey(DIK_S))
+	if (input->PushKey(DIK_S) || input->PushLStickDown())
 	{
 		float dz = 1.0f;
 
