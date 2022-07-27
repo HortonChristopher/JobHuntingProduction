@@ -60,6 +60,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -77,6 +79,9 @@ private: // メンバ変数
 
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
+	Object3d* objAttackRange = nullptr;
+
+	Model* modelAttackRange = nullptr;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
@@ -92,6 +97,10 @@ private: // メンバ変数
 	FBXGeneration* object6 = nullptr;
 
 	FBX3DModel* model3 = nullptr;
+	FBXGeneration* object7 = nullptr;
+
+	bool attacking = false;
+	int attackTime = 0;
 
 	float movement = 1.0f;
 };

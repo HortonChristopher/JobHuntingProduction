@@ -39,7 +39,7 @@ void DebugCamera::Update()
 			dy = mouseMove.lX * scaleY;
 			//float dx = mouseMove.lY * scaleX;
 		}
-		else if (input->PushRStickLeft() || input->PushRStickRight())
+		if (input->PushRStickLeft() || input->PushRStickRight())
 		{
 			dy = stickMove.x * -scaleY;
 		}
