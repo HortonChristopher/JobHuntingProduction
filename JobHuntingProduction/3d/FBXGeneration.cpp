@@ -94,7 +94,7 @@ void FBXGeneration::Update()
 	}
 
 	// Bone array
-	std::vector<Model::Bone>& bones = model->GetBones();
+	std::vector<FBX3DModel::Bone>& bones = model->GetBones();
 
 	if (isPlay == false)
 	{

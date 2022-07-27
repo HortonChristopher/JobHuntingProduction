@@ -131,7 +131,9 @@ public: // メンバ関数
 	float2 GetLStickDirection();
 	float2 GetRStickDirection();
 
-	// Controller Vibration
+	// Controller Vibration (Motor power is set between 0 and 65535)
+	// Left motor is low-frequency rumble motor. Right motor is high-frequency rumble motor
+	// The two motors are not the same. they create different vibration effects
 	void LeftVibration(unsigned int power, int setTime);
 	void RightVibration(unsigned int power, int setTime);
 	void Vibration(unsigned int power, int setTime);

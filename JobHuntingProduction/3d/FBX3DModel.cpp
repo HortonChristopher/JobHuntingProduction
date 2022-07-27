@@ -1,12 +1,12 @@
-#include "Model.h"
+#include "FBX3DModel.h"
 
-Model::~Model()
+FBX3DModel::~FBX3DModel()
 {
 	// Release FBX scene
 	fbxScene->Destroy();
 }
 
-void Model::CreateBuffers(ID3D12Device* device)
+void FBX3DModel::CreateBuffers(ID3D12Device* device)
 {
 	HRESULT result;
 
@@ -115,7 +115,7 @@ void Model::CreateBuffers(ID3D12Device* device)
 	);
 }
 
-void Model::Draw(ID3D12GraphicsCommandList* cmdList)
+void FBX3DModel::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	// Set vertex buffer (VBV)
 	cmdList->IASetVertexBuffers(0, 1, &vbView);

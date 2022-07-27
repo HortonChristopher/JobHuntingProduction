@@ -38,4 +38,3 @@ private:
 	// 回転行列
 	XMMATRIX matRot = DirectX::XMMatrixIdentity();
 };
-

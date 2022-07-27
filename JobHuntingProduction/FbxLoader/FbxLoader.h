@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "fbxsdk.h"
-#include "Model.h"
+#include "FBX3DModel.h"
 
 #include <d3d12.h>
 #include <d3dx12.h>
@@ -50,36 +50,36 @@ public:
 	/// </summary>
 	/// <param name="modelName">Model Name</param>
 	//void LoadModelFromFile(const string& modelName);
-	Model* LoadModelFromFile(const string& modelName);
+	FBX3DModel* LoadModelFromFile(const string& modelName);
 
 	/// <summary>
 	/// Recursively analyze node configuration
 	/// </summary>
 	/// <param name="model">Import destination model object</param>
 	/// <param name="fbxNode">Nodes to be analyzed</param>
-	void ParseNodeRecursive(Model* model, FbxNode* fbxNode, Node* parent = nullptr);
+	void ParseNodeRecursive(FBX3DModel* model, FbxNode* fbxNode, Node* parent = nullptr);
 
 	/// <summary>
 	/// Reading of mesh
 	/// </summary>
 	/// <param name="model">Imported Model Object</param>
 	/// <param name="fbxNode">Node to be analyzed</param>
-	void ParseMesh(Model* model, FbxNode* fbxNode);
+	void ParseMesh(FBX3DModel* model, FbxNode* fbxNode);
 
 	// Vertex coordinate reading
-	void ParseMeshVertices(Model* model, FbxMesh* fbxMesh);
+	void ParseMeshVertices(FBX3DModel* model, FbxMesh* fbxMesh);
 
 	// Surface information reading
-	void ParseMeshFaces(Model* model, FbxMesh* fbxMesh);
+	void ParseMeshFaces(FBX3DModel* model, FbxMesh* fbxMesh);
 
 	// Material reading
-	void ParseMaterial(Model* model, FbxNode* fbxNode);
+	void ParseMaterial(FBX3DModel* model, FbxNode* fbxNode);
 
 	// Read Skinning Information
-	void ParseSkin(Model* model, FbxMesh* fbxMesh);
+	void ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh);
 
 	// Texture reading
-	void LoadTexture(Model* model, const std::string& fullpath);
+	void LoadTexture(FBX3DModel* model, const std::string& fullpath);
 
 	std::string ExtractFileName(const std::string& path);
 

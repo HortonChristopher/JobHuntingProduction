@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Model.h"
+#include "FBX3DModel.h"
 #include "Camera.h"
 
 #include <Windows.h>
@@ -65,7 +65,7 @@ public:
 	/// <summary>
 	/// Setting model
 	/// </summary>
-	void SetModel(Model* model) { this->model = model; }
+	void SetModel(FBX3DModel* model) { this->model = model; }
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
@@ -113,7 +113,7 @@ protected:
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model
-	Model* model = nullptr;
+	FBX3DModel* model = nullptr;
 
 	// 1 frame time
 	FbxTime frameTime;

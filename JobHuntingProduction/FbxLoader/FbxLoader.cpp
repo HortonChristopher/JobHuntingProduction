@@ -57,7 +57,7 @@ void FbxLoader::Finalize()
     fbxManager->Destroy();
 }
 
-Model* FbxLoader::LoadModelFromFile(const string& modelName)
+FBX3DModel* FbxLoader::LoadModelFromFile(const string& modelName)
 {
     // Continue from the folder with same name as the model
     const string directoryPath = baseDirectory + modelName + "/";
@@ -81,7 +81,7 @@ Model* FbxLoader::LoadModelFromFile(const string& modelName)
     fbxImporter->Import(fbxScene);
 
     // Model Generation
-    Model* model = new Model();
+    FBX3DModel* model = new FBX3DModel();
     model->name = modelName;
 
     // Get number of nodes
@@ -103,7 +103,7 @@ Model* FbxLoader::LoadModelFromFile(const string& modelName)
     return model;
 }
 
-void FbxLoader::ParseNodeRecursive(Model* model, FbxNode* fbxNode, Node* parent)
+void FbxLoader::ParseNodeRecursive(FBX3DModel* model, FbxNode* fbxNode, Node* parent)
 {
     // Add node ot model
     model->nodes.emplace_back();
@@ -168,7 +168,7 @@ void FbxLoader::ParseNodeRecursive(Model* model, FbxNode* fbxNode, Node* parent)
     }
 }
 
-void FbxLoader::ParseMesh(Model* model, FbxNode* fbxNode)
+void FbxLoader::ParseMesh(FBX3DModel* model, FbxNode* fbxNode)
 {
     // Get mesh of node
     FbxMesh* fbxMesh = fbxNode->GetMesh();
@@ -186,7 +186,7 @@ void FbxLoader::ParseMesh(Model* model, FbxNode* fbxNode)
     ParseSkin(model, fbxMesh);
 }
 
-void FbxLoader::ParseMeshVertices(Model* model, FbxMesh* fbxMesh)
+void FbxLoader::ParseMeshVertices(FBX3DModel* model, FbxMesh* fbxMesh)
 {
     auto& vertices = model->vertices;
 
@@ -194,7 +194,7 @@ void FbxLoader::ParseMeshVertices(Model* model, FbxMesh* fbxMesh)
     const int controlPointsCount = fbxMesh->GetControlPointsCount();
 
     // Secure as many vertex data arrays as needed
-    Model::VertexPosNormalUvSkin vert{};
+    FBX3DModel::VertexPosNormalUvSkin vert{};
     model->vertices.resize(controlPointsCount, vert);
 
     // Get the vertex coordinate array of FBX mesh
@@ -203,7 +203,7 @@ void FbxLoader::ParseMeshVertices(Model* model, FbxMesh* fbxMesh)
     // Copy all vertex coordinates of FBX mesh to the array in the model
     for (int i = 0; i < controlPointsCount; i++)
     {
-        Model::VertexPosNormalUvSkin& vertex = vertices[i];
+        FBX3DModel::VertexPosNormalUvSkin& vertex = vertices[i];
         
         // Copy of coordinates
         vertex.pos.x = (float)pCoord[i][0];
@@ -212,7 +212,7 @@ void FbxLoader::ParseMeshVertices(Model* model, FbxMesh* fbxMesh)
     }
 }
 
-void FbxLoader::ParseMeshFaces(Model* model, FbxMesh* fbxMesh)
+void FbxLoader::ParseMeshFaces(FBX3DModel* model, FbxMesh* fbxMesh)
 {
     auto& vertices = model->vertices;
     auto& indices = model->indices;
@@ -245,7 +245,7 @@ void FbxLoader::ParseMeshFaces(Model* model, FbxMesh* fbxMesh)
             assert(index >= 0);
 
             // Read vertex normals
-            Model::VertexPosNormalUvSkin& vertex = vertices[index];
+            FBX3DModel::VertexPosNormalUvSkin& vertex = vertices[index];
             FbxVector4 normal;
             if (fbxMesh->GetPolygonVertexNormal(i, j, normal))
             {
@@ -291,7 +291,7 @@ void FbxLoader::ParseMeshFaces(Model* model, FbxMesh* fbxMesh)
     }
 }
 
-void FbxLoader::ParseMaterial(Model* model, FbxNode* fbxNode)
+void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
 {
     const int materialCount = fbxNode->GetMaterialCount();
     if (materialCount > 0)
@@ -350,7 +350,7 @@ void FbxLoader::ParseMaterial(Model* model, FbxNode* fbxNode)
     }
 }
 
-void FbxLoader::ParseSkin(Model* model, FbxMesh* fbxMesh)
+void FbxLoader::ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh)
 {
     // Skinning information
     FbxSkin* fbxSkin = static_cast<FbxSkin*>(fbxMesh->GetDeformer(0, FbxDeformer::eSkin));
@@ -370,7 +370,7 @@ void FbxLoader::ParseSkin(Model* model, FbxMesh* fbxMesh)
     }
 
     // Bone array reference
-    std::vector<Model::Bone>& bones = model->bones;
+    std::vector<FBX3DModel::Bone>& bones = model->bones;
 
     // Bone number
     int clusterCount = fbxSkin->GetClusterCount();
@@ -386,8 +386,8 @@ void FbxLoader::ParseSkin(Model* model, FbxMesh* fbxMesh)
         const char* boneName = fbxCluster->GetLink()->GetName();
 
         // Add a new bone and get new bone's features
-        bones.emplace_back(Model::Bone(boneName));
-        Model::Bone& bone = bones.back();
+        bones.emplace_back(FBX3DModel::Bone(boneName));
+        FBX3DModel::Bone& bone = bones.back();
 
         // Introduce your own bones and FBX bones
         bone.fbxCluster = fbxCluster;
@@ -470,12 +470,12 @@ void FbxLoader::ParseSkin(Model* model, FbxMesh* fbxMesh)
             vertices[i].boneWeight[weightArrayIndex] = weightSet.weight;
 
             // End when reaching 4
-            if (++weightArrayIndex >= Model::MAX_BONE_INDICES)
+            if (++weightArrayIndex >= FBX3DModel::MAX_BONE_INDICES)
             {
                 float weight = 0.0f;
 
                 // Total weight for second and subsequent obstacles
-                for (int j = 1; j < Model::MAX_BONE_INDICES; j++)
+                for (int j = 1; j < FBX3DModel::MAX_BONE_INDICES; j++)
                 {
                     weight += vertices[i].boneWeight[j];
                 }
@@ -488,7 +488,7 @@ void FbxLoader::ParseSkin(Model* model, FbxMesh* fbxMesh)
     }
 }
 
-void FbxLoader::LoadTexture(Model* model, const std::string& fullpath)
+void FbxLoader::LoadTexture(FBX3DModel* model, const std::string& fullpath)
 {
     HRESULT result = S_FALSE;
 

@@ -28,7 +28,7 @@ struct Node
 	Node* parent = nullptr;
 };
 
-class Model
+class FBX3DModel
 {
 private: // Alias
 	// Using Microsoft::WRL
@@ -87,7 +87,7 @@ public:
 
 public:
 	// Destructor
-	~Model();
+	~FBX3DModel();
 
 	// Create Buffer
 	void CreateBuffers(ID3D12Device* device);

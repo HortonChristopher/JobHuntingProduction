@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "LightGroup.h"
 #include "ParticleManager.h"
+#include "Object3d.h"
 #include "FbxLoader/FbxLoader.h"
 #include "2d/PostEffect.h"
 #include "input/Input.h"
@@ -74,6 +75,9 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	LightGroup::StaticInitialize(dxCommon->GetDevice());
 	// パーティクルマネージャ初期化
 	ParticleManager::GetInstance()->Initialize(dxCommon->GetDevice());
+
+	Object3d::StaticInitialize(dxCommon->GetDevice());
+
 	// FBX
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 #pragma endregion

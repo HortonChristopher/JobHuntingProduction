@@ -37,9 +37,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
+	//collisionManager = CollisionManager::GetInstance();
+
 	// Device set
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	// Camera set
+	Object3d::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
@@ -62,9 +65,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
 
+	objSkydome = Object3d::Create();
+	objGround = Object3d::Create();
+
+	modelSkydome = Model::CreateFromOBJ("skydome");
+	modelGround = Model::CreateFromOBJ("ground");
+
+	objSkydome->SetModel(modelSkydome);
+	objGround->SetModel(modelGround);
+
 	// Specify the FBX model and read the file
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRunning");
-	model2 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStanding");
+	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRunning");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	//model2 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStanding");
+	model2 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 
 	object1 = new FBXGeneration;
 	object1->Initialize();
@@ -100,25 +114,36 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	//camera->SetTarget({0, 20, 0});
 	//camera->SetDistance(100.0f);
 	camera->SetTarget({0, 0.0f, 0});
-	camera->SetUp({ 0,1,0 });
-	camera->SetDistance(32.0f);
+	camera->SetUp({ 0, 1, 0 });
+	camera->SetDistance(64.0f);
 
 	object1->SetPosition(objectPosition);
 	object1->SetRotation(objectRotation);
+	object1->SetScale({ 3, 3, 3 });
 	object6->SetPosition(objectPosition);
 	object6->SetRotation(objectRotation);
+	object6->SetScale({ 3, 3, 3 });
 
 	object2->SetPosition({ 0, -10, 100 });
 	object2->SetRotation({ 0, 180, 0 });
+	object2->SetScale({ 3, 3, 3 });
 
 	object3->SetPosition({ 100, -10, 0 });
 	object3->SetRotation({ 0, 90, 0 });
+	object3->SetScale({ 3, 3, 3 });
 
 	object4->SetPosition({ 0, -10, -100 });
 	object4->SetRotation({ 0, 0, 0 });
+	object4->SetScale({ 3, 3, 3 });
 	
 	object5->SetPosition({ -100, -10, 0 });
 	object5->SetRotation({ 0, 270, 0 });
+	object5->SetScale({ 3, 3, 3 });
+
+	objSkydome->SetScale({ 5,5,5 });
+	objGround->SetScale({ 100,0,100 });
+
+	objGround->SetPosition(objectPosition);
 }
 
 void GameScene::Update()
@@ -141,12 +166,12 @@ void GameScene::Update()
 	move = XMVector3TransformNormal(move, matRot);
 
 	// 向いている方向に移動
-	if (input->PushKey(DIK_S)) {
+	if (input->PushKey(DIK_S) || input->PushLStickDown()) {
 		objectPosition.x -= move.m128_f32[0];
 		objectPosition.y -= move.m128_f32[1];
 		objectPosition.z -= move.m128_f32[2];
 	}
-	else if (input->PushKey(DIK_W)) {
+	else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
 		objectPosition.x += move.m128_f32[0];
 		objectPosition.y += move.m128_f32[1];
 		objectPosition.z += move.m128_f32[2];
@@ -156,6 +181,7 @@ void GameScene::Update()
 	object1->SetRotation(objectRotation);
 	object6->SetPosition(objectPosition);
 	object6->SetRotation(objectRotation);
+	objSkydome->SetPosition(objectPosition);
 
 	object1->Update();
 	object2->Update();
@@ -163,6 +189,9 @@ void GameScene::Update()
 	object4->Update();
 	object5->Update();
 	object6->Update();
+
+	objSkydome->Update();
+	objGround->Update();
 
 	//Debug Start
 	//char msgbuf[256];
@@ -200,9 +229,10 @@ void GameScene::Draw()
 #pragma endregion
 
 #pragma region 3D描画
+	Object3d::PreDraw(cmdList);
 
 	// 3D Object Drawing
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_S))
+	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushLStickUp() || input->PushLStickDown())
 	{
 		object1->Draw(cmdList);
 	}
@@ -215,8 +245,13 @@ void GameScene::Draw()
 	object4->Draw(cmdList);
 	object5->Draw(cmdList);
 
+	objSkydome->Draw();
+	objGround->Draw();
+
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
+
+	Object3d::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画

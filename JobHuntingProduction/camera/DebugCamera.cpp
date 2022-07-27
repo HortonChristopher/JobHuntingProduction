@@ -30,10 +30,19 @@ void DebugCamera::Update()
 	Input::float2 stickMove = input->GetRStickDirection();
 
 	// Rotate the camera if the right mouse button is pressed
-	if (input->PushMouseRight())
+	if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
 	{
-		float dy = mouseMove.lX * scaleY;
-		//float dx = mouseMove.lY * scaleX;
+		float dy;
+
+		if (input->PushMouseRight())
+		{
+			dy = mouseMove.lX * scaleY;
+			//float dx = mouseMove.lY * scaleX;
+		}
+		else if (input->PushRStickLeft() || input->PushRStickRight())
+		{
+			dy = stickMove.x * -scaleY;
+		}
 
 		//angleX = dx * XM_PI;
 		angleY = dy * XM_PI;
@@ -43,7 +52,7 @@ void DebugCamera::Update()
 	}
 
 	// Translate the camera if the middle mouse button is pressed
-	if (input->PushMouseMiddle())
+	/*if (input->PushMouseMiddle())
 	{
 		float dx = mouseMove.lX / 100.0f;
 		float dy = mouseMove.lY / 100.0f;
@@ -53,7 +62,7 @@ void DebugCamera::Update()
 
 		MoveVector(move);
 		dirty = true;
-	}
+	}*/
 
 	if (input->PushKey(DIK_W) || input->PushLStickUp())
 	{

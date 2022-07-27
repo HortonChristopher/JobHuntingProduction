@@ -11,6 +11,7 @@
 #include "DebugCamera.h"
 #include "LightGroup.h"
 #include "FBXGeneration.h"
+#include "Object3D.h"
 
 #include <vector>
 
@@ -74,15 +75,23 @@ private: // メンバ変数
 
 	LightGroup* lightGroup = nullptr;
 
-	Model* model1 = nullptr;
+	Object3d* objSkydome = nullptr;
+	Object3d* objGround = nullptr;
+
+	Model* modelSkydome = nullptr;
+	Model* modelGround = nullptr;
+
+	FBX3DModel* model1 = nullptr;
 	FBXGeneration* object1 = nullptr;
 
-	Model* model2 = nullptr;
+	FBX3DModel* model2 = nullptr;
 	FBXGeneration* object2 = nullptr;
 	FBXGeneration* object3 = nullptr;
 	FBXGeneration* object4 = nullptr;
 	FBXGeneration* object5 = nullptr;
 	FBXGeneration* object6 = nullptr;
+
+	FBX3DModel* model3 = nullptr;
 
 	float movement = 1.0f;
 };
