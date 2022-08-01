@@ -41,7 +41,7 @@ void DebugCamera::Update()
 		}
 		if (input->PushRStickLeft() || input->PushRStickRight())
 		{
-			dy = stickMove.x * -scaleY;
+			dy = stickMove.x * -scaleY * 10.0f;
 		}
 
 		//angleX = dx * XM_PI;

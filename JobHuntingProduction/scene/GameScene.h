@@ -81,6 +81,9 @@ private: // メンバ変数
 	Object3d* objGround = nullptr;
 	Object3d* objAttackRange = nullptr;
 
+	Sprite* p1 = nullptr;
+	Sprite* p2 = nullptr;
+
 	Model* modelAttackRange = nullptr;
 
 	Model* modelSkydome = nullptr;
@@ -101,6 +104,18 @@ private: // メンバ変数
 
 	bool attacking = false;
 	int attackTime = 0;
+
+	bool enemy1Alive = true;
+	bool enemy2Alive = true;
+	bool enemy3Alive = true;
+	bool enemy4Alive = true;
+
+	int e1Respawn = 0;
+	int e2Respawn = 0;
+	int e3Respawn = 0;
+	int e4Respawn = 0;
+
+	int page = 0;
 
 	float movement = 1.0f;
 };

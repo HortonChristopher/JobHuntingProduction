@@ -5,12 +5,13 @@
 #include <cassert>
 #include <sstream>
 #include <iomanip>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace DirectX;
 
 extern XMFLOAT3 objectPosition = { 0.0f, -10.0f, 0.0f };
 extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
-extern XMFLOAT3 attackRangePosition = { objectPosition.x, objectPosition.y + 0.5f, objectPosition.z };
 
 GameScene::GameScene()
 {
@@ -61,8 +62,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 		return;
 	}
 
+	if (!Sprite::LoadTexture(3, L"Resources/P1.png")) {
+		assert(0);
+		return;
+	}
+
+	if (!Sprite::LoadTexture(4, L"Resources/P2.png")) {
+		assert(0);
+		return;
+	}
+
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
+	p1 = Sprite::Create(3, { 0.0f, 0.0f });
+	p2 = Sprite::Create(4, { 0.0f, 0.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
@@ -121,8 +134,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	lightGroup = LightGroup::Create();
 
 	// カメラ注視点をセット
-	//camera->SetTarget({0, 20, 0});
-	//camera->SetDistance(100.0f);
 	camera->SetTarget({0, 0.0f, 0});
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(64.0f);
@@ -139,7 +150,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	objAttackRange->SetPosition({ objectPosition.x, objectPosition.y + 0.5f, objectPosition.z + 5.0f });
 	objAttackRange->SetRotation({0, 0, 0});
-	objAttackRange->SetScale({ 10, 10, 10 });
+	objAttackRange->SetScale({ 15, 15, 15 });
 
 	object2->SetPosition({ 0, -10, 200 });
 	object2->SetRotation({ 0, 180, 0 });
@@ -161,92 +172,202 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objGround->SetScale({ 100,0,100 });
 
 	objGround->SetPosition({ 0, -10, 0 });
+
+	srand(time(NULL));
 }
 
 void GameScene::Update()
 {
 	lightGroup->Update();
-	camera->Update();
 	particleMan->Update();
 
-	// A,Dで旋回
-	/*if (input->PushKey(DIK_A)) {
-		objectRotation.y -= 2.0f;
-	}
-	else if (input->PushKey(DIK_D)) {
-		objectRotation.y += 2.0f;
-	}*/
-
-	// 移動ベクトルをY軸周りの角度で回転
-	XMVECTOR move = { 0,0,1.0f,0 };
-	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(objectRotation.y));
-	move = XMVector3TransformNormal(move, matRot);
-
-	// 向いている方向に移動
-	if (input->PushKey(DIK_S) || input->PushLStickDown()) {
-		objectPosition.x -= move.m128_f32[0];
-		objectPosition.y -= move.m128_f32[1];
-		objectPosition.z -= move.m128_f32[2];
-		//objAttackRange->SetPosition({ (objectPosition.x -= move.m128_f32[0]), objectPosition.y -= move.m128_f32[1] + 0.5f, (objectPosition.z -= move.m128_f32[2]) });
-		//attackRangePosition = objAttackRange->GetPosition();
-	}
-	else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
-		objectPosition.x += move.m128_f32[0];
-		objectPosition.y += move.m128_f32[1];
-		objectPosition.z += move.m128_f32[2];
-		//objAttackRange->SetPosition({ (objectPosition.x += move.m128_f32[0]), objectPosition.y += move.m128_f32[1] + 0.5f, (objectPosition.z += move.m128_f32[2]) });
-		//attackRangePosition = objAttackRange->GetPosition();
-	}
-
-	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->PushControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
+	if (page < 2)
 	{
-		//attacking = true;
-		attackTime = 30;
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+		{
+			page++;
+		}
 	}
 
-	if (attackTime > 0)
+	if (page > 1)
 	{
-		attackTime--;
+		camera->Update();
+
+		// A,Dで旋回
+		/*if (input->PushKey(DIK_A)) {
+			objectRotation.y -= 2.0f;
+		}
+		else if (input->PushKey(DIK_D)) {
+			objectRotation.y += 2.0f;
+		}*/
+
+		// 移動ベクトルをY軸周りの角度で回転
+		XMVECTOR move = { 0,0,1.0f,0 };
+		XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(objectRotation.y));
+		move = XMVector3TransformNormal(move, matRot);
+
+		// 向いている方向に移動
+		if (input->PushKey(DIK_S) || input->PushLStickDown()) {
+			objectPosition.x -= move.m128_f32[0];
+			objectPosition.y -= move.m128_f32[1];
+			objectPosition.z -= move.m128_f32[2];
+		}
+		else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
+			objectPosition.x += move.m128_f32[0];
+			objectPosition.y += move.m128_f32[1];
+			objectPosition.z += move.m128_f32[2];
+		}
+
+		if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
+		{
+			attackTime = 30;
+		}
+
+		if (attackTime > 0)
+		{
+			attackTime--;
+		}
+		else
+		{
+			attackTime = 0;
+		}
+
+		object1->SetPosition(objectPosition);
+		object1->SetRotation(objectRotation);
+		object6->SetPosition(objectPosition);
+		object6->SetRotation(objectRotation);
+		object7->SetPosition(objectPosition);
+		object7->SetRotation(objectRotation);
+		objSkydome->SetPosition(objectPosition);
+		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
+		objAttackRange->SetRotation(objectRotation);
+
+		if (attackTime > 10 && attackTime < 20)
+		{
+			if (intersect(objAttackRange->GetPosition(), object2->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy1Alive == true)
+			{
+				enemy1Alive = false;
+				e1Respawn = 30;
+			}
+
+			if (intersect(objAttackRange->GetPosition(), object3->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy2Alive == true)
+			{
+				enemy2Alive = false;
+				e2Respawn = 30;
+			}
+
+			if (intersect(objAttackRange->GetPosition(), object4->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy3Alive == true)
+			{
+				enemy3Alive = false;
+				e3Respawn = 30;
+			}
+
+			if (intersect(objAttackRange->GetPosition(), object5->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy4Alive == true)
+			{
+				enemy4Alive = false;
+				e4Respawn = 30;
+			}
+		}
+
+		if (e1Respawn > 0)
+		{
+			e1Respawn--;
+		}
+		else
+		{
+			e1Respawn = 0;
+		}
+
+		if (e2Respawn > 0)
+		{
+			e2Respawn--;
+		}
+		else
+		{
+			e2Respawn = 0;
+		}
+
+		if (e3Respawn > 0)
+		{
+			e3Respawn--;
+		}
+		else
+		{
+			e3Respawn = 0;
+		}
+
+		if (e4Respawn > 0)
+		{
+			e4Respawn--;
+		}
+		else
+		{
+			e4Respawn = 0;
+		}
+
+		if (e1Respawn <= 0 && !enemy1Alive)
+		{
+			object2->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			enemy1Alive = true;
+		}
+
+		if (e2Respawn <= 0 && !enemy2Alive)
+		{
+			object3->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			enemy2Alive = true;
+		}
+
+		if (e3Respawn <= 0 && !enemy3Alive)
+		{
+			object4->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			enemy3Alive = true;
+		}
+
+		if (e4Respawn <= 0 && !enemy4Alive)
+		{
+			object5->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			enemy4Alive = true;
+		}
+
+		object1->Update();
+		if (enemy1Alive)
+		{
+			object2->Update();
+		}
+		if (enemy2Alive)
+		{
+			object3->Update();
+		}
+		if (enemy3Alive)
+		{
+			object4->Update();
+		}
+		if (enemy4Alive)
+		{
+			object5->Update();
+		}
+		object6->Update();
+		if (attackTime > 0)
+		{
+			object7->Update();
+		}
+
+		objSkydome->Update();
+		objGround->Update();
+		objAttackRange->Update();
 	}
-	else
-	{
-		attackTime = 0;
-	}
-
-	object1->SetPosition(objectPosition);
-	object1->SetRotation(objectRotation);
-	object6->SetPosition(objectPosition);
-	object6->SetRotation(objectRotation);
-	object7->SetPosition(objectPosition);
-	object7->SetRotation(objectRotation);
-	objSkydome->SetPosition(objectPosition);
-	objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5))});
-	//attackRangePosition = objAttackRange->GetPosition();
-	objAttackRange->SetRotation(objectRotation);
-
-	object1->Update();
-	object2->Update();
-	object3->Update();
-	object4->Update();
-	object5->Update();
-	object6->Update();
-	object7->Update();
-
-	objSkydome->Update();
-	objGround->Update();
-	objAttackRange->Update();
 
 	//Debug Start
-	char msgbuf[256];
-	char msgbuf2[256];
-	char msgbuf3[256];
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", objAttackRange->GetPosition().x);
-	sprintf_s(msgbuf2, 256, "Y: %f\n", objAttackRange->GetPosition().y);
-	sprintf_s(msgbuf3, 256, "Z: %f\n", objAttackRange->GetPosition().z);
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);
+	//sprintf_s(msgbuf, 256, "X: %f\n", objAttackRange->GetPosition().x);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", objAttackRange->GetPosition().y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", objAttackRange->GetPosition().z);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
 	//Debug End
 }
 
@@ -278,7 +399,10 @@ void GameScene::Draw()
 	if (attackTime > 0)
 	{
 		object7->Draw(cmdList);
-		objAttackRange->Draw();
+		if (attackTime > 10 && attackTime < 20)
+		{
+			objAttackRange->Draw();
+		}
 	}
 	else if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushLStickUp() || input->PushLStickDown())
 	{
@@ -288,10 +412,22 @@ void GameScene::Draw()
 	{
 		object6->Draw(cmdList);
 	}
-	object2->Draw(cmdList);
-	object3->Draw(cmdList);
-	object4->Draw(cmdList);
-	object5->Draw(cmdList);
+	if (enemy1Alive)
+	{
+		object2->Draw(cmdList);
+	}
+	if (enemy2Alive)
+	{
+		object3->Draw(cmdList);
+	}
+	if (enemy3Alive)
+	{
+		object4->Draw(cmdList);
+	}
+	if (enemy4Alive)
+	{
+		object5->Draw(cmdList);
+	}
 
 	objSkydome->Draw();
 	objGround->Draw();
@@ -309,6 +445,14 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	if (page == 0)
+	{
+		p1->Draw();
+	}
+	if (page == 1)
+	{
+		p2->Draw();
+	}
 
 	// デバッグテキストの描画
 	debugText->DrawAll(cmdList);
