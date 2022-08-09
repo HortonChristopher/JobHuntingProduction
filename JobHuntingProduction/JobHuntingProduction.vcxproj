@@ -109,6 +109,7 @@
     <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object3d.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="MeshCollider.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object3d.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="QueryCallback.h" />
     <ClInclude Include="RaycastHit.h" />
     <ClInclude Include="scene\GameScene.h" />

@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "FBXGeneration.h"
 #include "EnemyHuman.h"
+#include "Player.h"
 #include "FbxLoader/FbxLoader.h"
 
 #include <cassert>
@@ -45,10 +46,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// Device set
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	EnemyHuman::SetDevice(dxCommon->GetDevice());
+	Player::SetDevice(dxCommon->GetDevice());
 	// Camera set
 	Object3d::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 	EnemyHuman::SetCamera(camera);
+	Player::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -102,7 +105,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	model3 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 
-	object1 = new FBXGeneration;
+	object1 = new Player;
 	object1->Initialize();
 	object1->SetModel(model1);
 
@@ -122,11 +125,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object5->Initialize();
 	object5->SetModel(model2);
 
-	object6 = new FBXGeneration;
+	object6 = new Player;
 	object6->Initialize();
 	object6->SetModel(model2);
 
-	object7 = new FBXGeneration;
+	object7 = new Player;
 	object7->Initialize();
 	object7->SetModel(model3);
 
