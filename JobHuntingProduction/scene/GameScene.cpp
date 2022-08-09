@@ -1,5 +1,6 @@
 ﻿#include "GameScene.h"
 #include "FBXGeneration.h"
+#include "EnemyHuman.h"
 #include "FbxLoader/FbxLoader.h"
 
 #include <cassert>
@@ -43,9 +44,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	// Device set
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
+	EnemyHuman::SetDevice(dxCommon->GetDevice());
 	// Camera set
 	Object3d::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
+	EnemyHuman::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -103,19 +106,19 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object1->Initialize();
 	object1->SetModel(model1);
 
-	object2 = new FBXGeneration;
+	object2 = new EnemyHuman;
 	object2->Initialize();
 	object2->SetModel(model2);
 
-	object3 = new FBXGeneration;
+	object3 = new EnemyHuman;
 	object3->Initialize();
 	object3->SetModel(model2);
 
-	object4 = new FBXGeneration;
+	object4 = new EnemyHuman;
 	object4->Initialize();
 	object4->SetModel(model2);
 
-	object5 = new FBXGeneration;
+	object5 = new EnemyHuman;
 	object5->Initialize();
 	object5->SetModel(model2);
 

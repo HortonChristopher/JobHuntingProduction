@@ -11,6 +11,7 @@
 #include "DebugCamera.h"
 #include "LightGroup.h"
 #include "FBXGeneration.h"
+#include "EnemyHuman.h"
 #include "Object3D.h"
 
 #include <vector>
@@ -93,10 +94,10 @@ private: // メンバ変数
 	FBXGeneration* object1 = nullptr;
 
 	FBX3DModel* model2 = nullptr;
-	FBXGeneration* object2 = nullptr;
-	FBXGeneration* object3 = nullptr;
-	FBXGeneration* object4 = nullptr;
-	FBXGeneration* object5 = nullptr;
+	EnemyHuman* object2 = nullptr;
+	EnemyHuman* object3 = nullptr;
+	EnemyHuman* object4 = nullptr;
+	EnemyHuman* object5 = nullptr;
 	FBXGeneration* object6 = nullptr;
 
 	FBX3DModel* model3 = nullptr;

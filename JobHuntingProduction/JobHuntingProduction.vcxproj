@@ -102,6 +102,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
     <ClCompile Include="Easing.cpp" />
+    <ClCompile Include="EnemyHuman.cpp" />
     <ClCompile Include="FbxLoader\FbxLoader.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="CollisionTypes.h" />
     <ClInclude Include="Easing.h" />
+    <ClInclude Include="EnemyHuman.h" />
     <ClInclude Include="FbxLoader\FbxLoader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
