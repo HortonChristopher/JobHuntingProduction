@@ -158,19 +158,19 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objAttackRange->SetRotation({0, 0, 0});
 	objAttackRange->SetScale({ 15, 15, 15 });
 
-	object2->SetPosition({ 0, -10, 200 });
+	object2->SetPosition(enemy1Position);
 	object2->SetRotation({ 0, 180, 0 });
 	object2->SetScale({ 3, 3, 3 });
 
-	object3->SetPosition({ 200, -10, 0 });
+	object3->SetPosition(enemy2Position);
 	object3->SetRotation({ 0, 90, 0 });
 	object3->SetScale({ 3, 3, 3 });
 
-	object4->SetPosition({ 0, -10, -200 });
+	object4->SetPosition(enemy3Position);
 	object4->SetRotation({ 0, 0, 0 });
 	object4->SetScale({ 3, 3, 3 });
 	
-	object5->SetPosition({ -200, -10, 0 });
+	object5->SetPosition(enemy4Position);
 	object5->SetRotation({ 0, 270, 0 });
 	object5->SetScale({ 3, 3, 3 });
 
@@ -222,6 +222,150 @@ void GameScene::Update()
 			objectPosition.x += move.m128_f32[0];
 			objectPosition.y += move.m128_f32[1];
 			objectPosition.z += move.m128_f32[2];
+		}
+
+		if (!wander1 && timer1 < 300)
+		{
+			timer1++;
+		}
+		else if (!wander1 && timer1 > 299)
+		{
+			movement1Position.x = rand() % 201 - 100;
+			movement1Position.z = rand() % 201 + 100;
+			timer1 = 0;
+			wander1 = true;
+		}
+
+		if (!wander2 && timer2 < 300)
+		{
+			timer2++;
+		}
+		else if (!wander2 && timer2 > 299)
+		{
+			movement2Position.x = rand() % 201 + 100;
+			movement2Position.z = rand() % 201 - 100;
+			timer2 = 0;
+			wander2 = true;
+		}
+
+		if (!wander3 && timer3 < 300)
+		{
+			timer3++;
+		}
+		else if (!wander3 && timer3 > 299)
+		{
+			movement3Position.x = rand() % 201 - 100;
+			movement3Position.z = rand() % 201 - 200;
+			timer3 = 0;
+			wander3 = true;
+		}
+
+		if (!wander4 && timer4 < 300)
+		{
+			timer4++;
+		}
+		else if (!wander4 && timer4 > 299)
+		{
+			movement4Position.x = rand() % 201 - 100;
+			movement4Position.z = rand() % 201 - 200;
+			timer4 = 0;
+			wander4 = true;
+		}
+
+		if (wander1 && !set1)
+		{
+			x1 = (movement1Position.x - enemy1Position.x) / 600.0f;
+			y1 = (movement1Position.z - enemy1Position.z) / 600.0f;
+			set1 = true;
+		}
+		else if (wander1 && set1)
+		{
+			if (timer1 > 600)
+			{
+				timer1 = 0;
+				wander1 = false;
+				set1 = false;
+			}
+			else
+			{
+				timer1++;
+			}
+
+			enemy1Position.x += x1;
+			enemy1Position.z += y1;
+			object2->SetPosition(enemy1Position);
+		}
+
+		if (wander2 && !set2)
+		{
+			x2 = (movement2Position.x - enemy2Position.x) / 600.0f;
+			y2 = (movement2Position.z - enemy2Position.z) / 600.0f;
+			set2 = true;
+		}
+		else if (wander2 && set2)
+		{
+			if (timer2 > 600)
+			{
+				timer2 = 0;
+				wander2 = false;
+				set2 = false;
+			}
+			else
+			{
+				timer2++;
+			}
+
+			enemy2Position.x += x2;
+			enemy2Position.z += y2;
+			object3->SetPosition(enemy2Position);
+		}
+
+		if (wander3 && !set3)
+		{
+			x3 = (movement3Position.x - enemy3Position.x) / 600.0f;
+			y3 = (movement3Position.z - enemy3Position.z) / 600.0f;
+			set3 = true;
+		}
+		else if (wander3 && set3)
+		{
+			if (timer3 > 600)
+			{
+				timer3 = 0;
+				wander3 = false;
+				set3 = false;
+			}
+			else
+			{
+				timer3++;
+			}
+
+			enemy3Position.x += x3;
+			enemy3Position.z += y3;
+			object4->SetPosition(enemy3Position);
+		}
+
+		if (wander4 && !set4)
+		{
+			x4 = (movement4Position.x - enemy4Position.x) / 600.0f;
+			y4 = (movement4Position.z - enemy4Position.z) / 600.0f;
+			set4 = true;
+		}
+		else if (wander4 && set4)
+		{
+			if (timer4 > 600)
+			{
+				timer4 = 0;
+				wander4 = false;
+				set4 = false;
+			}
+			else
+			{
+				timer4++;
+			}
+
+			enemy4Position.x += x4;
+			enemy4Position.z += y4;
+			object5->SetPosition(enemy4Position);
 		}
 
 		if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
@@ -311,7 +455,7 @@ void GameScene::Update()
 			e4Respawn = 0;
 		}
 
-		if (e1Respawn <= 0 && !enemy1Alive)
+		/*if (e1Respawn <= 0 && !enemy1Alive)
 		{
 			object2->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
 			enemy1Alive = true;
@@ -333,7 +477,7 @@ void GameScene::Update()
 		{
 			object5->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
 			enemy4Alive = true;
-		}
+		}*/
 
 		object1->Update();
 		if (enemy1Alive)
@@ -364,16 +508,16 @@ void GameScene::Update()
 	}
 
 	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
+	char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", objAttackRange->GetPosition().x);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", objAttackRange->GetPosition().y);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objAttackRange->GetPosition().z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
+	sprintf_s(msgbuf, 256, "X: %f\n", enemy1Position.x);
+	sprintf_s(msgbuf2, 256, "Y: %f\n", enemy1Position.z);
+	sprintf_s(msgbuf3, 256, "Z: %f\n", timer1);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);
 	//Debug End
 }
 

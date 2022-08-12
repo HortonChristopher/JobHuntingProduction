@@ -117,6 +117,40 @@ private: // メンバ変数
 	int e3Respawn = 0;
 	int e4Respawn = 0;
 
+	XMFLOAT3 enemy1Position = { 0, -10, 200 };
+	XMFLOAT3 enemy2Position = { 200, -10, 0 };
+	XMFLOAT3 enemy3Position = { 0, -10, -200 };
+	XMFLOAT3 enemy4Position = { -200, -10, 0 };
+
+	XMFLOAT3 movement1Position = { 0,0,0 };
+	XMFLOAT3 movement2Position = { 0,0,0 };
+	XMFLOAT3 movement3Position = { 0,0,0 };
+	XMFLOAT3 movement4Position = { 0,0,0 };
+
+	bool set1 = false;
+	bool set2 = false;
+	bool set3 = false;
+	bool set4 = false;
+
+	bool wander1 = false;
+	bool wander2 = false;
+	bool wander3 = false;
+	bool wander4 = false;
+
+	float x1 = 0.0f;
+	float y1 = 0.0f;
+	float x2 = 0.0f;
+	float y2 = 0.0f;
+	float x3 = 0.0f;
+	float y3 = 0.0f;
+	float x4 = 0.0f;
+	float y4 = 0.0f;
+
+	int timer1 = 0;
+	int timer2 = 0;
+	int timer3 = 0;
+	int timer4 = 0;
+
 	int page = 0;
 
 	float movement = 1.0f;
