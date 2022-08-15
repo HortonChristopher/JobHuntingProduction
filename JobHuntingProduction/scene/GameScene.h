@@ -93,6 +93,10 @@ private: // メンバ変数
 
 	FBX3DModel* model1 = nullptr;
 	Player* object1 = nullptr;
+	EnemyHuman* object8 = nullptr;
+	EnemyHuman* object9 = nullptr;
+	EnemyHuman* object10 = nullptr;
+	EnemyHuman* object11 = nullptr;
 
 	FBX3DModel* model2 = nullptr;
 	EnemyHuman* object2 = nullptr;
@@ -146,10 +150,15 @@ private: // メンバ変数
 	float x4 = 0.0f;
 	float y4 = 0.0f;
 
-	int timer1 = 0;
-	int timer2 = 0;
-	int timer3 = 0;
-	int timer4 = 0;
+	float theta_degrees1 = 0.0f;
+	float theta_degrees12 = 0.0f;
+	float theta_degrees123 = 0.0f;
+	float theta_degrees1234 = 0.0f;
+
+	int timer1 = 60;
+	int timer2 = 120;
+	int timer3 = 180;
+	int timer4 = 240;
 
 	int page = 0;
 

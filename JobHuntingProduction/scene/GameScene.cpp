@@ -133,6 +133,22 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object7->Initialize();
 	object7->SetModel(model3);
 
+	object8 = new EnemyHuman;
+	object8->Initialize();
+	object8->SetModel(model1);
+
+	object9 = new EnemyHuman;
+	object9->Initialize();
+	object9->SetModel(model1);
+
+	object10 = new EnemyHuman;
+	object10->Initialize();
+	object10->SetModel(model1);
+
+	object11 = new EnemyHuman;
+	object11->Initialize();
+	object11->SetModel(model1);
+
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
 
@@ -161,18 +177,30 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object2->SetPosition(enemy1Position);
 	object2->SetRotation({ 0, 180, 0 });
 	object2->SetScale({ 3, 3, 3 });
+	object8->SetPosition(enemy1Position);
+	object8->SetRotation({ 0, 180, 0 });
+	object8->SetScale({ 3, 3, 3 });
 
 	object3->SetPosition(enemy2Position);
 	object3->SetRotation({ 0, 90, 0 });
 	object3->SetScale({ 3, 3, 3 });
+	object9->SetPosition(enemy2Position);
+	object9->SetRotation({ 0, 90, 0 });
+	object9->SetScale({ 3, 3, 3 });
 
 	object4->SetPosition(enemy3Position);
 	object4->SetRotation({ 0, 0, 0 });
 	object4->SetScale({ 3, 3, 3 });
+	object10->SetPosition(enemy3Position);
+	object10->SetRotation({ 0, 0, 0 });
+	object10->SetScale({ 3, 3, 3 });
 	
 	object5->SetPosition(enemy4Position);
 	object5->SetRotation({ 0, 270, 0 });
 	object5->SetScale({ 3, 3, 3 });
+	object11->SetPosition(enemy4Position);
+	object11->SetRotation({ 0, 270, 0 });
+	object11->SetScale({ 3, 3, 3 });
 
 	objSkydome->SetScale({ 5,5,5 });
 	objGround->SetScale({ 100,0,100 });
@@ -276,6 +304,11 @@ void GameScene::Update()
 		{
 			x1 = (movement1Position.x - enemy1Position.x) / 600.0f;
 			y1 = (movement1Position.z - enemy1Position.z) / 600.0f;
+			float x = movement1Position.x - enemy1Position.x;
+			float y = movement1Position.z - enemy1Position.z;
+			float theta_radians = atan2(y, x);
+			float theta_degrees = XMConvertToDegrees(theta_radians);
+			theta_degrees1 = theta_degrees;
 			set1 = true;
 		}
 		else if (wander1 && set1)
@@ -293,13 +326,21 @@ void GameScene::Update()
 
 			enemy1Position.x += x1;
 			enemy1Position.z += y1;
+			object2->SetRotation({ object2->GetRotation().x, -theta_degrees1 + 90.0f, object2->GetRotation().z });
+			object8->SetRotation({ object8->GetRotation().x, -theta_degrees1 + 90.0f, object8->GetRotation().z });
 			object2->SetPosition(enemy1Position);
+			object8->SetPosition(enemy1Position);
 		}
 
 		if (wander2 && !set2)
 		{
 			x2 = (movement2Position.x - enemy2Position.x) / 600.0f;
 			y2 = (movement2Position.z - enemy2Position.z) / 600.0f;
+			float x2 = movement2Position.x - enemy2Position.x;
+			float y2 = movement2Position.z - enemy2Position.z;
+			float theta_radians2 = atan2(y2, x2);
+			float theta_degrees2 = XMConvertToDegrees(theta_radians2);
+			theta_degrees12 = theta_degrees2;
 			set2 = true;
 		}
 		else if (wander2 && set2)
@@ -317,13 +358,21 @@ void GameScene::Update()
 
 			enemy2Position.x += x2;
 			enemy2Position.z += y2;
+			object3->SetRotation({ object3->GetRotation().x, -theta_degrees12 + 90.0f, object3->GetRotation().z });
+			object9->SetRotation({ object9->GetRotation().x, -theta_degrees12 + 90.0f, object9->GetRotation().z });
 			object3->SetPosition(enemy2Position);
+			object9->SetPosition(enemy2Position);
 		}
 
 		if (wander3 && !set3)
 		{
 			x3 = (movement3Position.x - enemy3Position.x) / 600.0f;
 			y3 = (movement3Position.z - enemy3Position.z) / 600.0f;
+			float x3 = movement3Position.x - enemy3Position.x;
+			float y3 = movement3Position.z - enemy3Position.z;
+			float theta_radians3 = atan2(y3, x3);
+			float theta_degrees3 = XMConvertToDegrees(theta_radians3);
+			theta_degrees123 = theta_degrees3;
 			set3 = true;
 		}
 		else if (wander3 && set3)
@@ -341,13 +390,21 @@ void GameScene::Update()
 
 			enemy3Position.x += x3;
 			enemy3Position.z += y3;
+			object4->SetRotation({ object4->GetRotation().x, -theta_degrees123 + 90.0f, object4->GetRotation().z });
+			object10->SetRotation({ object10->GetRotation().x, -theta_degrees123 + 90.0f, object10->GetRotation().z });
 			object4->SetPosition(enemy3Position);
+			object10->SetPosition(enemy3Position);
 		}
 
 		if (wander4 && !set4)
 		{
 			x4 = (movement4Position.x - enemy4Position.x) / 600.0f;
 			y4 = (movement4Position.z - enemy4Position.z) / 600.0f;
+			float x4 = movement4Position.x - enemy4Position.x;
+			float y4 = movement4Position.z - enemy4Position.z;
+			float theta_radians4 = atan2(y4, x4);
+			float theta_degrees4 = XMConvertToDegrees(theta_radians4);
+			theta_degrees1234 = theta_degrees4;
 			set4 = true;
 		}
 		else if (wander4 && set4)
@@ -365,7 +422,10 @@ void GameScene::Update()
 
 			enemy4Position.x += x4;
 			enemy4Position.z += y4;
+			object5->SetRotation({ object5->GetRotation().x, -theta_degrees1234 + 90.0f, object5->GetRotation().z });
+			object11->SetRotation({ object11->GetRotation().x, -theta_degrees1234 + 90.0f, object11->GetRotation().z });
 			object5->SetPosition(enemy4Position);
+			object11->SetPosition(enemy4Position);
 		}
 
 		if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
@@ -483,18 +543,22 @@ void GameScene::Update()
 		if (enemy1Alive)
 		{
 			object2->Update();
+			object8->Update();
 		}
 		if (enemy2Alive)
 		{
 			object3->Update();
+			object9->Update();
 		}
 		if (enemy3Alive)
 		{
 			object4->Update();
+			object10->Update();
 		}
 		if (enemy4Alive)
 		{
 			object5->Update();
+			object11->Update();
 		}
 		object6->Update();
 		if (attackTime > 0)
@@ -508,16 +572,16 @@ void GameScene::Update()
 	}
 
 	//Debug Start
-	char msgbuf[256];
-	char msgbuf2[256];
-	char msgbuf3[256];
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", enemy1Position.x);
-	sprintf_s(msgbuf2, 256, "Y: %f\n", enemy1Position.z);
-	sprintf_s(msgbuf3, 256, "Z: %f\n", timer1);
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);
+	//sprintf_s(msgbuf, 256, "X: %f\n", theta_degrees_debug);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", enemy1Position.z);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", timer1);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
 	//Debug End
 }
 
@@ -564,19 +628,47 @@ void GameScene::Draw()
 	}
 	if (enemy1Alive)
 	{
-		object2->Draw(cmdList);
+		if (wander1 && set1)
+		{
+			object8->Draw(cmdList);
+		}
+		else
+		{
+			object2->Draw(cmdList);
+		}
 	}
 	if (enemy2Alive)
 	{
-		object3->Draw(cmdList);
+		if (wander2 && set2)
+		{
+			object9->Draw(cmdList);
+		}
+		else
+		{
+			object3->Draw(cmdList);
+		}
 	}
 	if (enemy3Alive)
 	{
-		object4->Draw(cmdList);
+		if (wander3 && set3)
+		{
+			object10->Draw(cmdList);
+		}
+		else
+		{
+			object4->Draw(cmdList);
+		}
 	}
 	if (enemy4Alive)
 	{
-		object5->Draw(cmdList);
+		if (wander4 && set4)
+		{
+			object11->Draw(cmdList);
+		}
+		else
+		{
+			object5->Draw(cmdList);
+		}
 	}
 
 	objSkydome->Draw();
