@@ -110,6 +110,7 @@ protected:
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation
 	XMFLOAT3 position = { 0,0,0 };
+	XMFLOAT3 newPosition = { 0,0,0 };
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model
@@ -129,4 +130,10 @@ protected:
 
 	// Animation is playing
 	bool isPlay = false;
+
+	bool set = false;
+	float degrees = 0.0f;
+	int timer = 0;
+	float x = 0.0f;
+	float y = 0.0f;
 };
