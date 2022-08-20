@@ -103,6 +103,9 @@ private:
 	// Camera
 	static Camera* camera;
 
+public:
+	bool wander = false;
+
 protected:
 	// Local scale
 	XMFLOAT3 scale = { 1,1,1 };

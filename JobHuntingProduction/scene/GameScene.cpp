@@ -174,7 +174,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objAttackRange->SetRotation({0, 0, 0});
 	objAttackRange->SetScale({ 15, 15, 15 });
 
-	object2->SetPosition(enemy1Position);
+	/*object2->SetPosition(enemy1Position);
 	object2->SetRotation({ 0, 180, 0 });
 	object2->SetScale({ 3, 3, 3 });
 	object8->SetPosition(enemy1Position);
@@ -200,7 +200,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object5->SetScale({ 3, 3, 3 });
 	object11->SetPosition(enemy4Position);
 	object11->SetRotation({ 0, 270, 0 });
-	object11->SetScale({ 3, 3, 3 });
+	object11->SetScale({ 3, 3, 3 });*/
 
 	objSkydome->SetScale({ 5,5,5 });
 	objGround->SetScale({ 100,0,100 });
@@ -252,7 +252,7 @@ void GameScene::Update()
 			objectPosition.z += move.m128_f32[2];
 		}
 
-		if (!wander1 && timer1 < 300)
+		/*if (!wander1 && timer1 < 300)
 		{
 			timer1++;
 		}
@@ -426,7 +426,7 @@ void GameScene::Update()
 			object11->SetRotation({ object11->GetRotation().x, -theta_degrees1234 + 90.0f, object11->GetRotation().z });
 			object5->SetPosition(enemy4Position);
 			object11->SetPosition(enemy4Position);
-		}
+		}*/
 
 		if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
 		{
@@ -452,7 +452,7 @@ void GameScene::Update()
 		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
 		objAttackRange->SetRotation(objectRotation);
 
-		if (attackTime > 10 && attackTime < 20)
+		/*if (attackTime > 10 && attackTime < 20)
 		{
 			if (intersect(objAttackRange->GetPosition(), object2->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy1Alive == true)
 			{
@@ -477,9 +477,9 @@ void GameScene::Update()
 				enemy4Alive = false;
 				e4Respawn = 30;
 			}
-		}
+		}*/
 
-		if (e1Respawn > 0)
+		/*if (e1Respawn > 0)
 		{
 			e1Respawn--;
 		}
@@ -513,7 +513,7 @@ void GameScene::Update()
 		else
 		{
 			e4Respawn = 0;
-		}
+		}*/
 
 		/*if (e1Respawn <= 0 && !enemy1Alive)
 		{

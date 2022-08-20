@@ -1,6 +1,7 @@
 #include "EnemyHuman.h"
 #include "FbxLoader/FbxLoader.h"
 
+#include <time.h>
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -51,6 +52,10 @@ void EnemyHuman::Initialize()
 
 	// Set time for 1 frame at 60fps
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
+
+	SetPosition(position);
+
+	srand(time(NULL));
 }
 
 void EnemyHuman::Update()
@@ -129,6 +134,47 @@ void EnemyHuman::Update()
 		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
 	}
 	constBuffSkin->Unmap(0, nullptr);
+
+	if (!wander && timer < 240)
+	{
+		timer++;
+	}
+	else if (!wander && timer > 239)
+	{
+		newPosition.x = rand() % 301 - 150;
+		newPosition.z = rand() % 301 - 150;
+		timer = 0;
+		wander = true;
+	}
+
+	if (wander && !set)
+	{
+		x = (newPosition.x - position.x) / 360.0f;
+		y = (newPosition.z - position.z) / 360.0f;
+		float x2 = newPosition.x - position.x;
+		float y2 = newPosition.z - position.z;
+		float radians = atan2(y2, x2);
+		degrees = XMConvertToDegrees(radians);
+		set = true;
+	}
+	else if (wander && set)
+	{
+		if (timer > 360)
+		{
+			timer = 0;
+			wander = false;
+			set = false;
+		}
+		else
+		{
+			timer++;
+		}
+
+		position.x += x;
+		position.z += y;
+		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+		SetPosition(position);
+	}
 }
 
 void EnemyHuman::CreateGraphicsPipeline()
