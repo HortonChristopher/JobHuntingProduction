@@ -12,8 +12,8 @@
 
 using namespace DirectX;
 
-extern XMFLOAT3 objectPosition = { 0.0f, -10.0f, 0.0f };
-extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
+extern XMFLOAT3 objectPosition;
+extern XMFLOAT3 objectRotation;
 
 GameScene::GameScene()
 {
@@ -160,7 +160,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(64.0f);
 
-	object1->SetPosition(objectPosition);
+	/*object1->SetPosition(objectPosition);
 	object1->SetRotation(objectRotation);
 	object1->SetScale({ 3, 3, 3 });
 	object6->SetPosition(objectPosition);
@@ -168,7 +168,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object6->SetScale({ 3, 3, 3 });
 	object7->SetPosition(objectPosition);
 	object7->SetRotation(objectRotation);
-	object7->SetScale({ 3, 3, 3 });
+	object7->SetScale({ 3, 3, 3 });*/
 
 	objAttackRange->SetPosition({ objectPosition.x, objectPosition.y + 0.5f, objectPosition.z + 5.0f });
 	objAttackRange->SetRotation({0, 0, 0});
@@ -235,22 +235,22 @@ void GameScene::Update()
 			objectRotation.y += 2.0f;
 		}*/
 
-		// 移動ベクトルをY軸周りの角度で回転
-		XMVECTOR move = { 0,0,1.0f,0 };
-		XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(objectRotation.y));
-		move = XMVector3TransformNormal(move, matRot);
+		//// 移動ベクトルをY軸周りの角度で回転
+		//XMVECTOR move = { 0,0,1.0f,0 };
+		//XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(objectRotation.y));
+		//move = XMVector3TransformNormal(move, matRot);
 
-		// 向いている方向に移動
-		if (input->PushKey(DIK_S) || input->PushLStickDown()) {
-			objectPosition.x -= move.m128_f32[0];
-			objectPosition.y -= move.m128_f32[1];
-			objectPosition.z -= move.m128_f32[2];
-		}
-		else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
-			objectPosition.x += move.m128_f32[0];
-			objectPosition.y += move.m128_f32[1];
-			objectPosition.z += move.m128_f32[2];
-		}
+		//// 向いている方向に移動
+		//if (input->PushKey(DIK_S) || input->PushLStickDown()) {
+		//	objectPosition.x -= move.m128_f32[0];
+		//	objectPosition.y -= move.m128_f32[1];
+		//	objectPosition.z -= move.m128_f32[2];
+		//}
+		//else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
+		//	objectPosition.x += move.m128_f32[0];
+		//	objectPosition.y += move.m128_f32[1];
+		//	objectPosition.z += move.m128_f32[2];
+		//}
 
 		/*if (!wander1 && timer1 < 300)
 		{
@@ -442,12 +442,12 @@ void GameScene::Update()
 			attackTime = 0;
 		}
 
-		object1->SetPosition(objectPosition);
+		/*object1->SetPosition(objectPosition);
 		object1->SetRotation(objectRotation);
 		object6->SetPosition(objectPosition);
 		object6->SetRotation(objectRotation);
 		object7->SetPosition(objectPosition);
-		object7->SetRotation(objectRotation);
+		object7->SetRotation(objectRotation);*/
 		objSkydome->SetPosition(objectPosition);
 		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
 		objAttackRange->SetRotation(objectRotation);

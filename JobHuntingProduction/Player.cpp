@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "FbxLoader/FbxLoader.h"
+#include "input/Input.h"
 
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
@@ -15,6 +16,9 @@ Camera* Player::camera = nullptr;
 
 ComPtr<ID3D12RootSignature> Player::rootsignature;
 ComPtr<ID3D12PipelineState> Player::pipelinestate;
+
+extern XMFLOAT3 objectPosition = { 0.0f, -10.0f, 0.0f };
+extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
 
 void Player::Initialize()
 {
@@ -51,6 +55,10 @@ void Player::Initialize()
 
 	// Set time for 1 frame at 60fps
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
+
+	input = Input::GetInstance();
+
+	SetScale({ 3,3,3 });
 }
 
 void Player::Update()
@@ -129,6 +137,32 @@ void Player::Update()
 		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
 	}
 	constBuffSkin->Unmap(0, nullptr);
+
+	rotation.y = objectRotation.y;
+
+	// ˆÚ“®ƒxƒNƒgƒ‹‚ðYŽ²Žü‚è‚ÌŠp“x‚Å‰ñ“]
+	XMVECTOR move = { 0,0,1.0f,0 };
+	matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	move = XMVector3TransformNormal(move, matRot);
+
+	// Œü‚¢‚Ä‚¢‚é•ûŒü‚ÉˆÚ“®
+	if (input->PushKey(DIK_S) || input->PushLStickDown()) {
+		position.x -= move.m128_f32[0];
+		position.y -= move.m128_f32[1];
+		position.z -= move.m128_f32[2];
+	}
+	else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
+		position.x += move.m128_f32[0];
+		position.y += move.m128_f32[1];
+		position.z += move.m128_f32[2];
+	}
+
+	objectPosition = position;
+
+	SetPosition(position);
+	SetRotation(rotation);
+
+	SetScale({ 3,3,3 });
 }
 
 void Player::CreateGraphicsPipeline()

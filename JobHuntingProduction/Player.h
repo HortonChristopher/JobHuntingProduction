@@ -2,6 +2,7 @@
 
 #include "FBX3DModel.h"
 #include "Camera.h"
+#include "input/Input.h"
 
 #include <Windows.h>
 #include <wrl.h>
@@ -104,12 +105,14 @@ private:
 	static Camera* camera;
 
 protected:
+	Input* input = nullptr;
+
 	// Local scale
 	XMFLOAT3 scale = { 1,1,1 };
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation
-	XMFLOAT3 position = { 0,0,0 };
+	XMFLOAT3 position = { 0,-10,0 };
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model

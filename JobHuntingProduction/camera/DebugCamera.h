@@ -34,7 +34,7 @@ private:
 	float scaleX = 1.0f;
 	float scaleY = 1.0f;
 
-	float rotation = 0.0f;
+	//float rotation = 0.0f;
 	// 回転行列
 	XMMATRIX matRot = DirectX::XMMatrixIdentity();
 };
