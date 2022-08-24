@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FBX3DModel.h"
+#include "FBXGeneration.h"
 #include "Camera.h"
 
 #include <Windows.h>
@@ -119,6 +120,12 @@ protected:
 	// Model
 	FBX3DModel* model = nullptr;
 
+	bool modelSwitch = false;
+	bool modelSwitchS = false;
+
+	FBX3DModel* modelRunning = nullptr;
+	FBX3DModel* modelStanding = nullptr;
+
 	// 1 frame time
 	FbxTime frameTime;
 
@@ -135,6 +142,7 @@ protected:
 	bool isPlay = false;
 
 	bool set = false;
+	bool modelChange = false;
 	float degrees = 0.0f;
 	int timer = 0;
 	float x = 0.0f;

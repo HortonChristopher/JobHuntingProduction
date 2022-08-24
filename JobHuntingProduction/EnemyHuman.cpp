@@ -1,4 +1,5 @@
 #include "EnemyHuman.h"
+#include "FbxGeneration.h"
 #include "FbxLoader/FbxLoader.h"
 
 #include <time.h>
@@ -19,6 +20,9 @@ ComPtr<ID3D12PipelineState> EnemyHuman::pipelinestate;
 
 void EnemyHuman::Initialize()
 {
+	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
+
 	HRESULT result;
 	// Creation of Constant Buffer
 	result = device->CreateCommittedResource(
@@ -54,6 +58,8 @@ void EnemyHuman::Initialize()
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 
 	SetPosition(position);
+	//SetModel(modelStanding);
+	SetModel(modelRunning);
 	SetScale({ 3,3,3 });
 	srand(time(NULL));
 }
@@ -81,6 +87,12 @@ void EnemyHuman::Update()
 		float radians = atan2(y2, x2);
 		degrees = XMConvertToDegrees(radians);
 		set = true;
+		modelChange = true;
+		if (modelChange)
+		{
+			SetModel(modelRunning);
+			modelChange = false;
+		}
 	}
 	else if (wander && set)
 	{
@@ -89,6 +101,12 @@ void EnemyHuman::Update()
 			timer = 0;
 			wander = false;
 			set = false;
+			modelChange = true;
+			if (modelChange)
+			{
+				SetModel(modelStanding);
+				modelChange = false;
+			}
 		}
 		else
 		{
@@ -99,7 +117,20 @@ void EnemyHuman::Update()
 		position.z += y;
 		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		SetPosition(position);
-		SetScale({ 3,3,3 });
+		//SetScale({ 3,3,3 });
+	}
+
+	if (modelSwitch)
+	{
+		modelSwitch = false;
+	}
+	else if (modelSwitchS)
+	{
+		modelSwitchS = false;
+	}
+	else
+	{
+
 	}
 
 	XMMATRIX matScale, matRot, matTrans;

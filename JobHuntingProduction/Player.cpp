@@ -162,7 +162,7 @@ void Player::Update()
 	SetPosition(position);
 	SetRotation(rotation);
 
-	SetScale({ 3,3,3 });
+	//SetScale({ 3,3,3 });
 }
 
 void Player::CreateGraphicsPipeline()

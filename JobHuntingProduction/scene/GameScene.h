@@ -108,8 +108,21 @@ private: // メンバ変数
 	FBX3DModel* model3 = nullptr;
 	Player* object7 = nullptr;
 
+	Model* modelWall = nullptr;
+	Object3d* objNorthWall1 = nullptr;
+	Object3d* objNorthWall2 = nullptr;
+	Object3d* objEastWall = nullptr;
+	Object3d* objWestWall = nullptr;
+	Object3d* objSouthWall = nullptr;
+
+	Model* modelDoor = nullptr;
+	Object3d* objDoor1 = nullptr;
+
 	bool attacking = false;
 	int attackTime = 0;
+	int enemyDefeated = 0;
+	bool gateOpen = false;
+	bool area1Clear = false;
 
 	bool enemy1Alive = true;
 	bool enemy2Alive = true;
@@ -130,35 +143,6 @@ private: // メンバ変数
 	XMFLOAT3 movement2Position = { 0,0,0 };
 	XMFLOAT3 movement3Position = { 0,0,0 };
 	XMFLOAT3 movement4Position = { 0,0,0 };
-
-	bool set1 = false;
-	bool set2 = false;
-	bool set3 = false;
-	bool set4 = false;
-
-	bool wander1 = false;
-	bool wander2 = false;
-	bool wander3 = false;
-	bool wander4 = false;
-
-	float x1 = 0.0f;
-	float y1 = 0.0f;
-	float x2 = 0.0f;
-	float y2 = 0.0f;
-	float x3 = 0.0f;
-	float y3 = 0.0f;
-	float x4 = 0.0f;
-	float y4 = 0.0f;
-
-	float theta_degrees1 = 0.0f;
-	float theta_degrees12 = 0.0f;
-	float theta_degrees123 = 0.0f;
-	float theta_degrees1234 = 0.0f;
-
-	int timer1 = 60;
-	int timer2 = 120;
-	int timer3 = 180;
-	int timer4 = 240;
 
 	int page = 0;
 

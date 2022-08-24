@@ -89,19 +89,31 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
 	objAttackRange = Object3d::Create();
+	objNorthWall1 = Object3d::Create();
+	objNorthWall2 = Object3d::Create();
+	objEastWall = Object3d::Create();
+	objWestWall = Object3d::Create();
+	objSouthWall = Object3d::Create();
+	objDoor1 = Object3d::Create();
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelAttackRange = Model::CreateFromOBJ("yuka");
+	modelWall = Model::CreateFromOBJ("kabe");
+	modelDoor = Model::CreateFromOBJ("DoorBase");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objAttackRange->SetModel(modelAttackRange);
+	objNorthWall1->SetModel(modelWall);
+	objNorthWall2->SetModel(modelWall);
+	objEastWall->SetModel(modelWall);
+	objWestWall->SetModel(modelWall);
+	objSouthWall->SetModel(modelWall);
+	objDoor1->SetModel(modelDoor);
 
 	// Specify the FBX model and read the file
-	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRunning");
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
-	//model2 = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStanding");
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	model3 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 
@@ -111,19 +123,19 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object2 = new EnemyHuman;
 	object2->Initialize();
-	object2->SetModel(model2);
+	//object2->SetModel(model2);
 
 	object3 = new EnemyHuman;
 	object3->Initialize();
-	object3->SetModel(model2);
+	//object3->SetModel(model2);
 
 	object4 = new EnemyHuman;
 	object4->Initialize();
-	object4->SetModel(model2);
+	//object4->SetModel(model2);
 
 	object5 = new EnemyHuman;
 	object5->Initialize();
-	object5->SetModel(model2);
+	//object5->SetModel(model2);
 
 	object6 = new Player;
 	object6->Initialize();
@@ -135,19 +147,19 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object8 = new EnemyHuman;
 	object8->Initialize();
-	object8->SetModel(model1);
+	//object8->SetModel(model1);
 
 	object9 = new EnemyHuman;
 	object9->Initialize();
-	object9->SetModel(model1);
+	//object9->SetModel(model1);
 
 	object10 = new EnemyHuman;
 	object10->Initialize();
-	object10->SetModel(model1);
+	//object10->SetModel(model1);
 
 	object11 = new EnemyHuman;
 	object11->Initialize();
-	object11->SetModel(model1);
+	//object11->SetModel(model1);
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -156,9 +168,25 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	lightGroup = LightGroup::Create();
 
 	// カメラ注視点をセット
-	camera->SetTarget({0, 0.0f, 0});
+	camera->SetTarget({0, 0.0f, -30.0f});
 	camera->SetUp({ 0, 1, 0 });
-	camera->SetDistance(64.0f);
+	camera->SetDistance(48.0f);
+
+	objNorthWall1->SetPosition({ -90.0f, 35.0f, 160.0f });
+	objNorthWall2->SetPosition({ 90.0f, 35.0f, 160.0f });
+	objNorthWall1->SetScale({ 140.0f, 60.0f, 3.0f });
+	objNorthWall2->SetScale({ 140.0f, 60.0f, 3.0f });
+	
+	objEastWall->SetPosition({ 160.0f, 35.0f, 0.0f });
+	objEastWall->SetScale({ 3.0f, 60.0f, 320.0f });
+	objWestWall->SetPosition({ -160.0f, 35.0f, 0.0f });
+	objWestWall->SetScale({ 3.0f, 60.0f, 320.0f });
+
+	objSouthWall->SetPosition({ 0.0f, 35.0f, -160.0f });
+	objSouthWall->SetScale({ 320.0f, 60.0f, 3.0f });
+
+	objDoor1->SetPosition({ 0.0f, -5.0f, 160.0f });
+	objDoor1->SetScale({ 40.0f, 10.0f, 3.0f });
 
 	objAttackRange->SetPosition({ objectPosition.x, objectPosition.y + 0.5f, objectPosition.z + 5.0f });
 	objAttackRange->SetRotation({0, 0, 0});
@@ -210,38 +238,56 @@ void GameScene::Update()
 		{
 			attackTime = 0;
 		}
+
 		objSkydome->SetPosition(objectPosition);
+
 		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
 		objAttackRange->SetRotation(objectRotation);
 
-		/*if (attackTime > 10 && attackTime < 20)
+		if (attackTime > 10 && attackTime < 20)
 		{
 			if (intersect(objAttackRange->GetPosition(), object2->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy1Alive == true)
 			{
 				enemy1Alive = false;
+				if (!area1Clear)
+				{
+					enemyDefeated++;
+				}
 				e1Respawn = 30;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object3->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy2Alive == true)
 			{
 				enemy2Alive = false;
+				if (!area1Clear)
+				{
+					enemyDefeated++;
+				}
 				e2Respawn = 30;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object4->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy3Alive == true)
 			{
 				enemy3Alive = false;
+				if (!area1Clear)
+				{
+					enemyDefeated++;
+				}
 				e3Respawn = 30;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object5->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy4Alive == true)
 			{
 				enemy4Alive = false;
+				if (!area1Clear)
+				{
+					enemyDefeated++;
+				}
 				e4Respawn = 30;
 			}
-		}*/
+		}
 
-		/*if (e1Respawn > 0)
+		if (e1Respawn > 0)
 		{
 			e1Respawn--;
 		}
@@ -275,62 +321,95 @@ void GameScene::Update()
 		else
 		{
 			e4Respawn = 0;
-		}*/
+		}
 
-		/*if (e1Respawn <= 0 && !enemy1Alive)
+		if (e1Respawn <= 0 && !enemy1Alive)
 		{
-			object2->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			object2->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
 			enemy1Alive = true;
 		}
 
 		if (e2Respawn <= 0 && !enemy2Alive)
 		{
-			object3->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			object3->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
 			enemy2Alive = true;
 		}
 
 		if (e3Respawn <= 0 && !enemy3Alive)
 		{
-			object4->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			object4->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
 			enemy3Alive = true;
 		}
 
 		if (e4Respawn <= 0 && !enemy4Alive)
 		{
-			object5->SetPosition({ rand() % 201 - 100.0f, -10, rand() % 201 - 100.0f });
+			object5->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
 			enemy4Alive = true;
-		}*/
+		}
 
+		if (enemyDefeated > 5 && !area1Clear)
+		{
+			gateOpen = true;
+			enemyDefeated = 0;
+			area1Clear = true;
+		}
+
+		if (gateOpen)
+		{
+			objDoor1->SetPosition({ objDoor1->GetPosition().x, objDoor1->GetPosition().y + 0.1f, objDoor1->GetPosition().z });
+			objDoor1->Update();
+			//camera->SetTarget({ 0, 0.0f, -30.0f });
+			//camera->SetUp({ 0, 1, 0 });
+			//camera->SetDistance(48.0f);
+			//camera->SetEye({ 0, 0.0f, 0.0f });
+			//camera->Update();
+
+			if (objDoor1->GetPosition().y > 20.0f)
+			{
+				gateOpen = false;
+			}
+		}
 		object1->Update();
 		if (enemy1Alive)
 		{
 			object2->Update();
-			object8->Update();
+			//object8->Update();
+			//object8->SetPosition(object2->GetPosition());
+			//object8->SetRotation(object2->GetRotation());
 		}
 		if (enemy2Alive)
 		{
+			//object9->SetPosition(object3->GetPosition());
+			//object9->SetRotation(object3->GetRotation());
 			object3->Update();
-			object9->Update();
+			//object9->Update();
 		}
 		if (enemy3Alive)
 		{
 			object4->Update();
-			object10->Update();
+			//object10->Update();
+			//object10->SetPosition(object4->GetPosition());
+			//object10->SetRotation(object4->GetRotation());
 		}
 		if (enemy4Alive)
 		{
 			object5->Update();
-			object11->Update();
+			//object11->Update();
+			//object11->SetPosition(object5->GetPosition());
+			//object11->SetRotation(object5->GetRotation());
 		}
 		object6->Update();
-		if (attackTime > 0)
-		{
-			object7->Update();
-		}
+		object7->Update();
 
+		objAttackRange->Update();
+		objNorthWall1->Update();
+		objNorthWall2->Update();
+		objEastWall->Update();
+		objWestWall->Update();
+		objSouthWall->Update();
 		objSkydome->Update();
 		objGround->Update();
-		objAttackRange->Update();
+		objDoor1->Update();
 	}
 
 	//Debug Start
@@ -338,9 +417,9 @@ void GameScene::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", theta_degrees_debug);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", enemy1Position.z);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", timer1);
+	//sprintf_s(msgbuf, 256, "X: %f\n", objectPosition.x);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", objectPosition.y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
 	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
@@ -390,51 +469,29 @@ void GameScene::Draw()
 	}
 	if (enemy1Alive)
 	{
-		if (wander1 && set1)
-		{
-			object8->Draw(cmdList);
-		}
-		else
-		{
-			object2->Draw(cmdList);
-		}
+		object2->Draw(cmdList);
 	}
 	if (enemy2Alive)
 	{
-		if (wander2 && set2)
-		{
-			object9->Draw(cmdList);
-		}
-		else
-		{
-			object3->Draw(cmdList);
-		}
+		object3->Draw(cmdList);
 	}
 	if (enemy3Alive)
 	{
-		if (wander3 && set3)
-		{
-			object10->Draw(cmdList);
-		}
-		else
-		{
-			object4->Draw(cmdList);
-		}
+		object4->Draw(cmdList);
 	}
 	if (enemy4Alive)
 	{
-		if (wander4 && set4)
-		{
-			object11->Draw(cmdList);
-		}
-		else
-		{
-			object5->Draw(cmdList);
-		}
+		object5->Draw(cmdList);
 	}
 
 	objSkydome->Draw();
 	objGround->Draw();
+	objNorthWall1->Draw();
+	objNorthWall2->Draw();
+	objEastWall->Draw();
+	objWestWall->Draw();
+	objSouthWall->Draw();
+	objDoor1->Draw();
 
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
