@@ -123,19 +123,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object2 = new EnemyHuman;
 	object2->Initialize();
-	//object2->SetModel(model2);
 
 	object3 = new EnemyHuman;
 	object3->Initialize();
-	//object3->SetModel(model2);
 
 	object4 = new EnemyHuman;
 	object4->Initialize();
-	//object4->SetModel(model2);
 
 	object5 = new EnemyHuman;
 	object5->Initialize();
-	//object5->SetModel(model2);
 
 	object6 = new Player;
 	object6->Initialize();
@@ -147,19 +143,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object8 = new EnemyHuman;
 	object8->Initialize();
-	//object8->SetModel(model1);
 
 	object9 = new EnemyHuman;
 	object9->Initialize();
-	//object9->SetModel(model1);
 
 	object10 = new EnemyHuman;
 	object10->Initialize();
-	//object10->SetModel(model1);
 
 	object11 = new EnemyHuman;
 	object11->Initialize();
-	//object11->SetModel(model1);
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -358,11 +350,6 @@ void GameScene::Update()
 		{
 			objDoor1->SetPosition({ objDoor1->GetPosition().x, objDoor1->GetPosition().y + 0.1f, objDoor1->GetPosition().z });
 			objDoor1->Update();
-			//camera->SetTarget({ 0, 0.0f, -30.0f });
-			//camera->SetUp({ 0, 1, 0 });
-			//camera->SetDistance(48.0f);
-			//camera->SetEye({ 0, 0.0f, 0.0f });
-			//camera->Update();
 
 			if (objDoor1->GetPosition().y > 20.0f)
 			{
@@ -373,30 +360,18 @@ void GameScene::Update()
 		if (enemy1Alive)
 		{
 			object2->Update();
-			//object8->Update();
-			//object8->SetPosition(object2->GetPosition());
-			//object8->SetRotation(object2->GetRotation());
 		}
 		if (enemy2Alive)
 		{
-			//object9->SetPosition(object3->GetPosition());
-			//object9->SetRotation(object3->GetRotation());
 			object3->Update();
-			//object9->Update();
 		}
 		if (enemy3Alive)
 		{
 			object4->Update();
-			//object10->Update();
-			//object10->SetPosition(object4->GetPosition());
-			//object10->SetRotation(object4->GetRotation());
 		}
 		if (enemy4Alive)
 		{
 			object5->Update();
-			//object11->Update();
-			//object11->SetPosition(object5->GetPosition());
-			//object11->SetRotation(object5->GetRotation());
 		}
 		object6->Update();
 		object7->Update();
