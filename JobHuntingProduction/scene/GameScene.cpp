@@ -96,6 +96,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objSouthWall = Object3d::Create();
 	objDoor1 = Object3d::Create();
 
+	objVisionRange1 = Object3d::Create();
+	objVisionRange2 = Object3d::Create();
+	objVisionRange3 = Object3d::Create();
+	objVisionRange4 = Object3d::Create();
+
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelAttackRange = Model::CreateFromOBJ("yuka");

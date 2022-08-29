@@ -118,6 +118,11 @@ private: // メンバ変数
 	Model* modelDoor = nullptr;
 	Object3d* objDoor1 = nullptr;
 
+	Object3d* objVisionRange1 = nullptr;
+	Object3d* objVisionRange2 = nullptr;
+	Object3d* objVisionRange3 = nullptr;
+	Object3d* objVisionRange4 = nullptr;
+
 	bool attacking = false;
 	int attackTime = 0;
 	int enemyDefeated = 0;
