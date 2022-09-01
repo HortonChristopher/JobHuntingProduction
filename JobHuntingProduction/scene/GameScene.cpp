@@ -104,6 +104,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelAttackRange = Model::CreateFromOBJ("yuka");
+	modelVisionRange = Model::CreateFromOBJ("yuka");
 	modelWall = Model::CreateFromOBJ("kabe");
 	modelDoor = Model::CreateFromOBJ("DoorBase");
 
@@ -116,6 +117,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objWestWall->SetModel(modelWall);
 	objSouthWall->SetModel(modelWall);
 	objDoor1->SetModel(modelDoor);
+
+	objVisionRange1->SetModel(modelVisionRange);
+	objVisionRange2->SetModel(modelVisionRange);
+	objVisionRange3->SetModel(modelVisionRange);
+	objVisionRange4->SetModel(modelVisionRange);
 
 	// Specify the FBX model and read the file
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
@@ -365,18 +371,22 @@ void GameScene::Update()
 		if (enemy1Alive)
 		{
 			object2->Update();
+			objVisionRange1->Update();
 		}
 		if (enemy2Alive)
 		{
 			object3->Update();
+			objVisionRange2->Update();
 		}
 		if (enemy3Alive)
 		{
 			object4->Update();
+			objVisionRange3->Update();
 		}
 		if (enemy4Alive)
 		{
 			object5->Update();
+			objVisionRange4->Update();
 		}
 		object6->Update();
 		object7->Update();
@@ -450,18 +460,22 @@ void GameScene::Draw()
 	if (enemy1Alive)
 	{
 		object2->Draw(cmdList);
+		objVisionRange1->Draw();
 	}
 	if (enemy2Alive)
 	{
 		object3->Draw(cmdList);
+		objVisionRange2->Draw();
 	}
 	if (enemy3Alive)
 	{
 		object4->Draw(cmdList);
+		objVisionRange3->Draw();
 	}
 	if (enemy4Alive)
 	{
 		object5->Draw(cmdList);
+		objVisionRange4->Draw();
 	}
 
 	objSkydome->Draw();
