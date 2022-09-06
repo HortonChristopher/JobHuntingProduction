@@ -193,7 +193,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	objAttackRange->SetPosition({ objectPosition.x, objectPosition.y + 0.5f, objectPosition.z + 5.0f });
 	objAttackRange->SetRotation({0, 0, 0});
-	objAttackRange->SetScale({ 15, 15, 15 });
+	objAttackRange->SetScale({ 15, 1, 15 });
+
+	objVisionRange1->SetScale({ 90,1,90 });
+	objVisionRange2->SetScale({ 90,1,90 });
+	objVisionRange3->SetScale({ 90,1,90 });
+	objVisionRange4->SetScale({ 90,1,90 });
 
 	objSkydome->SetScale({ 5,5,5 });
 	objGround->SetScale({ 100,0,100 });
@@ -246,6 +251,18 @@ void GameScene::Update()
 
 		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
 		objAttackRange->SetRotation(objectRotation);
+
+		objVisionRange1->SetPosition({(object2->GetPosition().x + (sinf(XMConvertToRadians(object2->GetRotation().y)) * 40)), object2->GetPosition().y + 0.5f, (object2->GetPosition().z + (cosf(XMConvertToRadians(object2->GetRotation().y)) * 40))});
+		objVisionRange1->SetRotation(object2->GetRotation());
+
+		objVisionRange2->SetPosition({ (object3->GetPosition().x + (sinf(XMConvertToRadians(object3->GetRotation().y)) * 40)), object3->GetPosition().y + 0.5f, (object3->GetPosition().z + (cosf(XMConvertToRadians(object3->GetRotation().y)) * 40)) });
+		objVisionRange2->SetRotation(object3->GetRotation());
+
+		objVisionRange3->SetPosition({ (object4->GetPosition().x + (sinf(XMConvertToRadians(object4->GetRotation().y)) * 40)), object4->GetPosition().y + 0.5f, (object4->GetPosition().z + (cosf(XMConvertToRadians(object4->GetRotation().y)) * 40)) });
+		objVisionRange3->SetRotation(object4->GetRotation());
+
+		objVisionRange4->SetPosition({ (object5->GetPosition().x + (sinf(XMConvertToRadians(object5->GetRotation().y)) * 40)), object5->GetPosition().y + 0.5f, (object5->GetPosition().z + (cosf(XMConvertToRadians(object5->GetRotation().y)) * 40)) });
+		objVisionRange4->SetRotation(object5->GetRotation());
 
 		if (attackTime > 10 && attackTime < 20)
 		{
