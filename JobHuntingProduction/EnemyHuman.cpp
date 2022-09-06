@@ -115,8 +115,8 @@ void EnemyHuman::Update()
 	else if (aggro && aggroSet)
 	{
 		newPosition = objectPosition;
-		x = (newPosition.x - position.x) / 120.0f;
-		y = (newPosition.z - position.z) / 120.0f;
+		x = (newPosition.x - position.x) / 100.0f;
+		y = (newPosition.z - position.z) / 100.0f;
 		float x2 = newPosition.x - position.x;
 		float y2 = newPosition.z - position.z;
 		float radians = atan2(y2, x2);

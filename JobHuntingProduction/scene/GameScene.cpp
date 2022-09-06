@@ -79,10 +79,22 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 		return;
 	}
 
+	if (!Sprite::LoadTexture(5, L"Resources/P3.png")) {
+		assert(0);
+		return;
+	}
+
+	if (!Sprite::LoadTexture(6, L"Resources/P4.png")) {
+		assert(0);
+		return;
+	}
+
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	p1 = Sprite::Create(3, { 0.0f, 0.0f });
 	p2 = Sprite::Create(4, { 0.0f, 0.0f });
+	p3 = Sprite::Create(5, { 0.0f, 0.0f });
+	p4 = Sprite::Create(6, { 0.0f, 0.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
@@ -90,6 +102,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
 	objAttackRange = Object3d::Create();
+	objEAttackRange1 = Object3d::Create();
+	objEAttackRange2 = Object3d::Create();
+	objEAttackRange3 = Object3d::Create();
+	objEAttackRange4 = Object3d::Create();
 	objNorthWall1 = Object3d::Create();
 	objNorthWall2 = Object3d::Create();
 	objEastWall = Object3d::Create();
@@ -112,6 +128,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objAttackRange->SetModel(modelAttackRange);
+	objEAttackRange1->SetModel(modelAttackRange);
+	objEAttackRange2->SetModel(modelAttackRange);
+	objEAttackRange3->SetModel(modelAttackRange);
+	objEAttackRange4->SetModel(modelAttackRange);
 	objNorthWall1->SetModel(modelWall);
 	objNorthWall2->SetModel(modelWall);
 	objEastWall->SetModel(modelWall);
@@ -192,6 +212,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objAttackRange->SetRotation({0, 0, 0});
 	objAttackRange->SetScale({ 15, 1, 15 });
 
+	objEAttackRange1->SetPosition({ object2->GetPosition().x, object2->GetPosition().y + 0.5f, object2->GetPosition().z + 5.0f });
+	objEAttackRange1->SetScale({ 15, 1, 15 });
+	objEAttackRange2->SetPosition({ object3->GetPosition().x, object3->GetPosition().y + 0.5f, object3->GetPosition().z + 5.0f });
+	objEAttackRange2->SetScale({ 15, 1, 15 }); 
+	objEAttackRange3->SetPosition({ object4->GetPosition().x, object4->GetPosition().y + 0.5f, object4->GetPosition().z + 5.0f });
+	objEAttackRange3->SetScale({ 15, 1, 15 }); 
+	objEAttackRange4->SetPosition({ object5->GetPosition().x, object5->GetPosition().y + 0.5f, object5->GetPosition().z + 5.0f });
+	objEAttackRange4->SetScale({ 15, 1, 15 });
+
 	objVisionRange1->SetScale({ 90,1,90 });
 	objVisionRange2->SetScale({ 90,1,90 });
 	objVisionRange3->SetScale({ 90,1,90 });
@@ -218,7 +247,7 @@ void GameScene::Update()
 		}
 	}
 
-	if (page > 1)
+	if (page > 1 && page < 3)
 	{
 		camera->Update();
 
@@ -249,8 +278,20 @@ void GameScene::Update()
 
 		objSkydome->SetPosition(objectPosition);
 
-		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
+		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
 		objAttackRange->SetRotation(objectRotation);
+
+		objEAttackRange1->SetPosition({ (object2->GetPosition().x + (sinf(XMConvertToRadians(object2->GetRotation().y)) * 5)), object2->GetPosition().y + 0.5f, (object2->GetPosition().z + (cosf(XMConvertToRadians(object2->GetRotation().y)) * 5)) });
+		objEAttackRange1->SetRotation(object2->GetRotation());
+
+		objEAttackRange2->SetPosition({ (object3->GetPosition().x + (sinf(XMConvertToRadians(object3->GetRotation().y)) * 5)), object3->GetPosition().y + 0.5f, (object3->GetPosition().z + (cosf(XMConvertToRadians(object3->GetRotation().y)) * 5)) });
+		objEAttackRange2->SetRotation(object3->GetRotation());
+
+		objEAttackRange3->SetPosition({ (object4->GetPosition().x + (sinf(XMConvertToRadians(object4->GetRotation().y)) * 5)), object4->GetPosition().y + 0.5f, (object4->GetPosition().z + (cosf(XMConvertToRadians(object4->GetRotation().y)) * 5)) });
+		objEAttackRange3->SetRotation(object4->GetRotation());
+
+		objEAttackRange4->SetPosition({ (object5->GetPosition().x + (sinf(XMConvertToRadians(object5->GetRotation().y)) * 5)), object5->GetPosition().y + 0.5f, (object5->GetPosition().z + (cosf(XMConvertToRadians(object5->GetRotation().y)) * 5)) });
+		objEAttackRange4->SetRotation(object5->GetRotation());
 
 		objVisionRange1->SetPosition({(object2->GetPosition().x + (sinf(XMConvertToRadians(object2->GetRotation().y)) * 40)), object2->GetPosition().y + 0.5f, (object2->GetPosition().z + (cosf(XMConvertToRadians(object2->GetRotation().y)) * 40))});
 		objVisionRange1->SetRotation(object2->GetRotation());
@@ -268,7 +309,7 @@ void GameScene::Update()
 		{
 			object2->SetAggro(true);
 			float distance1 = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
-			if (distance1 < 7.5f)
+			if (distance1 < 3.0f)
 			{
 				object2->SetAttack(true);
 			}
@@ -287,7 +328,7 @@ void GameScene::Update()
 		{
 			object3->SetAggro(true);
 			float distance2 = sqrt((object3->GetPosition().x - object1->GetPosition().x) * (object3->GetPosition().x - object1->GetPosition().x) + (object3->GetPosition().y - object1->GetPosition().y) * (object3->GetPosition().y - object1->GetPosition().y));
-			if (distance2 < 7.5f)
+			if (distance2 < 3.0f)
 			{
 				object3->SetAttack(true);
 			}
@@ -306,7 +347,7 @@ void GameScene::Update()
 		{
 			object4->SetAggro(true);
 			float distance3 = sqrt((object4->GetPosition().x - object1->GetPosition().x) * (object4->GetPosition().x - object1->GetPosition().x) + (object4->GetPosition().y - object1->GetPosition().y) * (object4->GetPosition().y - object1->GetPosition().y));
-			if (distance3 < 7.5f)
+			if (distance3 < 3.0f)
 			{
 				object4->SetAttack(true);
 			}
@@ -325,7 +366,7 @@ void GameScene::Update()
 		{
 			object5->SetAggro(true);
 			float distance4 = sqrt((object5->GetPosition().x - object1->GetPosition().x) * (object5->GetPosition().x - object1->GetPosition().x) + (object5->GetPosition().y - object1->GetPosition().y) * (object5->GetPosition().y - object1->GetPosition().y));
-			if (distance4 < 7.5f)
+			if (distance4 < 3.0f)
 			{
 				object5->SetAttack(true);
 			}
@@ -341,47 +382,57 @@ void GameScene::Update()
 			object5->SetAttack(false);
 		}	
 
+		if (intersect(objEAttackRange1->GetPosition(), object1->GetPosition(), 3.0f, 10.0f, 10.0f) && enemy1Alive == true)
+		{
+			page++;
+		}
+		if (intersect(objEAttackRange2->GetPosition(), object1->GetPosition(), 3.0f, 10.0f, 10.0f) && enemy2Alive == true)
+		{
+			page++;
+		}
+		if (intersect(objEAttackRange3->GetPosition(), object1->GetPosition(), 3.0f, 10.0f, 10.0f) && enemy3Alive == true)
+		{
+			page++;
+		}
+		if (intersect(objEAttackRange4->GetPosition(), object1->GetPosition(), 3.0f, 10.0f, 10.0f) && enemy4Alive == true)
+		{
+			page++;
+		}
+
 		if (attackTime > 10 && attackTime < 20)
 		{
-			if (intersect(objAttackRange->GetPosition(), object2->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy1Alive == true)
+			if (intersect(objAttackRange->GetPosition(), object2->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy1Alive == true)
 			{
 				enemy1Alive = false;
-				if (!area1Clear)
-				{
-					enemyDefeated++;
-				}
+				enemyDefeated++;
 				e1Respawn = 30;
 			}
 
-			if (intersect(objAttackRange->GetPosition(), object3->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy2Alive == true)
+			if (intersect(objAttackRange->GetPosition(), object3->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy2Alive == true)
 			{
 				enemy2Alive = false;
-				if (!area1Clear)
-				{
-					enemyDefeated++;
-				}
+				enemyDefeated++;
 				e2Respawn = 30;
 			}
 
-			if (intersect(objAttackRange->GetPosition(), object4->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy3Alive == true)
+			if (intersect(objAttackRange->GetPosition(), object4->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy3Alive == true)
 			{
 				enemy3Alive = false;
-				if (!area1Clear)
-				{
-					enemyDefeated++;
-				}
+				enemyDefeated++;
 				e3Respawn = 30;
 			}
 
-			if (intersect(objAttackRange->GetPosition(), object5->GetPosition(), 3.0f, 7.5f, 7.5f) && enemy4Alive == true)
+			if (intersect(objAttackRange->GetPosition(), object5->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy4Alive == true)
 			{
 				enemy4Alive = false;
-				if (!area1Clear)
-				{
-					enemyDefeated++;
-				}
+				enemyDefeated++;
 				e4Respawn = 30;
 			}
+		}
+
+		if (enemyDefeated > 9)
+		{
+			page += 2;
 		}
 
 		if (e1Respawn > 0)
@@ -422,25 +473,25 @@ void GameScene::Update()
 
 		if (e1Respawn <= 0 && !enemy1Alive)
 		{
-			object2->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
+			object2->SetPosition({ -300.0f, -10.0f, 0.0f });
 			enemy1Alive = true;
 		}
 
 		if (e2Respawn <= 0 && !enemy2Alive)
 		{
-			object3->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
+			object3->SetPosition({ 300.0f, -10.0f, 0.0f });
 			enemy2Alive = true;
 		}
 
 		if (e3Respawn <= 0 && !enemy3Alive)
 		{
-			object4->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
+			object4->SetPosition({ 0.0f, -10.0f, -300.0f });
 			enemy3Alive = true;
 		}
 
 		if (e4Respawn <= 0 && !enemy4Alive)
 		{
-			object5->SetPosition({ rand() % 301 - 150.0f, -10, rand() % 301 - 150.0f });
+			object5->SetPosition({ 0.0f, -10.0f, 300.0f });
 			enemy4Alive = true;
 		}
 
@@ -467,21 +518,25 @@ void GameScene::Update()
 		{
 			object2->Update();
 			objVisionRange1->Update();
+			objEAttackRange1->Update();
 		}
 		if (enemy2Alive)
 		{
 			object3->Update();
 			objVisionRange2->Update();
+			objEAttackRange2->Update();
 		}
 		if (enemy3Alive)
 		{
 			object4->Update();
 			objVisionRange3->Update();
+			objEAttackRange3->Update();
 		}
 		if (enemy4Alive)
 		{
 			object5->Update();
 			objVisionRange4->Update();
+			objEAttackRange4->Update();
 		}
 		object6->Update();
 		object7->Update();
@@ -495,6 +550,11 @@ void GameScene::Update()
 		objSkydome->Update();
 		objGround->Update();
 		//objDoor1->Update();
+	}
+
+	if (page > 2)
+	{
+
 	}
 
 	//float distance = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
@@ -543,7 +603,7 @@ void GameScene::Draw()
 		object7->Draw(cmdList);
 		if (attackTime > 10 && attackTime < 20)
 		{
-			objAttackRange->Draw();
+			//objAttackRange->Draw();
 		}
 	}
 	else if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushLStickUp() || input->PushLStickDown())
@@ -554,25 +614,29 @@ void GameScene::Draw()
 	{
 		object6->Draw(cmdList);
 	}
-	if (enemy1Alive)
+	if (enemy1Alive && page == 2)
 	{
 		object2->Draw(cmdList);
-		objVisionRange1->Draw();
+		//objVisionRange1->Draw();
+		//objEAttackRange1->Draw();
 	}
-	if (enemy2Alive)
+	if (enemy2Alive && page == 2)
 	{
 		object3->Draw(cmdList);
-		objVisionRange2->Draw();
+		//objVisionRange2->Draw();
+		//objEAttackRange2->Draw();
 	}
-	if (enemy3Alive)
+	if (enemy3Alive && page == 2)
 	{
 		object4->Draw(cmdList);
-		objVisionRange3->Draw();
+		//objVisionRange3->Draw();
+		//objEAttackRange3->Draw();
 	}
-	if (enemy4Alive)
+	if (enemy4Alive && page == 2)
 	{
 		object5->Draw(cmdList);
-		objVisionRange4->Draw();
+		//objVisionRange4->Draw();
+		//objEAttackRange4->Draw();
 	}
 
 	objSkydome->Draw();
@@ -604,6 +668,14 @@ void GameScene::Draw()
 	if (page == 1)
 	{
 		p2->Draw();
+	}
+	if (page == 3)
+	{
+		p3->Draw();
+	}
+	if (page == 4)
+	{
+		p4->Draw();
 	}
 
 	// デバッグテキストの描画
