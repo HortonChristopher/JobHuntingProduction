@@ -1,4 +1,6 @@
 #include "EnemyHuman.h"
+#include "Player.h"
+#include "GameScene.h"
 #include "FbxGeneration.h"
 #include "FbxLoader/FbxLoader.h"
 
@@ -8,6 +10,9 @@
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
+
+extern XMFLOAT3 objectPosition;
+extern XMFLOAT3 objectRotation;
 
 ///<summary>
 /// Static Member Variable Entity
@@ -66,11 +71,12 @@ void EnemyHuman::Initialize()
 
 void EnemyHuman::Update()
 {
-	if (!wander && timer < 240)
+	if (!wander && timer < 240 && !aggro)
 	{
+		aggroSet = false;
 		timer++;
 	}
-	else if (!wander && timer > 239)
+	else if (!wander && timer > 239 && !aggro)
 	{
 		newPosition.x = rand() % 301 - 150;
 		newPosition.z = rand() % 301 - 150;
@@ -78,7 +84,38 @@ void EnemyHuman::Update()
 		wander = true;
 	}
 
-	if (wander && !set)
+	if (aggro && !aggroSet)
+	{
+		modelChange = true;
+		if (modelChange)
+		{
+			SetModel(modelRunning);
+			modelChange = false;
+		}
+		aggroSet = true;
+	}
+	else if (aggro && aggroSet)
+	{
+		newPosition = objectPosition;
+		x = (newPosition.x - position.x) / 120.0f;
+		y = (newPosition.z - position.z) / 120.0f;
+		float x2 = newPosition.x - position.x;
+		float y2 = newPosition.z - position.z;
+		float radians = atan2(y2, x2);
+		degrees = XMConvertToDegrees(radians);
+		position.x += x;
+		position.z += y;
+		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+		SetPosition(position);
+		if (aggroSwitch)
+		{
+			SetModel(modelStanding);
+			aggroSet = false;
+			aggro = false;
+			aggroSwitch = false;
+		}
+	}
+	else if (wander && !set)
 	{
 		x = (newPosition.x - position.x) / 360.0f;
 		y = (newPosition.z - position.z) / 360.0f;

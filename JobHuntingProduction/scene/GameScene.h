@@ -64,6 +64,9 @@ public: // メンバ関数
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
+public:
+	//Player* object1 = nullptr;
+
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -153,5 +156,6 @@ private: // メンバ変数
 	int page = 0;
 
 	float movement = 1.0f;
+	bool testReset = false;
 };
 

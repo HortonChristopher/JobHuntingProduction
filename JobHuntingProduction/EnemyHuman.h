@@ -71,6 +71,8 @@ public:
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+	void SetAggro(bool aggro) { this->aggro = aggro; }
+	void SetAggroSwitch(bool aggroswitch) { this->aggroSwitch = aggroswitch; }
 
 	const XMFLOAT3& GetPosition() { return position; }
 	const XMFLOAT3& GetRotation() { return rotation; }
@@ -120,6 +122,10 @@ protected:
 	// Model
 	FBX3DModel* model = nullptr;
 
+	bool aggro = false;
+	bool aggroSet = false;
+	bool aggroSwitch = false;
+
 	bool modelSwitch = false;
 	bool modelSwitchS = false;
 
@@ -144,7 +150,7 @@ protected:
 	bool set = false;
 	bool modelChange = false;
 	float degrees = 0.0f;
-	int timer = 0;
+	int timer = 239;
 	float x = 0.0f;
 	float y = 0.0f;
 };

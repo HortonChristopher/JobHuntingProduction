@@ -247,6 +247,9 @@ void GameScene::Update()
 			attackTime = 0;
 		}
 
+		objectPosition = object1->GetPosition();
+		//objectRotation = object1->GetRotation();
+
 		objSkydome->SetPosition(objectPosition);
 
 		objAttackRange->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 5)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 5)) });
@@ -263,6 +266,43 @@ void GameScene::Update()
 
 		objVisionRange4->SetPosition({ (object5->GetPosition().x + (sinf(XMConvertToRadians(object5->GetRotation().y)) * 40)), object5->GetPosition().y + 0.5f, (object5->GetPosition().z + (cosf(XMConvertToRadians(object5->GetRotation().y)) * 40)) });
 		objVisionRange4->SetRotation(object5->GetRotation());
+
+		if (intersect(object1->GetPosition(), objVisionRange1->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		{
+			object2->SetAggro(true);
+		}
+		else
+		{
+			//object2->SetAggro(false);
+			object2->SetAggroSwitch(true);
+		}
+		if (intersect(object1->GetPosition(), objVisionRange2->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		{
+			object3->SetAggro(true);
+		}
+		else
+		{
+			//object3->SetAggro(false);
+			object3->SetAggroSwitch(true);
+		}
+		if (intersect(object1->GetPosition(), objVisionRange3->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		{
+			object4->SetAggro(true);
+		}
+		else
+		{
+			//object4->SetAggro(false);
+			object4->SetAggroSwitch(true);
+		}
+		if (intersect(object1->GetPosition(), objVisionRange4->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		{
+			object5->SetAggro(true);
+		}
+		else
+		{
+			//object5->SetAggro(false);
+			object5->SetAggroSwitch(true);
+		}
 
 		if (attackTime > 10 && attackTime < 20)
 		{
@@ -367,12 +407,12 @@ void GameScene::Update()
 			enemy4Alive = true;
 		}
 
-		if (enemyDefeated > 5 && !area1Clear)
+		/*if (enemyDefeated > 5 && !area1Clear)
 		{
 			gateOpen = true;
 			enemyDefeated = 0;
 			area1Clear = true;
-		}
+		}*/
 
 		if (gateOpen)
 		{
@@ -409,14 +449,14 @@ void GameScene::Update()
 		object7->Update();
 
 		objAttackRange->Update();
-		objNorthWall1->Update();
+		/*objNorthWall1->Update();
 		objNorthWall2->Update();
 		objEastWall->Update();
 		objWestWall->Update();
-		objSouthWall->Update();
+		objSouthWall->Update();*/
 		objSkydome->Update();
 		objGround->Update();
-		objDoor1->Update();
+		//objDoor1->Update();
 	}
 
 	//Debug Start
@@ -497,12 +537,12 @@ void GameScene::Draw()
 
 	objSkydome->Draw();
 	objGround->Draw();
-	objNorthWall1->Draw();
+	/*objNorthWall1->Draw();
 	objNorthWall2->Draw();
 	objEastWall->Draw();
 	objWestWall->Draw();
 	objSouthWall->Draw();
-	objDoor1->Draw();
+	objDoor1->Draw();*/
 
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
