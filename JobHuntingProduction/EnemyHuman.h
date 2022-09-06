@@ -71,6 +71,8 @@ public:
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+	void SetHomePosition(XMFLOAT2 position) { this->homePosition = position; }
+	void SetAttack(bool attack) { this->attack = attack; }
 	void SetAggro(bool aggro) { this->aggro = aggro; }
 	void SetAggroSwitch(bool aggroswitch) { this->aggroSwitch = aggroswitch; }
 
@@ -122,17 +124,23 @@ protected:
 	// Model
 	FBX3DModel* model = nullptr;
 
+	XMFLOAT2 homePosition = { 0, 0 };
+
 	bool aggro = false;
 	bool aggroSet = false;
 	bool aggroSwitch = false;
+
+	bool attack = false;
+	bool attackAnimation = false;
 
 	bool modelSwitch = false;
 	bool modelSwitchS = false;
 
 	FBX3DModel* modelRunning = nullptr;
 	FBX3DModel* modelStanding = nullptr;
+	FBX3DModel* modelAttacking = nullptr;
 
-	// 1 frame time
+	// 1 frame timed
 	FbxTime frameTime;
 
 	// Animation start time
@@ -151,6 +159,7 @@ protected:
 	bool modelChange = false;
 	float degrees = 0.0f;
 	int timer = 239;
+	int attackTimer = 0;
 	float x = 0.0f;
 	float y = 0.0f;
 };

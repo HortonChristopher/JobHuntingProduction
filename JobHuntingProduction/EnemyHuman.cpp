@@ -27,6 +27,7 @@ void EnemyHuman::Initialize()
 {
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
+	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -78,13 +79,30 @@ void EnemyHuman::Update()
 	}
 	else if (!wander && timer > 239 && !aggro)
 	{
-		newPosition.x = rand() % 301 - 150;
-		newPosition.z = rand() % 301 - 150;
+		newPosition.x = rand() % 301 - 150 + homePosition.x;
+		newPosition.z = rand() % 301 - 150 + homePosition.y;
 		timer = 0;
 		wander = true;
 	}
 
-	if (aggro && !aggroSet)
+	if (aggro && attack)
+	{
+		if (!attackAnimation)
+		{
+			SetModel(modelAttacking);
+			attackAnimation = true;
+		}
+		SetPosition(position);
+		SetRotation(rotation);
+		attackTimer++;
+		if (timer > 29)
+		{
+			attackTimer = 0;
+			attackAnimation = false;
+			attack = false;
+		}
+	}
+	else if (aggro && !aggroSet)
 	{
 		modelChange = true;
 		if (modelChange)

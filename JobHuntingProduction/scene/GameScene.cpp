@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 using namespace DirectX;
 
 extern XMFLOAT3 objectPosition;
@@ -134,15 +135,23 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object2 = new EnemyHuman;
 	object2->Initialize();
+	object2->SetPosition({ -300.0f, -10.0f, 0.0f });
+	object2->SetHomePosition({ -300.0f, 0.0f });
 
 	object3 = new EnemyHuman;
 	object3->Initialize();
+	object3->SetPosition({ 300.0f, -10.0f, 0.0f });
+	object3->SetHomePosition({ 300.0f, 0.0f });
 
 	object4 = new EnemyHuman;
 	object4->Initialize();
+	object4->SetPosition({ 0.0f, -10.0f, -300.0f });
+	object4->SetHomePosition({ 0.0f, -300.0f });
 
 	object5 = new EnemyHuman;
 	object5->Initialize();
+	object5->SetPosition({ 0.0f, -10.0f, 300.0f });
+	object5->SetHomePosition({ 0.0f, 300.0f });
 
 	object6 = new Player;
 	object6->Initialize();
@@ -151,18 +160,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	object7 = new Player;
 	object7->Initialize();
 	object7->SetModel(model3);
-
-	object8 = new EnemyHuman;
-	object8->Initialize();
-
-	object9 = new EnemyHuman;
-	object9->Initialize();
-
-	object10 = new EnemyHuman;
-	object10->Initialize();
-
-	object11 = new EnemyHuman;
-	object11->Initialize();
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -267,42 +264,82 @@ void GameScene::Update()
 		objVisionRange4->SetPosition({ (object5->GetPosition().x + (sinf(XMConvertToRadians(object5->GetRotation().y)) * 40)), object5->GetPosition().y + 0.5f, (object5->GetPosition().z + (cosf(XMConvertToRadians(object5->GetRotation().y)) * 40)) });
 		objVisionRange4->SetRotation(object5->GetRotation());
 
-		if (intersect(object1->GetPosition(), objVisionRange1->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		if (intersect(object1->GetPosition(), objVisionRange1->GetPosition(), 3.0f, 60.0f, 60.0f) && enemy1Alive == true)
 		{
 			object2->SetAggro(true);
+			float distance1 = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
+			if (distance1 < 7.5f)
+			{
+				object2->SetAttack(true);
+			}
+			else
+			{
+				object2->SetAttack(false);
+			}
 		}
 		else
 		{
 			//object2->SetAggro(false);
 			object2->SetAggroSwitch(true);
+			object2->SetAttack(false);
 		}
-		if (intersect(object1->GetPosition(), objVisionRange2->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		if (intersect(object1->GetPosition(), objVisionRange2->GetPosition(), 3.0f, 60.0f, 60.0f) && enemy1Alive == true)
 		{
 			object3->SetAggro(true);
+			float distance2 = sqrt((object3->GetPosition().x - object1->GetPosition().x) * (object3->GetPosition().x - object1->GetPosition().x) + (object3->GetPosition().y - object1->GetPosition().y) * (object3->GetPosition().y - object1->GetPosition().y));
+			if (distance2 < 7.5f)
+			{
+				object3->SetAttack(true);
+			}
+			else
+			{
+				object3->SetAttack(false);
+			}
 		}
 		else
 		{
 			//object3->SetAggro(false);
 			object3->SetAggroSwitch(true);
+			object3->SetAttack(false);
 		}
-		if (intersect(object1->GetPosition(), objVisionRange3->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		if (intersect(object1->GetPosition(), objVisionRange3->GetPosition(), 3.0f, 60.0f, 60.0f) && enemy1Alive == true)
 		{
 			object4->SetAggro(true);
+			float distance3 = sqrt((object4->GetPosition().x - object1->GetPosition().x) * (object4->GetPosition().x - object1->GetPosition().x) + (object4->GetPosition().y - object1->GetPosition().y) * (object4->GetPosition().y - object1->GetPosition().y));
+			if (distance3 < 7.5f)
+			{
+				object4->SetAttack(true);
+			}
+			else
+			{
+				object4->SetAttack(false);
+			}
 		}
 		else
 		{
 			//object4->SetAggro(false);
 			object4->SetAggroSwitch(true);
+			object4->SetAttack(false);
 		}
-		if (intersect(object1->GetPosition(), objVisionRange4->GetPosition(), 3.0f, 90.0f, 90.0f) && enemy1Alive == true)
+		if (intersect(object1->GetPosition(), objVisionRange4->GetPosition(), 3.0f, 60.0f, 60.0f) && enemy1Alive == true)
 		{
 			object5->SetAggro(true);
+			float distance4 = sqrt((object5->GetPosition().x - object1->GetPosition().x) * (object5->GetPosition().x - object1->GetPosition().x) + (object5->GetPosition().y - object1->GetPosition().y) * (object5->GetPosition().y - object1->GetPosition().y));
+			if (distance4 < 7.5f)
+			{
+				object5->SetAttack(true);
+			}
+			else
+			{
+				object5->SetAttack(false);
+			}
 		}
 		else
 		{
 			//object5->SetAggro(false);
 			object5->SetAggroSwitch(true);
-		}
+			object5->SetAttack(false);
+		}	
 
 		if (attackTime > 10 && attackTime < 20)
 		{
@@ -414,7 +451,7 @@ void GameScene::Update()
 			area1Clear = true;
 		}*/
 
-		if (gateOpen)
+		/*if (gateOpen)
 		{
 			objDoor1->SetPosition({ objDoor1->GetPosition().x, objDoor1->GetPosition().y + 0.1f, objDoor1->GetPosition().z });
 			objDoor1->Update();
@@ -423,7 +460,8 @@ void GameScene::Update()
 			{
 				gateOpen = false;
 			}
-		}
+		}*/
+
 		object1->Update();
 		if (enemy1Alive)
 		{
@@ -459,12 +497,14 @@ void GameScene::Update()
 		//objDoor1->Update();
 	}
 
+	//float distance = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
+
 	//Debug Start
 	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", objectPosition.x);
+	//sprintf_s(msgbuf, 256, "X: %f\n", distance);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", objectPosition.y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
 	//OutputDebugStringA(msgbuf);

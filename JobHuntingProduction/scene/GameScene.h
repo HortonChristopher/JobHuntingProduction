@@ -16,6 +16,7 @@
 #include "Object3D.h"
 
 #include <vector>
+#include <array>
 
 /// <summary>
 /// ゲームシーン
@@ -96,10 +97,6 @@ private: // メンバ変数
 
 	FBX3DModel* model1 = nullptr;
 	Player* object1 = nullptr;
-	EnemyHuman* object8 = nullptr;
-	EnemyHuman* object9 = nullptr;
-	EnemyHuman* object10 = nullptr;
-	EnemyHuman* object11 = nullptr;
 
 	FBX3DModel* model2 = nullptr;
 	EnemyHuman* object2 = nullptr;
@@ -157,5 +154,7 @@ private: // メンバ変数
 
 	float movement = 1.0f;
 	bool testReset = false;
+
+	std::array<float, 4> distanceArray{ {0.0f, 0.0f, 0.0f, 0.0f} };
 };
 
