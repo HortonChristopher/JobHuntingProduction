@@ -603,7 +603,7 @@ void GameScene::Draw()
 		object7->Draw(cmdList);
 		if (attackTime > 10 && attackTime < 20)
 		{
-			//objAttackRange->Draw();
+			objAttackRange->Draw();
 		}
 	}
 	else if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushLStickUp() || input->PushLStickDown())
