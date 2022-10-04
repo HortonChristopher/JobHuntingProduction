@@ -68,7 +68,6 @@ void EnemyHuman::Initialize()
 	input = Input::GetInstance();
 
 	SetPosition(position);
-	//SetModel(modelStanding);
 	SetModel(modelStanding);
 	SetScale({ 3,3,3 });
 	srand(time(NULL));
@@ -138,6 +137,7 @@ void EnemyHuman::Update()
 			aggroSet = false;
 			aggro = false;
 			wander = false;
+			set = false;
 			aggroSwitch = false;
 		}
 	}
