@@ -25,9 +25,11 @@ ComPtr<ID3D12PipelineState> EnemyHuman::pipelinestate;
 
 void EnemyHuman::Initialize()
 {
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
+	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
+	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
+	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -63,9 +65,11 @@ void EnemyHuman::Initialize()
 	// Set time for 1 frame at 60fps
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 
+	input = Input::GetInstance();
+
 	SetPosition(position);
 	//SetModel(modelStanding);
-	SetModel(modelRunning);
+	SetModel(modelStanding);
 	SetScale({ 3,3,3 });
 	srand(time(NULL));
 }
@@ -89,7 +93,8 @@ void EnemyHuman::Update()
 	{
 		if (!attackAnimation)
 		{
-			SetModel(modelAttacking);
+			animationSet = false;
+			animationNo = 3;
 			attackAnimation = true;
 		}
 		SetPosition(position);
@@ -107,7 +112,8 @@ void EnemyHuman::Update()
 		modelChange = true;
 		if (modelChange)
 		{
-			SetModel(modelRunning);
+			animationSet = false;
+			animationNo = 2;
 			modelChange = false;
 		}
 		aggroSet = true;
@@ -127,16 +133,18 @@ void EnemyHuman::Update()
 		SetPosition(position);
 		if (aggroSwitch)
 		{
-			SetModel(modelStanding);
+			animationSet = false;
+			animationNo = 0;
 			aggroSet = false;
 			aggro = false;
+			wander = false;
 			aggroSwitch = false;
 		}
 	}
 	else if (wander && !set)
 	{
-		x = (newPosition.x - position.x) / 360.0f;
-		y = (newPosition.z - position.z) / 360.0f;
+		x = (newPosition.x - position.x) / 720.0f;
+		y = (newPosition.z - position.z) / 720.0f;
 		float x2 = newPosition.x - position.x;
 		float y2 = newPosition.z - position.z;
 		float radians = atan2(y2, x2);
@@ -145,13 +153,14 @@ void EnemyHuman::Update()
 		modelChange = true;
 		if (modelChange)
 		{
-			SetModel(modelRunning);
+			animationSet = false;
+			animationNo = 1;
 			modelChange = false;
 		}
 	}
 	else if (wander && set)
 	{
-		if (timer > 360)
+		if (timer > 720)
 		{
 			timer = 0;
 			wander = false;
@@ -159,7 +168,8 @@ void EnemyHuman::Update()
 			modelChange = true;
 			if (modelChange)
 			{
-				SetModel(modelStanding);
+				animationSet = false;
+				animationNo = 0;
 				modelChange = false;
 			}
 		}
@@ -175,17 +185,51 @@ void EnemyHuman::Update()
 		//SetScale({ 3,3,3 });
 	}
 
-	if (modelSwitch)
+	if (!animationSet)
 	{
-		modelSwitch = false;
+		switch (animationNo)
+		{
+		case 0:
+			SetModel(modelStanding);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 1:
+			SetModel(modelWalking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 2:
+			SetModel(modelRunning);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 3:
+			SetModel(modelAttacking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 4:
+			SetModel(modelDamaged);
+			isPlay = false;
+			animationSet = true;
+			break;
+		}
 	}
-	else if (modelSwitchS)
-	{
-		modelSwitchS = false;
-	}
-	else
-	{
 
+	// Debug Only
+	if (input->TriggerKey(DIK_0))
+	{
+		if (animationNo < 4)
+		{
+			animationNo++;
+			animationSet = false;
+		}
+		else
+		{
+			animationNo = 0;
+			animationSet = false;
+		}
 	}
 
 	XMMATRIX matScale, matRot, matTrans;

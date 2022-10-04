@@ -3,6 +3,7 @@
 #include "FBX3DModel.h"
 #include "FBXGeneration.h"
 #include "Camera.h"
+#include "input/Input.h"
 
 #include <Windows.h>
 #include <wrl.h>
@@ -112,6 +113,8 @@ public:
 	bool wander = false;
 
 protected:
+	Input* input = nullptr;
+
 	// Local scale
 	XMFLOAT3 scale = { 1,1,1 };
 	// Local Rotation
@@ -133,12 +136,15 @@ protected:
 	bool attack = false;
 	bool attackAnimation = false;
 
-	bool modelSwitch = false;
-	bool modelSwitchS = false;
-
-	FBX3DModel* modelRunning = nullptr;
-	FBX3DModel* modelStanding = nullptr;
-	FBX3DModel* modelAttacking = nullptr;
+	FBX3DModel* modelStanding = nullptr; // 180 frames
+	FBX3DModel* modelWalking = nullptr; // 30 frames
+	FBX3DModel* modelRunning = nullptr; // 20(?) frames
+	//FBX3DModel* modelDodgeF = nullptr; // 30 frames
+	//FBX3DModel* modelDodgeB = nullptr; // 49 frames
+	//FBX3DModel* modelDodgeL = nullptr; // 29 frames
+	//FBX3DModel* modelDodgeR = nullptr; // 29 frames
+	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
+	FBX3DModel* modelDamaged = nullptr; // 54 frames
 
 	// 1 frame timed
 	FbxTime frameTime;
@@ -155,8 +161,12 @@ protected:
 	// Animation is playing
 	bool isPlay = false;
 
-	bool set = false;
+	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
+	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4)
+	bool animationSet = false;
 	bool modelChange = false;
+
+	bool set = false;
 	float degrees = 0.0f;
 	int timer = 239;
 	int attackTimer = 0;
