@@ -138,6 +138,7 @@ void EnemyHuman::Update()
 			aggro = false;
 			wander = false;
 			set = false;
+			timer = 0;
 			aggroSwitch = false;
 		}
 	}
@@ -218,7 +219,7 @@ void EnemyHuman::Update()
 	}
 
 	// Debug Only
-	if (input->TriggerKey(DIK_0))
+	/*if (input->TriggerKey(DIK_0))
 	{
 		if (animationNo < 4)
 		{
@@ -230,7 +231,7 @@ void EnemyHuman::Update()
 			animationNo = 0;
 			animationSet = false;
 		}
-	}
+	}*/
 
 	XMMATRIX matScale, matRot, matTrans;
 
