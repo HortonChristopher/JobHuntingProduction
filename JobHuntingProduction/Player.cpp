@@ -22,6 +22,16 @@ extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
 
 void Player::Initialize()
 {
+	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
+	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
+	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelDodgeF = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeForward");
+	modelDodgeB = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeBack");
+	modelDodgeL = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeLeft");
+	modelDodgeR = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDogeRight");
+	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
+	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
+
 	HRESULT result;
 	// Creation of Constant Buffer
 	result = device->CreateCommittedResource(
@@ -63,6 +73,58 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	if (!animationSet)
+	{
+		switch (animationNo)
+		{
+		case 0:
+			SetModel(modelStanding);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 1:
+			SetModel(modelWalking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 2:
+			SetModel(modelRunning);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 3:
+			SetModel(modelDodgeF);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 4:
+			SetModel(modelDodgeB);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 5:
+			SetModel(modelDodgeL);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 6:
+			SetModel(modelDodgeR);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 7:
+			SetModel(modelAttacking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 8:
+			SetModel(modelDamaged);
+			isPlay = false;
+			animationSet = true;
+			break;
+		}
+	}
+
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation

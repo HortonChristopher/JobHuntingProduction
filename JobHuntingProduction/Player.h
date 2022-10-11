@@ -118,6 +118,21 @@ protected:
 	// Model
 	FBX3DModel* model = nullptr;
 
+	FBX3DModel* modelStanding = nullptr; // 180 frames
+	FBX3DModel* modelWalking = nullptr; // 30 frames
+	FBX3DModel* modelRunning = nullptr; // 20(?) frames
+	FBX3DModel* modelDodgeF = nullptr; // 30 frames
+	FBX3DModel* modelDodgeB = nullptr; // 49 frames
+	FBX3DModel* modelDodgeL = nullptr; // 29 frames
+	FBX3DModel* modelDodgeR = nullptr; // 29 frames
+	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
+	FBX3DModel* modelDamaged = nullptr; // 54 frames
+
+	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
+	int animationNo = 0; // Stand(0), Walk(1), Run(2), DodgeF(3), DodgeB(4), DodgeL(5), DodgeR(6), Attack(7), Damaged(8)
+	bool animationSet = false;
+	bool modelChange = false;
+
 	// 1 frame time
 	FbxTime frameTime;
 
