@@ -64,7 +64,7 @@ void DebugCamera::Update()
 		dirty = true;
 	}*/
 
-	if (input->PushKey(DIK_W) || input->PushLStickUp())
+	/*if (input->PushKey(DIK_W) || input->PushLStickUp())
 	{
 		float dz = 1.0f;
 
@@ -84,7 +84,7 @@ void DebugCamera::Update()
 
 		MoveVector(move);
 		dirty = true;
-	}
+	}*/
 
 	//if (input->PushKey(DIK_A))
 	//{

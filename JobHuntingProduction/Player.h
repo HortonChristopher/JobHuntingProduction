@@ -3,6 +3,7 @@
 #include "FBX3DModel.h"
 #include "Camera.h"
 #include "input/Input.h"
+#include "Vector.h"
 
 #include <Windows.h>
 #include <wrl.h>
@@ -118,6 +119,8 @@ protected:
 	// Model
 	FBX3DModel* model = nullptr;
 
+	Vector3 direction = { 0, 0, 1 };
+
 	FBX3DModel* modelStanding = nullptr; // 180 frames
 	FBX3DModel* modelWalking = nullptr; // 30 frames
 	FBX3DModel* modelRunning = nullptr; // 20(?) frames
@@ -147,4 +150,7 @@ protected:
 
 	// Animation is playing
 	bool isPlay = false;
+
+	float rotateSpeed = 7.5f;
+	float speed = 1.0f; //0.09f
 };

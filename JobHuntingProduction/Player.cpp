@@ -28,7 +28,7 @@ void Player::Initialize()
 	modelDodgeF = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeForward");
 	modelDodgeB = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeBack");
 	modelDodgeL = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeLeft");
-	modelDodgeR = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDogeRight");
+	modelDodgeR = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRight");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 
@@ -73,58 +73,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	if (!animationSet)
-	{
-		switch (animationNo)
-		{
-		case 0:
-			SetModel(modelStanding);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 1:
-			SetModel(modelWalking);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 2:
-			SetModel(modelRunning);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 3:
-			SetModel(modelDodgeF);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 4:
-			SetModel(modelDodgeB);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 5:
-			SetModel(modelDodgeL);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 6:
-			SetModel(modelDodgeR);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 7:
-			SetModel(modelAttacking);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 8:
-			SetModel(modelDamaged);
-			isPlay = false;
-			animationSet = true;
-			break;
-		}
-	}
-
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation
@@ -200,31 +148,157 @@ void Player::Update()
 	}
 	constBuffSkin->Unmap(0, nullptr);
 
-	rotation.y = objectRotation.y;
+	//rotation.y = objectRotation.y;
 
-	// ˆÚ“®ƒxƒNƒgƒ‹‚ðYŽ²Žü‚è‚ÌŠp“x‚Å‰ñ“]
-	XMVECTOR move = { 0,0,1.0f,0 };
-	matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
-	move = XMVector3TransformNormal(move, matRot);
+	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
+	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
+	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
-	// Œü‚¢‚Ä‚¢‚é•ûŒü‚ÉˆÚ“®
-	if (input->PushKey(DIK_S) || input->PushLStickDown()) {
-		position.x -= move.m128_f32[0];
-		position.y -= move.m128_f32[1];
-		position.z -= move.m128_f32[2];
+	if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+		input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+	{
+		Vector3 moveDirection = {};
+
+		if (input->PushKey(DIK_A))
+		{
+			moveDirection += camDirectionX * -1;
+		}
+		if (input->PushKey(DIK_D))
+		{
+			moveDirection += camDirectionX;
+		}
+		if (input->PushKey(DIK_S))
+		{
+			moveDirection += camDirectionZ * -1;
+		}
+		if (input->PushKey(DIK_W))
+		{
+			moveDirection += camDirectionZ;
+		}
+		if (input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+		{
+			auto vector = input->GetLStickDirection();
+
+			moveDirection = camDirectionX * vector.x + camDirectionZ * vector.y;
+		}
+
+		moveDirection.Normalize();
+
+		direction.Normalize();
+		float cosA = direction.Dot(moveDirection);
+		if (cosA > 1.0f)
+		{
+			cosA = 1.0f;
+		}
+		else if (cosA < -1.0f)
+		{
+			cosA = -1.0f;
+		}
+
+		float rotY = acos(cosA) * 180 / 3.14159365f;
+		const Vector3 CrossVec = direction.Cross(moveDirection);
+
+		float rotSpeed = rotateSpeed;
+		if (abs(rotY) < 55)
+		{
+			position.x += moveDirection.x * speed;
+			position.y += moveDirection.y * speed;
+			position.z += moveDirection.z * speed;
+		}
+
+		if (rotSpeed > abs(rotY))
+		{
+			rotSpeed = rotY;
+		}
+
+		if (CrossVec.y < 0)
+		{
+			rotSpeed *= -1;
+		}
+
+		rotation.y += rotSpeed;
+
+		XMMATRIX matRotation = XMMatrixRotationY(XMConvertToRadians(rotSpeed));
+		XMVECTOR dir = { direction.x, direction.y, direction.z, 0 };
+		dir = XMVector3TransformNormal(dir, matRotation);
+		direction = dir;
+
+		SetPosition(position);
+		SetRotation(rotation);
+
+		camera->SetTarget(position + Vector3{ 0, 1, 0 });
 	}
-	else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
-		position.x += move.m128_f32[0];
-		position.y += move.m128_f32[1];
-		position.z += move.m128_f32[2];
+
+	//// ˆÚ“®ƒxƒNƒgƒ‹‚ðYŽ²Žü‚è‚ÌŠp“x‚Å‰ñ“]
+	//XMVECTOR move = { 0,0,1.0f,0 };
+	//matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	//move = XMVector3TransformNormal(move, matRot);
+
+	//// Œü‚¢‚Ä‚¢‚é•ûŒü‚ÉˆÚ“®
+	//if (input->PushKey(DIK_S) || input->PushLStickDown()) {
+	//	position.x -= move.m128_f32[0];
+	//	position.y -= move.m128_f32[1];
+	//	position.z -= move.m128_f32[2];
+	//}
+	//else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
+	//	position.x += move.m128_f32[0];
+	//	position.y += move.m128_f32[1];
+	//	position.z += move.m128_f32[2];
+	//}
+
+	//objectPosition = position;
+
+	if (!animationSet)
+	{
+		switch (animationNo)
+		{
+		case 0:
+			SetModel(modelStanding);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 1:
+			SetModel(modelWalking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 2:
+			SetModel(modelRunning);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 3:
+			SetModel(modelDodgeF);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 4:
+			SetModel(modelDodgeB);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 5:
+			SetModel(modelDodgeL);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 6:
+			SetModel(modelDodgeR);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 7:
+			SetModel(modelAttacking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 8:
+			SetModel(modelDamaged);
+			isPlay = false;
+			animationSet = true;
+			break;
+		}
 	}
-
-	objectPosition = position;
-
-	SetPosition(position);
-	SetRotation(rotation);
-
-	//SetScale({ 3,3,3 });
 }
 
 void Player::CreateGraphicsPipeline()
