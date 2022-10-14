@@ -226,7 +226,19 @@ void Player::Update()
 		SetPosition(position);
 		SetRotation(rotation);
 
+		if (input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_W) ||
+			input->TriggerLStickLeft() || input->TriggerLStickRight() || input->TriggerLStickDown() || input->TriggerLStickUp())
+		{
+			animationNo = 2;
+			animationSet = false;
+		}
+
 		camera->SetTarget(position + Vector3{ 0, 1, 0 });
+	}
+	else
+	{
+		animationNo = 0;
+		animationSet = false;
 	}
 
 	//// 移動ベクトルをY軸周りの角度で回転

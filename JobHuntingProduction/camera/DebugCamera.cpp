@@ -33,20 +33,24 @@ void DebugCamera::Update()
 	if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
 	{
 		float dy;
+		//float dx;
 
 		if (input->PushMouseRight())
 		{
 			dy = mouseMove.lX * scaleY;
-			//float dx = mouseMove.lY * scaleX;
+			//dx = mouseMove.lY * scaleX;
 		}
 		if (input->PushRStickLeft() || input->PushRStickRight())
 		{
 			dy = stickMove.x * -scaleY * 10.0f;
 		}
+		if (input->PushRStickUp() || input->PushRStickDown())
+		{
+			//dx = stickMove.y * -scaleX * 10.0f;
+		}
 
 		//angleX = dx * XM_PI;
 		angleY = dy * XM_PI;
-		objectRotation.y -= angleY * 57.3f;
 
 		dirty = true;
 	}
