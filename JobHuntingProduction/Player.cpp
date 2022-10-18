@@ -71,6 +71,7 @@ void Player::Initialize()
 	input = Input::GetInstance();
 
 	SetScale({ 3,3,3 });
+	SetModel(modelStanding);
 }
 
 void Player::Update()
@@ -170,10 +171,13 @@ void Player::Update()
 	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
 	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
-	if (attackTime == 30 && animationNo != 7)
+	if (attackTime > 0)
 	{
-		animationNo = 7;
-		animationSet = false;
+		if (animationNo != 7)
+		{
+			animationNo = 7;
+			animationSet = false;
+		}
 	}
 	else if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 		input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
@@ -258,8 +262,11 @@ void Player::Update()
 	}
 	else
 	{
-		animationNo = 0;
-		animationSet = false;
+		if (animationNo != 0)
+		{
+			animationNo = 0;
+			animationSet = false;
+		}
 	}
 
 	//// 移動ベクトルをY軸周りの角度で回転

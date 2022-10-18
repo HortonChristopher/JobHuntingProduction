@@ -97,7 +97,6 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update();
 
-		
 		// Render Texture Drawing
 		postEffect->PreDrawScene(dxCommon->GetCommandList());
 		// ゲームシーンの描画

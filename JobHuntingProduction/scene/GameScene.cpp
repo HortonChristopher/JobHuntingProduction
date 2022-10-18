@@ -156,7 +156,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object1 = new Player;
 	object1->Initialize();
-	object1->SetModel(model1);
+	//object1->SetModel(model1);
 
 	object2 = new EnemyHuman;
 	object2->Initialize();
@@ -576,14 +576,14 @@ void GameScene::Update()
 	deltaTime->deltaTimeNow();
 
 	//Debug Start
-	char msgbuf[256];
+	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", 300.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", objectPosition.y);
+	//sprintf_s(msgbuf, 256, "X: %f\n", 1000000.0f / deltaTime->deltaTimeCalculated.count());
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", );
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
@@ -614,13 +614,9 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3D Object Drawing
-	if (attackTime > 0)
+	/*if (attackTime > 0)
 	{
-		object7->Draw(cmdList);
-		if (attackTime > 10 && attackTime < 20)
-		{
-			objAttackRange->Draw();
-		}
+		object7->Draw(cmdList);	
 	}
 	else if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushLStickUp() || input->PushLStickDown())
 	{
@@ -629,7 +625,13 @@ void GameScene::Draw()
 	else
 	{
 		object6->Draw(cmdList);
+	}*/
+	object1->Draw(cmdList);
+	if (attackTime > 10 && attackTime < 20)
+	{
+		objAttackRange->Draw();
 	}
+
 	if (enemy1Alive && page == 2)
 	{
 		object2->Draw(cmdList);
