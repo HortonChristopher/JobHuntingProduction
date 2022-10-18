@@ -2,14 +2,7 @@
 
 void DeltaTime::deltaTimeCalc()
 {
-	if (!firstRun)
-	{
-		deltaTimeCalculated = deltaStartNow - deltaStartBase;
-	}
-	else
-	{
-		firstRun = false;
-	}
+	deltaTimeCalculated = deltaStartNow - deltaStartBase;
 }
 
 void DeltaTime::deltaTimeNow()

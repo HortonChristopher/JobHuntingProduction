@@ -12,7 +12,6 @@ public:
 private:
 	std::chrono::steady_clock::time_point deltaStartBase;
 	std::chrono::steady_clock::time_point deltaStartNow;
-	bool firstRun = true;
 
 public:
 	std::chrono::duration<double, std::micro> deltaTimeCalculated;
