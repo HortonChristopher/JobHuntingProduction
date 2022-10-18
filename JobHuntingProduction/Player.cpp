@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "FbxLoader/FbxLoader.h"
 #include "input/Input.h"
+#include "DeltaTime.h"
 
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
@@ -19,6 +20,7 @@ ComPtr<ID3D12PipelineState> Player::pipelinestate;
 
 extern XMFLOAT3 objectPosition = { 0.0f, -10.0f, 0.0f };
 extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
+extern DeltaTime* deltaTime;
 
 void Player::Initialize()
 {
@@ -150,11 +152,30 @@ void Player::Update()
 
 	//rotation.y = objectRotation.y;
 
+	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
+	{
+		attackTime = 30;
+	}
+
+	if (attackTime > 0)
+	{
+		attackTime--;
+	}
+	else
+	{
+		attackTime = 0;
+	}
+
 	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
 	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
 	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
-	if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+	if (attackTime == 30 && animationNo != 7)
+	{
+		animationNo = 7;
+		animationSet = false;
+	}
+	else if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 		input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 	{
 		Vector3 moveDirection = {};
@@ -201,9 +222,9 @@ void Player::Update()
 		float rotSpeed = rotateSpeed;
 		if (abs(rotY) < 55)
 		{
-			position.x += moveDirection.x * speed;
-			position.y += moveDirection.y * speed;
-			position.z += moveDirection.z * speed;
+			position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 
 		if (rotSpeed > abs(rotY))

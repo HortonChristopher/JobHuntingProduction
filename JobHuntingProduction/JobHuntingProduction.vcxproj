@@ -101,6 +101,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
+    <ClCompile Include="DeltaTime.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="EnemyHuman.cpp" />
     <ClCompile Include="FbxLoader\FbxLoader.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="CollisionTypes.h" />
+    <ClInclude Include="DeltaTime.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="EnemyHuman.h" />
     <ClInclude Include="FbxLoader\FbxLoader.h" />

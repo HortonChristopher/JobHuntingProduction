@@ -3,6 +3,7 @@
 #include "EnemyHuman.h"
 #include "Player.h"
 #include "FbxLoader/FbxLoader.h"
+#include "DeltaTime.h"
 
 #include <cassert>
 #include <sstream>
@@ -15,6 +16,8 @@ using namespace DirectX;
 
 extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
+
+extern DeltaTime* deltaTime = nullptr;
 
 GameScene::GameScene()
 {
@@ -149,6 +152,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	model3 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 
+	deltaTime = new DeltaTime;
+
 	object1 = new Player;
 	object1->Initialize();
 	object1->SetModel(model1);
@@ -236,6 +241,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 void GameScene::Update()
 {
+	if (!FirstRun)
+	{
+		deltaTime->deltaTimeCalc();
+	}
+	else
+	{
+		FirstRun = false;
+	}
+	deltaTime->deltaTimePrev();
 	lightGroup->Update();
 	particleMan->Update();
 
@@ -274,7 +288,7 @@ void GameScene::Update()
 		}
 
 		objectPosition = object1->GetPosition();
-		//objectRotation = object1->GetRotation();
+		objectRotation = object1->GetRotation();
 
 		objSkydome->SetPosition(objectPosition);
 
@@ -559,15 +573,17 @@ void GameScene::Update()
 
 	//float distance = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
 
+	deltaTime->deltaTimeNow();
+
 	//Debug Start
-	//char msgbuf[256];
+	char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", distance);
+	sprintf_s(msgbuf, 256, "X: %f\n", deltaTime->deltaTimeCalculated.count());
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", objectPosition.y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	//OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End

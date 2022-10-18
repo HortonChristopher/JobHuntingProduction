@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "FbxGeneration.h"
 #include "FbxLoader/FbxLoader.h"
+#include "DeltaTime.h"
 
 #include <time.h>
 #include <d3dcompiler.h>
@@ -13,6 +14,7 @@ using namespace DirectX;
 
 extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
+extern DeltaTime* deltaTime;
 
 ///<summary>
 /// Static Member Variable Entity
@@ -126,8 +128,18 @@ void EnemyHuman::Update()
 		float y2 = newPosition.z - position.z;
 		float radians = atan2(y2, x2);
 		degrees = XMConvertToDegrees(radians);
-		position.x += x;
-		position.z += y;
+		if (!FirstRun)
+		{
+			float deltaTimeFloat = deltaTime->deltaTimeCalculated.count();
+			position.x += x * (deltaTimeFloat / 1000000.0f);
+			position.z += y * (deltaTimeFloat / 1000000.0f);
+		}
+		else
+		{
+			FirstRun = false;
+		}
+		//position.x += x;
+		//position.z += y;
 		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		SetPosition(position);
 		if (aggroSwitch)
@@ -179,8 +191,18 @@ void EnemyHuman::Update()
 			timer++;
 		}
 
-		position.x += x;
-		position.z += y;
+		if (!FirstRun)
+		{
+			float deltaTimeFloat = deltaTime->deltaTimeCalculated.count();
+			position.x += x * (deltaTimeFloat / 1000000.0f);
+			position.z += y * (deltaTimeFloat / 1000000.0f);
+		}
+		else
+		{
+			FirstRun = false;
+		}
+		//position.x += x;
+		//position.z += y;
 		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		SetPosition(position);
 		//SetScale({ 3,3,3 });

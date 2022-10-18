@@ -4,6 +4,7 @@
 #include "FBXGeneration.h"
 #include "Camera.h"
 #include "input/Input.h"
+#include "DeltaTime.h"
 
 #include <Windows.h>
 #include <wrl.h>
@@ -114,6 +115,7 @@ public:
 
 protected:
 	Input* input = nullptr;
+	//DeltaTime* deltaTime = nullptr;
 
 	// Local scale
 	XMFLOAT3 scale = { 1,1,1 };
@@ -135,6 +137,8 @@ protected:
 
 	bool attack = false;
 	bool attackAnimation = false;
+
+	bool FirstRun = false;
 
 	FBX3DModel* modelStanding = nullptr; // 180 frames
 	FBX3DModel* modelWalking = nullptr; // 30 frames

@@ -153,4 +153,5 @@ protected:
 
 	float rotateSpeed = 7.5f;
 	float speed = 1.0f; //0.09f
+	int attackTime = 0;
 };

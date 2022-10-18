@@ -14,6 +14,8 @@
 #include "Player.h"
 #include "EnemyHuman.h"
 #include "Object3D.h"
+#include <chrono>
+#include "DeltaTime.h"
 
 #include <vector>
 #include <array>
@@ -145,6 +147,8 @@ private: // メンバ変数
 	int e2Respawn = 0;
 	int e3Respawn = 0;
 	int e4Respawn = 0;
+
+	bool FirstRun = true;
 
 	XMFLOAT3 enemy1Position = { 0, -10, 200 };
 	XMFLOAT3 enemy2Position = { 200, -10, 0 };
