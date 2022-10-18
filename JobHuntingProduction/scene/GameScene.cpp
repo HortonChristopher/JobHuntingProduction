@@ -580,7 +580,7 @@ void GameScene::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", deltaTime->deltaTimeCalculated.count());
+	sprintf_s(msgbuf, 256, "X: %f\n", 300.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", objectPosition.y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
 	OutputDebugStringA(msgbuf);
