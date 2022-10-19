@@ -238,21 +238,6 @@ void EnemyHuman::Update()
 		}
 	}
 
-	// Debug Only
-	/*if (input->TriggerKey(DIK_0))
-	{
-		if (animationNo < 4)
-		{
-			animationNo++;
-			animationSet = false;
-		}
-		else
-		{
-			animationNo = 0;
-			animationSet = false;
-		}
-	}*/
-
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation

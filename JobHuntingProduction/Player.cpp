@@ -125,7 +125,7 @@ void Player::Update()
 	if (isPlay)
 	{
 		// Advance one frame
-		currentTime += frameTime;
+		currentTime += frameTime /** (deltaTime->deltaTimeCalculated.count() / 1000.0f)*/;
 
 		// Return to the previous position after playing to the end
 		if (currentTime > endTime)
@@ -285,8 +285,6 @@ void Player::Update()
 	//	position.y += move.m128_f32[1];
 	//	position.z += move.m128_f32[2];
 	//}
-
-	//objectPosition = position;
 
 	if (!animationSet)
 	{

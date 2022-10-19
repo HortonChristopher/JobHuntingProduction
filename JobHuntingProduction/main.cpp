@@ -8,6 +8,10 @@
 #include "FbxLoader/FbxLoader.h"
 #include "2d/PostEffect.h"
 #include "input/Input.h"
+#include "DeltaTime.h"
+
+extern DeltaTime* deltaTime = nullptr;
+bool firstRun = true;
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
@@ -27,6 +31,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	Audio* audio = nullptr;
 	GameScene* gameScene = nullptr;
 	PostEffect* postEffect = nullptr;
+	deltaTime = new DeltaTime;
 
 	// ゲームウィンドウの作成
 	win = new WinApp();
@@ -89,6 +94,16 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	// メインループ
 	while (true)
 	{
+		if (!firstRun)
+		{
+			deltaTime->deltaTimeCalc();
+		}
+		else
+		{
+			firstRun = false;
+		}
+		deltaTime->deltaTimePrev();
+
 		// メッセージ処理
 		if (win->ProcessMessage()) {	break; }
 
@@ -108,6 +123,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 		postEffect->Draw(dxCommon->GetCommandList());
 		// 描画終了
 		dxCommon->PostDraw();
+
+		deltaTime->deltaTimeNow();
 	}
 	// 各種解放
 	safe_delete(gameScene);

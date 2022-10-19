@@ -17,7 +17,7 @@ using namespace DirectX;
 extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
-extern DeltaTime* deltaTime = nullptr;
+extern DeltaTime* deltaTime;
 
 GameScene::GameScene()
 {
@@ -152,7 +152,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	model3 = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 
-	deltaTime = new DeltaTime;
+	//deltaTime = new DeltaTime;
 
 	object1 = new Player;
 	object1->Initialize();
@@ -241,7 +241,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 void GameScene::Update()
 {
-	if (!FirstRun)
+	/*if (!FirstRun)
 	{
 		deltaTime->deltaTimeCalc();
 	}
@@ -249,7 +249,7 @@ void GameScene::Update()
 	{
 		FirstRun = false;
 	}
-	deltaTime->deltaTimePrev();
+	deltaTime->deltaTimePrev();*/
 	lightGroup->Update();
 	particleMan->Update();
 
@@ -573,17 +573,17 @@ void GameScene::Update()
 
 	//float distance = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
 
-	deltaTime->deltaTimeNow();
+	//deltaTime->deltaTimeNow();
 
 	//Debug Start
-	//char msgbuf[256];
+	char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", 1000000.0f / deltaTime->deltaTimeCalculated.count());
+	sprintf_s(msgbuf, 256, "X: %f\n", deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", );
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	//OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
