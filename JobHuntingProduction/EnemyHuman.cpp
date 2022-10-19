@@ -130,8 +130,8 @@ void EnemyHuman::Update()
 		degrees = XMConvertToDegrees(radians);
 		if (!FirstRun)
 		{
-			position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += y * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 		else
 		{
@@ -192,8 +192,8 @@ void EnemyHuman::Update()
 
 		if (!FirstRun)
 		{
-			position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += y * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 		else
 		{

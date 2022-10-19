@@ -152,6 +152,6 @@ protected:
 	bool isPlay = false;
 
 	float rotateSpeed = 7.5f;
-	float speed = 300.0f; //0.09f
+	float speed = 60.0f; //1.0f using frame speed instead of delta speed
 	int attackTime = 0;
 };
