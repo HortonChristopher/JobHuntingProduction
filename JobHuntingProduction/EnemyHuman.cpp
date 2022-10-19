@@ -65,7 +65,7 @@ void EnemyHuman::Initialize()
 	EnemyHuman::CreateGraphicsPipeline();
 
 	// Set time for 1 frame at 60fps
-	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
+	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 
 	input = Input::GetInstance();
 
@@ -287,6 +287,10 @@ void EnemyHuman::Update()
 	if (isPlay)
 	{
 		// Advance one frame
+		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
+		double sec = frameTime.GetSecondDouble();
+		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		frameTime.SetSecondDouble(sec);
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end

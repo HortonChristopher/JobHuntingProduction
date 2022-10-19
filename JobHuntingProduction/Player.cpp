@@ -227,7 +227,7 @@ void Player::Update()
 		float rotY = acos(cosA) * 180 / 3.14159365f;
 		const Vector3 CrossVec = direction.Cross(moveDirection);
 
-		float rotSpeed = rotateSpeed;
+		float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (abs(rotY) < 55)
 		{
 			position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
