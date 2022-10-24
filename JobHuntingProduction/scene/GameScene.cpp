@@ -18,6 +18,7 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
+float height = 0.0f;
 
 GameScene::GameScene()
 {
@@ -56,6 +57,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	FBXGeneration::SetCamera(camera);
 	EnemyHuman::SetCamera(camera);
 	Player::SetCamera(camera);
+	PlayerPositionObject::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -103,7 +105,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	particleMan->SetCamera(camera);
 
 	objSkydome = Object3d::Create();
-	objGround = Object3d::Create();
 	objAttackRange = Object3d::Create();
 	objEAttackRange1 = Object3d::Create();
 	objEAttackRange2 = Object3d::Create();
@@ -115,6 +116,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objWestWall = Object3d::Create();
 	objSouthWall = Object3d::Create();
 	objDoor1 = Object3d::Create();
+	playerPositionObject = PlayerPositionObject::Create();
 
 	objVisionRange1 = Object3d::Create();
 	objVisionRange2 = Object3d::Create();
@@ -122,14 +124,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objVisionRange4 = Object3d::Create();
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
-	modelGround = Model::CreateFromOBJ("ground");
+	modelGround = Model::CreateFromOBJ("ProtoLandscape");
 	modelAttackRange = Model::CreateFromOBJ("yuka");
 	modelVisionRange = Model::CreateFromOBJ("yuka");
 	modelWall = Model::CreateFromOBJ("kabe");
 	modelDoor = Model::CreateFromOBJ("DoorBase");
 
 	objSkydome->SetModel(modelSkydome);
-	objGround->SetModel(modelGround);
+	objGround = TouchableObject::Create(modelGround);
 	objAttackRange->SetModel(modelAttackRange);
 	objEAttackRange1->SetModel(modelAttackRange);
 	objEAttackRange2->SetModel(modelAttackRange);
@@ -141,6 +143,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objWestWall->SetModel(modelWall);
 	objSouthWall->SetModel(modelWall);
 	objDoor1->SetModel(modelDoor);
+	playerPositionObject->SetModel(modelAttackRange);
 
 	objVisionRange1->SetModel(modelVisionRange);
 	objVisionRange2->SetModel(modelVisionRange);
@@ -193,7 +196,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	lightGroup = LightGroup::Create();
 
 	// カメラ注視点をセット
-	camera->SetTarget({0, 0.0f, -30.0f});
+	camera->SetTarget({122.0f, 0.0f, -358.0f});
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(48.0f);
 
@@ -232,9 +235,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objVisionRange4->SetScale({ 90,1,90 });
 
 	objSkydome->SetScale({ 5,5,5 });
-	objGround->SetScale({ 100,0,100 });
+	objGround->SetScale({ 400,200,400 });
 
 	objGround->SetPosition({ 0, -10, 0 });
+	playerPositionObject->SetPosition({ object1->GetPosition().x, 100.0f, object1->GetPosition().z});
 
 	srand(time(NULL));
 }
@@ -263,15 +267,9 @@ void GameScene::Update()
 
 	if (page > 1 && page < 3)
 	{
+		height = playerPositionObject->GetPosition().y;
+		camera->SetTarget({ camera->GetTarget().x, height, camera->GetTarget().z });
 		camera->Update();
-
-		// A,Dで旋回
-		/*if (input->PushKey(DIK_A)) {
-			objectRotation.y -= 2.0f;
-		}
-		else if (input->PushKey(DIK_D)) {
-			objectRotation.y += 2.0f;
-		}*/
 
 		if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
 		{
@@ -527,7 +525,11 @@ void GameScene::Update()
 			}
 		}*/
 
+		object1->SetPosition({ object1->GetPosition().x, playerPositionObject->GetPosition().y, object1->GetPosition().z });
+		playerPositionObject->SetPosition({ object1->GetPosition().x, playerPositionObject->GetPosition().y, object1->GetPosition().z });
+
 		object1->Update();
+		playerPositionObject->Update();
 		if (enemy1Alive)
 		{
 			object2->Update();
@@ -577,14 +579,14 @@ void GameScene::Update()
 
 	//Debug Start
 	char msgbuf[256];
-	//char msgbuf2[256];
+	char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", );
+	sprintf_s(msgbuf, 256, "X: %f\n", object1->GetPosition().x);
+	sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
 	OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
 }
@@ -627,6 +629,7 @@ void GameScene::Draw()
 		object6->Draw(cmdList);
 	}*/
 	object1->Draw(cmdList);
+	playerPositionObject->Draw();
 	if (attackTime > 10 && attackTime < 20)
 	{
 		objAttackRange->Draw();

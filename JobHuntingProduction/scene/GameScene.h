@@ -16,6 +16,8 @@
 #include "Object3D.h"
 #include <chrono>
 #include "DeltaTime.h"
+#include "TouchableObject.h"
+#include "PlayerPositionObject.h"
 
 #include <vector>
 #include <array>
@@ -86,7 +88,7 @@ private: // メンバ変数
 	LightGroup* lightGroup = nullptr;
 
 	Object3d* objSkydome = nullptr;
-	Object3d* objGround = nullptr;
+	TouchableObject* objGround = nullptr;
 	Object3d* objAttackRange = nullptr;
 	Object3d* objEAttackRange1 = nullptr;
 	Object3d* objEAttackRange2 = nullptr;
@@ -105,6 +107,7 @@ private: // メンバ変数
 
 	FBX3DModel* model1 = nullptr;
 	Player* object1 = nullptr;
+	PlayerPositionObject* playerPositionObject = nullptr;
 
 	FBX3DModel* model2 = nullptr;
 	EnemyHuman* object2 = nullptr;
