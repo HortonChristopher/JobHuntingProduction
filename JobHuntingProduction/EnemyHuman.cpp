@@ -84,8 +84,8 @@ void EnemyHuman::Update()
 	}
 	else if (!wander && timer > 239 && !aggro)
 	{
-		newPosition.x = rand() % 301 - 150 + homePosition.x;
-		newPosition.z = rand() % 301 - 150 + homePosition.y;
+		newPosition.x = rand() % 50 - 25 + homePosition.x;
+		newPosition.z = rand() % 50 - 25 + homePosition.y;
 		timer = 0;
 		wander = true;
 	}
@@ -101,7 +101,7 @@ void EnemyHuman::Update()
 		SetPosition(position);
 		SetRotation(rotation);
 		attackTimer++;
-		if (timer > 29)
+		if (attackTimer > 29)
 		{
 			attackTimer = 0;
 			attackAnimation = false;

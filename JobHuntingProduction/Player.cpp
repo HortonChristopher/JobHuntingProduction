@@ -263,7 +263,10 @@ void Player::Update()
 			animationSet = false;
 		}
 
-		camera->SetTarget(position + Vector3{ 0, 1, 0 });
+		if (position.x < 139.0f && position.x > -398.0f && position.z < 398.0f && position.z > -398.0f)
+		{
+			camera->SetTarget(position + Vector3{ 0, 1, 0 });
+		}
 	}
 	else
 	{

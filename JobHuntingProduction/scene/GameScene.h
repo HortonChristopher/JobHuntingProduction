@@ -89,6 +89,7 @@ private: // メンバ変数
 
 	Object3d* objSkydome = nullptr;
 	TouchableObject* objGround = nullptr;
+	TouchableObject* objExtendedGround = nullptr;
 	Object3d* objAttackRange = nullptr;
 	Object3d* objEAttackRange1 = nullptr;
 	Object3d* objEAttackRange2 = nullptr;
@@ -100,10 +101,15 @@ private: // メンバ変数
 	Sprite* p3 = nullptr;
 	Sprite* p4 = nullptr;
 
+	Sprite* HPBar = nullptr;
+	Sprite* HPBarFrame = nullptr;
+	int playerHP = 10;
+
 	Model* modelAttackRange = nullptr;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
+	Model* modelExtendedGround = nullptr;
 
 	FBX3DModel* model1 = nullptr;
 	Player* object1 = nullptr;
@@ -111,9 +117,13 @@ private: // メンバ変数
 
 	FBX3DModel* model2 = nullptr;
 	EnemyHuman* object2 = nullptr;
+	PlayerPositionObject* enemyPositionObject1 = nullptr;
 	EnemyHuman* object3 = nullptr;
+	PlayerPositionObject* enemyPositionObject2 = nullptr;
 	EnemyHuman* object4 = nullptr;
+	PlayerPositionObject* enemyPositionObject3 = nullptr;
 	EnemyHuman* object5 = nullptr;
+	PlayerPositionObject* enemyPositionObject4 = nullptr;
 	Player* object6 = nullptr;
 
 	FBX3DModel* model3 = nullptr;
