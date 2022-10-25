@@ -129,16 +129,6 @@ private: // メンバ変数
 	FBX3DModel* model3 = nullptr;
 	Player* object7 = nullptr;
 
-	Model* modelWall = nullptr;
-	Object3d* objNorthWall1 = nullptr;
-	Object3d* objNorthWall2 = nullptr;
-	Object3d* objEastWall = nullptr;
-	Object3d* objWestWall = nullptr;
-	Object3d* objSouthWall = nullptr;
-
-	Model* modelDoor = nullptr;
-	Object3d* objDoor1 = nullptr;
-
 	Model* modelVisionRange = nullptr;
 	Object3d* objVisionRange1 = nullptr;
 	Object3d* objVisionRange2 = nullptr;

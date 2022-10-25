@@ -122,12 +122,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objEAttackRange2 = Object3d::Create();
 	objEAttackRange3 = Object3d::Create();
 	objEAttackRange4 = Object3d::Create();
-	objNorthWall1 = Object3d::Create();
-	objNorthWall2 = Object3d::Create();
-	objEastWall = Object3d::Create();
-	objWestWall = Object3d::Create();
-	objSouthWall = Object3d::Create();
-	objDoor1 = Object3d::Create();
 	playerPositionObject = PlayerPositionObject::Create();
 	enemyPositionObject1 = PlayerPositionObject::Create();
 	enemyPositionObject2 = PlayerPositionObject::Create();
@@ -144,8 +138,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	modelExtendedGround = Model::CreateFromOBJ("ground");
 	modelAttackRange = Model::CreateFromOBJ("yuka");
 	modelVisionRange = Model::CreateFromOBJ("yuka");
-	modelWall = Model::CreateFromOBJ("kabe");
-	modelDoor = Model::CreateFromOBJ("DoorBase");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround = TouchableObject::Create(modelGround);
@@ -155,12 +147,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objEAttackRange2->SetModel(modelAttackRange);
 	objEAttackRange3->SetModel(modelAttackRange);
 	objEAttackRange4->SetModel(modelAttackRange);
-	objNorthWall1->SetModel(modelWall);
-	objNorthWall2->SetModel(modelWall);
-	objEastWall->SetModel(modelWall);
-	objWestWall->SetModel(modelWall);
-	objSouthWall->SetModel(modelWall);
-	objDoor1->SetModel(modelDoor);
 	playerPositionObject->SetModel(modelAttackRange);
 	enemyPositionObject1->SetModel(modelAttackRange);
 	enemyPositionObject2->SetModel(modelAttackRange);
@@ -222,22 +208,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(48.0f);
 
-	objNorthWall1->SetPosition({ -90.0f, 35.0f, 160.0f });
-	objNorthWall2->SetPosition({ 90.0f, 35.0f, 160.0f });
-	objNorthWall1->SetScale({ 140.0f, 60.0f, 3.0f });
-	objNorthWall2->SetScale({ 140.0f, 60.0f, 3.0f });
-	
-	objEastWall->SetPosition({ 160.0f, 35.0f, 0.0f });
-	objEastWall->SetScale({ 3.0f, 60.0f, 320.0f });
-	objWestWall->SetPosition({ -160.0f, 35.0f, 0.0f });
-	objWestWall->SetScale({ 3.0f, 60.0f, 320.0f });
-
-	objSouthWall->SetPosition({ 0.0f, 35.0f, -160.0f });
-	objSouthWall->SetScale({ 320.0f, 60.0f, 3.0f });
-
-	objDoor1->SetPosition({ 0.0f, -5.0f, 160.0f });
-	objDoor1->SetScale({ 40.0f, 10.0f, 3.0f });
-
 	objAttackRange->SetPosition({ objectPosition.x, objectPosition.y + 0.5f, objectPosition.z + 5.0f });
 	objAttackRange->SetRotation({0, 0, 0});
 	objAttackRange->SetScale({ 15, 1, 15 });
@@ -274,15 +244,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 void GameScene::Update()
 {
-	/*if (!FirstRun)
-	{
-		deltaTime->deltaTimeCalc();
-	}
-	else
-	{
-		FirstRun = false;
-	}
-	deltaTime->deltaTimePrev();*/
 	lightGroup->Update();
 	particleMan->Update();
 
@@ -545,24 +506,6 @@ void GameScene::Update()
 			enemy4Alive = true;
 		}
 
-		/*if (enemyDefeated > 5 && !area1Clear)
-		{
-			gateOpen = true;
-			enemyDefeated = 0;
-			area1Clear = true;
-		}*/
-
-		/*if (gateOpen)
-		{
-			objDoor1->SetPosition({ objDoor1->GetPosition().x, objDoor1->GetPosition().y + 0.1f, objDoor1->GetPosition().z });
-			objDoor1->Update();
-
-			if (objDoor1->GetPosition().y > 20.0f)
-			{
-				gateOpen = false;
-			}
-		}*/
-
 		if (object1->GetPosition().x > 139.0f)
 		{
 			object1->SetPosition({ 139.0f, object1->GetPosition().y, object1->GetPosition().z });
@@ -632,26 +575,16 @@ void GameScene::Update()
 		object7->Update();
 
 		objAttackRange->Update();
-		/*objNorthWall1->Update();
-		objNorthWall2->Update();
-		objEastWall->Update();
-		objWestWall->Update();
-		objSouthWall->Update();*/
 		objSkydome->Update();
 		objExtendedGround->SetPosition({ object1->GetPosition().x, -11, object1->GetPosition().z });
 		objExtendedGround->Update();
 		objGround->Update();
-		//objDoor1->Update();
 	}
 
 	if (page > 2)
 	{
 
 	}
-
-	//float distance = sqrt((object2->GetPosition().x - object1->GetPosition().x) * (object2->GetPosition().x - object1->GetPosition().x) + (object2->GetPosition().y - object1->GetPosition().y) * (object2->GetPosition().y - object1->GetPosition().y));
-
-	//deltaTime->deltaTimeNow();
 
 	//Debug Start
 	char msgbuf[256];
@@ -692,18 +625,6 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3D Object Drawing
-	/*if (attackTime > 0)
-	{
-		object7->Draw(cmdList);	
-	}
-	else if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushLStickUp() || input->PushLStickDown())
-	{
-		object1->Draw(cmdList);
-	}
-	else
-	{
-		object6->Draw(cmdList);
-	}*/
 	object1->Draw(cmdList);
 	playerPositionObject->Draw();
 	if (attackTime > 10 && attackTime < 20)
@@ -714,37 +635,23 @@ void GameScene::Draw()
 	if (enemy1Alive && page == 2)
 	{
 		object2->Draw(cmdList);
-		//objVisionRange1->Draw();
-		//objEAttackRange1->Draw();
 	}
 	if (enemy2Alive && page == 2)
 	{
 		object3->Draw(cmdList);
-		//objVisionRange2->Draw();
-		//objEAttackRange2->Draw();
 	}
 	if (enemy3Alive && page == 2)
 	{
 		object4->Draw(cmdList);
-		//objVisionRange3->Draw();
-		//objEAttackRange3->Draw();
 	}
 	if (enemy4Alive && page == 2)
 	{
 		object5->Draw(cmdList);
-		//objVisionRange4->Draw();
-		//objEAttackRange4->Draw();
 	}
 
 	objSkydome->Draw();
 	objExtendedGround->Draw();
 	objGround->Draw();
-	/*objNorthWall1->Draw();
-	objNorthWall2->Draw();
-	objEastWall->Draw();
-	objWestWall->Draw();
-	objSouthWall->Draw();
-	objDoor1->Draw();*/
 
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
