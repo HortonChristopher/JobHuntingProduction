@@ -267,6 +267,7 @@ void Player::Update()
 		{
 			camera->SetTarget(position + Vector3{ 0, 1, 0 });
 		}
+		//camera->SetTarget(position + Vector3{ 0, 1, 0 });
 	}
 	else
 	{

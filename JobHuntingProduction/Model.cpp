@@ -222,16 +222,16 @@ void Model::Initialize(const std::string& modelname)
 	// コンテナに登録 Register in container
 	meshes.emplace_back(mesh);
 
-	//// １つもマテリアルがなければ If there is no material
-	//if (materials.size() == 0) {
-	//	// 生成して追加する
-	//	Material* material = Material::Create();
-	//	material->name = "no material";
-	//	materials.emplace(material->name, material);
+	// １つもマテリアルがなければ If there is no material
+	if (materials.size() == 0) {
+		// 生成して追加する
+		Material* material = Material::Create();
+		material->name = "no material";
+		materials.emplace(material->name, material);
 
-	//	// 全メッシュに適用 Applies to all meshes
-	//	for_each(meshes.begin(), meshes.end(), [&](Mesh* m) {m->SetMaterial(material); });
-	//}
+		// 全メッシュに適用 Applies to all meshes
+		for_each(meshes.begin(), meshes.end(), [&](Mesh* m) {m->SetMaterial(material); });
+	}
 
 	// メッシュのマテリアルチェック Mesh material check
 	for (auto& m : meshes) {

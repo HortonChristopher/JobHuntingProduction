@@ -127,7 +127,7 @@ void Object3d::CreateGraphicsPipeline()
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
 	// ラスタライザステート Rasterizer state
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC( D3D12_DEFAULT );
-	//gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	//gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	// デプスステンシルステート Depth stencil state
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC( D3D12_DEFAULT );
@@ -236,8 +236,6 @@ Object3d *Object3d::Create( Model *model )
 
 	return object3d;
 }
-
-
 
 bool Object3d::Initialize()
 {

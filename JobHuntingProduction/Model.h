@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include "Mesh.h"
 
-
 // モデルデータ Model data
 class Model
 {

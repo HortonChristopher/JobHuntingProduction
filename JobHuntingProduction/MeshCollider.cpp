@@ -53,7 +53,7 @@ void MeshCollider::ConstructTriangles(Model* model)
 			tri.ComputeNormal();
 		}
 
-		//start += (int)triangleNum;
+		start += (int)triangleNum;
 	}
 }
 

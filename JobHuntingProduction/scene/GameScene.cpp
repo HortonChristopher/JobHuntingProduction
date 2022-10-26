@@ -46,7 +46,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
-	//collisionManager = CollisionManager::GetInstance();
+	collisionManager = CollisionManager::GetInstance();
 
 	// Device set
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
@@ -135,6 +135,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ProtoLandscape");
+	//modelGround = Model::CreateFromOBJ("Landscape2");
 	modelExtendedGround = Model::CreateFromOBJ("ground");
 	modelAttackRange = Model::CreateFromOBJ("yuka");
 	modelVisionRange = Model::CreateFromOBJ("yuka");
@@ -167,7 +168,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object1 = new Player;
 	object1->Initialize();
-	//object1->SetModel(model1);
 
 	object2 = new EnemyHuman;
 	object2->Initialize();
@@ -231,7 +231,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	objGround->SetPosition({ 0, -10, 0 });
 	objExtendedGround->SetPosition({ 0, -10, 0 });
-	playerPositionObject->SetPosition({ object1->GetPosition().x, 10.0f, object1->GetPosition().z});
+	playerPositionObject->SetPosition({ object1->GetPosition().x, 30.0f, object1->GetPosition().z});
+	playerPositionObject->SetScale({ 10.0f, 10.0f, 10.0f });
 	enemyPositionObject1->SetPosition({ object2->GetPosition().x, 30.0f, object2->GetPosition().z });
 	enemyPositionObject2->SetPosition({ object3->GetPosition().x, 30.0f, object3->GetPosition().z });
 	enemyPositionObject3->SetPosition({ object4->GetPosition().x, 30.0f, object4->GetPosition().z });
@@ -579,6 +580,7 @@ void GameScene::Update()
 		objExtendedGround->SetPosition({ object1->GetPosition().x, -11, object1->GetPosition().z });
 		objExtendedGround->Update();
 		objGround->Update();
+		collisionManager->CheckAllCollisions();
 	}
 
 	if (page > 2)
@@ -587,15 +589,15 @@ void GameScene::Update()
 	}
 
 	//Debug Start
-	char msgbuf[256];
-	char msgbuf2[256];
+	//char msgbuf[256];
+	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", object1->GetPosition().x);
-	sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
+	//sprintf_s(msgbuf, 256, "X: %f\n", object1->GetPosition().x);
+	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
 }
@@ -626,7 +628,7 @@ void GameScene::Draw()
 
 	// 3D Object Drawing
 	object1->Draw(cmdList);
-	playerPositionObject->Draw();
+	//playerPositionObject->Draw();
 	if (attackTime > 10 && attackTime < 20)
 	{
 		objAttackRange->Draw();

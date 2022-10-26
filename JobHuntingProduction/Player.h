@@ -113,7 +113,7 @@ protected:
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation
-	XMFLOAT3 position = { 122,-10,-358 };
+	XMFLOAT3 position = { 122,100,-358 };
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model

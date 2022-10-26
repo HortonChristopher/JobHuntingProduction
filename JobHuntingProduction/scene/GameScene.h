@@ -18,6 +18,7 @@
 #include "DeltaTime.h"
 #include "TouchableObject.h"
 #include "PlayerPositionObject.h"
+#include "CollisionManager.h"
 
 #include <vector>
 #include <array>
@@ -84,6 +85,7 @@ private: // メンバ変数
 	DebugCamera* camera = nullptr;
 	Sprite* spriteBG = nullptr;
 	ParticleManager* particleMan = nullptr;
+	CollisionManager* collisionManager = nullptr;
 
 	LightGroup* lightGroup = nullptr;
 
