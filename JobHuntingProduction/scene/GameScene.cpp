@@ -553,7 +553,7 @@ void GameScene::Update()
 		enemyPositionObject4->SetPosition({ object5->GetPosition().x, enemyPositionObject4->GetPosition().y, object5->GetPosition().z });
 
 		HPBar->SetSize({ playerHP * 20.0f, 20.0f });
-		STBar->SetSize({ playerST * 2.0f, 20.0f });
+		STBar->SetSize({ object1->stamina * 2.0f, 20.0f });
 
 		object1->Update();
 		playerPositionObject->Update();

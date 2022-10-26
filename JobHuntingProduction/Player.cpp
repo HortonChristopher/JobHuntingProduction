@@ -231,9 +231,19 @@ void Player::Update()
 		float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (abs(rotY) < 55)
 		{
-			position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
+			{
+				position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				stamina -= 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 		}
 
 		if (rotSpeed > abs(rotY))
@@ -275,6 +285,14 @@ void Player::Update()
 		{
 			animationNo = 0;
 			animationSet = false;
+		}
+	}
+
+	if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+	{
+		if (stamina < 100.0f)
+		{
+			stamina += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 	}
 

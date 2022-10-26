@@ -109,7 +109,6 @@ private: // メンバ変数
 
 	Sprite* STBar = nullptr;
 	Sprite* STBarFrame = nullptr;
-	int playerST = 100;
 
 	Model* modelAttackRange = nullptr;
 
