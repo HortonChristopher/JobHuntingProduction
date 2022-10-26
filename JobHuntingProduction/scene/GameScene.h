@@ -107,6 +107,10 @@ private: // メンバ変数
 	Sprite* HPBarFrame = nullptr;
 	int playerHP = 10;
 
+	Sprite* STBar = nullptr;
+	Sprite* STBarFrame = nullptr;
+	int playerST = 100;
+
 	Model* modelAttackRange = nullptr;
 
 	Model* modelSkydome = nullptr;

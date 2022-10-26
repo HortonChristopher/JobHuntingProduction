@@ -104,6 +104,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 		return;
 	}
 
+	if (!Sprite::LoadTexture(9, L"Resources/STBar.png")) {
+		assert(0);
+		return;
+	}
+
+	if (!Sprite::LoadTexture(10, L"Resources/STBarFrame.png")) {
+		assert(0);
+		return;
+	}
+
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	p1 = Sprite::Create(3, { 0.0f, 0.0f });
@@ -112,6 +122,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	p4 = Sprite::Create(6, { 0.0f, 0.0f });
 	HPBar = Sprite::Create(7, { 25.0f, 25.0f });
 	HPBarFrame = Sprite::Create(8, { 25.0f, 25.0f });
+	STBar = Sprite::Create(9, { 25.0f, 55.0f });
+	STBarFrame = Sprite::Create(10, { 25.0f, 55.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
@@ -134,8 +146,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objVisionRange4 = Object3d::Create();
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
-	modelGround = Model::CreateFromOBJ("ProtoLandscape");
-	//modelGround = Model::CreateFromOBJ("Landscape2");
+	//modelGround = Model::CreateFromOBJ("ProtoLandscape");
+	modelGround = Model::CreateFromOBJ("Landscape2");
 	modelExtendedGround = Model::CreateFromOBJ("ground");
 	modelAttackRange = Model::CreateFromOBJ("yuka");
 	modelVisionRange = Model::CreateFromOBJ("yuka");
@@ -171,22 +183,22 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	object2 = new EnemyHuman;
 	object2->Initialize();
-	object2->SetPosition({ -300.0f, -10.0f, 0.0f });
+	object2->SetPosition({ -300.0f, 50.0f, 0.0f });
 	object2->SetHomePosition({ -300.0f, 0.0f });
 
 	object3 = new EnemyHuman;
 	object3->Initialize();
-	object3->SetPosition({ 100.0f, -10.0f, 100.0f });
-	object3->SetHomePosition({ 100.0f, 100.0f });
+	object3->SetPosition({ 300.0f, 50.0f, 0.0f });
+	object3->SetHomePosition({ 300.0f, 0.0f });
 
 	object4 = new EnemyHuman;
 	object4->Initialize();
-	object4->SetPosition({ 0.0f, -10.0f, -300.0f });
+	object4->SetPosition({ 0.0f, 50.0f, -300.0f });
 	object4->SetHomePosition({ 0.0f, -300.0f });
 
 	object5 = new EnemyHuman;
 	object5->Initialize();
-	object5->SetPosition({ 0.0f, -10.0f, 300.0f });
+	object5->SetPosition({ 0.0f, 50.0f, 300.0f });
 	object5->SetHomePosition({ 0.0f, 300.0f });
 
 	object6 = new Player;
@@ -229,14 +241,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objSkydome->SetScale({ 5,5,5 });
 	objGround->SetScale({ 400,200,400 });
 
-	objGround->SetPosition({ 0, -10, 0 });
+	objGround->SetPosition({ 0, -15, 0 });
 	objExtendedGround->SetPosition({ 0, -10, 0 });
-	playerPositionObject->SetPosition({ object1->GetPosition().x, 30.0f, object1->GetPosition().z});
+	playerPositionObject->SetPosition({ object1->GetPosition().x, 50.0f, object1->GetPosition().z});
 	playerPositionObject->SetScale({ 10.0f, 10.0f, 10.0f });
-	enemyPositionObject1->SetPosition({ object2->GetPosition().x, 30.0f, object2->GetPosition().z });
-	enemyPositionObject2->SetPosition({ object3->GetPosition().x, 30.0f, object3->GetPosition().z });
-	enemyPositionObject3->SetPosition({ object4->GetPosition().x, 30.0f, object4->GetPosition().z });
-	enemyPositionObject4->SetPosition({ object5->GetPosition().x, 30.0f, object5->GetPosition().z });
+	enemyPositionObject1->SetPosition({ object2->GetPosition().x, 50.0f, object2->GetPosition().z });
+	enemyPositionObject2->SetPosition({ object3->GetPosition().x, 50.0f, object3->GetPosition().z });
+	enemyPositionObject3->SetPosition({ object4->GetPosition().x, 50.0f, object4->GetPosition().z });
+	enemyPositionObject4->SetPosition({ object5->GetPosition().x, 50.0f, object5->GetPosition().z });
 
 	objExtendedGround->SetScale({ 1000, 1, 1000 });
 
@@ -481,36 +493,36 @@ void GameScene::Update()
 
 		if (e1Respawn <= 0 && !enemy1Alive)
 		{
-			object2->SetPosition({ -300.0f, 30.0f, 0.0f });
-			enemyPositionObject1->SetPosition({ -300.0f, 30.0f, 0.0f });
+			object2->SetPosition({ -300.0f, 50.0f, 0.0f });
+			enemyPositionObject1->SetPosition({ -300.0f, 50.0f, 0.0f });
 			enemy1Alive = true;
 		}
 
 		if (e2Respawn <= 0 && !enemy2Alive)
 		{
-			object3->SetPosition({ 100.0f, 30.0f, 100.0f });
-			enemyPositionObject2->SetPosition({ -100.0f, 30.0f, 100.0f });
+			object3->SetPosition({ 300.0f, 50.0f, 0.0f });
+			enemyPositionObject2->SetPosition({ 300.0f, 50.0f, 0.0f });
 			enemy2Alive = true;
 		}
 
 		if (e3Respawn <= 0 && !enemy3Alive)
 		{
-			object4->SetPosition({ 0.0f, 30.0f, -300.0f });
-			enemyPositionObject3->SetPosition({ -300.0f, 30.0f, 0.0f });
+			object4->SetPosition({ 0.0f, 50.0f, -300.0f });
+			enemyPositionObject3->SetPosition({ 0.0f, 50.0f, -300.0f });
 			enemy3Alive = true;
 		}
 
 		if (e4Respawn <= 0 && !enemy4Alive)
 		{
-			object5->SetPosition({ 0.0f, 30.0f, 300.0f });
-			enemyPositionObject4->SetPosition({ -300.0f, 30.0f, 0.0f });
+			object5->SetPosition({ 0.0f, 50.0f, 300.0f });
+			enemyPositionObject4->SetPosition({ 0.0f, 50.0f, 300.0f });
 			enemy4Alive = true;
 		}
 
-		if (object1->GetPosition().x > 139.0f)
+		if (object1->GetPosition().x > 398.0f)
 		{
-			object1->SetPosition({ 139.0f, object1->GetPosition().y, object1->GetPosition().z });
-			camera->SetTarget({ 139.0f, object1->GetPosition().y, object1->GetPosition().z });
+			object1->SetPosition({ 398.0f, object1->GetPosition().y, object1->GetPosition().z });
+			camera->SetTarget({ 398.0f, object1->GetPosition().y, object1->GetPosition().z });
 		}
 		else if (object1->GetPosition().x < -398.0f)
 		{
@@ -540,7 +552,8 @@ void GameScene::Update()
 		object5->SetPosition({ object5->GetPosition().x, enemyPositionObject4->GetPosition().y, object5->GetPosition().z });
 		enemyPositionObject4->SetPosition({ object5->GetPosition().x, enemyPositionObject4->GetPosition().y, object5->GetPosition().z });
 
-		HPBar->SetSize({ playerHP * 20.0f, 50.0f });
+		HPBar->SetSize({ playerHP * 20.0f, 20.0f });
+		STBar->SetSize({ playerST * 2.0f, 20.0f });
 
 		object1->Update();
 		playerPositionObject->Update();
@@ -689,6 +702,8 @@ void GameScene::Draw()
 	{
 		HPBar->Draw();
 		HPBarFrame->Draw();
+		STBar->Draw();
+		STBarFrame->Draw();
 	}
 
 	// デバッグテキストの描画
