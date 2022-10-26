@@ -121,17 +121,22 @@ void EnemyHuman::Update()
 	}
 	else if (aggro && aggroSet)
 	{
-		newPosition = objectPosition;
-		x = (newPosition.x - position.x) / 100.0f;
-		y = (newPosition.z - position.z) / 100.0f;
-		float x2 = newPosition.x - position.x;
-		float y2 = newPosition.z - position.z;
-		float radians = atan2(y2, x2);
+		//newPosition = objectPosition;
+		//x = (newPosition.x - position.x) / 100.0f;
+		//y = (newPosition.z - position.z) / 100.0f;
+		x = objectPosition.x - position.x;
+		y = objectPosition.z - position.z;
+		float hypotenuse = sqrt((x * x) + (y * y));
+		//float x2 = newPosition.x - position.x;
+		//float y2 = newPosition.z - position.z;
+		float radians = atan2(y, x);
 		degrees = XMConvertToDegrees(radians);
 		if (!FirstRun)
 		{
-			position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			//position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			//position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 		}
 		else
 		{
@@ -203,7 +208,6 @@ void EnemyHuman::Update()
 		//position.z += y;
 		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		SetPosition(position);
-		//SetScale({ 3,3,3 });
 	}
 
 	if (!animationSet)
