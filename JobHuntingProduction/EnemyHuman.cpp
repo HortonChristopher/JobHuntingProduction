@@ -84,8 +84,8 @@ void EnemyHuman::Update()
 	}
 	else if (!wander && timer > 239.0f && !aggro)
 	{
-		newPosition.x = rand() % 150 - 25 + homePosition.x;
-		newPosition.z = rand() % 150 - 25 + homePosition.y;
+		newPosition.x = rand() % 150 - 75 + homePosition.x;
+		newPosition.z = rand() % 150 - 75 + homePosition.y;
 		timer = 0.0f;
 		wander = true;
 	}
@@ -106,6 +106,7 @@ void EnemyHuman::Update()
 			attackTimer = 0;
 			attackAnimation = false;
 			attack = false;
+			modelChange = true;
 		}
 	}
 	else if (aggro && !aggroSet)
@@ -121,6 +122,12 @@ void EnemyHuman::Update()
 	}
 	else if (aggro && aggroSet)
 	{
+		if (modelChange)
+		{
+			animationSet = false;
+			animationNo = 2;
+			modelChange = false;
+		}
 		//newPosition = objectPosition;
 		//x = (newPosition.x - position.x) / 100.0f;
 		//y = (newPosition.z - position.z) / 100.0f;
