@@ -77,16 +77,16 @@ void EnemyHuman::Initialize()
 
 void EnemyHuman::Update()
 {
-	if (!wander && timer < 240 && !aggro)
+	if (!wander && timer < 240.0f && !aggro)
 	{
 		aggroSet = false;
 		timer++;
 	}
-	else if (!wander && timer > 239 && !aggro)
+	else if (!wander && timer > 239.0f && !aggro)
 	{
-		newPosition.x = rand() % 50 - 25 + homePosition.x;
-		newPosition.z = rand() % 50 - 25 + homePosition.y;
-		timer = 0;
+		newPosition.x = rand() % 150 - 25 + homePosition.x;
+		newPosition.z = rand() % 150 - 25 + homePosition.y;
+		timer = 0.0f;
 		wander = true;
 	}
 
@@ -177,9 +177,9 @@ void EnemyHuman::Update()
 	}
 	else if (wander && set)
 	{
-		if (timer > 720)
+		if (timer > 720.0f)
 		{
-			timer = 0;
+			timer = 0.0f;
 			wander = false;
 			set = false;
 			modelChange = true;
@@ -192,7 +192,7 @@ void EnemyHuman::Update()
 		}
 		else
 		{
-			timer++;
+			timer += 1.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 
 		if (!FirstRun)

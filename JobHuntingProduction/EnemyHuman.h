@@ -173,7 +173,7 @@ protected:
 
 	bool set = false;
 	float degrees = 0.0f;
-	int timer = 239;
+	float timer = 239.0f;
 	float x = 0.0f;
 	float y = 0.0f;
 };
