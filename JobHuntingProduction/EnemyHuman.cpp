@@ -133,7 +133,7 @@ void EnemyHuman::Update()
 		//y = (newPosition.z - position.z) / 100.0f;
 		x = objectPosition.x - position.x;
 		y = objectPosition.z - position.z;
-		float hypotenuse = sqrt((x * x) + (y * y));
+		hypotenuse = sqrt((x * x) + (y * y));
 		//float x2 = newPosition.x - position.x;
 		//float y2 = newPosition.z - position.z;
 		float radians = atan2(y, x);
@@ -327,6 +327,22 @@ void EnemyHuman::Update()
 		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
 	}
 	constBuffSkin->Unmap(0, nullptr);
+
+	if (aggro && aggroSet)
+	{
+		//Debug Start
+		//char msgbuf[256];
+		//char msgbuf2[256];
+		//char msgbuf3[256];
+
+		//sprintf_s(msgbuf, 256, "X: %f\n", x / hypotenuse);
+		//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
+		//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
+		//OutputDebugStringA(msgbuf);
+		//OutputDebugStringA(msgbuf2);
+		//OutputDebugStringA(msgbuf3);
+		//Debug End
+	}
 }
 
 void EnemyHuman::CreateGraphicsPipeline()

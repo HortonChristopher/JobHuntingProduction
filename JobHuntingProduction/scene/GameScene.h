@@ -103,6 +103,8 @@ private: // メンバ変数
 	Sprite* p3 = nullptr;
 	Sprite* p4 = nullptr;
 
+	Sprite* mission1 = nullptr;
+
 	Sprite* HPBar = nullptr;
 	Sprite* HPBarFrame = nullptr;
 	int playerHP = 10;

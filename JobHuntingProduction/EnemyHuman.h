@@ -176,4 +176,5 @@ protected:
 	float timer = 239.0f;
 	float x = 0.0f;
 	float y = 0.0f;
+	float hypotenuse = 0.0f;
 };

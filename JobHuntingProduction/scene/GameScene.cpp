@@ -114,6 +114,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 		return;
 	}
 
+	if (!Sprite::LoadTexture(11, L"Resources/Mission1.png")) {
+		assert(0);
+		return;
+	}
+
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	p1 = Sprite::Create(3, { 0.0f, 0.0f });
@@ -124,6 +129,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	HPBarFrame = Sprite::Create(8, { 25.0f, 25.0f });
 	STBar = Sprite::Create(9, { 25.0f, 55.0f });
 	STBarFrame = Sprite::Create(10, { 25.0f, 55.0f });
+	mission1 = Sprite::Create(11, { 1150.0f, 100.0f });
+	mission1->SetSize({ 100.0f, 56.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
@@ -270,6 +277,8 @@ void GameScene::Update()
 
 	if (page > 1 && page < 3)
 	{
+		std::ostringstream missionTracker;
+
 		height = playerPositionObject->GetPosition().y;
 		camera->SetTarget({ camera->GetTarget().x, height, camera->GetTarget().z });
 		camera->Update();
@@ -555,6 +564,11 @@ void GameScene::Update()
 		HPBar->SetSize({ playerHP * 20.0f, 20.0f });
 		STBar->SetSize({ object1->stamina * 2.0f, 20.0f });
 
+		missionTracker << enemyDefeated << " / 10"
+			<< std::fixed << std::setprecision(0)
+			<< std::setw(2) << std::setfill('0');
+		debugText->Print(missionTracker.str(), 1173.0f, 160.0f, 1.0f);
+
 		object1->Update();
 		playerPositionObject->Update();
 		enemyPositionObject1->Update();
@@ -704,6 +718,7 @@ void GameScene::Draw()
 		HPBarFrame->Draw();
 		STBar->Draw();
 		STBarFrame->Draw();
+		mission1->Draw();
 	}
 
 	// デバッグテキストの描画
