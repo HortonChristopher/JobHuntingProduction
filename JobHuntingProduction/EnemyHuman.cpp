@@ -85,8 +85,8 @@ void EnemyHuman::Update()
 	}
 	else if (!wander && timer > 239.0f && !aggro)
 	{
-		newPosition.x = rand() % 150 - 75 + homePosition.x;
-		newPosition.z = rand() % 150 - 75 + homePosition.y;
+		newPosition.x = rand() % 50 - 25 + homePosition.x;
+		newPosition.z = rand() % 50 - 25 + homePosition.y;
 		timer = 0.0f;
 		wander = true;
 	}
@@ -177,8 +177,8 @@ void EnemyHuman::Update()
 	}
 	else if (wander && !set)
 	{
-		x = (newPosition.x - position.x) / 720.0f;
-		y = (newPosition.z - position.z) / 720.0f;
+		x = (newPosition.x - position.x) / 180.0f;
+		y = (newPosition.z - position.z) / 180.0f;
 		float x2 = newPosition.x - position.x;
 		float y2 = newPosition.z - position.z;
 		float radians = atan2(y2, x2);
@@ -194,7 +194,7 @@ void EnemyHuman::Update()
 	}
 	else if (wander && set)
 	{
-		if (timer > 720.0f)
+		if (timer > 6.0f)
 		{
 			timer = 0.0f;
 			wander = false;

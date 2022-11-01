@@ -517,6 +517,8 @@ void GameScene::Update()
 			object2->SetPosition({ -300.0f, 50.0f, 0.0f });
 			enemyPositionObject1->SetPosition({ -300.0f, 50.0f, 0.0f });
 			object2->dead = false;
+			object2->wander = false;
+			object2->timer = 239.0f;
 			enemy1Alive = true;
 		}
 
@@ -525,6 +527,8 @@ void GameScene::Update()
 			object3->SetPosition({ 300.0f, 50.0f, 0.0f });
 			enemyPositionObject2->SetPosition({ 300.0f, 50.0f, 0.0f });
 			object3->dead = false;
+			object3->wander = false;
+			object3->timer = 239.0f;
 			enemy2Alive = true;
 		}
 
@@ -533,6 +537,8 @@ void GameScene::Update()
 			object4->SetPosition({ 0.0f, 50.0f, -300.0f });
 			enemyPositionObject3->SetPosition({ 0.0f, 50.0f, -300.0f });
 			object4->dead = false;
+			object4->wander = false;
+			object4->timer = 239.0f;
 			enemy3Alive = true;
 		}
 
@@ -541,6 +547,8 @@ void GameScene::Update()
 			object5->SetPosition({ 0.0f, 50.0f, 300.0f });
 			enemyPositionObject4->SetPosition({ 0.0f, 50.0f, 300.0f });
 			object5->dead = false;
+			object5->wander = false;
+			object5->timer = 239.0f;
 			enemy4Alive = true;
 		}
 
@@ -638,14 +646,14 @@ void GameScene::Update()
 	}
 
 	//Debug Start
-	//char msgbuf[256];
+	char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", object1->GetPosition().x);
+	sprintf_s(msgbuf, 256, "X: %f\n", object2->timer);
 	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	//OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End

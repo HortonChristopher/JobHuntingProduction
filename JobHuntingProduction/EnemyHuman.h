@@ -113,6 +113,7 @@ private:
 public:
 	bool wander = false;
 	int attackTimer = 0;
+	float timer = 239.0f;
 
 protected:
 	Input* input = nullptr;
@@ -173,7 +174,6 @@ protected:
 
 	bool set = false;
 	float degrees = 0.0f;
-	float timer = 239.0f;
 	float x = 0.0f;
 	float y = 0.0f;
 	float hypotenuse = 0.0f;
