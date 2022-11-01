@@ -70,6 +70,8 @@ public: // メンバ関数
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
+	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
+
 public:
 	//Player* object1 = nullptr;
 

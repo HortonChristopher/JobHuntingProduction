@@ -434,28 +434,32 @@ void GameScene::Update()
 			{
 				enemy1Alive = false;
 				enemyDefeated++;
-				e1Respawn = 30;
+				ParticleCreation(object2->GetPosition().x, object2->GetPosition().y, object2->GetPosition().z, 60, 5.0f, 10.0f);
+				e1Respawn = 300;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object3->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy2Alive == true)
 			{
 				enemy2Alive = false;
 				enemyDefeated++;
-				e2Respawn = 30;
+				ParticleCreation(object3->GetPosition().x, object3->GetPosition().y, object3->GetPosition().z, 60, 5.0f, 10.0f);
+				e2Respawn = 300;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object4->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy3Alive == true)
 			{
 				enemy3Alive = false;
 				enemyDefeated++;
-				e3Respawn = 30;
+				ParticleCreation(object4->GetPosition().x, object4->GetPosition().y, object4->GetPosition().z, 60, 5.0f, 10.0f);
+				e3Respawn = 300;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object5->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy4Alive == true)
 			{
 				enemy4Alive = false;
 				enemyDefeated++;
-				e4Respawn = 30;
+				ParticleCreation(object5->GetPosition().x, object5->GetPosition().y, object5->GetPosition().z, 60, 5.0f, 10.0f);
+				e4Respawn = 300;
 			}
 		}
 
@@ -563,6 +567,11 @@ void GameScene::Update()
 
 		HPBar->SetSize({ playerHP * 20.0f, 20.0f });
 		STBar->SetSize({ object1->stamina * 2.0f, 20.0f });
+
+		if (input->PushKey(DIK_LSHIFT) && object1->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && object1->stamina > 0.0f)
+		{
+			ParticleCreation(object1->GetPosition().x, object1->GetPosition().y, object1->GetPosition().z, 10, -1.0f, 1.0f);
+		}
 
 		missionTracker << enemyDefeated << " / 10"
 			<< std::fixed << std::setprecision(0)
@@ -745,4 +754,29 @@ int GameScene::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float re
 	float cornerDistance_sq = ((circleDistance.x - rectW / 2.0f) * (circleDistance.x - rectW / 2.0f)) + ((circleDistance.y - rectH / 2.0f) * (circleDistance.y - rectH / 2.0f));
 
 	return (cornerDistance_sq <= (circleR * circleR));
+}
+
+void GameScene::ParticleCreation(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		// X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 5.0f;
+		XMFLOAT3 pos{};
+		pos.x = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + x;
+		pos.y = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + y + offset;
+		pos.z = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + z;
+
+		const float rnd_vel = 0.1f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f;
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// 追加
+		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
 }
