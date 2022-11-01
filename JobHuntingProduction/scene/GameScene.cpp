@@ -434,32 +434,40 @@ void GameScene::Update()
 			{
 				enemy1Alive = false;
 				enemyDefeated++;
+				object2->dead = true;
+				object2->modelChange = true;
 				ParticleCreation(object2->GetPosition().x, object2->GetPosition().y, object2->GetPosition().z, 60, 5.0f, 10.0f);
-				e1Respawn = 300;
+				e1Respawn = 2500;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object3->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy2Alive == true)
 			{
 				enemy2Alive = false;
 				enemyDefeated++;
+				object3->dead = true;
+				object3->modelChange = true;
 				ParticleCreation(object3->GetPosition().x, object3->GetPosition().y, object3->GetPosition().z, 60, 5.0f, 10.0f);
-				e2Respawn = 300;
+				e2Respawn = 2500;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object4->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy3Alive == true)
 			{
 				enemy3Alive = false;
 				enemyDefeated++;
+				object4->dead = true;
+				object4->modelChange = true;
 				ParticleCreation(object4->GetPosition().x, object4->GetPosition().y, object4->GetPosition().z, 60, 5.0f, 10.0f);
-				e3Respawn = 300;
+				e3Respawn = 2500;
 			}
 
 			if (intersect(objAttackRange->GetPosition(), object5->GetPosition(), 3.0f, 25.0f, 25.0f) && enemy4Alive == true)
 			{
 				enemy4Alive = false;
 				enemyDefeated++;
+				object5->dead = true;
+				object5->modelChange = true;
 				ParticleCreation(object5->GetPosition().x, object5->GetPosition().y, object5->GetPosition().z, 60, 5.0f, 10.0f);
-				e4Respawn = 300;
+				e4Respawn = 2500;
 			}
 		}
 
@@ -508,6 +516,7 @@ void GameScene::Update()
 		{
 			object2->SetPosition({ -300.0f, 50.0f, 0.0f });
 			enemyPositionObject1->SetPosition({ -300.0f, 50.0f, 0.0f });
+			object2->dead = false;
 			enemy1Alive = true;
 		}
 
@@ -515,6 +524,7 @@ void GameScene::Update()
 		{
 			object3->SetPosition({ 300.0f, 50.0f, 0.0f });
 			enemyPositionObject2->SetPosition({ 300.0f, 50.0f, 0.0f });
+			object3->dead = false;
 			enemy2Alive = true;
 		}
 
@@ -522,6 +532,7 @@ void GameScene::Update()
 		{
 			object4->SetPosition({ 0.0f, 50.0f, -300.0f });
 			enemyPositionObject3->SetPosition({ 0.0f, 50.0f, -300.0f });
+			object4->dead = false;
 			enemy3Alive = true;
 		}
 
@@ -529,6 +540,7 @@ void GameScene::Update()
 		{
 			object5->SetPosition({ 0.0f, 50.0f, 300.0f });
 			enemyPositionObject4->SetPosition({ 0.0f, 50.0f, 300.0f });
+			object5->dead = false;
 			enemy4Alive = true;
 		}
 
@@ -584,27 +596,28 @@ void GameScene::Update()
 		enemyPositionObject2->Update();
 		enemyPositionObject3->Update();
 		enemyPositionObject4->Update();
+		object2->Update();
+		object3->Update();
+		object4->Update();
+		object5->Update();
+
 		if (enemy1Alive)
 		{
-			object2->Update();
 			objVisionRange1->Update();
 			objEAttackRange1->Update();
 		}
 		if (enemy2Alive)
 		{
-			object3->Update();
 			objVisionRange2->Update();
 			objEAttackRange2->Update();
 		}
 		if (enemy3Alive)
 		{
-			object4->Update();
 			objVisionRange3->Update();
 			objEAttackRange3->Update();
 		}
 		if (enemy4Alive)
 		{
-			object5->Update();
 			objVisionRange4->Update();
 			objEAttackRange4->Update();
 		}
@@ -670,19 +683,19 @@ void GameScene::Draw()
 		objAttackRange->Draw();
 	}
 
-	if (enemy1Alive && page == 2)
+	if (/*enemy1Alive && */page == 2)
 	{
 		object2->Draw(cmdList);
 	}
-	if (enemy2Alive && page == 2)
+	if (/*enemy2Alive && */page == 2)
 	{
 		object3->Draw(cmdList);
 	}
-	if (enemy3Alive && page == 2)
+	if (/*enemy3Alive && */page == 2)
 	{
 		object4->Draw(cmdList);
 	}
-	if (enemy4Alive && page == 2)
+	if (/*enemy4Alive && */page == 2)
 	{
 		object5->Draw(cmdList);
 	}

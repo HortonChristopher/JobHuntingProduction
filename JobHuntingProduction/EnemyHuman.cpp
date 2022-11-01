@@ -32,6 +32,7 @@ void EnemyHuman::Initialize()
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
+	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -90,7 +91,16 @@ void EnemyHuman::Update()
 		wander = true;
 	}
 
-	if (aggro && attack)
+	if (dead)
+	{
+		if (modelChange)
+		{
+			animationSet = false;
+			animationNo = 5;
+			modelChange = false;
+		}
+	}
+	else if (aggro && attack)
 	{
 		if (!attackAnimation)
 		{
@@ -246,6 +256,11 @@ void EnemyHuman::Update()
 			isPlay = false;
 			animationSet = true;
 			break;
+		case 5:
+			SetModel(modelDeath);
+			isPlay = false;
+			animationSet = true;
+			break;
 		}
 	}
 
@@ -305,9 +320,12 @@ void EnemyHuman::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime)
+		if (animationNo != 5)
 		{
-			currentTime = startTime;
+			if (currentTime > endTime)
+			{
+				currentTime = startTime;
+			}
 		}
 	}
 

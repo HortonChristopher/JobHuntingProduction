@@ -150,6 +150,7 @@ protected:
 	//FBX3DModel* modelDodgeR = nullptr; // 29 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
+	FBX3DModel* modelDeath = nullptr; // 91 frames
 
 	// 1 frame timed
 	FbxTime frameTime;
@@ -167,9 +168,8 @@ protected:
 	bool isPlay = false;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
-	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4)
+	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4), Death(5)
 	bool animationSet = false;
-	bool modelChange = false;
 
 	bool set = false;
 	float degrees = 0.0f;
@@ -177,4 +177,8 @@ protected:
 	float x = 0.0f;
 	float y = 0.0f;
 	float hypotenuse = 0.0f;
+
+public:
+	bool dead = false;
+	bool modelChange = false;
 };
