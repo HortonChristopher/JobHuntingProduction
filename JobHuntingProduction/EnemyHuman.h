@@ -112,6 +112,7 @@ private:
 
 public:
 	bool wander = false;
+	bool set = false;
 	int attackTimer = 0;
 	float timer = 239.0f;
 
@@ -172,7 +173,6 @@ protected:
 	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4), Death(5)
 	bool animationSet = false;
 
-	bool set = false;
 	float degrees = 0.0f;
 	float x = 0.0f;
 	float y = 0.0f;

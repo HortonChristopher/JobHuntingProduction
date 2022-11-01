@@ -518,6 +518,7 @@ void GameScene::Update()
 			enemyPositionObject1->SetPosition({ -300.0f, 50.0f, 0.0f });
 			object2->dead = false;
 			object2->wander = false;
+			object2->set = false;
 			object2->timer = 239.0f;
 			enemy1Alive = true;
 		}
@@ -528,6 +529,7 @@ void GameScene::Update()
 			enemyPositionObject2->SetPosition({ 300.0f, 50.0f, 0.0f });
 			object3->dead = false;
 			object3->wander = false;
+			object3->set = false;
 			object3->timer = 239.0f;
 			enemy2Alive = true;
 		}
@@ -538,6 +540,7 @@ void GameScene::Update()
 			enemyPositionObject3->SetPosition({ 0.0f, 50.0f, -300.0f });
 			object4->dead = false;
 			object4->wander = false;
+			object4->set = false;
 			object4->timer = 239.0f;
 			enemy3Alive = true;
 		}
@@ -548,6 +551,7 @@ void GameScene::Update()
 			enemyPositionObject4->SetPosition({ 0.0f, 50.0f, 300.0f });
 			object5->dead = false;
 			object5->wander = false;
+			object5->set = false;
 			object5->timer = 239.0f;
 			enemy4Alive = true;
 		}
