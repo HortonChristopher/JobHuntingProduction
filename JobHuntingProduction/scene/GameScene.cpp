@@ -130,7 +130,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	STBar = Sprite::Create(9, { 25.0f, 55.0f });
 	STBarFrame = Sprite::Create(10, { 25.0f, 55.0f });
 	mission1 = Sprite::Create(11, { 1150.0f, 100.0f });
-	mission1->SetSize({ 100.0f, 56.0f });
+	mission1->SetSize({ 100.0f, 80.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
