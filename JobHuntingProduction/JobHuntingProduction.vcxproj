@@ -94,6 +94,7 @@
     <ClCompile Include="3d\FBXGeneration.cpp" />
     <ClCompile Include="3d\ParticleManager.cpp" />
     <ClCompile Include="audio\Audio.cpp" />
+    <ClCompile Include="BaseArea.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
     <ClCompile Include="2d\DebugText.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="3d\PointLight.h" />
     <ClInclude Include="3d\SpotLight.h" />
     <ClInclude Include="audio\Audio.h" />
+    <ClInclude Include="BaseArea.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\DebugCamera.h" />

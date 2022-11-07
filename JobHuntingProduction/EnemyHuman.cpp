@@ -177,8 +177,8 @@ void EnemyHuman::Update()
 	}
 	else if (wander && !set)
 	{
-		x = (newPosition.x - position.x) / 180.0f;
-		y = (newPosition.z - position.z) / 180.0f;
+		x = (newPosition.x - position.x) / 360.0f;
+		y = (newPosition.z - position.z) / 360.0f;
 		float x2 = newPosition.x - position.x;
 		float y2 = newPosition.z - position.z;
 		float radians = atan2(y2, x2);

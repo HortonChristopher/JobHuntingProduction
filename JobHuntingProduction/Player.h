@@ -158,4 +158,5 @@ protected:
 
 public:
 	float stamina = 100.0f;
+	float hp = 10.0f;
 };
