@@ -391,7 +391,10 @@ void BaseArea::Draw()
 	baseAreaMinimapPlayerSPRITE->Draw();
 	for (int i = 0; i < 4; i++)
 	{
-		baseAreaMinimapEnemySPRITE[i]->Draw();
+		if (!baseAreaEnemyFBX[i]->dead)
+		{
+			baseAreaMinimapEnemySPRITE[i]->Draw();
+		}
 	}
 
 	// Debug text drawing
