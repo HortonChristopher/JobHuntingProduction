@@ -77,14 +77,12 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	Player::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
 
-	//std::thread th1(&BaseArea::thread1, std::ref(dxCommon), std::ref(input), std::ref(audio), this);
-	std::thread th2(&BaseArea::thread2, this); // 2D Initialization
-	std::thread th3(&BaseArea::thread3, this); // 3D Initialization (other than touchable objects)
-	std::thread th4(&BaseArea::thread4, this); // Model and Touchable Object Initialization
-	//th1.join();
+	std::thread th1(&BaseArea::thread1, this); // 2D Initialization
+	std::thread th2(&BaseArea::thread2, this); // 3D Initialization (other than touchable objects)
+	std::thread th3(&BaseArea::thread3, this); // Model and Touchable Object Initialization
+	th1.join();
 	th2.join();
 	th3.join();
-	th4.join();
 }
 
 void BaseArea::Update()
@@ -273,6 +271,14 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
+#pragma region minimapUpdates
+	baseAreaMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.3f + 165.0f, playerFBX->GetPosition().z * 0.3f + 545.0f});
+	for (int i = 0; i < 4; i++)
+	{
+		baseAreaMinimapEnemySPRITE[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x * 0.3f + 165.0f, baseAreaEnemyFBX[i]->GetPosition().z * 0.3f + 545.0f });
+	}
+#pragma endregion
+
 #pragma region missionTracker
 	missionTracker << enemyDefeated << " / 10"
 		<< std::fixed << std::setprecision(0)
@@ -350,16 +356,16 @@ void BaseArea::Draw()
 	}
 
 	// Debug only
-	if (attackTime > 10.0f && attackTime < 20.0f)
+	/*if (attackTime > 10.0f && attackTime < 20.0f)
 	{
-		//attackRangeOBJ[0]->Draw();
+		attackRangeOBJ[0]->Draw();
 	}
 
 	for (int i = 0; i < 4; i++)
 	{
-		//attackRangeOBJ[i + 1]->Draw();
-		//enemyVisionRangeOBJ[i]->Draw();
-	}
+		attackRangeOBJ[i + 1]->Draw();
+		enemyVisionRangeOBJ[i]->Draw();
+	}*/
 	// End Debug
 
 	skydomeOBJ->Draw();
@@ -381,6 +387,12 @@ void BaseArea::Draw()
 	STBarSPRITE->Draw();
 	STBarFrameSPRITE->Draw();
 	baseAreaMissionSPRITE->Draw();
+	baseAreaMinimapSPRITE->Draw();
+	baseAreaMinimapPlayerSPRITE->Draw();
+	for (int i = 0; i < 4; i++)
+	{
+		baseAreaMinimapEnemySPRITE[i]->Draw();
+	}
 
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
@@ -433,45 +445,7 @@ void BaseArea::ParticleCreation(float x, float y, float z, int life, float offse
 	}
 }
 
-void BaseArea::thread1(DirectXCommon* dxCommon, Input* input, Audio* audio)
-{
-	// Checking for nullptr
-	assert(dxCommon);
-	assert(input);
-	assert(audio);
-
-	// Assigning variables to this
-	this->dxCommon = dxCommon;
-	this->input = input;
-	this->audio = audio;
-
-	// Camera initialization
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
-
-	// Collision Manager initialization
-	collisionManager = CollisionManager::GetInstance();
-
-	// Particle Manager initialization/generation
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
-
-	// Light Group Creation
-	lightGroup = LightGroup::Create();
-
-	// Setting DxCommon device
-	FBXGeneration::SetDevice(dxCommon->GetDevice());
-	EnemyHuman::SetDevice(dxCommon->GetDevice());
-	Player::SetDevice(dxCommon->GetDevice());
-
-	// Setting camera
-	Object3d::SetCamera(camera);
-	FBXGeneration::SetCamera(camera);
-	EnemyHuman::SetCamera(camera);
-	Player::SetCamera(camera);
-	PlayerPositionObject::SetCamera(camera);
-}
-
-void BaseArea::thread2()
+void BaseArea::thread1()
 {
 	// Loading debug text
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
@@ -486,6 +460,9 @@ void BaseArea::thread2()
 	if (!Sprite::LoadTexture(3, L"Resources/STBar.png")) { assert(0); return; } // ST bar texture
 	if (!Sprite::LoadTexture(4, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
 	if (!Sprite::LoadTexture(5, L"Resources/Mission1.png")) { assert(0); return; } // Base mission texture
+	if (!Sprite::LoadTexture(6, L"Resources/BaseAreaMinimap.png")) { assert(0); return; } // Minimap texture
+	if (!Sprite::LoadTexture(7, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
+	if (!Sprite::LoadTexture(8, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -493,11 +470,17 @@ void BaseArea::thread2()
 	STBarSPRITE = Sprite::Create(3, { 25.0f, 55.0f });
 	STBarFrameSPRITE = Sprite::Create(4, { 25.0f, 55.0f });
 	baseAreaMissionSPRITE = Sprite::Create(5, { 1150.0f, 100.0f });
+	baseAreaMinimapSPRITE = Sprite::Create(6, { 50.0f , 430.0f });
+	baseAreaMinimapPlayerSPRITE = Sprite::Create(7, { 0.0f, 0.0f });
+	for (int i = 0; i < 4; i++)
+	{
+		baseAreaMinimapEnemySPRITE[i] = Sprite::Create(8, { 0.0f, 0.0f });
+	}
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 }
 
-void BaseArea::thread3()
+void BaseArea::thread2()
 {
 	// 3D Object creation
 	skydomeOBJ = Object3d::Create();
@@ -555,7 +538,7 @@ void BaseArea::thread3()
 	}
 }
 
-void BaseArea::thread4()
+void BaseArea::thread3()
 {
 	// Model creation
 	skydomeMODEL = Model::CreateFromOBJ("skydome");

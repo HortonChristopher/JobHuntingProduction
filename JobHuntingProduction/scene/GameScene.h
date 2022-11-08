@@ -54,9 +54,6 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-	void Loading();
-	void baseAreaInit();
-
 public:
 	//Player* object1 = nullptr;
 
@@ -71,10 +68,6 @@ private: // メンバ変数
 	Sprite* p2 = nullptr;
 	Sprite* p3 = nullptr;
 	Sprite* p4 = nullptr;
-
-	Sprite* loadingPage = nullptr;
-	Sprite* loadingBar = nullptr;
-	Sprite* loadingBarFrame = nullptr;
 public:
 	int page = 0;
 };

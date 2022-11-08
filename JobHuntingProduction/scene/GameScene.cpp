@@ -35,18 +35,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	this->audio = audio;
 
 	// テクスチャ読み込み
-	//if (!Sprite::LoadTexture(93, L"Resources/Loading.png")) { assert(0); return; }
-	//if (!Sprite::LoadTexture(94, L"Resources/LoadingBar.png")) { assert(0); return; }
-	//if (!Sprite::LoadTexture(95, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(96, L"Resources/P1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(97, L"Resources/P2.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(98, L"Resources/P3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(99, L"Resources/P4.png")) { assert(0); return; }
 
 	// 背景スプライト生成
-	//loadingPage = Sprite::Create(93, { 0.0f, 0.0f });
-	//loadingBar = Sprite::Create(94, { 830.0f, 670.0f });
-	//loadingBarFrame = Sprite::Create(95, { 830.0f, 670.0f });
 	p1 = Sprite::Create(96, { 0.0f, 0.0f });
 	p2 = Sprite::Create(97, { 0.0f, 0.0f });
 	p3 = Sprite::Create(98, { 0.0f, 0.0f });
@@ -78,11 +72,6 @@ void GameScene::Update()
 		{
 			baseArea->Initialize(dxCommon, input, audio);
 			baseArea->initialization = false;
-
-			//std::thread th1(&GameScene::baseAreaInit, GameScene());
-			//std::thread th2(&GameScene::Loading, GameScene());
-			//th1.join();
-			//th2.join();
 		}
 
 		if (baseArea->deletion)
@@ -165,14 +154,4 @@ void GameScene::Draw()
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion
-}
-
-void GameScene::Loading()
-{
-
-}
-
-void GameScene::baseAreaInit()
-{
-	
 }

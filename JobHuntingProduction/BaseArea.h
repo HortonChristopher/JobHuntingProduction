@@ -59,10 +59,9 @@ public:
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 
-	void thread1(DirectXCommon* dxCommon, Input* input, Audio* audio);
+	void thread1();
 	void thread2();
 	void thread3();
-	void thread4();
 
 private:
 	DirectXCommon* dxCommon = nullptr;
@@ -116,10 +115,15 @@ private:
 		// Base area enemy respawn timer
 	std::array<float, 4> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f} };
 		// Base area enemy spawn positions
-	std::array<XMFLOAT3, 4> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, -10.0f, 200.0f}, // Enemy 1
-															{200.0f, -10.0f, 0.0f}, // Enemy 2
-															{0.0f, -10.0f, -200.0f}, // Enemy 3
-															{-200.0f, -10.0f, 0.0f}} }; // Enemy 4
+	std::array<XMFLOAT3, 4> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 30.0f, 200.0f}, // Enemy 1
+															{200.0f, 30.0f, 0.0f}, // Enemy 2
+															{0.0f, 30.0f, -200.0f}, // Enemy 3
+															{-200.0f, 30.0f, 0.0f}} }; // Enemy 4
+
+	// Base Area minimap (move to separate minimap file later)
+	Sprite* baseAreaMinimapSPRITE = nullptr;
+	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
+	std::array<Sprite*, 4> baseAreaMinimapEnemySPRITE = { {} };
 
 	// Base area general aspects
 	bool attacking = false;
@@ -129,6 +133,5 @@ private:
 public:
 	bool initialization = true;
 	bool deletion = false;
-	float progress = 0.0f;
 	int result = 0; // 0 = default, 1 = defeat, 2 = victory
 };
