@@ -15,9 +15,9 @@ BaseArea::~BaseArea()
 {
 	// Safe Delete
 	safe_delete(camera);
-	//safe_delete(collisionManager);
-	//safe_delete(particleMan);
-	//safe_delete(debugText);
+	collisionManager = nullptr;
+	particleMan = nullptr;
+	debugText = nullptr;
 	safe_delete(HPBarSPRITE);
 	safe_delete(HPBarFrameSPRITE);
 	safe_delete(STBarSPRITE);
@@ -77,110 +77,14 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	Player::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
 
-	// Loading debug text
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
-
-	// Debug text initialization
-	debugText = DebugText::GetInstance();
-	debugText->Initialize(debugTextTexNumber);
-
-	// Sprite texture loading
-	if (!Sprite::LoadTexture(1, L"Resources/HPBar.png")) { assert(0); return; } // HP bar texture
-	if (!Sprite::LoadTexture(2, L"Resources/HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
-	if (!Sprite::LoadTexture(3, L"Resources/STBar.png")) { assert(0); return; } // ST bar texture
-	if (!Sprite::LoadTexture(4, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
-	if (!Sprite::LoadTexture(5, L"Resources/Mission1.png")) {assert(0); return; } // Base mission texture
-	
-	// Sprite generation
-	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
-	HPBarFrameSPRITE = Sprite::Create(2, { 25.0f, 25.0f });
-	STBarSPRITE = Sprite::Create(3, { 25.0f, 55.0f });
-	STBarFrameSPRITE = Sprite::Create(4, { 25.0f, 55.0f });
-	baseAreaMissionSPRITE = Sprite::Create(5, { 1150.0f, 100.0f });
-		// Resizing mission sprite
-	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
-
-	// Model creation
-	skydomeMODEL = Model::CreateFromOBJ("skydome");
-	groundMODEL = Model::CreateFromOBJ("Landscape2");
-	extendedGroundMODEL = Model::CreateFromOBJ("ground");
-	positionMODEL = Model::CreateFromOBJ("yuka");
-	attackRangeMODEL = Model::CreateFromOBJ("yuka");
-	visionRangeMODEL = Model::CreateFromOBJ("yuka");
-
-	// 3D Object creation
-	skydomeOBJ = Object3d::Create();
-	for (int i = 0; i < 5; i++) { attackRangeOBJ[i] = Object3d::Create(); }
-	for (int i = 0; i < 4; i++) { enemyVisionRangeOBJ[i] = Object3d::Create(); }
-	playerPositionOBJ = PlayerPositionObject::Create();
-	for (int i = 0; i < 4; i++) { baseAreaEnemyPositionOBJ[i] = PlayerPositionObject::Create(); }
-
-	// Setting 3D model
-	skydomeOBJ->SetModel(skydomeMODEL);
-	for (int i = 0; i < 5; i++) { attackRangeOBJ[i]->SetModel(attackRangeMODEL); }
-	for (int i = 0; i < 4; i++) { enemyVisionRangeOBJ[i]->SetModel(visionRangeMODEL); }
-	playerPositionOBJ->SetModel(positionMODEL);
-	for (int i = 0; i < 4; i++) { baseAreaEnemyPositionOBJ[i]->SetModel(positionMODEL); }
-
-	// Touchable object creation
-	groundOBJ = TouchableObject::Create(groundMODEL);
-	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
-
-	// Player initialization
-	playerFBX = new Player;
-	playerFBX->Initialize();
-
-	// Enemy initialization
-	for (int i = 0; i < 4; i++)
-	{
-		baseAreaEnemyFBX[i] = new EnemyHuman;
-		baseAreaEnemyFBX[i]->Initialize();
-		baseAreaEnemyFBX[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
-		baseAreaEnemyFBX[i]->SetHomePosition({baseAreaEnemySpawnXMFLOAT3[i].x, baseAreaEnemySpawnXMFLOAT3[i].z });
-	}
-
-	// Camera initial values
-	camera->SetTarget(playerFBX->GetPosition());
-	camera->SetUp({ 0, 1, 0 });
-	camera->SetDistance(48.0f);
-
-	// Attack range initial values
-	for (int i = 0; i < 5; i++)
-	{
-		if (i == 0)
-		{
-			attackRangeOBJ[i]->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 0.5f, playerFBX->GetPosition().z + 5.0f });
-		}
-		else
-		{
-			attackRangeOBJ[i]->SetPosition({ baseAreaEnemyFBX[i - 1]->GetPosition().x, baseAreaEnemyFBX[i - 1]->GetPosition().y + 0.5f, baseAreaEnemyFBX[i - 1]->GetPosition().z + 5.0f });
-		}
-		attackRangeOBJ[i]->SetScale({ 15, 1, 15 });
-	}
-
-	// Vision range initial values
-	for (int i = 0; i < 4; i++)
-	{
-		enemyVisionRangeOBJ[i]->SetScale({ 90, 1, 90 });
-	}
-
-	// Skydome and ground scale
-	skydomeOBJ->SetScale({ 5,5,5 });
-	groundOBJ->SetScale({ 400,200,400 });
-	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
-	
-	// Ground positions
-	groundOBJ->SetPosition({ 0, -15, 0 });
-	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
-
-	// Position Object initial positions
-	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 30.0f, playerFBX->GetPosition().z });
-	for (int i = 0; i < 4; i++)
-	{
-		baseAreaEnemyPositionOBJ[i]->SetPosition({baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z});
-	}
-
-	srand(time(NULL));
+	//std::thread th1(&BaseArea::thread1, std::ref(dxCommon), std::ref(input), std::ref(audio), this);
+	std::thread th2(&BaseArea::thread2, this); // 2D Initialization
+	std::thread th3(&BaseArea::thread3, this); // 3D Initialization (other than touchable objects)
+	std::thread th4(&BaseArea::thread4, this); // Model and Touchable Object Initialization
+	//th1.join();
+	th2.join();
+	th3.join();
+	th4.join();
 }
 
 void BaseArea::Update()
@@ -223,8 +127,8 @@ void BaseArea::Update()
 		attackRangeOBJ[i + 1]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
 	}
 #pragma endregion
-
-#pragma region DebugVisionRange
+	
+#pragma region VisionRange
 	for (int i = 0; i < 4; i++)
 	{
 		enemyVisionRangeOBJ[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 40)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 40))});
@@ -448,13 +352,13 @@ void BaseArea::Draw()
 	// Debug only
 	if (attackTime > 10.0f && attackTime < 20.0f)
 	{
-		attackRangeOBJ[0]->Draw();
+		//attackRangeOBJ[0]->Draw();
 	}
 
 	for (int i = 0; i < 4; i++)
 	{
-		attackRangeOBJ[i + 1]->Draw();
-		enemyVisionRangeOBJ[i]->Draw();
+		//attackRangeOBJ[i + 1]->Draw();
+		//enemyVisionRangeOBJ[i]->Draw();
 	}
 	// End Debug
 
@@ -527,4 +431,158 @@ void BaseArea::ParticleCreation(float x, float y, float z, int life, float offse
 		// ’Ç‰Á
 		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
 	}
+}
+
+void BaseArea::thread1(DirectXCommon* dxCommon, Input* input, Audio* audio)
+{
+	// Checking for nullptr
+	assert(dxCommon);
+	assert(input);
+	assert(audio);
+
+	// Assigning variables to this
+	this->dxCommon = dxCommon;
+	this->input = input;
+	this->audio = audio;
+
+	// Camera initialization
+	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
+
+	// Collision Manager initialization
+	collisionManager = CollisionManager::GetInstance();
+
+	// Particle Manager initialization/generation
+	particleMan = ParticleManager::GetInstance();
+	particleMan->SetCamera(camera);
+
+	// Light Group Creation
+	lightGroup = LightGroup::Create();
+
+	// Setting DxCommon device
+	FBXGeneration::SetDevice(dxCommon->GetDevice());
+	EnemyHuman::SetDevice(dxCommon->GetDevice());
+	Player::SetDevice(dxCommon->GetDevice());
+
+	// Setting camera
+	Object3d::SetCamera(camera);
+	FBXGeneration::SetCamera(camera);
+	EnemyHuman::SetCamera(camera);
+	Player::SetCamera(camera);
+	PlayerPositionObject::SetCamera(camera);
+}
+
+void BaseArea::thread2()
+{
+	// Loading debug text
+	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
+
+	// Debug text initialization
+	debugText = DebugText::GetInstance();
+	debugText->Initialize(debugTextTexNumber);
+
+	// Sprite texture loading
+	if (!Sprite::LoadTexture(1, L"Resources/HPBar.png")) { assert(0); return; } // HP bar texture
+	if (!Sprite::LoadTexture(2, L"Resources/HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
+	if (!Sprite::LoadTexture(3, L"Resources/STBar.png")) { assert(0); return; } // ST bar texture
+	if (!Sprite::LoadTexture(4, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
+	if (!Sprite::LoadTexture(5, L"Resources/Mission1.png")) { assert(0); return; } // Base mission texture
+
+	// Sprite generation
+	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
+	HPBarFrameSPRITE = Sprite::Create(2, { 25.0f, 25.0f });
+	STBarSPRITE = Sprite::Create(3, { 25.0f, 55.0f });
+	STBarFrameSPRITE = Sprite::Create(4, { 25.0f, 55.0f });
+	baseAreaMissionSPRITE = Sprite::Create(5, { 1150.0f, 100.0f });
+	// Resizing mission sprite
+	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
+}
+
+void BaseArea::thread3()
+{
+	// 3D Object creation
+	skydomeOBJ = Object3d::Create();
+	for (int i = 0; i < 5; i++) { attackRangeOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < 4; i++) { enemyVisionRangeOBJ[i] = Object3d::Create(); }
+	playerPositionOBJ = PlayerPositionObject::Create();
+	for (int i = 0; i < 4; i++) { baseAreaEnemyPositionOBJ[i] = PlayerPositionObject::Create(); }
+
+	// Player initialization
+	playerFBX = new Player;
+	playerFBX->Initialize();
+
+	// Enemy initialization
+	for (int i = 0; i < 4; i++)
+	{
+		baseAreaEnemyFBX[i] = new EnemyHuman;
+		baseAreaEnemyFBX[i]->Initialize();
+		baseAreaEnemyFBX[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
+		baseAreaEnemyFBX[i]->SetHomePosition({ baseAreaEnemySpawnXMFLOAT3[i].x, baseAreaEnemySpawnXMFLOAT3[i].z });
+	}
+
+	// Camera initial values
+	camera->SetTarget(playerFBX->GetPosition());
+	camera->SetUp({ 0, 1, 0 });
+	camera->SetDistance(48.0f);
+
+	// Attack range initial values
+	for (int i = 0; i < 5; i++)
+	{
+		if (i == 0)
+		{
+			attackRangeOBJ[i]->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 0.5f, playerFBX->GetPosition().z + 5.0f });
+		}
+		else
+		{
+			attackRangeOBJ[i]->SetPosition({ baseAreaEnemyFBX[i - 1]->GetPosition().x, baseAreaEnemyFBX[i - 1]->GetPosition().y + 0.5f, baseAreaEnemyFBX[i - 1]->GetPosition().z + 5.0f });
+		}
+		attackRangeOBJ[i]->SetScale({ 15, 1, 15 });
+	}
+
+	// Vision range initial values
+	for (int i = 0; i < 4; i++)
+	{
+		enemyVisionRangeOBJ[i]->SetScale({ 90, 1, 90 });
+	}
+
+	// Skydome scale
+	skydomeOBJ->SetScale({ 5,5,5 });
+
+	// Position Object initial positions
+	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 30.0f, playerFBX->GetPosition().z });
+	for (int i = 0; i < 4; i++)
+	{
+		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+	}
+}
+
+void BaseArea::thread4()
+{
+	// Model creation
+	skydomeMODEL = Model::CreateFromOBJ("skydome");
+	groundMODEL = Model::CreateFromOBJ("Landscape2");
+	extendedGroundMODEL = Model::CreateFromOBJ("ground");
+	positionMODEL = Model::CreateFromOBJ("yuka");
+	attackRangeMODEL = Model::CreateFromOBJ("yuka");
+	visionRangeMODEL = Model::CreateFromOBJ("yuka");
+
+	// Setting 3D model
+	skydomeOBJ->SetModel(skydomeMODEL);
+	for (int i = 0; i < 5; i++) { attackRangeOBJ[i]->SetModel(attackRangeMODEL); }
+	for (int i = 0; i < 4; i++) { enemyVisionRangeOBJ[i]->SetModel(visionRangeMODEL); }
+	playerPositionOBJ->SetModel(positionMODEL);
+	for (int i = 0; i < 4; i++) { baseAreaEnemyPositionOBJ[i]->SetModel(positionMODEL); }
+
+	// Touchable object creation
+	groundOBJ = TouchableObject::Create(groundMODEL);
+	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
+
+	// Ground scale
+	groundOBJ->SetScale({ 400,200,400 });
+	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
+
+	// Ground positions
+	groundOBJ->SetPosition({ 0, -15, 0 });
+	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
+
+	srand(time(NULL));
 }

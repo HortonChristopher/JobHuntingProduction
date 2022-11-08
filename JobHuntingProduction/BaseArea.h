@@ -28,6 +28,7 @@
 #include <iomanip>
 #include <stdlib.h>
 #include <time.h>
+#include <thread>
 
 class BaseArea
 {
@@ -57,6 +58,11 @@ public:
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
+
+	void thread1(DirectXCommon* dxCommon, Input* input, Audio* audio);
+	void thread2();
+	void thread3();
+	void thread4();
 
 private:
 	DirectXCommon* dxCommon = nullptr;
@@ -123,5 +129,6 @@ private:
 public:
 	bool initialization = true;
 	bool deletion = false;
+	float progress = 0.0f;
 	int result = 0; // 0 = default, 1 = defeat, 2 = victory
 };

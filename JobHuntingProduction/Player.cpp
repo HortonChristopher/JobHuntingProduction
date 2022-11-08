@@ -65,7 +65,7 @@ void Player::Initialize()
 	// Create graphics pipeline
 	Player::CreateGraphicsPipeline();
 
-	// Set time for 1 frame at 60fps
+	// Set time for 1 second at 60fps
 	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 
 	input = Input::GetInstance();
@@ -124,7 +124,7 @@ void Player::Update()
 
 	if (isPlay)
 	{
-		// Advance one frame
+		// Advance one frame/second
 		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 		double sec = frameTime.GetSecondDouble();
 		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -273,10 +273,10 @@ void Player::Update()
 			animationSet = false;
 		}
 
-		if (position.x < 398.0f && position.x > -398.0f && position.z < 398.0f && position.z > -398.0f)
+		/*if (position.x < 398.0f && position.x > -398.0f && position.z < 398.0f && position.z > -398.0f)
 		{
 			camera->SetTarget(position + Vector3{ 0, 1, 0 });
-		}
+		}*/
 		//camera->SetTarget(position + Vector3{ 0, 1, 0 });
 	}
 	else
