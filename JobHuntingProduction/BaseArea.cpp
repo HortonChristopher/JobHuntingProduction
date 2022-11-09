@@ -38,6 +38,9 @@ BaseArea::~BaseArea()
 	safe_delete(extendedGroundOBJ);
 	safe_delete(playerFBX);
 	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyFBX[i]); }
+	safe_delete(baseAreaMinimapSPRITE);
+	safe_delete(baseAreaMinimapPlayerSPRITE);
+	for (int i = 0; i < 4; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
 }
 
 void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -194,7 +197,7 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-	if (enemyDefeated > 9)
+	if (enemyDefeated > 5)
 	{
 		result = 2;
 		deletion = true;
@@ -280,7 +283,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region missionTracker
-	missionTracker << enemyDefeated << " / 10"
+	missionTracker << enemyDefeated << " / 5"
 		<< std::fixed << std::setprecision(0)
 		<< std::setw(2) << std::setfill('0');
 	debugText->Print(missionTracker.str(), 1173.0f, 160.0f, 1.0f);
