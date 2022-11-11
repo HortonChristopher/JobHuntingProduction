@@ -159,12 +159,12 @@ void Player::Update()
 
 	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
 	{
-		attackTime = 30;
+		attackTime = 60.0f;
 	}
 
 	if (attackTime > 0)
 	{
-		attackTime--;
+		attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 	}
 	else
 	{

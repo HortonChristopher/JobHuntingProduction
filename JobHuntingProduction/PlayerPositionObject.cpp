@@ -6,6 +6,7 @@
 #include "ParticleManager.h"
 #include "CollisionManager.h"
 #include "CollisionAttribute.h"
+#include "DeltaTime.h"
 
 using namespace DirectX;
 
@@ -13,6 +14,7 @@ extern int cameraMove;
 extern int prevCameraMove;
 extern int playFlag;
 extern int isStageGoing;
+extern DeltaTime* deltaTime;
 
 PlayerPositionObject* PlayerPositionObject::Create(Model* model)
 {
@@ -67,10 +69,10 @@ void PlayerPositionObject::Update()
 
 	if (!onGround) {
 
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
+		const float fallAcc = -0.6f; // -0.01f
+		const float fallVYMin = -0.5f; // -0.5f
 
-		fallV.m128_f32[1] = max(fallV.m128_f32[1] + fallAcc, fallVYMin);
+		fallV.m128_f32[1] = max(fallV.m128_f32[1] + fallAcc * (deltaTime->deltaTimeCalculated.count() / 1000000.0f), fallVYMin);
 
 		position.x += fallV.m128_f32[0];
 		position.y += fallV.m128_f32[1];

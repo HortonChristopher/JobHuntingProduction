@@ -118,6 +118,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="TitleScreen.cpp" />
     <ClCompile Include="TouchableObject.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -171,6 +172,7 @@
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="SphereCollider.h" />
+    <ClInclude Include="TitleScreen.h" />
     <ClInclude Include="TouchableObject.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

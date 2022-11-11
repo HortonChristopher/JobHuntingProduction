@@ -101,7 +101,7 @@ void BaseArea::Update()
 
 	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0.0f)
 	{
-		attackTime = 30.0f;
+		attackTime = 60.0f;
 	}
 
 	if (attackTime > 0)
@@ -180,7 +180,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerAttack
-	if (attackTime > 10.0f && attackTime < 20.0f)
+	if (attackTime > 10.0f && attackTime < 50.0f)
 	{
 		for (int i = 0; i < 4; i++)
 		{
@@ -191,7 +191,7 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->dead = true;
 				baseAreaEnemyFBX[i]->modelChange = true;
 				ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
-				baseAreaEnemyRespawnTimerFLOAT[i] = 2400;
+				baseAreaEnemyRespawnTimerFLOAT[i] = 1200;
 			}
 		}
 	}
@@ -436,14 +436,14 @@ void BaseArea::ParticleCreation(float x, float y, float z, int life, float offse
 		pos.y = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + y + offset;
 		pos.z = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + z;
 
-		const float rnd_vel = 0.1f;
+		const float rnd_vel = 0.1f; // 0.1f
 		XMFLOAT3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 		XMFLOAT3 acc{};
-		const float rnd_acc = 0.001f;
+		const float rnd_acc = 0.001f; // 0.001f
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 
 		// ’Ç‰Á
