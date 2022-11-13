@@ -45,16 +45,23 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	p2 = Sprite::Create(97, { 0.0f, 0.0f });
 	p3 = Sprite::Create(98, { 0.0f, 0.0f });
 	p4 = Sprite::Create(99, { 0.0f, 0.0f });
+
+	titleScreen = new TitleScreen;
+	titleScreen->Initialize(dxCommon, input, audio);
 }
 
 void GameScene::Update()
 {
 	if (page < 2)
 	{
+		titleScreen->Update();
+
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 		{
 			if (page == 1)
 			{
+				titleScreen->~TitleScreen();
+				titleScreen = nullptr;
 				baseArea = new BaseArea;
 				baseArea->initialization = true;
 				page++;
@@ -122,6 +129,10 @@ void GameScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
 
+	if (page < 2)
+	{
+		titleScreen->Draw();
+	}
 	if (page == 2)
 	{
 		baseArea->Draw();
@@ -134,14 +145,14 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	if (page == 0)
+	/*if (page == 0)
 	{
 		p1->Draw();
 	}
 	if (page == 1)
 	{
 		p2->Draw();
-	}
+	}*/
 	if (page == 3)
 	{
 		p3->Draw();

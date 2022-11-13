@@ -50,6 +50,17 @@ private:
 	ParticleManager* particleMan = nullptr;
 	LightGroup* lightGroup = nullptr;
 
-	
+	// Skydome and Ground Objects
+	Object3d* skydomeOBJ = nullptr;
+	TouchableObject* groundOBJ = nullptr;
+	TouchableObject* extendedGroundOBJ = nullptr;
+	Model* skydomeMODEL = nullptr;
+	Model* groundMODEL = nullptr;
+	Model* extendedGroundMODEL = nullptr;
+
+	float cameraTest = 0.0f;
+public:
+	bool initialization = true;
+	bool deletion = false;
 };
 

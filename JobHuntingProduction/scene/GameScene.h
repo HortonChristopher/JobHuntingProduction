@@ -8,6 +8,7 @@
 #include "Audio.h"
 #include "DeltaTime.h"
 #include "BaseArea.h"
+#include "TitleScreen.h"
 
 /// <summary>
 /// ゲームシーン
@@ -62,6 +63,7 @@ private: // メンバ変数
 	Input* input = nullptr;
 	Audio* audio = nullptr;
 
+	TitleScreen* titleScreen = nullptr;
 	BaseArea* baseArea = nullptr;
 
 	Sprite* p1 = nullptr;
