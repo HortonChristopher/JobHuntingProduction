@@ -70,6 +70,8 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	camera->SetTarget({ 0.0f, 0.0f, 0.0f });
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(48.0f);
+
+	camera->title = true;
 }
 
 void TitleScreen::Update()
@@ -77,9 +79,6 @@ void TitleScreen::Update()
 	lightGroup->Update();
 	particleMan->Update();
 	camera->Update();
-
-	cameraTest += 10.0f;
-	camera->SetEye({ camera->GetEye().x, cameraTest, camera->GetEye().z });
 
 	skydomeOBJ->Update();
 	extendedGroundOBJ->Update();

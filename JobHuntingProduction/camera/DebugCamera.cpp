@@ -29,8 +29,13 @@ void DebugCamera::Update()
 	Input::MouseMove mouseMove = input->GetMouseMove();
 	Input::float2 stickMove = input->GetRStickDirection();
 
+	if (title)
+	{
+		angleY += 0.001f;
+		dirty = true;
+	}
 	// Rotate the camera if the right mouse button is pressed
-	if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
+	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
 	{
 		float dy;
 		//float dx;
