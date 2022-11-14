@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Camera.h"
 #include "Input.h"
+#include "DeltaTime.h"
 
 /// <summary>
 /// デバッグ用カメラ

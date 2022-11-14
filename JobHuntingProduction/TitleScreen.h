@@ -58,7 +58,10 @@ private:
 	Model* groundMODEL = nullptr;
 	Model* extendedGroundMODEL = nullptr;
 
-	float cameraTest = 0.0f;
+	Sprite* titleSPRITE = nullptr;
+	Sprite* titleStartStopSPRITE = nullptr;
+	float titleSpriteALPHA = 0.0f;
+	float degrees = 0.0f;
 public:
 	bool initialization = true;
 	bool deletion = false;

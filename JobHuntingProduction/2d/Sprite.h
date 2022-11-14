@@ -141,6 +141,8 @@ public: // メンバ関数
 	/// <param name="size">サイズ</param>
 	void SetSize(XMFLOAT2 size);
 
+	void SetColor(XMFLOAT4 color);
+
 	/// <summary>
 	/// アンカーポイントの設定
 	/// </summary>

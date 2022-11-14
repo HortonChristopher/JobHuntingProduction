@@ -16,6 +16,7 @@ TitleScreen::~TitleScreen()
 	safe_delete(skydomeOBJ);
 	safe_delete(groundOBJ);
 	safe_delete(extendedGroundOBJ);
+	safe_delete(titleSPRITE);
 }
 
 void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -43,6 +44,11 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	// Loading debug text
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
 
+	if (!Sprite::LoadTexture(8, L"Resources/Title.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(9, L"Resources/TitleStartStop.png")) { assert(0); return; }
+	titleSPRITE = Sprite::Create(8, { 0,0 }, { 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
+	titleStartStopSPRITE = Sprite::Create(9, { 0,0 });
+
 	// Debug text initialization
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextTexNumber);
@@ -66,12 +72,17 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	groundOBJ->SetPosition({ 0, -15, 0 });
 	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
 
+	// Skydome scale
+	skydomeOBJ->SetScale({ 5,5,5 });
+
 	// Camera initial values
-	camera->SetTarget({ 0.0f, 0.0f, 0.0f });
+	camera->SetTarget({ 0.0f, 30.0f, 0.0f });
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(48.0f);
 
 	camera->title = true;
+
+	degrees = 0;
 }
 
 void TitleScreen::Update()
@@ -79,6 +90,21 @@ void TitleScreen::Update()
 	lightGroup->Update();
 	particleMan->Update();
 	camera->Update();
+
+	degrees += 10.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+	if (titleSpriteALPHA < 1.0f)
+	{
+		titleSpriteALPHA += 0.5f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	}
+	else
+	{
+		titleSpriteALPHA = 1.0f;
+	}
+
+	titleSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
+
+	camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 100.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 100.0f });
 
 	skydomeOBJ->Update();
 	extendedGroundOBJ->Update();
@@ -125,6 +151,11 @@ void TitleScreen::Draw()
 	Sprite::PreDraw(cmdList);
 
 	// Foreground sprite drawing
+	titleSPRITE->Draw();
+	if (titleSpriteALPHA >= 1.0f)
+	{
+		titleStartStopSPRITE->Draw();
+	}
 
 	// Debug text drawing
 	debugText->DrawAll(cmdList);

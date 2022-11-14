@@ -8,6 +8,8 @@ using namespace DirectX;
 extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
+extern DeltaTime* deltaTime;
+
 DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 	: Camera(window_width, window_height)
 {
@@ -31,7 +33,7 @@ void DebugCamera::Update()
 
 	if (title)
 	{
-		angleY += 0.001f;
+		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
 	// Rotate the camera if the right mouse button is pressed
