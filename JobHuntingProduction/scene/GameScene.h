@@ -72,5 +72,6 @@ private: // メンバ変数
 	Sprite* p4 = nullptr;
 public:
 	int page = 0;
+	bool mainLoop = true;
 };
 

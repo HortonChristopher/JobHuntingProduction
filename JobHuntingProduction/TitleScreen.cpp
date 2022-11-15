@@ -46,8 +46,10 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 
 	if (!Sprite::LoadTexture(8, L"Resources/Title.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(9, L"Resources/TitleStartStop.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; }
 	titleSPRITE = Sprite::Create(8, { 0,0 }, { 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
 	titleStartStopSPRITE = Sprite::Create(9, { 0,0 });
+	fadeSPRITE = Sprite::Create(10, { 0,0 }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 
 	// Debug text initialization
 	debugText = DebugText::GetInstance();
@@ -69,9 +71,10 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
 
 	// Ground position
-	groundOBJ->SetPosition({ 0, -15, 0 });
-	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
+	groundOBJ->SetPosition({ 0, -35, 0 });
+	extendedGroundOBJ->SetPosition({ 0, -40, 0 });
 
+	skydomeOBJ->SetPosition({ 0, -25, 0 });
 	// Skydome scale
 	skydomeOBJ->SetScale({ 5,5,5 });
 
@@ -100,11 +103,56 @@ void TitleScreen::Update()
 	else
 	{
 		titleSpriteALPHA = 1.0f;
+		if (!selectionBOOL)
+		{
+			if (selection == 0)
+			{
+				if (input->TriggerKey(DIK_S) || input->TriggerLStickDown())
+				{
+					selection = 2;
+				}
+				else if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+				{
+					selectionBOOL = true;
+				}
+			}
+			else if (selection == 2)
+			{
+				if (input->TriggerKey(DIK_W) || input->TriggerLStickUp())
+				{
+					selection = 0;
+				}
+				else if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+				{
+					selectionBOOL = true;
+				}
+			}
+		}
+	}
+
+	if (selectionBOOL)
+	{
+		fadeSpriteALPHA += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		
+		if (fadeSpriteALPHA >= 1.0f)
+		{
+			gameStart = true;
+		}
 	}
 
 	titleSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
+	fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 
-	camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 100.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 100.0f });
+	//camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 100.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 100.0f });
+	camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 10.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 10.0f });
+	if (selection == 0)
+	{
+		ParticleCreation(sinf(XMConvertToRadians(degrees)) * 10.0f, 23.0f, cosf(XMConvertToRadians(degrees)) * 10.0f, 20, 0, 2.0f);
+	}
+	else if (selection == 2)
+	{
+		ParticleCreation(sinf(XMConvertToRadians(degrees)) * 10.0f, 4.0f, cosf(XMConvertToRadians(degrees)) * 10.0f, 20, 0, 2.0f);
+	}
 
 	skydomeOBJ->Update();
 	extendedGroundOBJ->Update();
@@ -141,8 +189,11 @@ void TitleScreen::Draw()
 	extendedGroundOBJ->Draw();
 	groundOBJ->Draw();
 
-	// Particle drawing
-	particleMan->Draw(cmdList);
+	if (titleSpriteALPHA >= 1.0f)
+	{
+		// Particle drawing
+		particleMan->Draw(cmdList);
+	}
 
 	Object3d::PostDraw();
 #pragma endregion
@@ -157,10 +208,59 @@ void TitleScreen::Draw()
 		titleStartStopSPRITE->Draw();
 	}
 
+	if (selectionBOOL)
+	{
+		fadeSPRITE->Draw();
+	}
+
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
 
 	// Sprite post draw
 	Sprite::PostDraw();
 #pragma endregion
+
+#pragma region debugTestStrings
+	//Debug Start
+	char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
+	char msgbuf4[256];
+
+	sprintf_s(msgbuf, 256, "sinf %f \n", sinf(XMConvertToRadians(degrees)) * 10.0f);
+	sprintf_s(msgbuf2, 256, "cosf %f \n", cosf(XMConvertToRadians(degrees)) * 10.0f);
+	sprintf_s(msgbuf3, 256, "camX %f \n", camera->GetTarget().x);
+	sprintf_s(msgbuf4, 256, "camZ %f \n", camera->GetTarget().z);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);
+	OutputDebugStringA(msgbuf4);
+	//Debug End
+#pragma endregion
+}
+
+void TitleScreen::ParticleCreation(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		// X,Y,Z‘S‚Ä[-5.0f,+5.0f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		const float rnd_pos = 5.0f;
+		const float rnd_pos2 = 15.0f;
+		XMFLOAT3 pos{};
+		pos.x = ((float)rand() / RAND_MAX * rnd_pos2 - rnd_pos2 / 2.0f) + x;
+		pos.y = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + y + offset;
+		pos.z = ((float)rand() / RAND_MAX * rnd_pos2 - rnd_pos2 / 2.0f) + z;
+
+		const float rnd_vel = 0.1f; // 0.1f
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f; // 0.001f
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// ’Ç‰Á
+		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
 }

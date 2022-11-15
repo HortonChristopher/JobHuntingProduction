@@ -56,19 +56,22 @@ void GameScene::Update()
 	{
 		titleScreen->Update();
 
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+		if (titleScreen->gameStart)
 		{
-			if (page == 1)
+			if (titleScreen->selection == 0)
 			{
-				titleScreen->~TitleScreen();
-				titleScreen = nullptr;
-				baseArea = new BaseArea;
-				baseArea->initialization = true;
-				page++;
+				if (page == 0)
+				{
+					titleScreen->~TitleScreen();
+					titleScreen = nullptr;
+					baseArea = new BaseArea;
+					baseArea->initialization = true;
+					page = 2;
+				}
 			}
-			else
+			else if (titleScreen->selection == 2)
 			{
-				page++;
+				mainLoop = false;
 			}
 		}
 	}

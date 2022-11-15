@@ -92,7 +92,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	gameScene->Initialize(dxCommon, input, audio);
 	
 	// メインループ
-	while (true)
+	while (gameScene->mainLoop)
 	{
 		if (!firstRun)
 		{

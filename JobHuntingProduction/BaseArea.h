@@ -130,6 +130,9 @@ private:
 	float attackTime = 0.0f;
 	int enemyDefeated = 0;
 
+	Sprite* fadeSPRITE = nullptr;
+	float fadeSpriteALPHA = 1.0f;
+	bool gameStart = false;
 public:
 	bool initialization = true;
 	bool deletion = false;

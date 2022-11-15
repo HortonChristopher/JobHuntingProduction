@@ -99,6 +99,18 @@ void BaseArea::Update()
 	camera->SetTarget(playerPositionOBJ->GetPosition());
 	camera->Update();
 
+	if (!gameStart)
+	{
+		fadeSpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+
+		if (fadeSpriteALPHA <= 0.0f)
+		{
+			fadeSpriteALPHA = 0.0f;
+			gameStart = true;
+		}
+	}
+
 	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0.0f)
 	{
 		attackTime = 60.0f;
@@ -403,6 +415,11 @@ void BaseArea::Draw()
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
 
+	if (!gameStart)
+	{
+		fadeSPRITE->Draw();
+	}
+
 	// Sprite post draw
 	Sprite::PostDraw();
 #pragma endregion
@@ -469,6 +486,7 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(6, L"Resources/BaseAreaMinimap.png")) { assert(0); return; } // Minimap texture
 	if (!Sprite::LoadTexture(7, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(8, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
+	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; } // Black Screen
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -482,6 +500,7 @@ void BaseArea::thread1()
 	{
 		baseAreaMinimapEnemySPRITE[i] = Sprite::Create(8, { 0.0f, 0.0f });
 	}
+	fadeSPRITE = Sprite::Create(10, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 }

@@ -41,6 +41,8 @@ public:
 
 	void Draw();
 
+	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
+
 private:
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -62,8 +64,14 @@ private:
 	Sprite* titleStartStopSPRITE = nullptr;
 	float titleSpriteALPHA = 0.0f;
 	float degrees = 0.0f;
+
+	Sprite* fadeSPRITE = nullptr;
+	float fadeSpriteALPHA = 0.0f;
+	bool selectionBOOL = false;
 public:
 	bool initialization = true;
 	bool deletion = false;
+	int selection = 0;
+	bool gameStart = false;
 };
 
