@@ -103,13 +103,13 @@ void TitleScreen::Update()
 	else
 	{
 		titleSpriteALPHA = 1.0f;
-		if (!selectionBOOL)
+		if (!selectionBOOL && !particleMovement)
 		{
 			if (selection == 0)
 			{
 				if (input->TriggerKey(DIK_S) || input->TriggerLStickDown())
 				{
-					selection = 2;
+					particleMovement = true;
 				}
 				else if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 				{
@@ -120,12 +120,36 @@ void TitleScreen::Update()
 			{
 				if (input->TriggerKey(DIK_W) || input->TriggerLStickUp())
 				{
-					selection = 0;
+					particleMovement = true;
 				}
 				else if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 				{
 					selectionBOOL = true;
 				}
+			}
+		}
+	}
+
+	if (particleMovement)
+	{
+		if (selection == 0)
+		{
+			particleYPosition -= 0.5f;
+			if (particleYPosition <= 4.0f)
+			{
+				particleYPosition = 4.0f;
+				particleMovement = false;
+				selection = 2;
+			}
+		}
+		else if (selection == 2)
+		{
+			particleYPosition += 0.5f;
+			if (particleYPosition >= 23.0f)
+			{
+				particleYPosition = 23.0f;
+				particleMovement = false;
+				selection = 0;
 			}
 		}
 	}
@@ -145,14 +169,7 @@ void TitleScreen::Update()
 
 	//camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 100.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 100.0f });
 	camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 10.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 10.0f });
-	if (selection == 0)
-	{
-		ParticleCreation(sinf(XMConvertToRadians(degrees)) * 10.0f, 23.0f, cosf(XMConvertToRadians(degrees)) * 10.0f, 20, 0, 2.0f);
-	}
-	else if (selection == 2)
-	{
-		ParticleCreation(sinf(XMConvertToRadians(degrees)) * 10.0f, 4.0f, cosf(XMConvertToRadians(degrees)) * 10.0f, 20, 0, 2.0f);
-	}
+	ParticleCreation(sinf(XMConvertToRadians(degrees)) * 10.0f, particleYPosition, cosf(XMConvertToRadians(degrees)) * 10.0f, 20, 0, 2.0f);
 
 	skydomeOBJ->Update();
 	extendedGroundOBJ->Update();

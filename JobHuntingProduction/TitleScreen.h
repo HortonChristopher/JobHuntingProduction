@@ -68,6 +68,9 @@ private:
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 0.0f;
 	bool selectionBOOL = false;
+
+	bool particleMovement = false;
+	float particleYPosition = 23.0f;
 public:
 	bool initialization = true;
 	bool deletion = false;
