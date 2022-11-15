@@ -123,6 +123,7 @@ void BaseArea::Update()
 	else
 	{
 		attackTime = 0.0f;
+		ableToDamage = true;
 	}
 
 	objectPosition = playerFBX->GetPosition();
@@ -154,22 +155,33 @@ void BaseArea::Update()
 	{
 		if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 60.0f, 60.0f) && baseAreaEnemyAliveBOOL[i] == true)
 		{
-			baseAreaEnemyFBX[i]->SetAggro(true);
-			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) * (baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y));
-			if (distance < 6.0f)
+			//baseAreaEnemyFBX[i]->SetAggro(true);
+			/*if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK || baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
 			{
-				baseAreaEnemyFBX[i]->SetAttack(true);
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+			}*/
+			float distance = abs(sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) * (baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y)));
+			if (distance < abs(6.0f))
+			{
+				//baseAreaEnemyFBX[i]->SetAttack(true);
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+				}
 			}
 			else
 			{
-				baseAreaEnemyFBX[i]->SetAttack(false);
+				//baseAreaEnemyFBX[i]->SetAttack(false);
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				}
 			}
 		}
 		else
 		{
-			//baseAreaEnemyFBX[i]->SetAggro(false);
 			baseAreaEnemyFBX[i]->SetAggroSwitch(true);
-			baseAreaEnemyFBX[i]->SetAttack(false);
+			//baseAreaEnemyFBX[i]->SetAttack(false);
 		}
 	}
 #pragma endregion
@@ -177,8 +189,9 @@ void BaseArea::Update()
 #pragma region playerHPDamage
 	for (int i = 0; i < 4; i++)
 	{
-		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 10.0f, 10.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 14 && baseAreaEnemyFBX[i]->attackTimer < 16)
+		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 10.0f, 10.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 14 && baseAreaEnemyFBX[i]->attackTimer < 16 && baseAreaEnemyFBX[i]->ableToDamage)
 		{
+			baseAreaEnemyFBX[i]->ableToDamage = false;
 			playerFBX->hp -= 1.0f;
 		}
 	}
@@ -192,18 +205,28 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerAttack
-	if (attackTime > 10.0f && attackTime < 50.0f)
+	if (attackTime > 10.0f && attackTime < 50.0f && ableToDamage)
 	{
 		for (int i = 0; i < 4; i++)
 		{
 			if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 25.0f, 25.0f) && baseAreaEnemyAliveBOOL[i] == true)
 			{
-				baseAreaEnemyAliveBOOL[i] = false;
-				enemyDefeated++;
-				baseAreaEnemyFBX[i]->dead = true;
-				baseAreaEnemyFBX[i]->modelChange = true;
+				baseAreaEnemyFBX[i]->HP -= 1.0f;
+				if (baseAreaEnemyFBX[i]->HP < 1.0f)
+				{
+					baseAreaEnemyAliveBOOL[i] = false;
+					enemyDefeated++;
+					baseAreaEnemyFBX[i]->dead = true;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					baseAreaEnemyRespawnTimerFLOAT[i] = 600;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+				}
+				else
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+				}
 				ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
-				baseAreaEnemyRespawnTimerFLOAT[i] = 1200;
+				ableToDamage = false;
 			}
 		}
 	}
@@ -232,9 +255,10 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
 			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
 			baseAreaEnemyFBX[i]->dead = false;
-			baseAreaEnemyFBX[i]->wander = false;
+			//baseAreaEnemyFBX[i]->wander = false;
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::STAND);
 			baseAreaEnemyFBX[i]->set = false;
-			baseAreaEnemyFBX[i]->timer = 239.0f;
+			baseAreaEnemyFBX[i]->timer = 238.0f;
 			baseAreaEnemyAliveBOOL[i] = true;
 		}
 	}

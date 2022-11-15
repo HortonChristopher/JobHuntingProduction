@@ -109,6 +109,8 @@ void GameScene::Update()
 	{
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 		{
+			titleScreen = new TitleScreen;
+			titleScreen->Initialize(dxCommon, input, audio);
 			page = 0;
 		}
 	}

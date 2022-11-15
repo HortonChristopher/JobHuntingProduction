@@ -65,7 +65,7 @@ void EnemyHuman::Initialize()
 	// Create graphics pipeline
 	EnemyHuman::CreateGraphicsPipeline();
 
-	// Set time for 1 frame at 60fps
+	// Set time for 1 second at 60fps
 	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 
 	input = Input::GetInstance();
@@ -78,7 +78,7 @@ void EnemyHuman::Initialize()
 
 void EnemyHuman::Update()
 {
-	if (!wander && timer < 240.0f && !aggro)
+	/*if (!wander && timer < 240.0f && !aggro)
 	{
 		aggroSet = false;
 		timer++;
@@ -89,143 +89,311 @@ void EnemyHuman::Update()
 		newPosition.z = rand() % 50 - 25 + homePosition.y;
 		timer = 0.0f;
 		wander = true;
-	}
+	}*/
 
-	if (dead)
+	switch (enumStatus)
 	{
-		if (modelChange)
+	case STAND:
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (timer > 239.0f)
 		{
-			animationSet = false;
-			animationNo = 5;
-			modelChange = false;
+			newPosition.x = rand() % 80 - 40 + homePosition.x;
+			newPosition.z = rand() % 80 - 40 + homePosition.y;
+			timer = 0.0f;
+			enumStatus = WANDER;
 		}
-	}
-	else if (aggro && attack)
-	{
+		break;
+	case WANDER:
+		if (!set)
+		{
+			x = (newPosition.x - position.x) / 300.0f;
+			y = (newPosition.z - position.z) / 300.0f;
+			float x2 = newPosition.x - position.x;
+			float y2 = newPosition.z - position.z;
+			float radians = atan2(y2, x2);
+			degrees = XMConvertToDegrees(radians);
+			set = true;
+			modelChange = true;
+			if (modelChange)
+			{
+				animationSet = false;
+				animationNo = 1;
+				modelChange = false;
+			}
+		}
+		else
+		{
+			if (timer > 360.0f)
+			{
+				timer = 0.0f;
+				wander = false;
+				set = false;
+				modelChange = true;
+				if (modelChange)
+				{
+					animationSet = false;
+					animationNo = 0;
+					modelChange = false;
+				}
+				enumStatus = STAND;
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+
+			if (!FirstRun)
+			{
+				position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				FirstRun = false;
+			}
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetPosition(position);
+		}
+		break;
+	case AGGRO:
+		if (!aggroSet)
+		{
+			modelChange = true;
+			if (modelChange)
+			{
+				animationSet = false;
+				animationNo = 2;
+				modelChange = false;
+			}
+			aggroSet = true;
+		}
+		else if (aggroSet)
+		{
+			x = objectPosition.x - position.x;
+			y = objectPosition.z - position.z;
+			hypotenuse = sqrt((x * x) + (y * y));
+			float radians = atan2(y, x);
+			degrees = XMConvertToDegrees(radians);
+			if (!FirstRun)
+			{
+				position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			}
+			else
+			{
+				FirstRun = false;
+			}
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetPosition(position);
+			if (aggroSwitch)
+			{
+				animationSet = false;
+				animationNo = 0;
+				aggroSet = false;
+				aggro = false;
+				wander = false;
+				set = false;
+				timer = 0.0f;
+				aggroSwitch = false;
+				enumStatus = STAND;
+			}
+		}
+		break;
+	case ATTACK:
 		if (!attackAnimation)
 		{
 			animationSet = false;
 			animationNo = 3;
 			attackAnimation = true;
 		}
-		SetPosition(position);
-		SetRotation(rotation);
-		attackTimer++;
-		if (attackTimer > 29)
+		attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (attackTimer > 29.0f)
 		{
-			attackTimer = 0;
-			attackAnimation = false;
-			attack = false;
+			attackTimer = 0.0f;
+			//attack = false;
 			modelChange = true;
+			attackAnimation = false;
+			timer = 0.0f;
+			enumStatus = COOLDOWN;
 		}
-	}
-	else if (aggro && !aggroSet)
-	{
-		modelChange = true;
+		break;
+	case COOLDOWN:
 		if (modelChange)
-		{
-			animationSet = false;
-			animationNo = 2;
-			modelChange = false;
-		}
-		aggroSet = true;
-	}
-	else if (aggro && aggroSet)
-	{
-		if (modelChange)
-		{
-			animationSet = false;
-			animationNo = 2;
-			modelChange = false;
-		}
-		//newPosition = objectPosition;
-		//x = (newPosition.x - position.x) / 100.0f;
-		//y = (newPosition.z - position.z) / 100.0f;
-		x = objectPosition.x - position.x;
-		y = objectPosition.z - position.z;
-		hypotenuse = sqrt((x * x) + (y * y));
-		//float x2 = newPosition.x - position.x;
-		//float y2 = newPosition.z - position.z;
-		float radians = atan2(y, x);
-		degrees = XMConvertToDegrees(radians);
-		if (!FirstRun)
-		{
-			//position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			//position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
-		}
-		else
-		{
-			FirstRun = false;
-		}
-		//position.x += x;
-		//position.z += y;
-		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-		SetPosition(position);
-		if (aggroSwitch)
 		{
 			animationSet = false;
 			animationNo = 0;
-			aggroSet = false;
-			aggro = false;
-			wander = false;
-			set = false;
-			timer = 0;
-			aggroSwitch = false;
+			modelChange = false;
 		}
-	}
-	else if (wander && !set)
-	{
-		x = (newPosition.x - position.x) / 360.0f;
-		y = (newPosition.z - position.z) / 360.0f;
-		float x2 = newPosition.x - position.x;
-		float y2 = newPosition.z - position.z;
-		float radians = atan2(y2, x2);
-		degrees = XMConvertToDegrees(radians);
-		set = true;
-		modelChange = true;
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (timer > 59.0f)
+		{
+			timer = 0.0f;
+			ableToDamage = true;
+			enumStatus = AGGRO;
+		}
+		break;
+	case DAMAGED:
 		if (modelChange)
 		{
 			animationSet = false;
-			animationNo = 1;
+			animationNo = 4;
 			modelChange = false;
 		}
-	}
-	else if (wander && set)
-	{
-		if (timer > 6.0f)
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (timer > 53.0f)
 		{
 			timer = 0.0f;
-			wander = false;
-			set = false;
-			modelChange = true;
-			if (modelChange)
-			{
-				animationSet = false;
-				animationNo = 0;
-				modelChange = false;
-			}
+			enumStatus = AGGRO;
 		}
-		else
+		break;
+	case DEAD:
+		if (modelChange)
 		{
-			timer += 1.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			animationSet = false;
+			animationNo = 5;
+			modelChange = false;
 		}
-
-		if (!FirstRun)
-		{
-			position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		}
-		else
-		{
-			FirstRun = false;
-		}
-		//position.x += x;
-		//position.z += y;
-		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-		SetPosition(position);
+		break;
+	default:
+		enumStatus = STAND;
+		break;
 	}
+
+	//if (dead)
+	//{
+	//	if (modelChange)
+	//	{
+	//		animationSet = false;
+	//		animationNo = 5;
+	//		modelChange = false;
+	//	}
+	//}
+	//else if (aggro && attack)
+	//{
+	//	if (!attackAnimation)
+	//	{
+	//		animationSet = false;
+	//		animationNo = 3;
+	//		attackAnimation = true;
+	//	}
+	//	SetPosition(position);
+	//	SetRotation(rotation);
+	//	attackTimer++;
+	//	if (attackTimer > 29)
+	//	{
+	//		attackTimer = 0;
+	//		attackAnimation = false;
+	//		attack = false;
+	//		modelChange = true;
+	//	}
+	//}
+	//else if (aggro && !aggroSet)
+	//{
+	//	modelChange = true;
+	//	if (modelChange)
+	//	{
+	//		animationSet = false;
+	//		animationNo = 2;
+	//		modelChange = false;
+	//	}
+	//	aggroSet = true;
+	//}
+	//else if (aggro && aggroSet)
+	//{
+	//	if (modelChange)
+	//	{
+	//		animationSet = false;
+	//		animationNo = 2;
+	//		modelChange = false;
+	//	}
+	//	//newPosition = objectPosition;
+	//	//x = (newPosition.x - position.x) / 100.0f;
+	//	//y = (newPosition.z - position.z) / 100.0f;
+	//	x = objectPosition.x - position.x;
+	//	y = objectPosition.z - position.z;
+	//	hypotenuse = sqrt((x * x) + (y * y));
+	//	//float x2 = newPosition.x - position.x;
+	//	//float y2 = newPosition.z - position.z;
+	//	float radians = atan2(y, x);
+	//	degrees = XMConvertToDegrees(radians);
+	//	if (!FirstRun)
+	//	{
+	//		//position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//		//position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//		position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+	//		position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+	//	}
+	//	else
+	//	{
+	//		FirstRun = false;
+	//	}
+	//	//position.x += x;
+	//	//position.z += y;
+	//	SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+	//	SetPosition(position);
+	//	if (aggroSwitch)
+	//	{
+	//		animationSet = false;
+	//		animationNo = 0;
+	//		aggroSet = false;
+	//		aggro = false;
+	//		wander = false;
+	//		set = false;
+	//		timer = 0;
+	//		aggroSwitch = false;
+	//	}
+	//}
+	//else if (wander && !set)
+	//{
+	//	x = (newPosition.x - position.x) / 360.0f;
+	//	y = (newPosition.z - position.z) / 360.0f;
+	//	float x2 = newPosition.x - position.x;
+	//	float y2 = newPosition.z - position.z;
+	//	float radians = atan2(y2, x2);
+	//	degrees = XMConvertToDegrees(radians);
+	//	set = true;
+	//	modelChange = true;
+	//	if (modelChange)
+	//	{
+	//		animationSet = false;
+	//		animationNo = 1;
+	//		modelChange = false;
+	//	}
+	//}
+	//else if (wander && set)
+	//{
+	//	if (timer > 6.0f)
+	//	{
+	//		timer = 0.0f;
+	//		wander = false;
+	//		set = false;
+	//		modelChange = true;
+	//		if (modelChange)
+	//		{
+	//			animationSet = false;
+	//			animationNo = 0;
+	//			modelChange = false;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		timer += 1.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//	}
+
+	//	if (!FirstRun)
+	//	{
+	//		position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//		position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//	}
+	//	else
+	//	{
+	//		FirstRun = false;
+	//	}
+	//	//position.x += x;
+	//	//position.z += y;
+	//	SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+	//	SetPosition(position);
+	//}
 
 	if (!animationSet)
 	{
@@ -346,21 +514,17 @@ void EnemyHuman::Update()
 	}
 	constBuffSkin->Unmap(0, nullptr);
 
-	if (aggro && aggroSet)
-	{
-		//Debug Start
-		//char msgbuf[256];
-		//char msgbuf2[256];
-		//char msgbuf3[256];
-
-		//sprintf_s(msgbuf, 256, "X: %f\n", x / hypotenuse);
-		//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
-		//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-		//OutputDebugStringA(msgbuf);
-		//OutputDebugStringA(msgbuf2);
-		//OutputDebugStringA(msgbuf3);
-		//Debug End
-	}
+	//Debug Start
+	char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+	sprintf_s(msgbuf, 256, "Timer: %f\n", timer);
+	//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
+	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 }
 
 void EnemyHuman::CreateGraphicsPipeline()

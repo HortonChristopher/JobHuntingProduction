@@ -133,6 +133,7 @@ private:
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 1.0f;
 	bool gameStart = false;
+	bool ableToDamage = true;
 public:
 	bool initialization = true;
 	bool deletion = false;

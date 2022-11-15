@@ -45,6 +45,20 @@ public:
 	};
 
 public:
+	enum status
+	{
+		STAND = 1,
+		WANDER = 2,
+		AGGRO = 3,
+		ATTACK = 4,
+		COOLDOWN = 5,
+		DAMAGED = 6,
+		DEAD = 7
+	};
+
+	status enumStatus = STAND;
+
+public:
 	/// <summary>
 	/// Initialization
 	/// </summary>
@@ -77,6 +91,7 @@ public:
 	void SetAttack(bool attack) { this->attack = attack; }
 	void SetAggro(bool aggro) { this->aggro = aggro; }
 	void SetAggroSwitch(bool aggroswitch) { this->aggroSwitch = aggroswitch; }
+	void SetEnumStatus(status enumStatus) { this->enumStatus = enumStatus; }
 
 	const XMFLOAT3& GetPosition() { return position; }
 	const XMFLOAT3& GetRotation() { return rotation; }
@@ -109,12 +124,6 @@ private:
 
 	// Camera
 	static Camera* camera;
-
-public:
-	bool wander = false;
-	bool set = false;
-	int attackTimer = 0;
-	float timer = 239.0f;
 
 protected:
 	Input* input = nullptr;
@@ -177,8 +186,13 @@ protected:
 	float x = 0.0f;
 	float y = 0.0f;
 	float hypotenuse = 0.0f;
-
 public:
+	bool HP = 5.0f;
 	bool dead = false;
 	bool modelChange = false;
+	bool wander = false;
+	bool ableToDamage = true;
+	bool set = false;
+	float attackTimer = 0.0f;
+	float timer = 238.0f;
 };
