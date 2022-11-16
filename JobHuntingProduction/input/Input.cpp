@@ -155,6 +155,17 @@ bool Input::TriggerKey(BYTE keyNumber)
 	return false;
 }
 
+bool Input::UpKey(BYTE keyNumber)
+{
+	assert(0 <= keyNumber && keyNumber <= 256);
+
+	if (keyPre[keyNumber] && !key[keyNumber]) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Input::PushMouseLeft()
 {
 	// 0でなければ押している

@@ -138,4 +138,5 @@ public:
 	bool initialization = true;
 	bool deletion = false;
 	int result = 0; // 0 = default, 1 = defeat, 2 = victory
+	XMFLOAT3 originalRotation = { 0.0f, 0.0f, 0.0f };
 };

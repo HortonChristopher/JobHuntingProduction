@@ -224,11 +224,15 @@ void EnemyHuman::Update()
 			animationNo = 0;
 			modelChange = false;
 		}
+		XMFLOAT3 cooldownPosition = position;
+		SetPosition(cooldownPosition);
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer > 59.0f)
+		if (timer > 179.0f)
 		{
 			timer = 0.0f;
 			ableToDamage = true;
+			aggroSet = false;
+			modelChange = true;
 			enumStatus = AGGRO;
 		}
 		break;
@@ -243,6 +247,8 @@ void EnemyHuman::Update()
 		if (timer > 53.0f)
 		{
 			timer = 0.0f;
+			aggroSet = false;
+			modelChange = true;
 			enumStatus = AGGRO;
 		}
 		break;
@@ -518,7 +524,7 @@ void EnemyHuman::Update()
 	char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
-	sprintf_s(msgbuf, 256, "Timer: %f\n", timer);
+	sprintf_s(msgbuf, 256, "HP: %d\n", HP);
 	//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
 	OutputDebugStringA(msgbuf);

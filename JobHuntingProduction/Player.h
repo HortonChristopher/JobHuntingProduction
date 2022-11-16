@@ -151,7 +151,7 @@ protected:
 	// Animation is playing
 	bool isPlay = false;
 
-	float rotateSpeed = 450.0f; // Currently using delta time; 7.5f using frame speed
+	float rotateSpeed = 900.0f; // Currently using delta time; 7.5f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 120.0f; // 2.0f using frame speed
 	float attackTime = 0.0f;

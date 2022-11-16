@@ -62,6 +62,8 @@ public: // メンバ関数
 	/// <returns>トリガーか</returns>
 	bool TriggerKey(BYTE keyNumber);
 
+	bool UpKey(BYTE keyNumber);
+
 	/// <summary>
 	/// キーの左ボタン押下をチェック
 	/// </summary>

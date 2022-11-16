@@ -157,7 +157,7 @@ void Player::Update()
 
 	//rotation.y = objectRotation.y;
 
-	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
+	if (input->TriggerMouseLeft() && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
 	{
 		attackTime = 60.0f;
 	}
@@ -264,7 +264,10 @@ void Player::Update()
 		direction = dir;
 
 		SetPosition(position);
-		SetRotation(rotation);
+		if (!input->PushKey(DIK_SPACE))
+		{
+			SetRotation(rotation);
+		}
 
 		if (input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_W) ||
 			input->TriggerLStickLeft() || input->TriggerLStickRight() || input->TriggerLStickDown() || input->TriggerLStickUp())

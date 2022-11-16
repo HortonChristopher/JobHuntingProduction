@@ -187,7 +187,7 @@ protected:
 	float y = 0.0f;
 	float hypotenuse = 0.0f;
 public:
-	bool HP = 5.0f;
+	float HP = 5.0f;
 	bool dead = false;
 	bool modelChange = false;
 	bool wander = false;

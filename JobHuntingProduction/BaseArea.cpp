@@ -111,12 +111,12 @@ void BaseArea::Update()
 		}
 	}
 
-	if (input->TriggerKey(DIK_SPACE) && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0.0f)
+	if (input->TriggerMouseLeft() && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0.0f)
 	{
 		attackTime = 60.0f;
 	}
 
-	if (attackTime > 0)
+	if (attackTime > 0.0f)
 	{
 		attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 	}
@@ -130,6 +130,36 @@ void BaseArea::Update()
 	objectRotation = playerFBX->GetRotation();
 
 	skydomeOBJ->SetPosition(objectPosition);
+
+	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
+		originalRotation = playerFBX->GetRotation();
+	}
+
+	if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
+		float min = FLT_MAX;
+		int closestEnemy = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+			float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+			if (abs(sqrt(x * x + y * y)) < min)
+			{
+				min = abs(sqrt(x * x + y * y));
+				closestEnemy = i;
+			}
+		}
+		float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+		float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+		float radians = atan2(y2, x2);
+		float degrees = XMConvertToDegrees(radians);
+		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+	}
+	else if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
+		playerFBX->SetRotation(originalRotation);
+	}
 
 #pragma region DebugAttackRange
 	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
@@ -212,7 +242,7 @@ void BaseArea::Update()
 			if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 25.0f, 25.0f) && baseAreaEnemyAliveBOOL[i] == true)
 			{
 				baseAreaEnemyFBX[i]->HP -= 1.0f;
-				if (baseAreaEnemyFBX[i]->HP < 1.0f)
+				if (baseAreaEnemyFBX[i]->HP < 0.9f)
 				{
 					baseAreaEnemyAliveBOOL[i] = false;
 					enemyDefeated++;
@@ -223,6 +253,8 @@ void BaseArea::Update()
 				}
 				else
 				{
+					baseAreaEnemyFBX[i]->timer = 0.0f;
+					baseAreaEnemyFBX[i]->modelChange = true;
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
 				}
 				ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
