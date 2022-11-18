@@ -131,12 +131,7 @@ void BaseArea::Update()
 
 	skydomeOBJ->SetPosition(objectPosition);
 
-	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	{
-		originalRotation = playerFBX->GetRotation();
-	}
-
-	if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	/*if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		float min = FLT_MAX;
 		int closestEnemy = 0;
@@ -155,11 +150,14 @@ void BaseArea::Update()
 		float radians = atan2(y2, x2);
 		float degrees = XMConvertToDegrees(radians);
 		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+		camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+		camera->SetDistance(min);
+		camera->Update();
 	}
 	else if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
-		playerFBX->SetRotation(originalRotation);
-	}
+
+	}*/
 
 #pragma region DebugAttackRange
 	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
@@ -384,9 +382,9 @@ void BaseArea::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", object2->timer);
-	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
+	//sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);

@@ -225,6 +225,12 @@ void Player::Update()
 			cosA = -1.0f;
 		}
 
+		/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			cosA = 1.0f;
+		}
+		debug2 = cosA;*/
+
 		float rotY = acos(cosA) * 180 / 3.14159365f;
 		const Vector3 CrossVec = direction.Cross(moveDirection);
 
@@ -246,10 +252,21 @@ void Player::Update()
 			}
 		}
 
+		/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			
+		}*/
+
 		if (rotSpeed > abs(rotY))
 		{
 			rotSpeed = rotY;
 		}
+
+		/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			rotY = 1.0f;
+		}
+		debug = rotY;*/
 
 		if (CrossVec.y < 0)
 		{
@@ -361,6 +378,19 @@ void Player::Update()
 			break;
 		}
 	}
+
+	//Debug Start
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+
+	//sprintf_s(msgbuf, 256, "rotY: %f\n", debug);
+	//sprintf_s(msgbuf2, 256, "cosA: %f\n", debug2);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 }
 
 void Player::CreateGraphicsPipeline()

@@ -44,6 +44,23 @@ public:
 	};
 
 public:
+	enum status
+	{
+		STAND = 1,
+		WALK = 2,
+		RUN = 3,
+		DODGEF = 4,
+		DODGEB = 5,
+		DODGEL = 6,
+		DODGER = 7,
+		ATTACK = 8,
+		DAMAGED = 9,
+		DEAD = 10
+	};
+
+	status enumStatus = STAND;
+
+public:
 	/// <summary>
 	/// Initialization
 	/// </summary>
@@ -151,11 +168,12 @@ protected:
 	// Animation is playing
 	bool isPlay = false;
 
-	float rotateSpeed = 900.0f; // Currently using delta time; 7.5f using frame speed
+	float rotateSpeed = 900.0f; // Currently using delta time; 15.0f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 120.0f; // 2.0f using frame speed
 	float attackTime = 0.0f;
-
+	float debug = 0.0f;
+	float debug2 = 0.0f;
 public:
 	float stamina = 100.0f;
 	float hp = 10.0f;

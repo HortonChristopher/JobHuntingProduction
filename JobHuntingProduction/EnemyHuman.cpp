@@ -521,13 +521,13 @@ void EnemyHuman::Update()
 	constBuffSkin->Unmap(0, nullptr);
 
 	//Debug Start
-	char msgbuf[256];
+	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
-	sprintf_s(msgbuf, 256, "HP: %d\n", HP);
+	//sprintf_s(msgbuf, 256, "HP: %d\n", HP);
 	//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End

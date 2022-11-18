@@ -114,7 +114,7 @@ void DebugCamera::Update()
 	//}
 
 	// Change the distance with wheel input
-	if (mouseMove.lZ != 0) {
+	if (mouseMove.lZ != 0 && !title) {
 		distance -= mouseMove.lZ / 100.0f;
 		distance = max(distance, 1.0f);
 		dirty = true;
