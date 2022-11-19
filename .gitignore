@@ -360,4 +360,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/JobHuntingProduction/lib/fbx_sdk/lib
+/Pursuer/lib/fbx_sdk/lib
