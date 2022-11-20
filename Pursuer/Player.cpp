@@ -231,7 +231,7 @@ void Player::Update()
 		}
 		debug2 = cosA;*/
 
-		float rotY = acos(cosA) * 180 / 3.14159365f;
+		float rotY = (float)acos(cosA) * 180 / 3.14159365f;
 		const Vector3 CrossVec = direction.Cross(moveDirection);
 
 		float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);

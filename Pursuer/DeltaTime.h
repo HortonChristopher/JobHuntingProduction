@@ -14,5 +14,5 @@ private:
 	std::chrono::steady_clock::time_point deltaStartNow;
 
 public:
-	std::chrono::duration<double, std::micro> deltaTimeCalculated;
+	std::chrono::duration<float, std::micro> deltaTimeCalculated;
 };

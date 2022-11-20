@@ -73,7 +73,7 @@ void EnemyHuman::Initialize()
 	SetPosition(position);
 	SetModel(modelStanding);
 	SetScale({ 3,3,3 });
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 }
 
 void EnemyHuman::Update()

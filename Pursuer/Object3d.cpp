@@ -324,7 +324,7 @@ void Object3d::UpdateWorldMatrix()
 {
 	assert(camera);
 
-	XMMATRIX matScale, matRot, matTrans, matScale2, matRot2, matTrans2;
+	XMMATRIX matScale, matRot, matTrans;
 
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();

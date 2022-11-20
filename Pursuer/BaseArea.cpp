@@ -646,5 +646,5 @@ void BaseArea::thread3()
 	groundOBJ->SetPosition({ 0, -15, 0 });
 	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
 
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 }

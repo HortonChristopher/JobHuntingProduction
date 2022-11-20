@@ -236,24 +236,6 @@ void TitleScreen::Draw()
 	// Sprite post draw
 	Sprite::PostDraw();
 #pragma endregion
-
-#pragma region debugTestStrings
-	//Debug Start
-	char msgbuf[256];
-	char msgbuf2[256];
-	char msgbuf3[256];
-	char msgbuf4[256];
-
-	sprintf_s(msgbuf, 256, "sinf %f \n", sinf(XMConvertToRadians(degrees)) * 10.0f);
-	sprintf_s(msgbuf2, 256, "cosf %f \n", cosf(XMConvertToRadians(degrees)) * 10.0f);
-	sprintf_s(msgbuf3, 256, "camX %f \n", camera->GetTarget().x);
-	sprintf_s(msgbuf4, 256, "camZ %f \n", camera->GetTarget().z);
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);
-	OutputDebugStringA(msgbuf4);
-	//Debug End
-#pragma endregion
 }
 
 void TitleScreen::ParticleCreation(float x, float y, float z, int life, float offset, float start_scale)

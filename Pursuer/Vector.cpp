@@ -199,20 +199,18 @@ Vector3::Vector3(const float& x, const float& y, const float& z)
 
 Vector3& Vector3::operator*(Vector3 vector)
 {
-	Vector3 ans;
-	ans.x = x * vector.x;
-	ans.y = y * vector.y;
-	ans.z = z * vector.z;
-	return ans;
+	x = x * vector.x;
+	y = y * vector.y;
+	z = z * vector.z;
+	return *this;
 }
 
 Vector3& Vector3::operator/(Vector3 vector)
 {
-	Vector3 ans;
-	ans.x = x / vector.x;
-	ans.y = y / vector.y;
-	ans.z = z / vector.z;
-	return ans;
+	x = x / vector.x;
+	y = y / vector.y;
+	z = z / vector.z;
+	return *this;
 }
 
 Vector3& Vector3::operator+=(Vector3 vector)
