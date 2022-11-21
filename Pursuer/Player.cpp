@@ -302,30 +302,6 @@ void Player::Update()
 		}
 	}
 
-	/*if (input->PushKey(DIK_LCONTROL) && !dodge || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge)
-	{
-		if (input->PushKey(DIK_W) || input->PushLStickUp())
-		{
-			enumDodgeDirection = FORWARD;
-			dodge = true;
-		}
-		else if (input->PushKey(DIK_S) || input->PushLStickDown())
-		{
-			enumDodgeDirection = BACKWARD;
-			dodge = true;
-		}
-		else if (input->PushKey(DIK_A) || input->PushLStickLeft())
-		{
-			enumDodgeDirection = LEFT;
-			dodge = true;
-		}
-		else if (input->PushKey(DIK_D) || input->PushLStickRight())
-		{
-			enumDodgeDirection = RIGHT;
-			dodge = true;
-		}
-	}*/
-
 	if (input->PushKey(DIK_LCONTROL) && !dodge || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge)
 	{
 		dodge = true;

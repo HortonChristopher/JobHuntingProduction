@@ -103,18 +103,18 @@ void DirectXCommon::PreDraw()
 	lastUpdate = now;
 
 	// FPS,CPU使用率表示
-	{
-		static int count = 0;
-		const float FPS_BASIS = 60.0f;
-		// 一秒に一度更新
-		if (++count > FPS_BASIS) {
-			count = 0;
-			float cputime = deltaTime - commandWaitTime;
-			char str[50];
-			sprintf_s(str, 50, "fps=%03.0f cpu usage=%06.2f%%", frameRate, cputime * FPS_BASIS * 100.0f);
-			SetWindowTextA(winApp->GetHwnd(), str);
-		}
-	}
+	//{
+	//	static int count = 0;
+	//	const float FPS_BASIS = 60.0f;
+	//	// 一秒に一度更新
+	//	if (++count > FPS_BASIS) {
+	//		count = 0;
+	//		float cputime = deltaTime - commandWaitTime;
+	//		char str[50];
+	//		sprintf_s(str, 50, "fps=%03.0f cpu usage=%06.2f%%", frameRate, cputime * FPS_BASIS * 100.0f);
+	//		SetWindowTextA(winApp->GetHwnd(), str);
+	//	}
+	//}
 }
 
 void DirectXCommon::PostDraw()

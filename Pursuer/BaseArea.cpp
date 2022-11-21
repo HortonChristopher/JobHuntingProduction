@@ -96,7 +96,10 @@ void BaseArea::Update()
 	// Debug Text string
 	std::ostringstream missionTracker;
 
-	camera->SetTarget(playerPositionOBJ->GetPosition());
+	if (!input->PushKey(DIK_SPACE))
+	{
+		camera->SetTarget(playerPositionOBJ->GetPosition());
+	}
 	camera->Update();
 
 	if (!gameStart)
@@ -131,18 +134,21 @@ void BaseArea::Update()
 
 	skydomeOBJ->SetPosition(objectPosition);
 
-	/*if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		float min = FLT_MAX;
 		int closestEnemy = 0;
 		for (int i = 0; i < 4; i++)
 		{
-			float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
-			float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
-			if (abs(sqrt(x * x + y * y)) < min)
+			if (!baseAreaEnemyFBX[i]->dead)
 			{
-				min = abs(sqrt(x * x + y * y));
-				closestEnemy = i;
+				float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+				float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+				if (abs(sqrt(x * x + y * y)) < min)
+				{
+					min = abs(sqrt(x * x + y * y));
+					closestEnemy = i;
+				}
 			}
 		}
 		float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
@@ -151,13 +157,15 @@ void BaseArea::Update()
 		float degrees = XMConvertToDegrees(radians);
 		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
 		camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-		camera->SetDistance(min);
+		camera->SetDistance(min + 48.0f);
 		camera->Update();
 	}
 	else if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
-
-	}*/
+		camera->SetTarget(playerFBX->GetPosition());
+		camera->SetDistance(48.0f);
+		camera->Update();
+	}
 
 #pragma region DebugAttackRange
 	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
@@ -378,16 +386,16 @@ void BaseArea::Update()
 
 #pragma region debugTestStrings
 	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
+	char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
+	sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
+	sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
+	sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);
 	//Debug End
 #pragma endregion
 }
