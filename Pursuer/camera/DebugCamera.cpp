@@ -36,6 +36,11 @@ void DebugCamera::Update()
 		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
+	else if (input->PushKey(DIK_SPACE))
+	{
+		//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		angleY -= XMConvertToRadians(objectRotation.y - prevRotation);
+	}
 	// Rotate the camera if the right mouse button is pressed
 	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
 	{
@@ -61,6 +66,8 @@ void DebugCamera::Update()
 
 		dirty = true;
 	}
+
+	prevRotation = objectRotation.y;
 
 	// Translate the camera if the middle mouse button is pressed
 	/*if (input->PushMouseMiddle())
@@ -114,11 +121,11 @@ void DebugCamera::Update()
 	//}
 
 	// Change the distance with wheel input
-	if (mouseMove.lZ != 0 && !title) {
+	/*if (mouseMove.lZ != 0 && !title) {
 		distance -= mouseMove.lZ / 100.0f;
 		distance = max(distance, 1.0f);
 		dirty = true;
-	}
+	}*/
 
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成

@@ -156,14 +156,10 @@ void BaseArea::Update()
 		float radians = atan2(y2, x2);
 		float degrees = XMConvertToDegrees(radians);
 		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
-		camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-		camera->SetDistance(min + 48.0f);
-		camera->Update();
-	}
-	else if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	{
 		camera->SetTarget(playerFBX->GetPosition());
 		camera->SetDistance(48.0f);
+		/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+		camera->SetDistance(min + 48.0f);*/
 		camera->Update();
 	}
 
@@ -386,7 +382,7 @@ void BaseArea::Update()
 
 #pragma region debugTestStrings
 	//Debug Start
-	char msgbuf[256];
+	/*char msgbuf[256];
 	char msgbuf2[256];
 	char msgbuf3[256];
 
@@ -395,7 +391,7 @@ void BaseArea::Update()
 	sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	OutputDebugStringA(msgbuf);
 	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);
+	OutputDebugStringA(msgbuf3);*/
 	//Debug End
 #pragma endregion
 }
