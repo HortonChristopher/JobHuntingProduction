@@ -33,6 +33,7 @@ void Player::Initialize()
 	modelDodgeR = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRight");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
+	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -184,123 +185,250 @@ void Player::Update()
 			animationSet = false;
 		}
 	}
-	else if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
-		input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+	else if (!dodge)
 	{
-		Vector3 moveDirection = {};
+		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+		{
+			moveDirection = {};
 
-		if (input->PushKey(DIK_A))
-		{
-			moveDirection += camDirectionX * -1;
-		}
-		if (input->PushKey(DIK_D))
-		{
-			moveDirection += camDirectionX;
-		}
-		if (input->PushKey(DIK_S))
-		{
-			moveDirection += camDirectionZ * -1;
-		}
-		if (input->PushKey(DIK_W))
-		{
-			moveDirection += camDirectionZ;
-		}
-		if (input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
-		{
-			auto vector = input->GetLStickDirection();
-
-			moveDirection = camDirectionX * vector.x + camDirectionZ * vector.y;
-		}
-
-		moveDirection.Normalize();
-
-		direction.Normalize();
-		float cosA = direction.Dot(moveDirection);
-		if (cosA > 1.0f)
-		{
-			cosA = 1.0f;
-		}
-		else if (cosA < -1.0f)
-		{
-			cosA = -1.0f;
-		}
-
-		/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-		{
-			cosA = 1.0f;
-		}
-		debug2 = cosA;*/
-
-		float rotY = (float)acos(cosA) * 180 / 3.14159365f;
-		const Vector3 CrossVec = direction.Cross(moveDirection);
-
-		float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (abs(rotY) < 55)
-		{
-			if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
+			if (input->PushKey(DIK_A))
 			{
-				position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				stamina -= 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				moveDirection += camDirectionX * -1;
 			}
-			else
+			if (input->PushKey(DIK_D))
 			{
-				position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				moveDirection += camDirectionX;
+			}
+			if (input->PushKey(DIK_S))
+			{
+				moveDirection += camDirectionZ * -1;
+			}
+			if (input->PushKey(DIK_W))
+			{
+				moveDirection += camDirectionZ;
+			}
+			if (input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+			{
+				auto vector = input->GetLStickDirection();
+
+				moveDirection = camDirectionX * vector.x + camDirectionZ * vector.y;
+			}
+
+			moveDirection.Normalize();
+
+			direction.Normalize();
+			float cosA = direction.Dot(moveDirection);
+			if (cosA > 1.0f)
+			{
+				cosA = 1.0f;
+			}
+			else if (cosA < -1.0f)
+			{
+				cosA = -1.0f;
+			}
+
+			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+			{
+				cosA = 1.0f;
+			}
+			debug2 = cosA;*/
+
+			float rotY = (float)acos(cosA) * 180 / 3.14159365f;
+			const Vector3 CrossVec = direction.Cross(moveDirection);
+
+			float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (abs(rotY) < 55 && !dodge)
+			{
+				if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
+				{
+					position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					stamina -= 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+			}
+
+			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+			{
+
+			}*/
+
+			if (rotSpeed > abs(rotY))
+			{
+				rotSpeed = rotY;
+			}
+
+			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+			{
+				rotY = 1.0f;
+			}
+			debug = rotY;*/
+
+			if (CrossVec.y < 0)
+			{
+				rotSpeed *= -1;
+			}
+
+			rotation.y += rotSpeed;
+
+			XMMATRIX matRotation = XMMatrixRotationY(XMConvertToRadians(rotSpeed));
+			XMVECTOR dir = { direction.x, direction.y, direction.z, 0 };
+			dir = XMVector3TransformNormal(dir, matRotation);
+			direction = dir;
+
+			SetPosition(position);
+			if (!input->PushKey(DIK_SPACE))
+			{
+				SetRotation(rotation);
+			}
+
+			if (input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_W) ||
+				input->TriggerLStickLeft() || input->TriggerLStickRight() || input->TriggerLStickDown() || input->TriggerLStickUp())
+			{
+				animationNo = 2;
+				animationSet = false;
 			}
 		}
-
-		/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		else
 		{
-			
+			if (animationNo != 0)
+			{
+				animationNo = 0;
+				animationSet = false;
+			}
+		}
+	}
+
+	/*if (input->PushKey(DIK_LCONTROL) && !dodge || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge)
+	{
+		if (input->PushKey(DIK_W) || input->PushLStickUp())
+		{
+			enumDodgeDirection = FORWARD;
+			dodge = true;
+		}
+		else if (input->PushKey(DIK_S) || input->PushLStickDown())
+		{
+			enumDodgeDirection = BACKWARD;
+			dodge = true;
+		}
+		else if (input->PushKey(DIK_A) || input->PushLStickLeft())
+		{
+			enumDodgeDirection = LEFT;
+			dodge = true;
+		}
+		else if (input->PushKey(DIK_D) || input->PushLStickRight())
+		{
+			enumDodgeDirection = RIGHT;
+			dodge = true;
+		}
+	}*/
+
+	if (input->PushKey(DIK_LCONTROL) && !dodge || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge)
+	{
+		dodge = true;
+	}
+
+	if (dodge)
+	{
+		if (frameTimeInt == 0)
+		{
+			animationNo = 9;
+			animationSet = false;
+		}
+		frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (frameTimeInt > 58.9f)
+		{
+			frameTimeInt = 0.0f;
+			dodge = false;
+		}
+
+		/*switch (enumDodgeDirection)
+		{
+		case FORWARD:
+			if (frameTimeInt == 0)
+			{
+				animationNo = 3;
+				animationSet = false;
+			}
+			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (frameTimeInt > 29.9f)
+			{
+				enumDodgeDirection = NONE;
+				frameTimeInt = 0.0f;
+				dodge = false;
+			}
+			break;
+		case BACKWARD:
+			if (frameTimeInt == 0)
+			{
+				animationNo = 4;
+				animationSet = false;
+			}
+			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (frameTimeInt > 48.9f)
+			{
+				enumDodgeDirection = NONE;
+				frameTimeInt = 0.0f;
+				dodge = false;
+			}
+			break;
+		case LEFT:
+			if (frameTimeInt == 0)
+			{
+				animationNo = 6;
+				animationSet = false;
+			}
+			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (frameTimeInt > 28.9f)
+			{
+				enumDodgeDirection = NONE;
+				frameTimeInt = 0.0f;
+				dodge = false;
+			}
+			break;
+		case RIGHT:
+			if (frameTimeInt == 0)
+			{
+				animationNo = 5;
+				animationSet = false;
+			}
+			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (frameTimeInt > 28.9f)
+			{
+				enumDodgeDirection = NONE;
+				frameTimeInt = 0.0f;
+				dodge = false;
+			}
+			break;
+		case NONE:
+			frameTimeInt = 0.0f;
+			dodge = false;
+			break;
 		}*/
-
-		if (rotSpeed > abs(rotY))
-		{
-			rotSpeed = rotY;
-		}
-
-		/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-		{
-			rotY = 1.0f;
-		}
-		debug = rotY;*/
-
-		if (CrossVec.y < 0)
-		{
-			rotSpeed *= -1;
-		}
-
-		rotation.y += rotSpeed;
-
-		XMMATRIX matRotation = XMMatrixRotationY(XMConvertToRadians(rotSpeed));
-		XMVECTOR dir = { direction.x, direction.y, direction.z, 0 };
-		dir = XMVector3TransformNormal(dir, matRotation);
-		direction = dir;
-
-		SetPosition(position);
-		if (!input->PushKey(DIK_SPACE))
-		{
-			SetRotation(rotation);
-		}
-
-		if (input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_W) ||
-			input->TriggerLStickLeft() || input->TriggerLStickRight() || input->TriggerLStickDown() || input->TriggerLStickUp())
-		{
-			animationNo = 2;
-			animationSet = false;
-		}
 	}
-	else
-	{
-		if (animationNo != 0)
-		{
-			animationNo = 0;
-			animationSet = false;
-		}
-	}
+
+	//Debug Start
+	char msgbuf[256];
+	char msgbuf2[256];
+	//char msgbuf3[256];
+
+	sprintf_s(msgbuf, 256, "Dodge: %d\n", dodge);
+	sprintf_s(msgbuf2, 256, "Frame Time: %f\n", frameTimeInt);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", moveDirection.z);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 
 	if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
 	{
@@ -356,7 +484,7 @@ void Player::Update()
 			isPlay = false;
 			animationSet = true;
 			break;
-		case 5:
+		case 5: // Case 5 and 6 are currently running opposite animations: must investigate
 			SetModel(modelDodgeL);
 			isPlay = false;
 			animationSet = true;
@@ -376,21 +504,13 @@ void Player::Update()
 			isPlay = false;
 			animationSet = true;
 			break;
+		case 9:
+			SetModel(modelDodgeRoll);
+			isPlay = false;
+			animationSet = true;
+			break;
 		}
 	}
-
-	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
-
-	//sprintf_s(msgbuf, 256, "rotY: %f\n", debug);
-	//sprintf_s(msgbuf2, 256, "cosA: %f\n", debug2);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
-	//Debug End
 }
 
 void Player::CreateGraphicsPipeline()
