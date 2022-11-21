@@ -153,17 +153,13 @@ protected:
 	FBX3DModel* modelStanding = nullptr; // 180 frames
 	FBX3DModel* modelWalking = nullptr; // 30 frames
 	FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	FBX3DModel* modelDodgeF = nullptr; // 30 frames
-	FBX3DModel* modelDodgeB = nullptr; // 49 frames
-	FBX3DModel* modelDodgeL = nullptr; // 29 frames
-	FBX3DModel* modelDodgeR = nullptr; // 29 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 49 frames
 	float frameTimeInt = 0.0f;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
-	int animationNo = 0; // Stand(0), Walk(1), Run(2), DodgeF(3), DodgeB(4), DodgeL(5), DodgeR(6), Attack(7), Damaged(8)
+	int animationNo = 0; // Stand(0), Walk(1), Run(2), DodgeRoll(3), Attack(4), Damaged(5)
 	bool animationSet = false;
 	bool modelChange = false;
 
@@ -185,7 +181,7 @@ protected:
 	float rotateSpeed = 900.0f; // Currently using delta time; 15.0f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 120.0f; // 2.0f using frame speed
-	float rollSpeed = 75.0f;
+	float rollSpeed = 75.0f; // 1.5 using frame speed
 	float attackTime = 0.0f;
 	bool dodge = false;
 public:

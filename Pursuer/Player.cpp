@@ -27,10 +27,6 @@ void Player::Initialize()
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
-	modelDodgeF = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeForward");
-	modelDodgeB = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeBack");
-	modelDodgeL = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeLeft");
-	modelDodgeR = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRight");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
@@ -179,9 +175,9 @@ void Player::Update()
 
 	if (attackTime > 0)
 	{
-		if (animationNo != 7)
+		if (animationNo != 4)
 		{
-			animationNo = 7;
+			animationNo = 4;
 			animationSet = false;
 		}
 	}
@@ -339,7 +335,7 @@ void Player::Update()
 	{
 		if (frameTimeInt == 0)
 		{
-			animationNo = 9;
+			animationNo = 3;
 			animationSet = false;
 		}
 		frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -351,82 +347,18 @@ void Player::Update()
 			frameTimeInt = 0.0f;
 			dodge = false;
 		}
-
-		/*switch (enumDodgeDirection)
-		{
-		case FORWARD:
-			if (frameTimeInt == 0)
-			{
-				animationNo = 3;
-				animationSet = false;
-			}
-			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (frameTimeInt > 29.9f)
-			{
-				enumDodgeDirection = NONE;
-				frameTimeInt = 0.0f;
-				dodge = false;
-			}
-			break;
-		case BACKWARD:
-			if (frameTimeInt == 0)
-			{
-				animationNo = 4;
-				animationSet = false;
-			}
-			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (frameTimeInt > 48.9f)
-			{
-				enumDodgeDirection = NONE;
-				frameTimeInt = 0.0f;
-				dodge = false;
-			}
-			break;
-		case LEFT:
-			if (frameTimeInt == 0)
-			{
-				animationNo = 6;
-				animationSet = false;
-			}
-			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (frameTimeInt > 28.9f)
-			{
-				enumDodgeDirection = NONE;
-				frameTimeInt = 0.0f;
-				dodge = false;
-			}
-			break;
-		case RIGHT:
-			if (frameTimeInt == 0)
-			{
-				animationNo = 5;
-				animationSet = false;
-			}
-			frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (frameTimeInt > 28.9f)
-			{
-				enumDodgeDirection = NONE;
-				frameTimeInt = 0.0f;
-				dodge = false;
-			}
-			break;
-		case NONE:
-			frameTimeInt = 0.0f;
-			dodge = false;
-			break;
-		}*/
 	}
 
 	//Debug Start
-	char msgbuf[256];
-	char msgbuf2[256];
+	//char msgbuf[256];
+	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "Dodge: %d\n", dodge);
-	sprintf_s(msgbuf2, 256, "Frame Time: %f\n", frameTimeInt);
+	//sprintf_s(msgbuf, 256, "Dodge: %d\n", dodge);
+	//sprintf_s(msgbuf2, 256, "Frame Time: %f\n", frameTimeInt);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", moveDirection.z);
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
 
@@ -475,37 +407,17 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 3:
-			SetModel(modelDodgeF);
+			SetModel(modelDodgeRoll);
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			SetModel(modelDodgeB);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 5: // Case 5 and 6 are currently running opposite animations: must investigate
-			SetModel(modelDodgeL);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 6:
-			SetModel(modelDodgeR);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 7:
 			SetModel(modelAttacking);
 			isPlay = false;
 			animationSet = true;
 			break;
-		case 8:
+		case 5:
 			SetModel(modelDamaged);
-			isPlay = false;
-			animationSet = true;
-			break;
-		case 9:
-			SetModel(modelDodgeRoll);
 			isPlay = false;
 			animationSet = true;
 			break;
