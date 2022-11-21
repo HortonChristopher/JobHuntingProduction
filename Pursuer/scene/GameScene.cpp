@@ -35,16 +35,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	this->audio = audio;
 
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(96, L"Resources/P1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(97, L"Resources/P2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(98, L"Resources/P3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(99, L"Resources/P4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(99, L"Resources/Controls.png")) { assert(0); return; }
 
 	// 背景スプライト生成
-	p1 = Sprite::Create(96, { 0.0f, 0.0f });
-	p2 = Sprite::Create(97, { 0.0f, 0.0f });
-	p3 = Sprite::Create(98, { 0.0f, 0.0f });
-	p4 = Sprite::Create(99, { 0.0f, 0.0f });
+	instructionSPRITE = Sprite::Create(99, { 0,0 });
 
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);
@@ -52,7 +46,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 void GameScene::Update()
 {
-	if (page < 2)
+	if (page < 1)
 	{
 		titleScreen->Update();
 
@@ -64,15 +58,23 @@ void GameScene::Update()
 				{
 					titleScreen->~TitleScreen();
 					titleScreen = nullptr;
-					baseArea = new BaseArea;
-					baseArea->initialization = true;
-					page = 2;
+					page = 1;
 				}
 			}
 			else if (titleScreen->selection == 2)
 			{
 				mainLoop = false;
 			}
+		}
+	}
+
+	if (page == 1)
+	{
+		if (input->TriggerKey(DIK_T) || input->TriggerControllerButton(XINPUT_GAMEPAD_START))
+		{
+			baseArea = new BaseArea;
+			baseArea->initialization = true;
+			page = 2;
 		}
 	}
 
@@ -134,7 +136,7 @@ void GameScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
 
-	if (page < 2)
+	if (page < 1)
 	{
 		titleScreen->Draw();
 	}
@@ -150,21 +152,9 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	/*if (page == 0)
-	{
-		p1->Draw();
-	}
 	if (page == 1)
 	{
-		p2->Draw();
-	}*/
-	if (page == 3)
-	{
-		p3->Draw();
-	}
-	if (page == 4)
-	{
-		p4->Draw();
+		instructionSPRITE->Draw();
 	}
 	
 	// スプライト描画後処理

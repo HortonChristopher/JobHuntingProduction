@@ -66,10 +66,7 @@ private: // メンバ変数
 	TitleScreen* titleScreen = nullptr;
 	BaseArea* baseArea = nullptr;
 
-	Sprite* p1 = nullptr;
-	Sprite* p2 = nullptr;
-	Sprite* p3 = nullptr;
-	Sprite* p4 = nullptr;
+	Sprite* instructionSPRITE = nullptr;
 public:
 	int page = 0;
 	bool mainLoop = true;
