@@ -36,7 +36,7 @@ void DebugCamera::Update()
 		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
-	else if (input->PushKey(DIK_SPACE))
+	else if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		angleY -= XMConvertToRadians(objectRotation.y - prevRotation);

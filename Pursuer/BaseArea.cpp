@@ -116,7 +116,7 @@ void BaseArea::Update()
 
 	if (input->TriggerMouseLeft() && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0.0f)
 	{
-		attackTime = 60.0f;
+		attackTime = 53.0f;
 	}
 
 	if (attackTime > 0.0f)
@@ -134,7 +134,7 @@ void BaseArea::Update()
 
 	skydomeOBJ->SetPosition(objectPosition);
 
-	if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		float min = FLT_MAX;
 		int closestEnemy = 0;

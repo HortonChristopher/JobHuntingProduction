@@ -154,9 +154,10 @@ void Player::Update()
 
 	//rotation.y = objectRotation.y;
 
-	if (input->TriggerMouseLeft() && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0)
+	if (input->TriggerMouseLeft() && attackTime == 0 && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
 	{
-		attackTime = 60.0f;
+		attackTime = 53.0f;
+		stamina -= 20.0f;
 	}
 
 	if (attackTime > 0)
@@ -215,7 +216,7 @@ void Player::Update()
 			direction.Normalize();
 
 			float  cosA = direction.Dot(moveDirection);
-			if (input->UpKey(DIK_SPACE))
+			if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 			{
 				cosA = 1.0f;
 			}
@@ -229,16 +230,16 @@ void Player::Update()
 			}
 
 			//Debug Start
-			char msgbuf[256];
-			char msgbuf2[256];
-			char msgbuf3[256];
+			//char msgbuf[256];
+			//char msgbuf2[256];
+			//char msgbuf3[256];
 
-			sprintf_s(msgbuf, 256, "X: %f\n", moveDirection.x);
-			sprintf_s(msgbuf2, 256, "Y: %f\n", moveDirection.y);
-			sprintf_s(msgbuf3, 256, "Z: %f\n", moveDirection.z);
-			OutputDebugStringA(msgbuf);
-			OutputDebugStringA(msgbuf2);
-			OutputDebugStringA(msgbuf3);
+			//sprintf_s(msgbuf, 256, "X: %f\n", moveDirection.x);
+			//sprintf_s(msgbuf2, 256, "Y: %f\n", moveDirection.y);
+			//sprintf_s(msgbuf3, 256, "Z: %f\n", moveDirection.z);
+			//OutputDebugStringA(msgbuf);
+			//OutputDebugStringA(msgbuf2);
+			//OutputDebugStringA(msgbuf3);
 			//Debug End
 
 			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
@@ -319,8 +320,9 @@ void Player::Update()
 		}
 	}
 
-	if (input->PushKey(DIK_LCONTROL) && !dodge || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge)
+	if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
 	{
+		stamina -= 40.0f;
 		dodge = true;
 	}
 
