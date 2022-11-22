@@ -196,7 +196,7 @@ void BaseArea::Update()
 			if (distance < abs(4.0f))
 			{
 				//baseAreaEnemyFBX[i]->SetAttack(true);
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 				}
@@ -204,7 +204,7 @@ void BaseArea::Update()
 			else
 			{
 				//baseAreaEnemyFBX[i]->SetAttack(false);
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK)
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK)
 				{
 					if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
 					{
