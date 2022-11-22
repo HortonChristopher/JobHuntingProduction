@@ -49,27 +49,13 @@ public:
 		STAND = 1,
 		WALK = 2,
 		RUN = 3,
-		DODGEF = 4,
-		DODGEB = 5,
-		DODGEL = 6,
-		DODGER = 7,
-		ATTACK = 8,
-		DAMAGED = 9,
-		DEAD = 10
+		DODGER = 4,
+		ATTACK = 5,
+		DAMAGED = 6,
+		DEAD = 7
 	};
 
 	status enumStatus = STAND;
-
-	enum dodgeDirection
-	{
-		FORWARD = 1,
-		BACKWARD = 2,
-		LEFT = 3,
-		RIGHT = 4,
-		NONE = 5
-	};
-
-	dodgeDirection enumDodgeDirection = NONE;
 
 public:
 	/// <summary>
@@ -141,7 +127,8 @@ protected:
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation
-	XMFLOAT3 position = { 122,100,-358 };
+	//XMFLOAT3 position = { 122,100,-358 };
+	XMFLOAT3 position = { 0.0f, 10.0f, 0.0f };
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model
@@ -178,7 +165,7 @@ protected:
 	// Animation is playing
 	bool isPlay = false;
 
-	float rotateSpeed = 900.0f; // Currently using delta time; 15.0f using frame speed
+	float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 120.0f; // 2.0f using frame speed
 	float rollSpeed = 75.0f; // 1.25 using frame speed

@@ -36,10 +36,30 @@ void DebugCamera::Update()
 		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
-	else if (input->PushKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	else if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		angleY -= XMConvertToRadians(objectRotation.y - prevRotation);
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			if (objectRotation.y > 0.0f)
+			{
+				angleY -= XMConvertToRadians(objectRotation.y + 0.0f);
+			}
+			else if (objectRotation.y < 0.0f)
+			{
+				angleY += XMConvertToRadians(objectRotation.y + 0.0f);
+			}
+
+			dirty = true;
+
+			prevRotation = objectRotation.y;
+		}
+		else
+		{
+			angleY -= XMConvertToRadians(objectRotation.y - prevRotation);
+
+			dirty = true;
+		}
 	}
 	// Rotate the camera if the right mouse button is pressed
 	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
@@ -82,44 +102,6 @@ void DebugCamera::Update()
 		dirty = true;
 	}*/
 
-	/*if (input->PushKey(DIK_W) || input->PushLStickUp())
-	{
-		float dz = 1.0f;
-
-		XMVECTOR move = { 0, 0, +dz };
-		move = XMVector3Transform(move, matRot);
-
-		MoveVector(move);
-		dirty = true;
-	}
-
-	if (input->PushKey(DIK_S) || input->PushLStickDown())
-	{
-		float dz = 1.0f;
-
-		XMVECTOR move = { 0, 0, -dz };
-		move = XMVector3Transform(move, matRot);
-
-		MoveVector(move);
-		dirty = true;
-	}*/
-
-	//if (input->PushKey(DIK_A))
-	//{
-	//	float dy = 2.0f;
-
-	//	angleY = dy * XM_PI;
-	//	dirty = true;
-	//}
-
-	//if (input->PushKey(DIK_D))
-	//{
-	//	float dy = 2.0f;
-
-	//	angleY = -dy * XM_PI;
-	//	dirty = true;
-	//}
-
 	// Change the distance with wheel input
 	/*if (mouseMove.lZ != 0 && !title) {
 		distance -= mouseMove.lZ / 100.0f;
@@ -130,7 +112,7 @@ void DebugCamera::Update()
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
 		XMMATRIX matRotNew = XMMatrixIdentity();
-		matRotNew *= XMMatrixRotationX(-angleX);
+		//matRotNew *= XMMatrixRotationX(-angleX);
 		matRotNew *= XMMatrixRotationY(-angleY);
 		// 累積の回転行列を合成
 		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為

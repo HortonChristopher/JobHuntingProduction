@@ -136,6 +136,12 @@ void BaseArea::Update()
 
 	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
+			objectRotation = playerFBX->GetRotation();
+			camera->Update();
+		}
 		float min = FLT_MAX;
 		int closestEnemy = 0;
 		for (int i = 0; i < 4; i++)
@@ -156,6 +162,7 @@ void BaseArea::Update()
 		float radians = atan2(y2, x2);
 		float degrees = XMConvertToDegrees(radians);
 		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+		objectRotation = playerFBX->GetRotation();
 		camera->SetTarget(playerFBX->GetPosition());
 		camera->SetDistance(48.0f);
 		/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());

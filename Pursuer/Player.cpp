@@ -215,7 +215,15 @@ void Player::Update()
 			moveDirection.Normalize();
 			direction.Normalize();
 
-			float  cosA = direction.Dot(moveDirection);
+			float cosA;
+			if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+			{
+				cosA = 1.0f;
+			}
+			else
+			{
+				cosA = direction.Dot(moveDirection);
+			}
 			if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 			{
 				cosA = 1.0f;
@@ -228,19 +236,6 @@ void Player::Update()
 			{
 				cosA = -1.0f;
 			}
-
-			//Debug Start
-			//char msgbuf[256];
-			//char msgbuf2[256];
-			//char msgbuf3[256];
-
-			//sprintf_s(msgbuf, 256, "X: %f\n", moveDirection.x);
-			//sprintf_s(msgbuf2, 256, "Y: %f\n", moveDirection.y);
-			//sprintf_s(msgbuf3, 256, "Z: %f\n", moveDirection.z);
-			//OutputDebugStringA(msgbuf);
-			//OutputDebugStringA(msgbuf2);
-			//OutputDebugStringA(msgbuf3);
-			//Debug End
 
 			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 			{
@@ -319,6 +314,19 @@ void Player::Update()
 			}
 		}
 	}
+
+	//Debug Start
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+
+	//sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 
 	if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
 	{
