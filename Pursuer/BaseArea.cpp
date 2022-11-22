@@ -204,9 +204,12 @@ void BaseArea::Update()
 			else
 			{
 				//baseAreaEnemyFBX[i]->SetAttack(false);
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
 				{
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+					if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
+					{
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+					}
 				}
 			}
 		}
@@ -266,7 +269,7 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-	if (enemyDefeated > 5)
+	if (enemyDefeated > 4)
 	{
 		result = 2;
 		deletion = true;

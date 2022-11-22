@@ -155,10 +155,6 @@ protected:
 	FBX3DModel* modelStanding = nullptr; // 180 frames
 	FBX3DModel* modelWalking = nullptr; // 30 frames
 	FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	//FBX3DModel* modelDodgeF = nullptr; // 30 frames
-	//FBX3DModel* modelDodgeB = nullptr; // 49 frames
-	//FBX3DModel* modelDodgeL = nullptr; // 29 frames
-	//FBX3DModel* modelDodgeR = nullptr; // 29 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
@@ -186,6 +182,8 @@ protected:
 	float x = 0.0f;
 	float y = 0.0f;
 	float hypotenuse = 0.0f;
+
+	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 public:
 	float HP = 5.0f;
 	bool dead = false;
