@@ -192,8 +192,8 @@ void BaseArea::Update()
 			{
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 			}*/
-			float distance = abs(sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) * (baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y)));
-			if (distance < abs(4.0f))
+			float distance = abs(sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z)));
+			if (distance < abs(6.0f))
 			{
 				//baseAreaEnemyFBX[i]->SetAttack(true);
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
