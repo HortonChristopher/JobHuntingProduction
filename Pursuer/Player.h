@@ -49,7 +49,7 @@ public:
 		STAND = 1,
 		WALK = 2,
 		RUN = 3,
-		DODGER = 4,
+		DODGE = 4,
 		ATTACK = 5,
 		DAMAGED = 6,
 		DEAD = 7

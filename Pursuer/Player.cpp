@@ -193,7 +193,7 @@ void Player::Update()
 			{
 				moveDirection += camDirectionX * -1;
 			}
-			if (input->PushKey(DIK_D))
+			else if (input->PushKey(DIK_D))
 			{
 				moveDirection += camDirectionX;
 			}
@@ -201,7 +201,7 @@ void Player::Update()
 			{
 				moveDirection += camDirectionZ * -1;
 			}
-			if (input->PushKey(DIK_W))
+			else if (input->PushKey(DIK_W))
 			{
 				moveDirection += camDirectionZ;
 			}
