@@ -30,7 +30,8 @@ void EnemyHuman::Initialize()
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
-	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
+	//modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
+	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 
@@ -194,7 +195,7 @@ void EnemyHuman::Update()
 			attackAnimation = true;
 		}
 		attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (attackTimer > 29.0f)
+		if (attackTimer > 135.0f)
 		{
 			attackTimer = 0.0f;
 			//attack = false;
