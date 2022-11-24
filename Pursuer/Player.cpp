@@ -30,6 +30,7 @@ void Player::Initialize()
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
+	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -129,7 +130,7 @@ void Player::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime)
+		if (currentTime > endTime && animationNo != 6)
 		{
 			currentTime = startTime;
 		}
@@ -167,6 +168,59 @@ void Player::Update()
 	else
 	{
 		attackTime = 0;
+	}
+
+	switch (enumStatus)
+	{
+	case STAND:
+		if (animationNo != 0)
+		{
+			animationNo = 0;
+			animationSet = false;
+		}
+		break;
+	case WALK:
+		if (animationNo != 1)
+		{
+			animationNo = 1;
+			animationSet = false;
+		}
+		break;
+	case RUN:
+		if (animationNo != 2)
+		{
+			animationNo = 2;
+			animationSet = false;
+		}
+		break;
+	case DODGE:
+		if (animationNo != 3)
+		{
+			animationNo = 3;
+			animationSet = false;
+		}
+		break;
+	case ATTACK:
+		if (animationNo != 4)
+		{
+			animationNo = 4;
+			animationSet = false;
+		}
+		break;
+	case DAMAGED:
+		if (animationNo != 5)
+		{
+			animationNo = 5;
+			animationSet = false;
+		}
+		break;
+	case DEAD:
+		if (animationNo != 6)
+		{
+			animationNo = 5;
+			animationSet = false;
+		}
+		break;
 	}
 
 	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
@@ -411,6 +465,10 @@ void Player::Update()
 			isPlay = false;
 			animationSet = true;
 			break;
+		case 6:
+			SetModel(modelDeath);
+			isPlay = false;
+			animationSet = true;
 		}
 	}
 }
