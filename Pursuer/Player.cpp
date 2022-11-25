@@ -170,7 +170,7 @@ void Player::Update()
 		attackTime = 0;
 	}
 
-	switch (enumStatus)
+	/*switch (enumStatus)
 	{
 	case STAND:
 		if (animationNo != 0)
@@ -221,7 +221,7 @@ void Player::Update()
 			animationSet = false;
 		}
 		break;
-	}
+	}*/
 
 	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
 	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
