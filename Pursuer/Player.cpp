@@ -170,59 +170,6 @@ void Player::Update()
 		attackTime = 0;
 	}
 
-	/*switch (enumStatus)
-	{
-	case STAND:
-		if (animationNo != 0)
-		{
-			animationNo = 0;
-			animationSet = false;
-		}
-		break;
-	case WALK:
-		if (animationNo != 1)
-		{
-			animationNo = 1;
-			animationSet = false;
-		}
-		break;
-	case RUN:
-		if (animationNo != 2)
-		{
-			animationNo = 2;
-			animationSet = false;
-		}
-		break;
-	case DODGE:
-		if (animationNo != 3)
-		{
-			animationNo = 3;
-			animationSet = false;
-		}
-		break;
-	case ATTACK:
-		if (animationNo != 4)
-		{
-			animationNo = 4;
-			animationSet = false;
-		}
-		break;
-	case DAMAGED:
-		if (animationNo != 5)
-		{
-			animationNo = 5;
-			animationSet = false;
-		}
-		break;
-	case DEAD:
-		if (animationNo != 6)
-		{
-			animationNo = 5;
-			animationSet = false;
-		}
-		break;
-	}*/
-
 	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
 	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
 	const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
@@ -230,11 +177,7 @@ void Player::Update()
 
 	if (attackTime > 0)
 	{
-		if (animationNo != 4)
-		{
-			animationNo = 4;
-			animationSet = false;
-		}
+		enumStatus = ATTACK;
 	}
 	else if (!dodge)
 	{
@@ -355,17 +298,12 @@ void Player::Update()
 			if (input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_W) ||
 				input->TriggerLStickLeft() || input->TriggerLStickRight() || input->TriggerLStickDown() || input->TriggerLStickUp())
 			{
-				animationNo = 2;
-				animationSet = false;
+				enumStatus = RUN;
 			}
 		}
 		else
 		{
-			if (animationNo != 0)
-			{
-				animationNo = 0;
-				animationSet = false;
-			}
+			enumStatus = STAND;
 		}
 	}
 
@@ -390,11 +328,7 @@ void Player::Update()
 
 	if (dodge)
 	{
-		if (frameTimeInt == 0)
-		{
-			animationNo = 3;
-			animationSet = false;
-		}
+		enumStatus = DODGE;
 		frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -430,6 +364,59 @@ void Player::Update()
 	//	position.y += move.m128_f32[1];
 	//	position.z += move.m128_f32[2];
 	//}
+
+	switch (enumStatus)
+	{
+	case STAND:
+		if (animationNo != 0)
+		{
+			animationNo = 0;
+			animationSet = false;
+		}
+		break;
+	case WALK:
+		if (animationNo != 1)
+		{
+			animationNo = 1;
+			animationSet = false;
+		}
+		break;
+	case RUN:
+		if (animationNo != 2)
+		{
+			animationNo = 2;
+			animationSet = false;
+		}
+		break;
+	case DODGE:
+		if (animationNo != 3)
+		{
+			animationNo = 3;
+			animationSet = false;
+		}
+		break;
+	case ATTACK:
+		if (animationNo != 4)
+		{
+			animationNo = 4;
+			animationSet = false;
+		}
+		break;
+	case DAMAGED:
+		if (animationNo != 5)
+		{
+			animationNo = 5;
+			animationSet = false;
+		}
+		break;
+	case DEAD:
+		if (animationNo != 6)
+		{
+			animationNo = 6;
+			animationSet = false;
+		}
+		break;
+	}
 
 	if (!animationSet)
 	{
