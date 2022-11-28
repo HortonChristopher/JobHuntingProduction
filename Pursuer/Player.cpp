@@ -27,6 +27,9 @@ void Player::Initialize()
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
+	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeRight");
+	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("StrafeBack");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
@@ -213,14 +216,8 @@ void Player::Update()
 			direction.Normalize();
 
 			float cosA;
-			if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-			{
-				cosA = 1.0f;
-			}
-			else
-			{
-				cosA = direction.Dot(moveDirection);
-			}
+			cosA = direction.Dot(moveDirection);
+
 			if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 			{
 				cosA = 1.0f;
@@ -233,12 +230,6 @@ void Player::Update()
 			{
 				cosA = -1.0f;
 			}
-
-			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-			{
-				cosA = 1.0f;
-			}
-			debug2 = cosA;*/
 
 			float rotY = (float)acos(cosA) * 180 / 3.14159365f;
 			const Vector3 CrossVec = direction.Cross(moveDirection);
@@ -261,21 +252,10 @@ void Player::Update()
 				}
 			}
 
-			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-			{
-
-			}*/
-
 			if (rotSpeed > abs(rotY))
 			{
 				rotSpeed = rotY;
 			}
-
-			/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-			{
-				rotY = 1.0f;
-			}
-			debug = rotY;*/
 
 			if (CrossVec.y < 0)
 			{

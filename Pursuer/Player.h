@@ -49,10 +49,13 @@ public:
 		STAND = 1,
 		WALK = 2,
 		RUN = 3,
-		DODGE = 4,
-		ATTACK = 5,
-		DAMAGED = 6,
-		DEAD = 7
+		STRAFEL = 4,
+		STRAFER = 5,
+		STRAFEB = 6,
+		DODGE = 7,
+		ATTACK = 8,
+		DAMAGED = 9,
+		DEAD = 10
 	};
 
 	status enumStatus = STAND;
@@ -140,6 +143,9 @@ protected:
 	FBX3DModel* modelStanding = nullptr; // 180 frames
 	FBX3DModel* modelWalking = nullptr; // 30 frames
 	FBX3DModel* modelRunning = nullptr; // 20(?) frames
+	FBX3DModel* modelStrafeL = nullptr; // 20 frames
+	FBX3DModel* modelStrafeR = nullptr; // 20 frames
+	FBX3DModel* modelStrafeB = nullptr; // 24 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 49 frames
@@ -147,7 +153,9 @@ protected:
 	float frameTimeInt = 0.0f;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
-	int animationNo = 0; // Stand(0), Walk(1), Run(2), DodgeRoll(3), Attack(4), Damaged(5), Death(6)
+	// Stand(0), Walk(1), Run(2), Strafe Left(3), Strafe Right(4), Strafe Back(5),
+	// DodgeRoll(6), Attack(7), Damaged(8), Death(9)
+	int animationNo = 0;
 	bool animationSet = false;
 	bool modelChange = false;
 
