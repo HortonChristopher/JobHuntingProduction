@@ -126,8 +126,13 @@ private:
 	std::array<Sprite*, 4> baseAreaMinimapEnemySPRITE = { {} };
 
 	// Base Area enemy HP bar
-	std::array<Sprite*, 4> baseAreaEnemyHPBar = { {} };
-	std::array<Sprite*, 4> baseAreaEnemyHPBarFrame = { {} };
+	std::array<Sprite*, 4> baseAreaEnemyHPBarSPRITE = { {} };
+	std::array<Sprite*, 4> baseAreaEnemyHPBarFrameSPRITE = { {} };
+
+	// Damage Overlay
+	Sprite* baseAreaDamageOverlaySPRITE = nullptr;
+	float damageOverlaySpriteALPHA = 1.0f;
+	bool damageOverlayDisplay = false;
 
 	// Base area general aspects
 	bool attacking = false;

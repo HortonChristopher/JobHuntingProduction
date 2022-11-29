@@ -297,15 +297,15 @@ void Player::Update()
 			{
 				if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 				{
-					if (input->PushKey(DIK_A))
+					if (input->PushKey(DIK_A) || input->PushLStickLeft())
 					{
 						enumStatus = STRAFEL;
 					}
-					else if (input->PushKey(DIK_D))
+					else if (input->PushKey(DIK_D) || input->PushLStickRight())
 					{
 						enumStatus = STRAFER;
 					}
-					else if (input->PushKey(DIK_S))
+					else if (input->PushKey(DIK_S) || input->PushLStickDown())
 					{
 						enumStatus = STRAFEB;
 					}
@@ -358,7 +358,6 @@ void Player::Update()
 		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dodgePosition.x = Easing::EaseInQuad(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 1.25f * 59.0f), 59.0f, dodgeCameraTime);
-		//dodgePosition.y = Easing::EaseInQuad(dodgeStartPosition.y, dodgeStartPosition.y + (moveDirection.y * 1.25f * 59.0f), 59.0f, dodgeCameraTime);
 		dodgePosition.y = position.y;
 		dodgePosition.z = Easing::EaseInQuad(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 1.25f * 59.0f), 59.0f, dodgeCameraTime);
 		if (frameTimeFloat > 58.9f)

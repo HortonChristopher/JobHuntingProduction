@@ -41,8 +41,9 @@ BaseArea::~BaseArea()
 	safe_delete(baseAreaMinimapSPRITE);
 	safe_delete(baseAreaMinimapPlayerSPRITE);
 	for (int i = 0; i < 4; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBar[i]); }
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBarFrame[i]); }
+	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBarSPRITE[i]); }
+	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBarFrameSPRITE[i]); }
+	safe_delete(baseAreaDamageOverlaySPRITE);
 }
 
 void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -242,6 +243,9 @@ void BaseArea::Update()
 		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 70.0f && baseAreaEnemyFBX[i]->attackTimer < 85.0f && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
+			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlayDisplay = true;
+			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			playerFBX->hp -= 1.0f;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 		}
@@ -262,6 +266,17 @@ void BaseArea::Update()
 			fadeSpriteALPHA = 1.0f;
 			result = 1;
 			deletion = true;
+		}
+	}
+
+	// Damage overlay display
+	if (damageOverlayDisplay)
+	{
+		damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+		if (damageOverlaySpriteALPHA <= 0.0f)
+		{
+			damageOverlayDisplay = false;
 		}
 	}
 #pragma endregion
@@ -485,6 +500,10 @@ void BaseArea::Draw()
 	Sprite::PreDraw(cmdList);
 
 	// Foreground sprite drawing
+	if (damageOverlayDisplay)
+	{
+		baseAreaDamageOverlaySPRITE->Draw();
+	}
 	HPBarSPRITE->Draw();
 	HPBarFrameSPRITE->Draw();
 	STBarSPRITE->Draw();
@@ -577,6 +596,7 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; } // Black Screen
 	if (!Sprite::LoadTexture(11, L"Resources/EnemyHumanHPBar.png")) { assert(0); return; } // Enemy HP Bar
 	if (!Sprite::LoadTexture(12, L"Resources/EnemyHumanHPBarFrame.png")) { assert(0); return; } // Enemy HP Bar Frame
+	if (!Sprite::LoadTexture(13, L"Resources/DamageOverlay.png")) { assert(0); return; } // Damage Overlay
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -589,8 +609,11 @@ void BaseArea::thread1()
 	for (int i = 0; i < 4; i++)
 	{
 		baseAreaMinimapEnemySPRITE[i] = Sprite::Create(8, { 0.0f, 0.0f });
+		baseAreaEnemyHPBarSPRITE[i] = Sprite::Create(11, { 0.0f, 0.0f });
+		baseAreaEnemyHPBarFrameSPRITE[i] = Sprite::Create(12, { 0.0f, 0.0f });
 	}
 	fadeSPRITE = Sprite::Create(10, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+	baseAreaDamageOverlaySPRITE = Sprite::Create(13, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 }
