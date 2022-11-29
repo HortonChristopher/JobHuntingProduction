@@ -41,6 +41,8 @@ BaseArea::~BaseArea()
 	safe_delete(baseAreaMinimapSPRITE);
 	safe_delete(baseAreaMinimapPlayerSPRITE);
 	for (int i = 0; i < 4; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
+	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBar[i]); }
+	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBarFrame[i]); }
 }
 
 void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -96,9 +98,13 @@ void BaseArea::Update()
 	// Debug Text string
 	std::ostringstream missionTracker;
 
-	if (!input->PushKey(DIK_SPACE))
+	if (!input->PushKey(DIK_SPACE) && !playerFBX->dodge)
 	{
 		camera->SetTarget(playerPositionOBJ->GetPosition());
+	}
+	else if (playerFBX->dodge)
+	{
+		camera->SetTarget(playerFBX->dodgePosition);
 	}
 	camera->Update();
 
@@ -233,7 +239,7 @@ void BaseArea::Update()
 #pragma region playerHPDamage
 	for (int i = 0; i < 4; i++)
 	{
-		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 65.0f && baseAreaEnemyFBX[i]->attackTimer < 85.0f && baseAreaEnemyFBX[i]->ableToDamage)
+		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 70.0f && baseAreaEnemyFBX[i]->attackTimer < 85.0f && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			playerFBX->hp -= 1.0f;
@@ -569,6 +575,8 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(7, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(8, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
 	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; } // Black Screen
+	if (!Sprite::LoadTexture(11, L"Resources/EnemyHumanHPBar.png")) { assert(0); return; } // Enemy HP Bar
+	if (!Sprite::LoadTexture(12, L"Resources/EnemyHumanHPBarFrame.png")) { assert(0); return; } // Enemy HP Bar Frame
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });

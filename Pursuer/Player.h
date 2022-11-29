@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "input/Input.h"
 #include "Vector.h"
+#include "Easing.h"
 
 #include <Windows.h>
 #include <wrl.h>
@@ -151,7 +152,7 @@ protected:
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 49 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
-	float frameTimeInt = 0.0f;
+	float frameTimeFloat = 0.0f;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	// Stand(0), Walk(1), Run(2), Strafe Left(3), Strafe Right(4), Strafe Back(5),
@@ -178,12 +179,15 @@ protected:
 	float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 120.0f; // 2.0f using frame speed
-	float rollSpeed = 45.0f; // 0.75 using frame speed
+	float rollSpeed = 75.0f; // 1.25 using frame speed
 	float attackTime = 0.0f;
-	bool dodge = false;
 	float timer = 0.0f;
+	float dodgeCameraTime = 0.0f;
+	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
+	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };
+	bool dodge = false;
 	bool isPlayerDead = false;
 	float stamina = 100.0f;
-	float hp = 2.0f; // Base of 10.0f
+	float hp = 10.0f; // Base of 10.0f
 };

@@ -347,14 +347,24 @@ void Player::Update()
 
 	if (dodge)
 	{
+		if (dodgeStartPosition.x == 0.0f && dodgeStartPosition.y == 10.0f && dodgeStartPosition.z == 0.0f)
+		{
+			dodgeStartPosition = position;
+		}
 		enumStatus = DODGE;
-		frameTimeInt += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		frameTimeFloat += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		dodgeCameraTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (frameTimeInt > 58.9f)
+		dodgePosition.x = Easing::EaseInSin(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 1.25f * 59.0f), 59.0f, dodgeCameraTime);
+		dodgePosition.y = Easing::EaseInSin(dodgeStartPosition.y, dodgeStartPosition.y + (moveDirection.y * 1.25f * 59.0f), 59.0f, dodgeCameraTime);
+		dodgePosition.z = Easing::EaseInSin(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 1.25f * 59.0f), 59.0f, dodgeCameraTime);
+		if (frameTimeFloat > 58.9f)
 		{
-			frameTimeInt = 0.0f;
+			frameTimeFloat = 0.0f;
+			dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
+			dodgeCameraTime = 0.0f;
 			dodge = false;
 		}
 	}

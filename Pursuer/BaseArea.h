@@ -125,6 +125,10 @@ private:
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
 	std::array<Sprite*, 4> baseAreaMinimapEnemySPRITE = { {} };
 
+	// Base Area enemy HP bar
+	std::array<Sprite*, 4> baseAreaEnemyHPBar = { {} };
+	std::array<Sprite*, 4> baseAreaEnemyHPBarFrame = { {} };
+
 	// Base area general aspects
 	bool attacking = false;
 	float attackTime = 0.0f;

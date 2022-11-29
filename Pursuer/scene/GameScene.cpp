@@ -36,9 +36,13 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	// テクスチャ読み込み
 	if (!Sprite::LoadTexture(99, L"Resources/Controls.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(98, L"Resources/p3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(97, L"Resources/p4.png")) { assert(0); return; }
 
 	// 背景スプライト生成
 	instructionSPRITE = Sprite::Create(99, { 0,0 });
+	gameOverSPRITE = Sprite::Create(98, { 0,0 });
+	gameClearSPRITE = Sprite::Create(97, { 0,0 });
 
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);
@@ -155,6 +159,14 @@ void GameScene::Draw()
 	if (page == 1)
 	{
 		instructionSPRITE->Draw();
+	}
+	if (page == 3)
+	{
+		gameOverSPRITE->Draw();
+	}
+	if (page == 4)
+	{
+		gameClearSPRITE->Draw();
 	}
 	
 	// スプライト描画後処理
