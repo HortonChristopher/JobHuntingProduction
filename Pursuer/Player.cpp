@@ -357,10 +357,10 @@ void Player::Update()
 		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		dodgePosition.x = Easing::EaseInQuartic(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 1.25f * 53.0f), 53.0f, dodgeCameraTime);
+		dodgePosition.x = Easing::EaseInSin(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
 		dodgePosition.y = position.y;
-		dodgePosition.z = Easing::EaseInQuartic(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 1.25f * 53.0f), 53.0f, dodgeCameraTime);
-		if (frameTimeFloat >= 53.0f)
+		dodgePosition.z = Easing::EaseInSin(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
+		if (frameTimeFloat >= 68.0f)
 		{
 			frameTimeFloat = 0.0f;
 			dodgeStartPosition = { 0.0f, 10.0f, 0.0f };

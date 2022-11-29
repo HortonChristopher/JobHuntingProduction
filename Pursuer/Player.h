@@ -179,7 +179,7 @@ protected:
 	float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 120.0f; // 2.0f using frame speed
-	float rollSpeed = 75.0f; // 1.25 using frame speed
+	float rollSpeed = 45.0f; // 0.75 using frame speed
 	float attackTime = 0.0f;
 	float timer = 0.0f;
 	float dodgeCameraTime = 0.0f;
