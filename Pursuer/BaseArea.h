@@ -58,6 +58,7 @@ public:
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
+	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
 
 	void thread1();
 	void thread2();
@@ -133,6 +134,10 @@ private:
 	Sprite* baseAreaDamageOverlaySPRITE = nullptr;
 	float damageOverlaySpriteALPHA = 1.0f;
 	bool damageOverlayDisplay = false;
+
+	// Screen shake
+	bool screenShake = false;
+	float shakeTimer = 0.0f;
 
 	// Base area general aspects
 	bool attacking = false;

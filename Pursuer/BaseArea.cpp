@@ -99,15 +99,18 @@ void BaseArea::Update()
 	// Debug Text string
 	std::ostringstream missionTracker;
 
-	if (!input->PushKey(DIK_SPACE) && !playerFBX->dodge)
+	if (!screenShake)
 	{
-		camera->SetTarget(playerPositionOBJ->GetPosition());
+		if (!input->PushKey(DIK_SPACE) && !playerFBX->dodge)
+		{
+			camera->SetTarget(playerPositionOBJ->GetPosition());
+		}
+		else if (playerFBX->dodge)
+		{
+			camera->SetTarget(playerFBX->dodgePosition);
+		}
+		camera->Update();
 	}
-	else if (playerFBX->dodge)
-	{
-		camera->SetTarget(playerFBX->dodgePosition);
-	}
-	camera->Update();
 
 	if (!gameStart)
 	{
@@ -245,6 +248,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = 1.0f;
 			damageOverlayDisplay = true;
+			screenShake = true;
 			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			playerFBX->hp -= 1.0f;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
@@ -266,6 +270,18 @@ void BaseArea::Update()
 			fadeSpriteALPHA = 1.0f;
 			result = 1;
 			deletion = true;
+		}
+	}
+
+	if (screenShake)
+	{
+		camera->SetTarget(ScreenShake(playerFBX->GetPosition()));
+		camera->Update();
+		shakeTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (shakeTimer >= 15.0f)
+		{
+			shakeTimer = 0.0f;
+			screenShake = false;
 		}
 	}
 
@@ -573,6 +589,17 @@ void BaseArea::ParticleCreation(float x, float y, float z, int life, float offse
 		// ’Ç‰Á
 		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
 	}
+}
+
+XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
+{
+	XMFLOAT3 shakePosition;
+
+	shakePosition.x = playerPosition.x + (rand() % 3 - 1);
+	shakePosition.y = playerPosition.y + (rand() % 3 - 1);
+	shakePosition.z = playerPosition.z + (rand() % 3 - 1);
+
+	return shakePosition;
 }
 
 void BaseArea::thread1()
