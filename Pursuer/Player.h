@@ -183,6 +183,7 @@ protected:
 	bool dodge = false;
 	float timer = 0.0f;
 public:
+	bool isPlayerDead = false;
 	float stamina = 100.0f;
-	float hp = 10.0f;
+	float hp = 2.0f; // Base of 10.0f
 };

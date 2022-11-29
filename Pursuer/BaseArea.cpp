@@ -243,9 +243,20 @@ void BaseArea::Update()
 
 	if (playerFBX->hp < 0.1f)
 	{
-		result = 1;
-		deletion = true;
 		playerFBX->hp = 0.0f;
+		playerFBX->SetEnumStatus(Player::DEAD);
+	}
+
+	if (playerFBX->isPlayerDead)
+	{
+		fadeSpriteALPHA += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+		if (fadeSpriteALPHA >= 1.0f)
+		{
+			fadeSpriteALPHA = 1.0f;
+			result = 1;
+			deletion = true;
+		}
 	}
 #pragma endregion
 
@@ -486,7 +497,7 @@ void BaseArea::Draw()
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
 
-	if (!gameStart)
+	if (fadeSpriteALPHA > 0.0f)
 	{
 		fadeSPRITE->Draw();
 	}

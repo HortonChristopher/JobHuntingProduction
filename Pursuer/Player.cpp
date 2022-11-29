@@ -133,7 +133,7 @@ void Player::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime && animationNo != 6)
+		if (currentTime > endTime && enumStatus != DEAD)
 		{
 			currentTime = startTime;
 		}
@@ -178,7 +178,15 @@ void Player::Update()
 	const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
 	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
-	if (enumStatus == DAMAGED)
+	if (enumStatus == DEAD)
+	{
+		timer += 60.0f *(deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (timer >= 91.0f)
+		{
+			isPlayerDead = true;
+		}
+	}
+	else if (enumStatus == DAMAGED)
 	{
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (timer >= 54.0f)
