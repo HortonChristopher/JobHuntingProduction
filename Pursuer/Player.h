@@ -150,7 +150,7 @@ protected:
 	FBX3DModel* modelStrafeB = nullptr; // 24 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
-	FBX3DModel* modelDodgeRoll = nullptr; // 49 frames
+	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
 	float frameTimeFloat = 0.0f;
 

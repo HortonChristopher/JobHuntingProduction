@@ -144,8 +144,10 @@ private:
 	float attackTime = 0.0f;
 	int enemyDefeated = 0;
 
+	// Fade in-out sprite
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 1.0f;
+
 	bool gameStart = false;
 	bool ableToDamage = true;
 public:
