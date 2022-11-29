@@ -27,8 +27,8 @@ void Player::Initialize()
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
-	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
-	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeRight");
+	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("StrafeRight");
+	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
 	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("StrafeBack");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
@@ -178,7 +178,16 @@ void Player::Update()
 	const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
 	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
-	if (attackTime > 0)
+	if (enumStatus == DAMAGED)
+	{
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (timer >= 54.0f)
+		{
+			timer = 0.0f;
+			enumStatus = STAND;
+		}
+	}
+	else if (attackTime > 0)
 	{
 		enumStatus = ATTACK;
 	}
@@ -275,10 +284,32 @@ void Player::Update()
 				SetRotation(rotation);
 			}
 
-			if (input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_W) ||
-				input->TriggerLStickLeft() || input->TriggerLStickRight() || input->TriggerLStickDown() || input->TriggerLStickUp())
+			if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+				input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 			{
-				enumStatus = RUN;
+				if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+				{
+					if (input->PushKey(DIK_A))
+					{
+						enumStatus = STRAFEL;
+					}
+					else if (input->PushKey(DIK_D))
+					{
+						enumStatus = STRAFER;
+					}
+					else if (input->PushKey(DIK_S))
+					{
+						enumStatus = STRAFEB;
+					}
+					else
+					{
+						enumStatus = RUN;
+					}
+				}
+				else
+				{
+					enumStatus = RUN;
+				}
 			}
 		}
 		else
@@ -368,31 +399,52 @@ void Player::Update()
 			animationSet = false;
 		}
 		break;
-	case DODGE:
+	case STRAFEL:
 		if (animationNo != 3)
 		{
 			animationNo = 3;
 			animationSet = false;
 		}
 		break;
-	case ATTACK:
+	case STRAFER:
 		if (animationNo != 4)
 		{
 			animationNo = 4;
 			animationSet = false;
 		}
 		break;
-	case DAMAGED:
+	case STRAFEB:
 		if (animationNo != 5)
 		{
 			animationNo = 5;
 			animationSet = false;
 		}
 		break;
-	case DEAD:
+	case DODGE:
 		if (animationNo != 6)
 		{
 			animationNo = 6;
+			animationSet = false;
+		}
+		break;
+	case ATTACK:
+		if (animationNo != 7)
+		{
+			animationNo = 7;
+			animationSet = false;
+		}
+		break;
+	case DAMAGED:
+		if (animationNo != 8)
+		{
+			animationNo = 8;
+			animationSet = false;
+		}
+		break;
+	case DEAD:
+		if (animationNo != 9)
+		{
+			animationNo = 9;
 			animationSet = false;
 		}
 		break;
@@ -418,21 +470,36 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 3:
-			SetModel(modelDodgeRoll);
+			SetModel(modelStrafeL);
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			SetModel(modelAttacking);
+			SetModel(modelStrafeR);
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 5:
-			SetModel(modelDamaged);
+			SetModel(modelStrafeB);
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 6:
+			SetModel(modelDodgeRoll);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 7:
+			SetModel(modelAttacking);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 8:
+			SetModel(modelDamaged);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 9:
 			SetModel(modelDeath);
 			isPlay = false;
 			animationSet = true;

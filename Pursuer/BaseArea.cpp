@@ -134,6 +134,7 @@ void BaseArea::Update()
 
 	skydomeOBJ->SetPosition(objectPosition);
 
+#pragma region LockOn
 	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
@@ -169,6 +170,7 @@ void BaseArea::Update()
 		camera->SetDistance(min + 48.0f);*/
 		camera->Update();
 	}
+#pragma endregion
 
 #pragma region DebugAttackRange
 	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
@@ -235,6 +237,7 @@ void BaseArea::Update()
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			playerFBX->hp -= 1.0f;
+			playerFBX->SetEnumStatus(Player::DAMAGED);
 		}
 	}
 
