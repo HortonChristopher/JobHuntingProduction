@@ -34,6 +34,8 @@ struct Vector2 : public DirectX::XMFLOAT2
 	static float Cross(Vector2 v1, Vector2 v2);
 	// Dot Product
 	static float Dot(Vector2 v1, Vector2 v2);
+	// Convert to screen point
+	Vector2 Convert(DirectX::XMFLOAT3 pos, DirectX::XMMATRIX viewMat, DirectX::XMMATRIX projMat, int screenW, int screenH, float offsetX, float offsetY);
 };
 
 struct Vector3 : public DirectX::XMFLOAT3 
@@ -75,6 +77,9 @@ struct Vector3 : public DirectX::XMFLOAT3
 
 	// Cross product
 	Vector3 Cross(Vector3 vector);
+
+	// Transform
+	Vector3 Transform(DirectX::XMMATRIX m, DirectX::XMMATRIX m2);
 
 	// Dot product
 	float Dot(Vector3 vector);

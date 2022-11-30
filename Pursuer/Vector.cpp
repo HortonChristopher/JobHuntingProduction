@@ -147,6 +147,20 @@ float Vector2::Dot(Vector2 v1, Vector2 v2)
 {
 	return v1.x * v2.x + v1.y * v2.y;
 }
+
+Vector2 Vector2::Convert(DirectX::XMFLOAT3 pos, DirectX::XMMATRIX viewMat, DirectX::XMMATRIX projMat, int screenW, int screenH, float offsetX, float offsetY)
+{
+	Vector3 result;
+	result = pos;
+	result.Transform(viewMat, projMat);
+	result.x /= result.z;
+	result.y /= result.z;
+	result.x = (result.x + 1.0f) * screenW / 2.0f;
+	result.y = (1.0f - result.y) * screenH / 2.0f;
+	result.x += offsetX;
+	result.y -= offsetY;
+	return Vector2(result.x, result.y);
+}
 #pragma endregion
 
 #pragma region Vector3
@@ -335,6 +349,27 @@ Vector3 Vector3::Cross(Vector3 vector)
 	ans.y = z * vector.x - x * vector.z;
 	ans.z = x * vector.y - y * vector.x;
 	return ans;
+}
+
+Vector3 Vector3::Transform(DirectX::XMMATRIX m, DirectX::XMMATRIX m2)
+{
+	DirectX::XMVECTOR result;
+	DirectX::XMVECTOR result2;
+	for (int i = 0; i < 4; i++)
+	{
+		result.m128_f32[i] = x * m.r[0].m128_f32[i] + y * m.r[1].m128_f32[i]
+			+ z + m.r[2].m128_f32[i] + 1.0f * m.r[3].m128_f32[i];
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		result2.m128_f32[i] = result.m128_f32[0] * m2.r[0].m128_f32[i] + result.m128_f32[1] * m2.r[1].m128_f32[i]
+			+ result.m128_f32[2] + m2.r[2].m128_f32[i] + result.m128_f32[3] * m2.r[3].m128_f32[i];
+	}
+	Vector3 returnV;
+	returnV.x = result2.m128_f32[0] / result2.m128_f32[3];
+	returnV.y = result2.m128_f32[1] / result2.m128_f32[3];
+	returnV.z = result2.m128_f32[2] / result2.m128_f32[3];
+	return returnV;
 }
 
 float Vector3::Dot(Vector3 vector)

@@ -260,7 +260,7 @@ void BaseArea::Update()
 		playerFBX->hp = 0.0f;
 		playerFBX->SetEnumStatus(Player::DEAD);
 	}
-
+	
 	if (playerFBX->isPlayerDead)
 	{
 		fadeSpriteALPHA += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -420,6 +420,20 @@ void BaseArea::Update()
 	debugText->Print(missionTracker.str(), 1173.0f, 160.0f, 1.0f);
 #pragma endregion
 
+	/*float test;
+
+	test = 0.0f;
+
+	Vector2 testPosition;
+	Vector2 testPosition2;
+
+	baseAreaEnemyHPBarSPRITE[0]->SetPosition(testPosition.Convert(baseAreaEnemyFBX[0]->GetPosition(),
+		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720, 
+		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));
+	baseAreaEnemyHPBarFrameSPRITE[0]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[0]->GetPosition(),
+		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));*/
+
 #pragma region updates
 	playerFBX->Update();
 	playerPositionOBJ->Update();
@@ -443,16 +457,16 @@ void BaseArea::Update()
 
 #pragma region debugTestStrings
 	//Debug Start
-	/*char msgbuf[256];
-	char msgbuf2[256];
-	char msgbuf3[256];
+	char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
-	sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
-	sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
+	sprintf_s(msgbuf, 256, "X: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().x);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);*/
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
 	//Debug End
 #pragma endregion
 }
@@ -527,6 +541,11 @@ void BaseArea::Draw()
 	baseAreaMissionSPRITE->Draw();
 	baseAreaMinimapSPRITE->Draw();
 	baseAreaMinimapPlayerSPRITE->Draw();
+	/*for (int i = 0; i < 1; i++)
+	{
+		baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
+		baseAreaEnemyHPBarSPRITE[i]->Draw();
+	}*/
 	for (int i = 0; i < 4; i++)
 	{
 		if (!baseAreaEnemyFBX[i]->dead)
