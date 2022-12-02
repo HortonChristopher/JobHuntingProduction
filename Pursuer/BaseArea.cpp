@@ -420,7 +420,7 @@ void BaseArea::Update()
 	debugText->Print(missionTracker.str(), 1173.0f, 160.0f, 1.0f);
 #pragma endregion
 
-	/*float test;
+	float test;
 
 	test = 0.0f;
 
@@ -432,7 +432,7 @@ void BaseArea::Update()
 		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));
 	baseAreaEnemyHPBarFrameSPRITE[0]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[0]->GetPosition(),
 		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));*/
+		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));
 
 #pragma region updates
 	playerFBX->Update();
@@ -541,11 +541,11 @@ void BaseArea::Draw()
 	baseAreaMissionSPRITE->Draw();
 	baseAreaMinimapSPRITE->Draw();
 	baseAreaMinimapPlayerSPRITE->Draw();
-	/*for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
 		baseAreaEnemyHPBarSPRITE[i]->Draw();
-	}*/
+	}
 	for (int i = 0; i < 4; i++)
 	{
 		if (!baseAreaEnemyFBX[i]->dead)
