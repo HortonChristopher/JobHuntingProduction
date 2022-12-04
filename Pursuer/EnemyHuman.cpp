@@ -33,6 +33,7 @@ void EnemyHuman::Initialize()
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
+	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -247,6 +248,30 @@ void EnemyHuman::Update()
 			modelChange = false;
 		}
 		break;
+	case PARTICLEATTACK:
+		if (modelChange)
+		{
+			animationSet = false;
+			animationNo = 6;
+			modelChange = false;
+		}
+		x = objectPosition.x - position.x;
+		y = objectPosition.z - position.z;
+		hypotenuse = sqrt((x * x) + (y * y));
+		float radians = atan2(y, x);
+		degrees = XMConvertToDegrees(radians);
+		if (!FirstRun)
+		{
+			position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+		}
+		else
+		{
+			FirstRun = false;
+		}
+		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+		SetPosition(position);
+		break;
 	default:
 		timer = 0.0f;
 		enumStatus = STAND;
@@ -284,6 +309,11 @@ void EnemyHuman::Update()
 			break;
 		case 5:
 			SetModel(modelDeath);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 6:
+			SetModel(modelParticleAttack);
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -346,7 +376,7 @@ void EnemyHuman::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (animationNo != 5)
+		if (animationNo != 5 || animationNo != 6)
 		{
 			if (currentTime > endTime)
 			{

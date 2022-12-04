@@ -53,7 +53,8 @@ public:
 		ATTACK = 4,
 		COOLDOWN = 5,
 		DAMAGED = 6,
-		DEAD = 7
+		DEAD = 7,
+		PARTICLEATTACK = 8
 	};
 
 	status enumStatus = STAND;
@@ -158,6 +159,7 @@ protected:
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
+	FBX3DModel* modelParticleAttack = nullptr; // 81 frames
 
 	// 1 frame timed
 	FbxTime frameTime;
@@ -175,7 +177,7 @@ protected:
 	bool isPlay = false;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
-	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4), Death(5)
+	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4), Death(5), ParticleAttack(6)
 	bool animationSet = false;
 
 	float degrees = 0.0f;
