@@ -251,6 +251,7 @@ void EnemyHuman::Update()
 	case PARTICLEATTACK:
 		if (modelChange)
 		{
+			timer = 0.0f;
 			animationSet = false;
 			animationNo = 6;
 			modelChange = false;
@@ -260,15 +261,8 @@ void EnemyHuman::Update()
 		hypotenuse = sqrt((x * x) + (y * y));
 		float radians = atan2(y, x);
 		degrees = XMConvertToDegrees(radians);
-		if (!FirstRun)
-		{
-			position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
-		}
-		else
-		{
-			FirstRun = false;
-		}
+		position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+		position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		SetPosition(position);
 		break;
