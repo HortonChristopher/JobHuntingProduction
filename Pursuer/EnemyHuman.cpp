@@ -33,6 +33,7 @@ void EnemyHuman::Initialize()
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
+	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
 	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
 
 	HRESULT result;
@@ -249,22 +250,46 @@ void EnemyHuman::Update()
 		}
 		break;
 	case PARTICLEATTACK:
-		if (modelChange)
+		switch (particleAttackStage)
 		{
-			timer = 0.0f;
-			animationSet = false;
-			animationNo = 6;
-			modelChange = false;
+		case 0:
+			if (modelChange)
+			{
+				timer = 0.0f;
+				animationSet = false;
+				animationNo = 6;
+				modelChange = false;
+			}
+			x = objectPosition.x - position.x;
+			y = objectPosition.z - position.z;
+			hypotenuse = sqrt((x * x) + (y * y));
+			float radians = atan2(y, x);
+			degrees = XMConvertToDegrees(radians);
+			position.x -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetPosition(position);
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (timer >= 63.0f)
+			{
+				particleAttackStage = 1;
+			}
+			break;
+		case 1:
+			if (modelChange)
+			{
+				timer = 0.0f;
+				animationSet = false;
+				animationNo = 7;
+				modelChange = false;
+			}
+			x = objectPosition.x - position.x;
+			y = objectPosition.z - position.z;
+			hypotenuse = sqrt((x * x) + (y * y));
+			float radians = atan2(y, x);
+			degrees = XMConvertToDegrees(radians);
+			break;
 		}
-		x = objectPosition.x - position.x;
-		y = objectPosition.z - position.z;
-		hypotenuse = sqrt((x * x) + (y * y));
-		float radians = atan2(y, x);
-		degrees = XMConvertToDegrees(radians);
-		position.x += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-		position.z += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
-		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-		SetPosition(position);
 		break;
 	default:
 		timer = 0.0f;
@@ -307,6 +332,11 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 6:
+			SetModel(modelJumpBack);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 7:
 			SetModel(modelParticleAttack);
 			isPlay = false;
 			animationSet = true;
