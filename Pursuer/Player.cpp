@@ -252,7 +252,7 @@ void Player::Update()
 			const Vector3 CrossVec = direction.Cross(moveDirection);
 
 			float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (abs(rotY) < 55 && !dodge)
+			if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
 			{
 				if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
 				{

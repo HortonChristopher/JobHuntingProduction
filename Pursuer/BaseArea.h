@@ -150,6 +150,9 @@ private:
 
 	bool gameStart = false;
 	bool ableToDamage = true;
+
+	float knockbackTime = 0.0f;
+	bool knockback = false;
 public:
 	bool initialization = true;
 	bool deletion = false;

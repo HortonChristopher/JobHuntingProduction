@@ -263,31 +263,62 @@ void EnemyHuman::Update()
 			x = objectPosition.x - position.x;
 			y = objectPosition.z - position.z;
 			hypotenuse = sqrt((x * x) + (y * y));
-			float radians = atan2(y, x);
+			radians = atan2(y, x);
 			degrees = XMConvertToDegrees(radians);
-			position.x -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			position.x -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			if (currentTime < endTime / 2 && timer > 0.0f)
+			{
+				position.y += 1.0f;
+			}
 			SetPosition(position);
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (timer >= 63.0f)
+			if (currentTime > endTime && timer > 0.0f)
 			{
 				particleAttackStage = 1;
+				modelChange = true;
 			}
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
 			if (modelChange)
 			{
+				x = objectPosition.x - position.x;
+				y = objectPosition.y - position.y;
+				z = objectPosition.z - position.z;
+				hypotenuse = sqrt((x * x) + (y * y) + (z * z));
+				radians = atan2(z, x);
+				degrees = XMConvertToDegrees(radians);
 				timer = 0.0f;
+				particleAttackPosition = { position.x, position.y + 5.0f, position.z };
 				animationSet = false;
 				animationNo = 7;
 				modelChange = false;
 			}
-			x = objectPosition.x - position.x;
-			y = objectPosition.z - position.z;
-			hypotenuse = sqrt((x * x) + (y * y));
-			float radians = atan2(y, x);
-			degrees = XMConvertToDegrees(radians);
+			if (currentTime > endTime / 2 && timer > 0.0f && !particleAttackActive)
+			{
+				particleAttackActive = true;
+				timer = 0.0f;
+			}
+			if (particleAttackActive)
+			{
+				particleAttackPosition.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				particleAttackPosition.y += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+				particleAttackPosition.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			if (timer >= 180.0f && particleAttackActive)
+			{
+				ableToDamage = true;
+				timer = 0.0f;
+				particleAttackActive = false;
+				particleAttackStage = 0;
+				enumStatus = AGGRO;
+			}
 			break;
 		}
 		break;
@@ -342,6 +373,23 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		}
+	}
+
+	if (position.x >= 398.0f)
+	{
+		position.x = 398.0f;
+	}
+	else if (position.x <= -398.0f)
+	{
+		position.x = -398.0f;
+	}
+	if (position.z >= 398.0f)
+	{
+		position.z = 398.0f;
+	}
+	else if (position.z <= -398.0f)
+	{
+		position.z = -398.0f;
 	}
 
 	XMMATRIX matScale, matRot, matTrans;
@@ -400,7 +448,7 @@ void EnemyHuman::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (animationNo != 5 || animationNo != 6)
+		if (animationNo != 5 && animationNo != 6 && animationNo != 7)
 		{
 			if (currentTime > endTime)
 			{

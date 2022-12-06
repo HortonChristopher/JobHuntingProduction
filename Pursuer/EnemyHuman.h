@@ -162,8 +162,6 @@ protected:
 	FBX3DModel* modelJumpBack = nullptr; // 63 frames
 	FBX3DModel* modelParticleAttack = nullptr; // 81 frames
 
-	int particleAttackStage = 0;
-
 	// 1 frame timed
 	FbxTime frameTime;
 
@@ -186,16 +184,21 @@ protected:
 	float degrees = 0.0f;
 	float x = 0.0f;
 	float y = 0.0f;
+	float z = 0.0f;
 	float hypotenuse = 0.0f;
+	float radians = 0.0f;
 
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 public:
+	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
 	float HP = 5.0f;
 	bool dead = false;
 	bool modelChange = false;
 	bool wander = false;
 	bool ableToDamage = true;
 	bool set = false;
+	bool particleAttackActive = false;
 	float attackTimer = 0.0f;
 	float timer = 238.0f;
+	int particleAttackStage = 0;
 };

@@ -212,18 +212,29 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 			}*/
 			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
-			if (distance < 6.0f)
+			if (distance < 8.0f)
 			{
 				//baseAreaEnemyFBX[i]->SetAttack(true);
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
 				{
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+					int random = rand() % 10;
+
+					if (random < 5)
+					{
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+					}
+					else
+					{
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
+						baseAreaEnemyFBX[i]->particleAttackStage = 0;
+						baseAreaEnemyFBX[i]->modelChange = true;
+					}
 				}
 			}
 			else
 			{
 				//baseAreaEnemyFBX[i]->SetAttack(false);
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK)
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK)
 				{
 					if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
 					{
@@ -236,6 +247,11 @@ void BaseArea::Update()
 		{
 			baseAreaEnemyFBX[i]->SetAggroSwitch(true);
 			//baseAreaEnemyFBX[i]->SetAttack(false);
+		}
+
+		if (baseAreaEnemyFBX[i]->particleAttackActive)
+		{
+			ParticleCreation(baseAreaEnemyFBX[i]->particleAttackPosition.x, baseAreaEnemyFBX[i]->particleAttackPosition.y, baseAreaEnemyFBX[i]->particleAttackPosition.z, 60, 0.0f, 10.0f);
 		}
 	}
 #pragma endregion
@@ -253,9 +269,37 @@ void BaseArea::Update()
 			playerFBX->hp -= 1.0f;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 		}
+
+		if (intersect(baseAreaEnemyFBX[i]->particleAttackPosition, playerFBX->GetPosition(), 3.0f, 12.0f, 12.0f) && baseAreaEnemyFBX[i]->particleAttackActive && baseAreaEnemyFBX[i]->ableToDamage)
+		{
+			baseAreaEnemyFBX[i]->ableToDamage = false;
+			damageOverlayDisplay = true;
+			screenShake = true;
+			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			playerFBX->hp -= 3.0f;
+			playerFBX->SetEnumStatus(Player::DAMAGED);
+			knockback = true;
+		}
+
+		if (knockback && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::PARTICLEATTACK)
+		{
+			XMFLOAT3 xyz = baseAreaEnemyFBX[i]->GetPosition() - playerFBX->GetPosition();
+			XMFLOAT3 knockbackPrevPosition = playerFBX->GetPosition();
+			float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
+			playerFBX->SetPosition({
+					knockbackPrevPosition.x -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.z -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+			knockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (knockbackTime >= 30.0f)
+			{
+				knockbackTime = 0.0f;
+				knockback = false;
+			}
+		}
 	}
 
-	if (playerFBX->hp < 0.1f)
+	if (playerFBX->hp <= 0.0f)
 	{
 		playerFBX->hp = 0.0f;
 		playerFBX->SetEnumStatus(Player::DEAD);
@@ -457,14 +501,14 @@ void BaseArea::Update()
 
 #pragma region debugTestStrings
 	//Debug Start
-	char msgbuf[256];
+	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().x);
+	//sprintf_s(msgbuf, 256, "X: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().x);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
