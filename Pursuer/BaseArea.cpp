@@ -398,7 +398,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
 			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
 			baseAreaEnemyFBX[i]->dead = false;
-			//baseAreaEnemyFBX[i]->wander = false;
+			baseAreaEnemyFBX[i]->HP = 5.0f;
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::STAND);
 			baseAreaEnemyFBX[i]->set = false;
 			baseAreaEnemyFBX[i]->timer = 238.0f;

@@ -86,8 +86,8 @@ void EnemyHuman::Update()
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (timer > 239.0f)
 		{
-			newPosition.x = rand() % 80 - 40 + homePosition.x;
-			newPosition.z = rand() % 80 - 40 + homePosition.y;
+			newPosition.x = rand() % 401 - 150 + homePosition.x;
+			newPosition.z = rand() % 401 - 150 + homePosition.y;
 			timer = 0.0f;
 			enumStatus = WANDER;
 		}

@@ -417,10 +417,6 @@ void Player::Update()
 				}
 			}
 		}
-		else
-		{
-			enumStatus = STAND;
-		}
 	}
 
 	if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
