@@ -152,7 +152,6 @@ protected:
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
-	float frameTimeFloat = 0.0f;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	// Stand(0), Walk(1), Run(2), Strafe Left(3), Strafe Right(4), Strafe Back(5),
@@ -183,6 +182,7 @@ protected:
 	float attackTime = 0.0f;
 	float timer = 0.0f;
 	float dodgeCameraTime = 0.0f;
+	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };

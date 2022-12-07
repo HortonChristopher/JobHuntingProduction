@@ -273,6 +273,7 @@ void BaseArea::Update()
 		if (intersect(baseAreaEnemyFBX[i]->particleAttackPosition, playerFBX->GetPosition(), 3.0f, 12.0f, 12.0f) && baseAreaEnemyFBX[i]->particleAttackActive && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
+			damageOverlaySpriteALPHA = 1.0f;
 			damageOverlayDisplay = true;
 			screenShake = true;
 			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
@@ -332,7 +333,10 @@ void BaseArea::Update()
 	// Damage overlay display
 	if (damageOverlayDisplay)
 	{
-		damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (playerFBX->enumStatus != Player::DEAD)
+		{
+			damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
 		baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 		if (damageOverlaySpriteALPHA <= 0.0f)
 		{

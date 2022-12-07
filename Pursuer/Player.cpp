@@ -118,27 +118,6 @@ void Player::Update()
 	// Bone array
 	std::vector<FBX3DModel::Bone>& bones = model->GetBones();
 
-	if (isPlay == false)
-	{
-		PlayAnimation();
-	}
-
-	if (isPlay)
-	{
-		// Advance one frame/second
-		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
-		double sec = frameTime.GetSecondDouble();
-		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		frameTime.SetSecondDouble(sec);
-		currentTime += frameTime;
-
-		// Return to the previous position after playing to the end
-		if (currentTime > endTime && enumStatus != DEAD)
-		{
-			currentTime = startTime;
-		}
-	}
-
 	// Constant buffer data transfer
 	ConstBufferDataSkin* constMapSkin = nullptr;
 	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
@@ -156,9 +135,122 @@ void Player::Update()
 	}
 	constBuffSkin->Unmap(0, nullptr);
 
-	//rotation.y = objectRotation.y;
+	switch (enumStatus)
+	{
+	case STAND:
+		if (animationNo != 0)
+		{
+			animationNo = 0;
+			animationSet = false;
+		}
+		break;
+	case WALK:
+		if (animationNo != 1)
+		{
+			animationNo = 1;
+			animationSet = false;
+		}
+		break;
+	case RUN:
+		if (animationNo != 2)
+		{
+			animationNo = 2;
+			animationSet = false;
+		}
+		break;
+	case STRAFEL:
+		if (animationNo != 3)
+		{
+			animationNo = 3;
+			animationSet = false;
+		}
+		break;
+	case STRAFER:
+		if (animationNo != 4)
+		{
+			animationNo = 4;
+			animationSet = false;
+		}
+		break;
+	case STRAFEB:
+		if (animationNo != 5)
+		{
+			animationNo = 5;
+			animationSet = false;
+		}
+		break;
+	case DODGE:
+		if (animationNo != 6)
+		{
+			animationNo = 6;
+			animationSet = false;
+		}
+		if (dodgeStartPosition.x == 0.0f && dodgeStartPosition.y == 10.0f && dodgeStartPosition.z == 0.0f)
+		{
+			timer = 0.0f;
+			dodgeStartPosition = position;
+		}
+		dodgeCameraTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		dodgePosition.x = Easing::EaseInSin(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
+		dodgePosition.y = position.y;
+		dodgePosition.z = Easing::EaseInSin(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			timer = 0.0f;
+			dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
+			dodgeCameraTime = 0.0f;
+			enumStatus = STAND;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
+	case ATTACK:
+		if (animationNo != 7)
+		{
+			timer = 0.0f;
+			animationNo = 7;
+			animationSet = false;
+		}
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			timer = 0.0f;
+			enumStatus = STAND;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
+	case DAMAGED:
+		if (animationNo != 8)
+		{
+			timer = 0.0f;
+			animationNo = 8;
+			animationSet = false;
+		}
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			timer = 0.0f;
+			enumStatus = STAND;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
+	case DEAD:
+		if (animationNo != 9)
+		{
+			timer = 0.0f;
+			animationNo = 9;
+			animationSet = false;
+		}
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			timer = 0.0f;
+			isPlayerDead = true;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
+	}
 
-	if (input->TriggerMouseLeft() && attackTime == 0 && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
+	if (input->TriggerMouseLeft() && attackTime == 0.0f && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
 	{
 		attackTime = 53.0f;
 		stamina -= 20.0f;
@@ -173,33 +265,38 @@ void Player::Update()
 		attackTime = 0;
 	}
 
+	if (attackTime > 0)
+	{
+		enumStatus = ATTACK;
+	}
+
 	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
 	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
 	const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
 	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
-	if (enumStatus == DEAD)
+	if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+		input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 	{
-		timer += 60.0f *(deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer >= 91.0f)
+		if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
 		{
-			isPlayerDead = true;
+			movementAllowed = true;
+		}
+		else
+		{
+			movementAllowed = false;
 		}
 	}
-	else if (enumStatus == DAMAGED)
+	else
 	{
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer >= 54.0f)
+		if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
 		{
-			timer = 0.0f;
 			enumStatus = STAND;
 		}
+		movementAllowed = false;
 	}
-	else if (attackTime > 0)
-	{
-		enumStatus = ATTACK;
-	}
-	else if (!dodge)
+
+	if (movementAllowed)
 	{
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
@@ -326,47 +423,10 @@ void Player::Update()
 		}
 	}
 
-	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
-
-	//sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
-	//Debug End
-
 	if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
 	{
 		stamina -= 40.0f;
-		dodge = true;
-	}
-
-	if (dodge)
-	{
-		if (dodgeStartPosition.x == 0.0f && dodgeStartPosition.y == 10.0f && dodgeStartPosition.z == 0.0f)
-		{
-			dodgeStartPosition = position;
-		}
 		enumStatus = DODGE;
-		frameTimeFloat += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		dodgeCameraTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		dodgePosition.x = Easing::EaseInSin(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
-		dodgePosition.y = position.y;
-		dodgePosition.z = Easing::EaseInSin(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
-		if (frameTimeFloat >= 68.0f)
-		{
-			frameTimeFloat = 0.0f;
-			dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
-			dodgeCameraTime = 0.0f;
-			dodge = false;
-		}
 	}
 
 	if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
@@ -375,97 +435,6 @@ void Player::Update()
 		{
 			stamina += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
-	}
-
-	//// ˆÚ“®ƒxƒNƒgƒ‹‚ðYŽ²Žü‚è‚ÌŠp“x‚Å‰ñ“]
-	//XMVECTOR move = { 0,0,1.0f,0 };
-	//matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
-	//move = XMVector3TransformNormal(move, matRot);
-
-	//// Œü‚¢‚Ä‚¢‚é•ûŒü‚ÉˆÚ“®
-	//if (input->PushKey(DIK_S) || input->PushLStickDown()) {
-	//	position.x -= move.m128_f32[0];
-	//	position.y -= move.m128_f32[1];
-	//	position.z -= move.m128_f32[2];
-	//}
-	//else if (input->PushKey(DIK_W) || input->PushLStickUp()) {
-	//	position.x += move.m128_f32[0];
-	//	position.y += move.m128_f32[1];
-	//	position.z += move.m128_f32[2];
-	//}
-
-	switch (enumStatus)
-	{
-	case STAND:
-		if (animationNo != 0)
-		{
-			animationNo = 0;
-			animationSet = false;
-		}
-		break;
-	case WALK:
-		if (animationNo != 1)
-		{
-			animationNo = 1;
-			animationSet = false;
-		}
-		break;
-	case RUN:
-		if (animationNo != 2)
-		{
-			animationNo = 2;
-			animationSet = false;
-		}
-		break;
-	case STRAFEL:
-		if (animationNo != 3)
-		{
-			animationNo = 3;
-			animationSet = false;
-		}
-		break;
-	case STRAFER:
-		if (animationNo != 4)
-		{
-			animationNo = 4;
-			animationSet = false;
-		}
-		break;
-	case STRAFEB:
-		if (animationNo != 5)
-		{
-			animationNo = 5;
-			animationSet = false;
-		}
-		break;
-	case DODGE:
-		if (animationNo != 6)
-		{
-			animationNo = 6;
-			animationSet = false;
-		}
-		break;
-	case ATTACK:
-		if (animationNo != 7)
-		{
-			animationNo = 7;
-			animationSet = false;
-		}
-		break;
-	case DAMAGED:
-		if (animationNo != 8)
-		{
-			animationNo = 8;
-			animationSet = false;
-		}
-		break;
-	case DEAD:
-		if (animationNo != 9)
-		{
-			animationNo = 9;
-			animationSet = false;
-		}
-		break;
 	}
 
 	if (!animationSet)
@@ -523,6 +492,40 @@ void Player::Update()
 			animationSet = true;
 		}
 	}
+
+	if (isPlay == false)
+	{
+		PlayAnimation();
+	}
+
+	if (isPlay)
+	{
+		// Advance one frame/second
+		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
+		double sec = frameTime.GetSecondDouble();
+		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		frameTime.SetSecondDouble(sec);
+		currentTime += frameTime;
+
+		// Return to the previous position after playing to the end
+		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED)
+		{
+			currentTime = startTime;
+		}
+	}
+
+	//Debug Start
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+
+	//sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 }
 
 void Player::CreateGraphicsPipeline()
