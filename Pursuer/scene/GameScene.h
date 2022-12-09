@@ -9,6 +9,7 @@
 #include "DeltaTime.h"
 #include "BaseArea.h"
 #include "TitleScreen.h"
+#include "TutorialArea.h"
 
 /// <summary>
 /// ゲームシーン

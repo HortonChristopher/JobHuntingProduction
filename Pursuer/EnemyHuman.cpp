@@ -265,8 +265,8 @@ void EnemyHuman::Update()
 			hypotenuse = sqrt((x * x) + (y * y));
 			radians = atan2(y, x);
 			degrees = XMConvertToDegrees(radians);
-			position.x -= 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z -= 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			position.x -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 			if (currentTime < endTime / 2 && timer > 0.0f)
 			{
