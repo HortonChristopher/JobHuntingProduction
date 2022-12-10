@@ -69,4 +69,16 @@ private:
 	ParticleManager* particleMan = nullptr;
 	CollisionManager* collisionManager = nullptr;
 	LightGroup* lightGroup = nullptr;
+
+	// Stage Model and Obj
+	TouchableObject* groundOBJ = nullptr;
+	Model* groundMODEL = nullptr;
+
+	// Player aspects
+	Player* playerFBX = nullptr;
+	PlayerPositionObject* playerPositionOBJ = nullptr;
+	Model* positionMODEL = nullptr; // Used for both player and enemies
+
+public:
+	bool initialize = false;
 };

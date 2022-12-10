@@ -55,11 +55,51 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	EnemyHuman::SetCamera(camera);
 	Player::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
+
+	// Model Creation
+	groundMODEL = Model::CreateFromOBJ("TutorialStage");
+	
+	// Touchable Objection Creation
+	groundOBJ = TouchableObject::Create(groundMODEL);
+
+	positionMODEL = Model::CreateFromOBJ("yuka");
+
+	// Player initialization
+	playerFBX = new Player;
+	playerFBX->Initialize();
+	playerPositionOBJ = PlayerPositionObject::Create();
+	playerPositionOBJ->SetModel(positionMODEL);
+	playerFBX->SetPosition({ 0.0f, 0.0f, -700.0f });
+
+	// Ground Aspects
+	groundOBJ->SetPosition({ 0, 0, 0 });
+	groundOBJ->SetScale({ 50, 10, 50 });
+	playerPositionOBJ->SetScale({ 10, 10, 10 });
+
+	// Camera initial values
+	camera->SetTarget(playerFBX->GetPosition());
+	camera->SetUp({ 0, 1, 0 });
+	camera->SetDistance(48.0f);
+
+	srand((unsigned int)time(NULL));
 }
 
 void TutorialArea::Update()
 {
+	lightGroup->Update();
+	particleMan->Update();
+	camera->SetTarget(playerFBX->GetPosition());
+	camera->Update();
 
+	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
+	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
+
+#pragma region updates
+	groundOBJ->Update();
+	playerFBX->Update();
+	playerPositionOBJ->Update();
+	collisionManager->CheckAllCollisions();
+#pragma endregion
 }
 
 void TutorialArea::Draw()
@@ -87,6 +127,9 @@ void TutorialArea::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3D Object Drawing
+	playerFBX->Draw(cmdList);
+	//playerPositionOBJ->Draw();
+	groundOBJ->Draw();
 
 	// Particle drawing
 	particleMan->Draw(cmdList);

@@ -76,13 +76,15 @@ void GameScene::Update()
 	{
 		if (input->TriggerKey(DIK_T) || input->TriggerControllerButton(XINPUT_GAMEPAD_START))
 		{
-			baseArea = new BaseArea;
-			baseArea->initialization = true;
+			//baseArea = new BaseArea;
+			//baseArea->initialization = true;
+			tutorialArea = new TutorialArea;
+			tutorialArea->initialize = true;
 			page = 2;
 		}
 	}
 
-	if (page == 2)
+	/*if (page == 2)
 	{
 		if (baseArea->initialization)
 		{
@@ -108,6 +110,19 @@ void GameScene::Update()
 		if (baseArea != nullptr)
 		{
 			baseArea->Update();
+		}
+	}*/
+	if (page == 2)
+	{
+		if (tutorialArea->initialize)
+		{
+			tutorialArea->Initialize(dxCommon, input, audio);
+			tutorialArea->initialize = false;
+		}
+
+		if (tutorialArea != nullptr)
+		{
+			tutorialArea->Update();
 		}
 	}
 
@@ -146,7 +161,8 @@ void GameScene::Draw()
 	}
 	if (page == 2)
 	{
-		baseArea->Draw();
+		//baseArea->Draw();
+		tutorialArea->Draw();
 	}
 
 #pragma region 前景スプライト描画

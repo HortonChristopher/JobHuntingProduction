@@ -65,6 +65,7 @@ private: // メンバ変数
 	Audio* audio = nullptr;
 
 	TitleScreen* titleScreen = nullptr;
+	TutorialArea* tutorialArea = nullptr;
 	BaseArea* baseArea = nullptr;
 
 	Sprite* instructionSPRITE = nullptr;
