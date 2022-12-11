@@ -46,6 +46,23 @@ private: // ê√ìIÉÅÉìÉoïœêî
 	static const int debugTextTexNumber = 0;
 
 public:
+	enum tutorialStatus
+	{
+		INTROCUTSCENE = 1,
+		MOVEMENTTUTORIAL = 2,
+		RUN = 3,
+		STRAFEL = 4,
+		STRAFER = 5,
+		STRAFEB = 6,
+		DODGE = 7,
+		ATTACK = 8,
+		DAMAGED = 9,
+		DEAD = 10
+	};
+
+	tutorialStatus status = INTROCUTSCENE;
+
+public:
 	TutorialArea();
 	~TutorialArea();
 
@@ -79,6 +96,7 @@ private:
 	PlayerPositionObject* playerPositionOBJ = nullptr;
 	Model* positionMODEL = nullptr; // Used for both player and enemies
 
+	int tutorialPage = 0;
 public:
 	bool initialize = false;
 };

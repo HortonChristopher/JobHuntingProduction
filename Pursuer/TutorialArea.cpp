@@ -91,6 +91,20 @@ void TutorialArea::Update()
 	camera->SetTarget(playerFBX->GetPosition());
 	camera->Update();
 
+	switch (status)
+	{
+	case INTROCUTSCENE:
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		if (playerFBX->GetPosition().z >= -450.0f)
+		{
+			status = MOVEMENTTUTORIAL;
+			break;
+		}
+		break;
+	case MOVEMENTTUTORIAL:
+		break;
+	}
+
 	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 
