@@ -14,6 +14,8 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 
+extern int keyOrMouse = 0; // 0 = keyboard, 1 = mouse
+
 GameScene::GameScene()
 {
 }

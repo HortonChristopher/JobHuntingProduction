@@ -7,6 +7,8 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 
+extern int keyOrMouse;
+
 TutorialArea::TutorialArea()
 {
 }
@@ -47,25 +49,45 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	// Setting DxCommon device
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	EnemyHuman::SetDevice(dxCommon->GetDevice());
-	Player::SetDevice(dxCommon->GetDevice());
+	TutorialPlayer::SetDevice(dxCommon->GetDevice());
 
 	// Setting camera
 	Object3d::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 	EnemyHuman::SetCamera(camera);
-	Player::SetCamera(camera);
+	TutorialPlayer::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
+
+	// Sprite Generation
+	if (!Sprite::LoadTexture(1, L"Resources/TutorialTextFrame.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(2, L"Resources/Tutorial1_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(3, L"Resources/Tutorial1_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(4, L"Resources/Tutorial1_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(5, L"Resources/Tutorial1_3_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(6, L"Resources/Tutorial1_3_c.png")) { assert(0); return; }
+
+	tutorialTextFrame = Sprite::Create(1, { 390.0f, 300.0f });
+	for (int i = 0; i < 5; i++)
+	{
+		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
+	}
+
+	// 3D Object Create
+	skydomeOBJ = Object3d::Create();
 
 	// Model Creation
 	groundMODEL = Model::CreateFromOBJ("TutorialStage");
+	skydomeMODEL = Model::CreateFromOBJ("skydome");
 	
 	// Touchable Objection Creation
 	groundOBJ = TouchableObject::Create(groundMODEL);
+	skydomeOBJ->SetModel(skydomeMODEL);
+	skydomeOBJ->SetScale({ 5,5,5 });
 
 	positionMODEL = Model::CreateFromOBJ("yuka");
 
 	// Player initialization
-	playerFBX = new Player;
+	playerFBX = new TutorialPlayer;
 	playerFBX->Initialize();
 	playerPositionOBJ = PlayerPositionObject::Create();
 	playerPositionOBJ->SetModel(positionMODEL);
@@ -91,17 +113,52 @@ void TutorialArea::Update()
 	camera->SetTarget(playerFBX->GetPosition());
 	camera->Update();
 
-	switch (status)
+	skydomeOBJ->SetPosition(playerFBX->GetPosition());
+
+	switch (tutorialStatus)
 	{
 	case INTROCUTSCENE:
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
 		if (playerFBX->GetPosition().z >= -450.0f)
 		{
-			status = MOVEMENTTUTORIAL;
+			tutorialStatus = MOVEMENTTUTORIAL;
+			playerFBX->SetEnumStatus(TutorialPlayer::STAND);
 			break;
 		}
 		break;
 	case MOVEMENTTUTORIAL:
+		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
+		{
+			if (tutorialPage < 2)
+			{
+				tutorialPage++;
+			}
+			else
+			{
+				tutorialActive = false;
+				playerFBX->tutorialPart = 1;
+			}
+		}
+
+		if (!tutorialActive)
+		{
+			if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+				input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+			{
+				progress += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			
+			if (progress >= 100.0f)
+			{
+				progress = 0.0f;
+				tutorialPage = 0;
+				tutorialActive = true;
+				playerFBX->tutorialPart = 0;
+				tutorialStatus = STAMINATUTORIAL;
+			}
+		}
+		break;
+	case STAMINATUTORIAL:
 		break;
 	}
 
@@ -110,6 +167,7 @@ void TutorialArea::Update()
 
 #pragma region updates
 	groundOBJ->Update();
+	skydomeOBJ->Update();
 	playerFBX->Update();
 	playerPositionOBJ->Update();
 	collisionManager->CheckAllCollisions();
@@ -144,6 +202,7 @@ void TutorialArea::Draw()
 	playerFBX->Draw(cmdList);
 	//playerPositionOBJ->Draw();
 	groundOBJ->Draw();
+	skydomeOBJ->Draw();
 
 	// Particle drawing
 	particleMan->Draw(cmdList);
@@ -155,6 +214,37 @@ void TutorialArea::Draw()
 	Sprite::PreDraw(cmdList);
 
 	// Foreground sprite drawing
+	if (tutorialActive)
+	{
+		switch (tutorialStatus)
+		{
+		case INTROCUTSCENE:
+			break;
+		case MOVEMENTTUTORIAL:
+			tutorialTextFrame->Draw();
+			switch (tutorialPage)
+			{
+			case 0:
+				tutorialTextSPRITE[0]->Draw();
+				break;
+			case 1:
+				tutorialTextSPRITE[1]->Draw();
+				break;
+			case 2:
+				tutorialTextSPRITE[2]->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextSPRITE[3]->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextSPRITE[4]->Draw();
+				}
+				break;
+			}
+			break;
+		}
+	}
 
 	// Sprite post draw
 	Sprite::PostDraw();

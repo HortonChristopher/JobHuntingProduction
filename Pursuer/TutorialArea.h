@@ -11,7 +11,7 @@
 #include "DebugCamera.h"
 #include "LightGroup.h"
 #include "FBXGeneration.h"
-#include "Player.h"
+#include "TutorialPlayer.h"
 #include "EnemyHuman.h"
 #include "Object3D.h"
 #include "FbxLoader/FbxLoader.h"
@@ -50,9 +50,9 @@ public:
 	{
 		INTROCUTSCENE = 1,
 		MOVEMENTTUTORIAL = 2,
-		RUN = 3,
-		STRAFEL = 4,
-		STRAFER = 5,
+		STAMINATUTORIAL = 3,
+		ATTACKTUTORIAL = 4,
+		DODGETUTORIAL = 5,
 		STRAFEB = 6,
 		DODGE = 7,
 		ATTACK = 8,
@@ -60,7 +60,7 @@ public:
 		DEAD = 10
 	};
 
-	tutorialStatus status = INTROCUTSCENE;
+	tutorialStatus tutorialStatus = INTROCUTSCENE;
 
 public:
 	TutorialArea();
@@ -90,12 +90,20 @@ private:
 	// Stage Model and Obj
 	TouchableObject* groundOBJ = nullptr;
 	Model* groundMODEL = nullptr;
+	Object3d* skydomeOBJ = nullptr;
+	Model* skydomeMODEL = nullptr;
+
+	// Sprite Generation
+	Sprite* tutorialTextFrame = nullptr;
+	std::array<Sprite*, 5> tutorialTextSPRITE = { {} };
 
 	// Player aspects
-	Player* playerFBX = nullptr;
+	TutorialPlayer* playerFBX = nullptr;
 	PlayerPositionObject* playerPositionOBJ = nullptr;
 	Model* positionMODEL = nullptr; // Used for both player and enemies
 
+	bool tutorialActive = true;
+	float progress = 0.0f;
 	int tutorialPage = 0;
 public:
 	bool initialize = false;

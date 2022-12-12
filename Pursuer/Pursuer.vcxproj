@@ -135,6 +135,7 @@
     <ClCompile Include="TitleScreen.cpp" />
     <ClCompile Include="TouchableObject.cpp" />
     <ClCompile Include="TutorialArea.cpp" />
+    <ClCompile Include="TutorialPlayer.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="TitleScreen.h" />
     <ClInclude Include="TouchableObject.h" />
     <ClInclude Include="TutorialArea.h" />
+    <ClInclude Include="TutorialPlayer.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
