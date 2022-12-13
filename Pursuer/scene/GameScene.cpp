@@ -37,12 +37,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	this->audio = audio;
 
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(99, L"Resources/Controls.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(98, L"Resources/p3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(97, L"Resources/p4.png")) { assert(0); return; }
 
 	// 背景スプライト生成
-	instructionSPRITE = Sprite::Create(99, { 0,0 });
 	gameOverSPRITE = Sprite::Create(98, { 0,0 });
 	gameClearSPRITE = Sprite::Create(97, { 0,0 });
 
@@ -60,12 +58,19 @@ void GameScene::Update()
 		{
 			if (titleScreen->selection == 0)
 			{
-				if (page == 0)
-				{
-					titleScreen->~TitleScreen();
-					titleScreen = nullptr;
-					page = 1;
-				}
+				tutorialArea = new TutorialArea;
+				tutorialArea->initialize = true;
+				titleScreen->~TitleScreen();
+				titleScreen = nullptr;
+				page = 2;
+			}
+			else if (titleScreen->selection == 1)
+			{
+				baseArea = new BaseArea;
+				baseArea->initialization = true;
+				titleScreen->~TitleScreen();
+				titleScreen = nullptr;
+				page = 3;
 			}
 			else if (titleScreen->selection == 2)
 			{
@@ -74,46 +79,16 @@ void GameScene::Update()
 		}
 	}
 
-	if (page == 1)
+	/*if (page == 1)
 	{
 		if (input->TriggerKey(DIK_T) || input->TriggerControllerButton(XINPUT_GAMEPAD_START))
 		{
-			//baseArea = new BaseArea;
-			//baseArea->initialization = true;
 			tutorialArea = new TutorialArea;
 			tutorialArea->initialize = true;
 			page = 2;
 		}
-	}
-
-	/*if (page == 2)
-	{
-		if (baseArea->initialization)
-		{
-			baseArea->Initialize(dxCommon, input, audio);
-			baseArea->initialization = false;
-		}
-
-		if (baseArea->deletion)
-		{
-			baseArea->~BaseArea();
-			if (baseArea->result == 1)
-			{
-				page = 3;
-			}
-			else if (baseArea->result == 2)
-			{
-				page = 4;
-			}
-			baseArea->deletion = false;
-			baseArea = nullptr;
-		}
-
-		if (baseArea != nullptr)
-		{
-			baseArea->Update();
-		}
 	}*/
+
 	if (page == 2)
 	{
 		if (tutorialArea->initialize)
@@ -126,9 +101,51 @@ void GameScene::Update()
 		{
 			tutorialArea->Update();
 		}
+
+		if (tutorialArea->deletion)
+		{
+			tutorialArea->~TutorialArea();
+			baseArea = new BaseArea;
+			baseArea->initialization = true;
+			page = 3;
+			tutorialArea->deletion = false;
+		}
 	}
 
-	if (page > 2)
+	if (page == 3)
+	{
+		if (baseArea->initialization)
+		{
+			if (tutorialArea != nullptr)
+			{
+				tutorialArea = nullptr;
+			}
+			baseArea->Initialize(dxCommon, input, audio);
+			baseArea->initialization = false;
+		}
+
+		if (baseArea->deletion)
+		{
+			baseArea->~BaseArea();
+			if (baseArea->result == 1)
+			{
+				page = 4;
+			}
+			else if (baseArea->result == 2)
+			{
+				page = 5;
+			}
+			baseArea->deletion = false;
+			baseArea = nullptr;
+		}
+
+		if (baseArea != nullptr)
+		{
+			baseArea->Update();
+		}
+	}
+
+	if (page > 3)
 	{
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 		{
@@ -163,8 +180,11 @@ void GameScene::Draw()
 	}
 	if (page == 2)
 	{
-		//baseArea->Draw();
 		tutorialArea->Draw();
+	}
+	if (page == 3)
+	{
+		baseArea->Draw();
 	}
 
 #pragma region 前景スプライト描画
@@ -174,15 +194,11 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	if (page == 1)
-	{
-		instructionSPRITE->Draw();
-	}
-	if (page == 3)
+	if (page == 4)
 	{
 		gameOverSPRITE->Draw();
 	}
-	if (page == 4)
+	if (page == 5)
 	{
 		gameClearSPRITE->Draw();
 	}

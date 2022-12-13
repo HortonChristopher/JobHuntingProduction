@@ -47,9 +47,15 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	if (!Sprite::LoadTexture(8, L"Resources/Title.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(9, L"Resources/TitleStartStop.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(99, L"Resources/TitleTutorialSelection_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(100, L"Resources/TitleTutorialSelection_2.png")) { assert(0); return; }
 	titleSPRITE = Sprite::Create(8, { 0,0 }, { 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
 	titleStartStopSPRITE = Sprite::Create(9, { 0,0 });
 	fadeSPRITE = Sprite::Create(10, { 0,0 }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+	for (int i = 0; i < 2; i++)
+	{
+		tutorialSelectionSPRITE[i] = Sprite::Create(i + 99, { 390.0f, 300.0f });
+	}
 
 	// Debug text initialization
 	debugText = DebugText::GetInstance();
@@ -96,6 +102,35 @@ void TitleScreen::Update()
 
 	degrees += 10.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
+	if (tutorialSelectionBOOL && !selectionBOOL)
+	{
+		if (selection == 0)
+		{
+			if (input->TriggerKey(DIK_S) || input->TriggerLStickDown())
+			{
+				selection = 1;
+			}
+		}
+		else
+		{
+			if (input->TriggerKey(DIK_W) || input->TriggerLStickUp())
+			{
+				selection = 0;
+			}
+		}
+
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+		{
+			selectionBOOL = true;
+		}
+
+		if (input->TriggerKey(DIK_X) || input->TriggerControllerButton(XINPUT_GAMEPAD_B))
+		{
+			selection = 0;
+			tutorialSelectionBOOL = false;
+		}
+	}
+
 	if (titleSpriteALPHA < 1.0f)
 	{
 		titleSpriteALPHA += 0.5f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -113,7 +148,9 @@ void TitleScreen::Update()
 				}
 				else if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 				{
-					selectionBOOL = true;
+					//selectionBOOL = true;
+					selection = 0;
+					tutorialSelectionBOOL = true;
 				}
 			}
 			else if (selection == 2)
@@ -167,7 +204,6 @@ void TitleScreen::Update()
 	titleSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
 	fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 
-	//camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 100.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 100.0f });
 	camera->SetTarget({ sinf(XMConvertToRadians(degrees)) * 10.0f, 30.0f, cosf(XMConvertToRadians(degrees)) * 10.0f });
 	ParticleCreation(sinf(XMConvertToRadians(degrees)) * 10.0f, particleYPosition, cosf(XMConvertToRadians(degrees)) * 10.0f, 20, 0, 2.0f);
 
@@ -223,6 +259,18 @@ void TitleScreen::Draw()
 	if (titleSpriteALPHA >= 1.0f)
 	{
 		titleStartStopSPRITE->Draw();
+	}
+
+	if (tutorialSelectionBOOL)
+	{
+		if (selection == 0)
+		{
+			tutorialSelectionSPRITE[0]->Draw();
+		}
+		else
+		{
+			tutorialSelectionSPRITE[1]->Draw();
+		}
 	}
 
 	if (selectionBOOL)

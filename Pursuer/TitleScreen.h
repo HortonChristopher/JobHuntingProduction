@@ -65,6 +65,9 @@ private:
 	float titleSpriteALPHA = 0.0f;
 	float degrees = 0.0f;
 
+	std::array<Sprite*, 2> tutorialSelectionSPRITE = { {} };
+	bool tutorialSelectionBOOL = false;
+
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 0.0f;
 	bool selectionBOOL = false;
@@ -74,6 +77,7 @@ private:
 public:
 	bool initialization = true;
 	bool deletion = false;
+	bool tutorialStart = false;
 	int selection = 0;
 	bool gameStart = false;
 };

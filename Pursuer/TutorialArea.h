@@ -94,8 +94,11 @@ private:
 	Model* skydomeMODEL = nullptr;
 
 	// Sprite Generation
-	Sprite* tutorialTextFrame = nullptr;
+	Sprite* tutorialTextFrameSPRITE = nullptr;
 	std::array<Sprite*, 5> tutorialTextSPRITE = { {} };
+	std::array<Sprite*, 1> tutorialMissionSPRITE = { {} };
+	Sprite* missionBarSPRITE = nullptr;
+	Sprite* missionBarFrameSPRITE = nullptr;
 
 	// Player aspects
 	TutorialPlayer* playerFBX = nullptr;
@@ -107,4 +110,5 @@ private:
 	int tutorialPage = 0;
 public:
 	bool initialize = false;
+	bool deletion = false;
 };

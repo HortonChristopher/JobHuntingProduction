@@ -68,7 +68,6 @@ private: // メンバ変数
 	TutorialArea* tutorialArea = nullptr;
 	BaseArea* baseArea = nullptr;
 
-	Sprite* instructionSPRITE = nullptr;
 	Sprite* gameOverSPRITE = nullptr;
 	Sprite* gameClearSPRITE = nullptr;
 public:

@@ -132,8 +132,7 @@ protected:
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation
-	//XMFLOAT3 position = { 122,100,-358 };
-	XMFLOAT3 position = { 0.0f, 10.0f, 0.0f };
+	XMFLOAT3 position = { 0.0f, 4.0f, -397.0f };
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model
@@ -177,7 +176,7 @@ protected:
 
 	float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
-	float sprintSpeed = 120.0f; // 2.0f using frame speed
+	float sprintSpeed = 90.0f; // 1.5f using frame speed
 	float rollSpeed = 45.0f; // 0.75 using frame speed
 	float attackTime = 0.0f;
 	float timer = 0.0f;

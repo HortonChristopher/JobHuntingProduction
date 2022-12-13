@@ -19,6 +19,16 @@ TutorialArea::~TutorialArea()
 	collisionManager = nullptr;
 	particleMan = nullptr;
 	debugText = nullptr;
+	safe_delete(groundOBJ);
+	safe_delete(groundMODEL);
+	safe_delete(skydomeOBJ);
+	safe_delete(skydomeMODEL);
+	safe_delete(tutorialTextFrameSPRITE);
+	for (int i = 0; i < 5; i++) { safe_delete(tutorialTextSPRITE[i]); }
+	for (int i = 0; i < 1; i++) { safe_delete(tutorialMissionSPRITE[i]); }
+	safe_delete(playerFBX);
+	safe_delete(playerPositionOBJ);
+	safe_delete(positionMODEL);
 }
 
 void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -66,11 +76,27 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(5, L"Resources/Tutorial1_3_k.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(6, L"Resources/Tutorial1_3_c.png")) { assert(0); return; }
 
-	tutorialTextFrame = Sprite::Create(1, { 390.0f, 300.0f });
+	if (!Sprite::LoadTexture(96, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(95, L"Resources/LoadingBar.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(94, L"Resources/TutorialMission1.png")) { assert(0); return; }
+
+	if (!Sprite::LoadTexture(85, L"Resources/LoadingBar.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(86, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
+
+	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
 	for (int i = 0; i < 5; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
+	for (int i = 94; i > 93; i--)
+	{
+		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
+		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
+	}
+	missionBarSPRITE = Sprite::Create(85, { 1150.0f, 150.0f });
+	missionBarFrameSPRITE = Sprite::Create(86, { 1150.0f, 150.0f });
+	missionBarSPRITE->SetSize({ 100.0f, 30.0f });
+	missionBarFrameSPRITE->SetSize({ 100.0f, 30.0f });
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -147,18 +173,25 @@ void TutorialArea::Update()
 			{
 				progress += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
+
+			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
 			
 			if (progress >= 100.0f)
 			{
 				progress = 0.0f;
 				tutorialPage = 0;
-				tutorialActive = true;
-				playerFBX->tutorialPart = 0;
+				//tutorialActive = true;
+				//playerFBX->tutorialPart = 0;
+				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
 				tutorialStatus = STAMINATUTORIAL;
 			}
 		}
 		break;
 	case STAMINATUTORIAL:
+		if (playerFBX->GetPosition().z >= 600.0f)
+		{
+			deletion = true;
+		}
 		break;
 	}
 
@@ -221,7 +254,7 @@ void TutorialArea::Draw()
 		case INTROCUTSCENE:
 			break;
 		case MOVEMENTTUTORIAL:
-			tutorialTextFrame->Draw();
+			tutorialTextFrameSPRITE->Draw();
 			switch (tutorialPage)
 			{
 			case 0:
@@ -242,6 +275,20 @@ void TutorialArea::Draw()
 				}
 				break;
 			}
+			break;
+		}
+	}
+	
+	if (!tutorialActive)
+	{
+		switch (tutorialStatus)
+		{
+		case INTROCUTSCENE:
+			break;
+		case MOVEMENTTUTORIAL:
+			tutorialMissionSPRITE[0]->Draw();
+			missionBarSPRITE->Draw();
+			//missionBarFrameSPRITE->Draw();
 			break;
 		}
 	}
