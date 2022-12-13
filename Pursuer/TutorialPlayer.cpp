@@ -427,18 +427,21 @@ void TutorialPlayer::Update()
 
 	if (tutorialPart > 1)
 	{
-		if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
-		{
-			stamina -= 40.0f;
-			enumStatus = DODGE;
-		}
-
 		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
 		{
 			if (stamina < 100.0f)
 			{
 				stamina += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
+		}
+	}
+
+	if (tutorialPart > 3)
+	{
+		if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
+		{
+			stamina -= 40.0f;
+			enumStatus = DODGE;
 		}
 	}
 

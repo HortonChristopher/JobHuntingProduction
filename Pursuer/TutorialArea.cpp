@@ -75,20 +75,32 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(4, L"Resources/Tutorial1_3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(5, L"Resources/Tutorial1_3_k.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(6, L"Resources/Tutorial1_3_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(7, L"Resources/Tutorial1_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(8, L"Resources/Tutorial2_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(9, L"Resources/Tutorial2_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(10, L"Resources/Tutorial2_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(11, L"Resources/Tutorial2_3_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(12, L"Resources/Tutorial2_3_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(13, L"Resources/Tutorial2_4.png")) { assert(0); return; }
 
-	if (!Sprite::LoadTexture(96, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(95, L"Resources/LoadingBar.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(95, L"Resources/StaminaTutorialMask.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(94, L"Resources/TutorialMission1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(93, L"Resources/TutorialMission2.png")) { assert(0); return; }
 
 	if (!Sprite::LoadTexture(85, L"Resources/LoadingBar.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(86, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
 
+	if (!Sprite::LoadTexture(87, L"Resources/HPBar.png")) { assert(0); return; } // HP bar texture
+	if (!Sprite::LoadTexture(88, L"Resources/HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
+	if (!Sprite::LoadTexture(89, L"Resources/STBar.png")) { assert(0); return; } // ST bar texture
+	if (!Sprite::LoadTexture(90, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
+
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
-	for (int i = 94; i > 93; i--)
+	for (int i = 94; i > 92; i--)
 	{
 		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
 		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
@@ -97,6 +109,11 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	missionBarFrameSPRITE = Sprite::Create(86, { 1150.0f, 150.0f });
 	missionBarSPRITE->SetSize({ 100.0f, 30.0f });
 	missionBarFrameSPRITE->SetSize({ 100.0f, 30.0f });
+	HPBarSPRITE = Sprite::Create(87, { 25.0f, 25.0f });
+	HPBarFrameSPRITE = Sprite::Create(88, { 25.0f, 25.0f });
+	STBarSPRITE = Sprite::Create(89, { 25.0f, 55.0f });
+	STBarFrameSPRITE = Sprite::Create(90, { 25.0f, 55.0f });
+	staminaTutorialMaskSPRITE = Sprite::Create(95, { 0.0f, 0.0f });
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -159,10 +176,16 @@ void TutorialArea::Update()
 			{
 				tutorialPage++;
 			}
-			else
+			else if (tutorialPage == 2)
 			{
 				tutorialActive = false;
 				playerFBX->tutorialPart = 1;
+			}
+			else if (tutorialPage == 3)
+			{
+				progress = 0.0f;
+				tutorialPage = 0;
+				tutorialStatus = STAMINATUTORIAL;
 			}
 		}
 
@@ -178,16 +201,58 @@ void TutorialArea::Update()
 			
 			if (progress >= 100.0f)
 			{
-				progress = 0.0f;
-				tutorialPage = 0;
-				//tutorialActive = true;
-				//playerFBX->tutorialPart = 0;
+				tutorialPage = 3;
+				playerFBX->tutorialPart = 0;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
-				tutorialStatus = STAMINATUTORIAL;
+				tutorialActive = true;
 			}
 		}
 		break;
 	case STAMINATUTORIAL:
+		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
+		{
+			if (tutorialPage < 2)
+			{
+				tutorialPage++;
+			}
+			else if (tutorialPage == 2)
+			{
+				tutorialActive = false;
+				playerFBX->tutorialPart = 2;
+			}
+			else if (tutorialPage == 3)
+			{
+				progress = 0.0f;
+				tutorialPage = 0;
+				tutorialStatus = ATTACKTUTORIAL;
+			}
+		}
+
+		if (!tutorialActive)
+		{
+			progress = (100.0f - playerFBX->stamina);
+			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
+
+			if (progress >= 100.0f)
+			{
+				tutorialPage = 3;
+				playerFBX->tutorialPart = 0;
+				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
+				tutorialActive = true;
+			}
+		}
+
+		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 20.0f });
+		STBarSPRITE->SetSize({ playerFBX->stamina * 2.0f, 20.0f });
+
+		if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && playerFBX->stamina > 0.0f)
+		{
+			ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, 10, -1.0f, 1.0f);
+		}
+		break;
+	case ATTACKTUTORIAL:
+		tutorialActive = false;
+		playerFBX->tutorialPart = 2;
 		if (playerFBX->GetPosition().z >= 600.0f)
 		{
 			deletion = true;
@@ -274,7 +339,43 @@ void TutorialArea::Draw()
 					tutorialTextSPRITE[4]->Draw();
 				}
 				break;
+			case 3:
+				tutorialTextSPRITE[5]->Draw();
+				break;
 			}
+			break;
+		case STAMINATUTORIAL:
+			switch (tutorialPage)
+			{
+			case 0:
+				staminaTutorialMaskSPRITE->Draw();
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[6]->Draw();
+				break;
+			case 1:
+				staminaTutorialMaskSPRITE->Draw();
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[7]->Draw();
+				break;
+			case 2:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[8]->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextSPRITE[9]->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextSPRITE[10]->Draw();
+				}
+				break;
+			case 3:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[11]->Draw();
+				break;
+			}
+			break;
+		case ATTACKTUTORIAL:
 			break;
 		}
 	}
@@ -288,9 +389,26 @@ void TutorialArea::Draw()
 		case MOVEMENTTUTORIAL:
 			tutorialMissionSPRITE[0]->Draw();
 			missionBarSPRITE->Draw();
-			//missionBarFrameSPRITE->Draw();
+			break;
+		case STAMINATUTORIAL:
+			tutorialMissionSPRITE[1]->Draw();
+			missionBarSPRITE->Draw();
+			break;
+		case ATTACKTUTORIAL:
 			break;
 		}
+	}
+
+	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL)
+	{
+		STBarSPRITE->Draw();
+		STBarFrameSPRITE->Draw();
+	}
+
+	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL && tutorialStatus != STAMINATUTORIAL)
+	{
+		HPBarSPRITE->Draw();
+		HPBarFrameSPRITE->Draw();
 	}
 
 	// Sprite post draw

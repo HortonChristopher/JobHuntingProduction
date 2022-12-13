@@ -53,11 +53,8 @@ public:
 		STAMINATUTORIAL = 3,
 		ATTACKTUTORIAL = 4,
 		DODGETUTORIAL = 5,
-		STRAFEB = 6,
-		DODGE = 7,
-		ATTACK = 8,
-		DAMAGED = 9,
-		DEAD = 10
+		BATTLETUTORIAL = 6,
+		TUTORIALEND = 7
 	};
 
 	tutorialStatus tutorialStatus = INTROCUTSCENE;
@@ -95,10 +92,16 @@ private:
 
 	// Sprite Generation
 	Sprite* tutorialTextFrameSPRITE = nullptr;
-	std::array<Sprite*, 5> tutorialTextSPRITE = { {} };
-	std::array<Sprite*, 1> tutorialMissionSPRITE = { {} };
+	std::array<Sprite*, 12> tutorialTextSPRITE = { {} };
+	std::array<Sprite*, 2> tutorialMissionSPRITE = { {} };
 	Sprite* missionBarSPRITE = nullptr;
 	Sprite* missionBarFrameSPRITE = nullptr;
+		// HP and Stamina Bar Sprites
+	Sprite* HPBarSPRITE = nullptr;
+	Sprite* HPBarFrameSPRITE = nullptr;
+	Sprite* STBarSPRITE = nullptr;
+	Sprite* STBarFrameSPRITE = nullptr;
+	Sprite* staminaTutorialMaskSPRITE = nullptr;
 
 	// Player aspects
 	TutorialPlayer* playerFBX = nullptr;
