@@ -29,6 +29,17 @@ TutorialArea::~TutorialArea()
 	safe_delete(playerFBX);
 	safe_delete(playerPositionOBJ);
 	safe_delete(positionMODEL);
+	safe_delete(missionBarSPRITE);
+	safe_delete(missionBarFrameSPRITE);
+	safe_delete(HPBarSPRITE);
+	safe_delete(HPBarFrameSPRITE);
+	safe_delete(STBarSPRITE);
+	safe_delete(STBarFrameSPRITE);
+	safe_delete(staminaTutorialMaskSPRITE);
+	safe_delete(minimapTutorialMaskSPRITE);
+	safe_delete(tutorialMinimapSPRITE);
+	safe_delete(tutorialMinimapPlayerSPRITE);
+	safe_delete(tutorialMinimapEnemySPRITE);
 }
 
 void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -82,7 +93,12 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(11, L"Resources/Tutorial2_3_k.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(12, L"Resources/Tutorial2_3_c.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(13, L"Resources/Tutorial2_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(14, L"Resources/Tutorial3_1.png")) { assert(0); return; }
 
+	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
+	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
+	if (!Sprite::LoadTexture(97, L"Resources/MinimapTutorialMask.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(96, L"Resources/TutorialMinimap.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(95, L"Resources/StaminaTutorialMask.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(94, L"Resources/TutorialMission1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(93, L"Resources/TutorialMission2.png")) { assert(0); return; }
@@ -96,7 +112,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(90, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
@@ -114,6 +130,10 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	STBarSPRITE = Sprite::Create(89, { 25.0f, 55.0f });
 	STBarFrameSPRITE = Sprite::Create(90, { 25.0f, 55.0f });
 	staminaTutorialMaskSPRITE = Sprite::Create(95, { 0.0f, 0.0f });
+	tutorialMinimapSPRITE = Sprite::Create(96, { 50.0f , 430.0f });
+	minimapTutorialMaskSPRITE = Sprite::Create(97, { 0.0f, 0.0f });
+	tutorialMinimapEnemySPRITE = Sprite::Create(98, { 0.0f, 0.0f });
+	tutorialMinimapPlayerSPRITE = Sprite::Create(99, { 0.0f, 0.0f });
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -241,23 +261,47 @@ void TutorialArea::Update()
 				tutorialActive = true;
 			}
 		}
+		break;
+	case ATTACKTUTORIAL:
+		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
+		{
+			if (tutorialPage < 2)
+			{
+				tutorialPage++;
+			}
+			else if (tutorialPage == 2)
+			{
+				tutorialActive = false;
+				playerFBX->tutorialPart = 2;
+			}
+			else if (tutorialPage == 3)
+			{
+				progress = 0.0f;
+				tutorialPage = 0;
+				tutorialStatus = ATTACKTUTORIAL;
+			}
+		}
+		//tutorialActive = false;
+		//playerFBX->tutorialPart = 2;
+		if (playerFBX->GetPosition().z >= 500.0f)
+		{
+			deletion = true;
+		}
+		break;
+	}
 
+	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL)
+	{
 		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 20.0f });
 		STBarSPRITE->SetSize({ playerFBX->stamina * 2.0f, 20.0f });
+
+		tutorialMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.24f + 165.0f, playerFBX->GetPosition().z * 0.24f + 545.0f });
+		//tutorialMinimapEnemySPRITE->SetPosition({ tutorialEnemyFBX[i]->GetPosition().x * 0.24f + 165.0f, tutorialEnemyFBX[i]->GetPosition().z * 0.24f + 545.0f });
 
 		if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && playerFBX->stamina > 0.0f)
 		{
 			ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, 10, -1.0f, 1.0f);
 		}
-		break;
-	case ATTACKTUTORIAL:
-		tutorialActive = false;
-		playerFBX->tutorialPart = 2;
-		if (playerFBX->GetPosition().z >= 600.0f)
-		{
-			deletion = true;
-		}
-		break;
 	}
 
 	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
@@ -376,11 +420,21 @@ void TutorialArea::Draw()
 			}
 			break;
 		case ATTACKTUTORIAL:
+			switch (tutorialPage)
+			{
+			case 0:
+				minimapTutorialMaskSPRITE->Draw();
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[12]->Draw();
+				break;
+			case 1:
+				tutorialTextFrameSPRITE->Draw();
+				break;
+			}
 			break;
 		}
 	}
-	
-	if (!tutorialActive)
+	else if (!tutorialActive)
 	{
 		switch (tutorialStatus)
 		{
@@ -407,6 +461,9 @@ void TutorialArea::Draw()
 
 	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL && tutorialStatus != STAMINATUTORIAL)
 	{
+		tutorialMinimapSPRITE->Draw();
+		tutorialMinimapEnemySPRITE->Draw();
+		tutorialMinimapPlayerSPRITE->Draw();
 		HPBarSPRITE->Draw();
 		HPBarFrameSPRITE->Draw();
 	}

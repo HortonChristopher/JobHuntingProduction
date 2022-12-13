@@ -144,6 +144,9 @@
     <ClCompile Include="TutorialPlayer.cpp">
       <Filter>Source Files\Behavior</Filter>
     </ClCompile>
+    <ClCompile Include="TutorialEnemy.cpp">
+      <Filter>Source Files\Behavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision.h">
@@ -282,6 +285,9 @@
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
     <ClInclude Include="TutorialPlayer.h">
+      <Filter>Header Files\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialEnemy.h">
       <Filter>Header Files\Behavior</Filter>
     </ClInclude>
   </ItemGroup>

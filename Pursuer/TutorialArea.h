@@ -46,7 +46,7 @@ private: // ê√ìIÉÅÉìÉoïœêî
 	static const int debugTextTexNumber = 0;
 
 public:
-	enum tutorialStatus
+	enum TutorialStatus
 	{
 		INTROCUTSCENE = 1,
 		MOVEMENTTUTORIAL = 2,
@@ -57,7 +57,7 @@ public:
 		TUTORIALEND = 7
 	};
 
-	tutorialStatus tutorialStatus = INTROCUTSCENE;
+	TutorialStatus tutorialStatus = INTROCUTSCENE;
 
 public:
 	TutorialArea();
@@ -92,7 +92,7 @@ private:
 
 	// Sprite Generation
 	Sprite* tutorialTextFrameSPRITE = nullptr;
-	std::array<Sprite*, 12> tutorialTextSPRITE = { {} };
+	std::array<Sprite*, 13> tutorialTextSPRITE = { {} };
 	std::array<Sprite*, 2> tutorialMissionSPRITE = { {} };
 	Sprite* missionBarSPRITE = nullptr;
 	Sprite* missionBarFrameSPRITE = nullptr;
@@ -102,6 +102,10 @@ private:
 	Sprite* STBarSPRITE = nullptr;
 	Sprite* STBarFrameSPRITE = nullptr;
 	Sprite* staminaTutorialMaskSPRITE = nullptr;
+	Sprite* minimapTutorialMaskSPRITE = nullptr;
+	Sprite* tutorialMinimapSPRITE = nullptr;
+	Sprite* tutorialMinimapPlayerSPRITE = nullptr;
+	Sprite* tutorialMinimapEnemySPRITE = nullptr;
 
 	// Player aspects
 	TutorialPlayer* playerFBX = nullptr;
