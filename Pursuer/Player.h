@@ -147,7 +147,8 @@ protected:
 	FBX3DModel* modelStrafeL = nullptr; // 20 frames
 	FBX3DModel* modelStrafeR = nullptr; // 20 frames
 	FBX3DModel* modelStrafeB = nullptr; // 24 frames
-	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
+	FBX3DModel* modelAttacking = nullptr; // 30(?) frames Float: 56
+	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31; 2nd: 45-49; 3rd: 76-80 Float: 253
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
@@ -180,6 +181,7 @@ protected:
 	float rollSpeed = 45.0f; // 0.75 using frame speed
 	float attackTime = 0.0f;
 	float timer = 0.0f;
+	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
 	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };

@@ -489,10 +489,10 @@ void BaseArea::Update()
 	Vector2 testPosition;
 	Vector2 testPosition2;
 
-	baseAreaEnemyHPBarSPRITE[0]->SetPosition(testPosition.Convert(baseAreaEnemyFBX[0]->GetPosition(),
+	baseAreaEnemyHPBarSPRITE[0]->SetPosition(testPosition.Convert(baseAreaEnemyFBX[3]->GetPosition(),
 		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720, 
 		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));
-	baseAreaEnemyHPBarFrameSPRITE[0]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[0]->GetPosition(),
+	baseAreaEnemyHPBarFrameSPRITE[0]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[3]->GetPosition(),
 		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
 		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));*/
 

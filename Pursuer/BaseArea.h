@@ -123,7 +123,7 @@ private:
 															{0.0f, 30.0f, -200.0f}, // Enemy 3
 															{-200.0f, 30.0f, 0.0f}} }; // Enemy 4
 
-	// Base Area minimap (move to separate minimap file later)
+	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
 	std::array<Sprite*, 4> baseAreaMinimapEnemySPRITE = { {} };

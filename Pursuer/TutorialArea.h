@@ -70,6 +70,7 @@ public:
 	void Draw();
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
+	float distance(XMFLOAT3 player, XMFLOAT3 center);
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 
@@ -121,6 +122,8 @@ private:
 	TutorialEnemy* enemyFBX = nullptr;
 	PlayerPositionObject* enemyPositionOBJ = nullptr;
 
+	bool arenaClamp = false;
+	XMFLOAT3 fromOriginToObject = { 0.0f, 0.0f, 0.0f };
 	bool tutorialActive = true;
 	float progress = 0.0f;
 	int tutorialPage = 0;

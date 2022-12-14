@@ -344,6 +344,21 @@ void TutorialArea::Update()
 		break;
 	}
 
+	if (distance(playerFBX->GetPosition(), groundOBJ->GetPosition()) >= 490.0f && tutorialStatus != INTROCUTSCENE && tutorialStatus != TUTORIALEND)
+	{
+		if (!arenaClamp)
+		{
+			fromOriginToObject = playerFBX->GetPosition() - groundOBJ->GetPosition();
+			fromOriginToObject* (490.0f / distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
+		}
+		playerFBX->SetPosition(groundOBJ->GetPosition() + fromOriginToObject);
+		arenaClamp = true;
+	}
+	else
+	{
+		arenaClamp = false;
+	}
+
 	if (tutorialStatus > 2)
 	{
 		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 20.0f });
@@ -369,6 +384,19 @@ void TutorialArea::Update()
 
 	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
+
+	//Debug Start
+	char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+
+	sprintf_s(msgbuf, 256, "X: %f\n", distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
+	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
+	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
+	//Debug End
 
 #pragma region updates
 	groundOBJ->Update();
@@ -586,6 +614,12 @@ int TutorialArea::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float
 	float cornerDistance_sq = ((circleDistance.x - rectW / 2.0f) * (circleDistance.x - rectW / 2.0f)) + ((circleDistance.y - rectH / 2.0f) * (circleDistance.y - rectH / 2.0f));
 
 	return (cornerDistance_sq <= (circleR * circleR));
+}
+
+float TutorialArea::distance(XMFLOAT3 player, XMFLOAT3 center)
+{
+	float d = sqrtf(pow(center.x - player.x, 2.0f) + pow(center.y - player.y, 2.0f) + pow(center.z - player.z, 2.0f));
+	return d;
 }
 
 void TutorialArea::ParticleCreation(float x, float y, float z, int life, float offset, float start_scale)

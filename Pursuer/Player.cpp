@@ -31,6 +31,7 @@ void Player::Initialize()
 	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
 	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("StrafeBack");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
+	modelComboAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoMeleeCombo");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
@@ -215,6 +216,7 @@ void Player::Update()
 		}
 		if (currentTime > endTime && timer > 0.0f)
 		{
+			debugTimer = timer;
 			timer = 0.0f;
 			enumStatus = STAND;
 		}
@@ -477,6 +479,7 @@ void Player::Update()
 			break;
 		case 7:
 			SetModel(modelAttacking);
+			//SetModel(modelComboAttack);
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -518,7 +521,7 @@ void Player::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
+	//sprintf_s(msgbuf, 256, "Float Animation Time: %f\n", debugTimer);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	//OutputDebugStringA(msgbuf);
