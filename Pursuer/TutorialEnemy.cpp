@@ -83,6 +83,12 @@ void TutorialEnemy::Update()
 	switch (enumStatus)
 	{
 	case STAND:
+		if (modelChange)
+		{
+			animationSet = false;
+			animationNo = 0;
+			modelChange = false;
+		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (timer > 239.0f)
 		{
@@ -233,12 +239,19 @@ void TutorialEnemy::Update()
 			modelChange = false;
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer > 53.0f)
+		if (currentTime > endTime)
 		{
-			timer = 0.0f;
+			timer = 238.0f;
 			aggroSet = false;
+			if (!tutorial)
+			{
+				enumStatus = AGGRO;
+			}
+			else
+			{
+				enumStatus = STAND;
+			}
 			modelChange = true;
-			enumStatus = AGGRO;
 		}
 		break;
 	case DEAD:
@@ -449,7 +462,7 @@ void TutorialEnemy::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (animationNo != 5 && animationNo != 6 && animationNo != 7)
+		if (animationNo < 4)
 		{
 			if (currentTime > endTime)
 			{

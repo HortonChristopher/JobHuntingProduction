@@ -81,9 +81,11 @@ private:
 	// Skydome & Ground objects & models
 	Object3d* skydomeOBJ = nullptr;
 	TouchableObject* groundOBJ = nullptr;
+	TouchableObject* tutorialGroundOBJ = nullptr;
 	TouchableObject* extendedGroundOBJ = nullptr;
 	Model* skydomeMODEL = nullptr;
 	Model* groundMODEL = nullptr;
+	Model* tutorialGroundMODEL = nullptr;
 	Model* extendedGroundMODEL = nullptr;
 
 	// Attack range visual objects (Debug Use Only)

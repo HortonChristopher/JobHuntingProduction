@@ -500,6 +500,7 @@ void BaseArea::Update()
 	extendedGroundOBJ->SetPosition({ playerFBX->GetPosition().x, -11, playerFBX->GetPosition().z });
 	extendedGroundOBJ->Update();
 	groundOBJ->Update();
+	tutorialGroundOBJ->Update();
 	collisionManager->CheckAllCollisions();
 #pragma endregion
 
@@ -567,6 +568,7 @@ void BaseArea::Draw()
 	skydomeOBJ->Draw();
 	extendedGroundOBJ->Draw();
 	groundOBJ->Draw();
+	tutorialGroundOBJ->Draw();
 
 	// Particle drawing
 	particleMan->Draw(cmdList);
@@ -775,6 +777,7 @@ void BaseArea::thread3()
 	// Model creation
 	skydomeMODEL = Model::CreateFromOBJ("skydome");
 	groundMODEL = Model::CreateFromOBJ("Landscape2");
+	tutorialGroundMODEL = Model::CreateFromOBJ("TutorialStage");
 	extendedGroundMODEL = Model::CreateFromOBJ("ground");
 	positionMODEL = Model::CreateFromOBJ("yuka");
 	attackRangeMODEL = Model::CreateFromOBJ("yuka");
@@ -789,14 +792,17 @@ void BaseArea::thread3()
 
 	// Touchable object creation
 	groundOBJ = TouchableObject::Create(groundMODEL);
+	tutorialGroundOBJ = TouchableObject::Create(tutorialGroundMODEL);
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
 	// Ground scale
 	groundOBJ->SetScale({ 400,200,400 });
+	tutorialGroundOBJ->SetScale({ 50, 10, 50 });
 	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
 
 	// Ground positions
 	groundOBJ->SetPosition({ 0, -15, 0 });
+	tutorialGroundOBJ->SetPosition({ 0.0f, 18.0f, -1150.0f });
 	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
 
 	srand((unsigned int)time(NULL));

@@ -264,7 +264,7 @@ void TutorialPlayer::Update()
 		}
 		else
 		{
-			attackTime = 0;
+			attackTime = 0.0f;
 		}
 
 		if (attackTime > 0)

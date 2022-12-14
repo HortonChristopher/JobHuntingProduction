@@ -179,13 +179,14 @@ protected:
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 90.0f; // 1.5f using frame speed
 	float rollSpeed = 45.0f; // 0.75 using frame speed
-	float attackTime = 0.0f;
 	float timer = 0.0f;
 	float dodgeCameraTime = 0.0f;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };
 	bool dodge = false;
+	float attackTime = 0.0f;
+	bool ableToDamage = true;
 	bool isPlayerDead = false;
 	float stamina = 100.0f;
 	float hp = 10.0f; // Base of 10.0f

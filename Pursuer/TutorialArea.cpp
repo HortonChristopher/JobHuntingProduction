@@ -24,10 +24,14 @@ TutorialArea::~TutorialArea()
 	safe_delete(skydomeOBJ);
 	safe_delete(skydomeMODEL);
 	safe_delete(tutorialTextFrameSPRITE);
-	for (int i = 0; i < 5; i++) { safe_delete(tutorialTextSPRITE[i]); }
-	for (int i = 0; i < 1; i++) { safe_delete(tutorialMissionSPRITE[i]); }
+	for (int i = 0; i < 16; i++) { safe_delete(tutorialTextSPRITE[i]); }
+	for (int i = 0; i < 2; i++) { safe_delete(tutorialMissionSPRITE[i]); }
 	safe_delete(playerFBX);
 	safe_delete(playerPositionOBJ);
+	safe_delete(enemyFBX);
+	safe_delete(enemyPositionOBJ);
+	safe_delete(playerAttackRangeOBJ);
+	safe_delete(enemyAttackRangeOBJ);
 	safe_delete(positionMODEL);
 	safe_delete(missionBarSPRITE);
 	safe_delete(missionBarFrameSPRITE);
@@ -69,13 +73,13 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 
 	// Setting DxCommon device
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
-	EnemyHuman::SetDevice(dxCommon->GetDevice());
+	TutorialEnemy::SetDevice(dxCommon->GetDevice());
 	TutorialPlayer::SetDevice(dxCommon->GetDevice());
 
 	// Setting camera
 	Object3d::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
-	EnemyHuman::SetCamera(camera);
+	TutorialEnemy::SetCamera(camera);
 	TutorialPlayer::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
 
@@ -94,6 +98,10 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(12, L"Resources/Tutorial2_3_c.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(13, L"Resources/Tutorial2_4.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(14, L"Resources/Tutorial3_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(15, L"Resources/Tutorial3_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(16, L"Resources/Tutorial3_2_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(17, L"Resources/Tutorial3_2_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(18, L"Resources/Tutorial3_3.png")) { assert(0); return; }
 
 	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
@@ -102,6 +110,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(95, L"Resources/StaminaTutorialMask.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(94, L"Resources/TutorialMission1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(93, L"Resources/TutorialMission2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(92, L"Resources/TutorialMission3.png")) { assert(0); return; }
 
 	if (!Sprite::LoadTexture(85, L"Resources/LoadingBar.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(86, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
@@ -112,11 +121,11 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(90, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
-	for (int i = 0; i < 13; i++)
+	for (int i = 0; i < 17; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
-	for (int i = 94; i > 92; i--)
+	for (int i = 94; i > 91; i--)
 	{
 		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
 		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
@@ -137,17 +146,22 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
+	playerAttackRangeOBJ = Object3d::Create();
+	enemyAttackRangeOBJ = Object3d::Create();
 
 	// Model Creation
 	groundMODEL = Model::CreateFromOBJ("TutorialStage");
 	skydomeMODEL = Model::CreateFromOBJ("skydome");
+	positionMODEL = Model::CreateFromOBJ("yuka");
+	outsideGroundMODEL = Model::CreateFromOBJ("Landscape2");
 	
 	// Touchable Objection Creation
 	groundOBJ = TouchableObject::Create(groundMODEL);
+	outsideGroundOBJ = TouchableObject::Create(outsideGroundMODEL);
 	skydomeOBJ->SetModel(skydomeMODEL);
 	skydomeOBJ->SetScale({ 5,5,5 });
-
-	positionMODEL = Model::CreateFromOBJ("yuka");
+	playerAttackRangeOBJ->SetModel(positionMODEL);
+	enemyAttackRangeOBJ->SetModel(positionMODEL);
 
 	// Player initialization
 	playerFBX = new TutorialPlayer;
@@ -156,10 +170,20 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	playerPositionOBJ->SetModel(positionMODEL);
 	playerFBX->SetPosition({ 0.0f, 0.0f, -700.0f });
 
+	// Enemy initialization
+	enemyFBX = new TutorialEnemy;
+	enemyFBX->Initialize();
+	enemyPositionOBJ = PlayerPositionObject::Create();
+	playerPositionOBJ->SetModel(positionMODEL);
+	enemyFBX->SetPosition({ 0.0f, 0.0f, 0.0f });
+
 	// Ground Aspects
 	groundOBJ->SetPosition({ 0, 0, 0 });
 	groundOBJ->SetScale({ 50, 10, 50 });
+	outsideGroundOBJ->SetPosition({ 0.0f, -33.0f, 1150.0f });
+	outsideGroundOBJ->SetScale({ 400, 200, 400 });
 	playerPositionOBJ->SetScale({ 10, 10, 10 });
+	enemyPositionOBJ->SetScale({ 10, 10, 10 });
 
 	// Camera initial values
 	camera->SetTarget(playerFBX->GetPosition());
@@ -265,24 +289,54 @@ void TutorialArea::Update()
 	case ATTACKTUTORIAL:
 		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
 		{
-			if (tutorialPage < 2)
+			if (tutorialPage < 1)
 			{
 				tutorialPage++;
 			}
-			else if (tutorialPage == 2)
+			else if (tutorialPage == 1)
 			{
 				tutorialActive = false;
-				playerFBX->tutorialPart = 2;
+				playerFBX->tutorialPart = 3;
 			}
-			else if (tutorialPage == 3)
+			else if (tutorialPage == 2)
 			{
 				progress = 0.0f;
 				tutorialPage = 0;
-				tutorialStatus = ATTACKTUTORIAL;
+				tutorialStatus = DODGETUTORIAL;
 			}
 		}
-		//tutorialActive = false;
-		//playerFBX->tutorialPart = 2;
+
+		if (!tutorialActive)
+		{
+			if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
+			{
+				if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+				{
+					enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
+					enemyFBX->modelChange = true;
+					ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
+					playerFBX->ableToDamage = false;
+					progress += 20.0f;
+				}
+			}
+			else if (playerFBX->attackTime == 0.0f)
+			{
+				playerFBX->ableToDamage = true;
+			}
+			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
+
+			if (progress >= 100.0f)
+			{
+				tutorialPage = 2;
+				playerFBX->tutorialPart = 0;
+				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
+				tutorialActive = true;
+			}
+		}
+		break;
+	case DODGETUTORIAL:
+		tutorialActive = false;
+		playerFBX->tutorialPart = 2;
 		if (playerFBX->GetPosition().z >= 500.0f)
 		{
 			deletion = true;
@@ -290,13 +344,13 @@ void TutorialArea::Update()
 		break;
 	}
 
-	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL)
+	if (tutorialStatus > 2)
 	{
 		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 20.0f });
 		STBarSPRITE->SetSize({ playerFBX->stamina * 2.0f, 20.0f });
 
 		tutorialMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.24f + 165.0f, playerFBX->GetPosition().z * 0.24f + 545.0f });
-		//tutorialMinimapEnemySPRITE->SetPosition({ tutorialEnemyFBX[i]->GetPosition().x * 0.24f + 165.0f, tutorialEnemyFBX[i]->GetPosition().z * 0.24f + 545.0f });
+		tutorialMinimapEnemySPRITE->SetPosition({ enemyFBX->GetPosition().x * 0.24f + 165.0f, enemyFBX->GetPosition().z * 0.24f + 545.0f });
 
 		if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && playerFBX->stamina > 0.0f)
 		{
@@ -304,13 +358,30 @@ void TutorialArea::Update()
 		}
 	}
 
+	playerAttackRangeOBJ->SetPosition({ (playerFBX->GetPosition().x + (sinf(XMConvertToRadians(playerFBX->GetRotation().y)) * 15)), playerFBX->GetPosition().y + 0.5f, (playerFBX->GetPosition().z + (cosf(XMConvertToRadians(playerFBX->GetRotation().y)) * 15))});
+	playerAttackRangeOBJ->SetRotation(playerFBX->GetRotation());
+
+	if (tutorialStatus > 3)
+	{
+		enemyAttackRangeOBJ->SetPosition({ (enemyFBX->GetPosition().x + (sinf(XMConvertToRadians(enemyFBX->GetRotation().y)) * 15)), enemyFBX->GetPosition().y + 0.5f, (enemyFBX->GetPosition().z + (cosf(XMConvertToRadians(enemyFBX->GetRotation().y)) * 15)) });
+		enemyAttackRangeOBJ->SetRotation(enemyFBX->GetRotation());
+	}
+
 	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 
 #pragma region updates
 	groundOBJ->Update();
+	outsideGroundOBJ->Update();
 	skydomeOBJ->Update();
 	playerFBX->Update();
+	playerAttackRangeOBJ->Update();
+	if (tutorialStatus > 3)
+	{
+		enemyFBX->Update();
+		enemyAttackRangeOBJ->Update();
+		enemyPositionOBJ->Update();
+	}
 	playerPositionOBJ->Update();
 	collisionManager->CheckAllCollisions();
 #pragma endregion
@@ -342,8 +413,15 @@ void TutorialArea::Draw()
 
 	// 3D Object Drawing
 	playerFBX->Draw(cmdList);
+	playerAttackRangeOBJ->Draw();
+	if (tutorialStatus > 3)
+	{
+		enemyFBX->Draw(cmdList);
+		enemyAttackRangeOBJ->Draw();
+	}
 	//playerPositionOBJ->Draw();
 	groundOBJ->Draw();
+	outsideGroundOBJ->Draw();
 	skydomeOBJ->Draw();
 
 	// Particle drawing
@@ -429,8 +507,23 @@ void TutorialArea::Draw()
 				break;
 			case 1:
 				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[13]->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextSPRITE[14]->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextSPRITE[15]->Draw();
+				}
+				break;
+			case 2:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[16]->Draw();
 				break;
 			}
+			break;
+		case DODGETUTORIAL:
 			break;
 		}
 	}
@@ -449,17 +542,21 @@ void TutorialArea::Draw()
 			missionBarSPRITE->Draw();
 			break;
 		case ATTACKTUTORIAL:
+			tutorialMissionSPRITE[2]->Draw();
+			missionBarSPRITE->Draw();
+			break;
+		case DODGETUTORIAL:
 			break;
 		}
 	}
 
-	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL)
+	if (tutorialStatus > 2)
 	{
 		STBarSPRITE->Draw();
 		STBarFrameSPRITE->Draw();
 	}
 
-	if (tutorialStatus != INTROCUTSCENE && tutorialStatus != MOVEMENTTUTORIAL && tutorialStatus != STAMINATUTORIAL)
+	if (tutorialStatus > 3)
 	{
 		tutorialMinimapSPRITE->Draw();
 		tutorialMinimapEnemySPRITE->Draw();

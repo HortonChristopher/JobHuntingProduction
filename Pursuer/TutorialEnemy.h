@@ -200,5 +200,6 @@ public:
 	bool particleAttackActive = false;
 	float attackTimer = 0.0f;
 	float timer = 238.0f;
+	bool tutorial = true;
 	int particleAttackStage = 0;
 };

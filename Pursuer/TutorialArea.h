@@ -12,7 +12,7 @@
 #include "LightGroup.h"
 #include "FBXGeneration.h"
 #include "TutorialPlayer.h"
-#include "EnemyHuman.h"
+#include "TutorialEnemy.h"
 #include "Object3D.h"
 #include "FbxLoader/FbxLoader.h"
 #include "DeltaTime.h"
@@ -86,14 +86,19 @@ private:
 
 	// Stage Model and Obj
 	TouchableObject* groundOBJ = nullptr;
+	TouchableObject* outsideGroundOBJ = nullptr;
 	Model* groundMODEL = nullptr;
+	Model* outsideGroundMODEL = nullptr;
 	Object3d* skydomeOBJ = nullptr;
 	Model* skydomeMODEL = nullptr;
+	
+	Object3d* playerAttackRangeOBJ = nullptr;
+	Object3d* enemyAttackRangeOBJ = nullptr;
 
 	// Sprite Generation
 	Sprite* tutorialTextFrameSPRITE = nullptr;
-	std::array<Sprite*, 13> tutorialTextSPRITE = { {} };
-	std::array<Sprite*, 2> tutorialMissionSPRITE = { {} };
+	std::array<Sprite*, 17> tutorialTextSPRITE = { {} };
+	std::array<Sprite*, 3> tutorialMissionSPRITE = { {} };
 	Sprite* missionBarSPRITE = nullptr;
 	Sprite* missionBarFrameSPRITE = nullptr;
 		// HP and Stamina Bar Sprites
@@ -111,6 +116,10 @@ private:
 	TutorialPlayer* playerFBX = nullptr;
 	PlayerPositionObject* playerPositionOBJ = nullptr;
 	Model* positionMODEL = nullptr; // Used for both player and enemies
+
+	// Enemy aspects
+	TutorialEnemy* enemyFBX = nullptr;
+	PlayerPositionObject* enemyPositionOBJ = nullptr;
 
 	bool tutorialActive = true;
 	float progress = 0.0f;
