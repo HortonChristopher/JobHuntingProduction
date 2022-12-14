@@ -407,27 +407,41 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-#pragma region areaBoundaryLimits
-	if (playerFBX->GetPosition().x > 398.0f)
+	if (playerFBX->baseAreaOpeningCutscene)
 	{
-		playerFBX->SetPosition({ 398.0f, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
-		camera->SetTarget(playerFBX->GetPosition());
-	}
-	else if (playerFBX->GetPosition().x < -398.0f)
-	{
-		playerFBX->SetPosition({ -398.0f, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
-		camera->SetTarget(playerFBX->GetPosition());
+		playerFBX->SetEnumStatus(Player::WALK);
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		if (playerFBX->GetPosition().z >= -398.0f)
+		{
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
+			playerFBX->baseAreaOpeningCutscene = false;
+		}
 	}
 
-	if (playerFBX->GetPosition().z > 398.0f)
+#pragma region areaBoundaryLimits
+	if (!playerFBX->baseAreaOpeningCutscene)
 	{
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, 398.0f });
-		camera->SetTarget(playerFBX->GetPosition());
-	}
-	else if (playerFBX->GetPosition().z < -398.0f)
-	{
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
-		camera->SetTarget(playerFBX->GetPosition());
+		if (playerFBX->GetPosition().x > 398.0f)
+		{
+			playerFBX->SetPosition({ 398.0f, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
+			camera->SetTarget(playerFBX->GetPosition());
+		}
+		else if (playerFBX->GetPosition().x < -398.0f)
+		{
+			playerFBX->SetPosition({ -398.0f, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
+			camera->SetTarget(playerFBX->GetPosition());
+		}
+
+		if (playerFBX->GetPosition().z > 398.0f)
+		{
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, 398.0f });
+			camera->SetTarget(playerFBX->GetPosition());
+		}
+		else if (playerFBX->GetPosition().z < -398.0f)
+		{
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
+			camera->SetTarget(playerFBX->GetPosition());
+		}
 	}
 #pragma endregion
 
@@ -765,7 +779,7 @@ void BaseArea::thread2()
 	skydomeOBJ->SetScale({ 5,5,5 });
 
 	// Position Object initial positions
-	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 30.0f, playerFBX->GetPosition().z });
+	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 20.0f, playerFBX->GetPosition().z });
 	for (int i = 0; i < 4; i++)
 	{
 		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z });

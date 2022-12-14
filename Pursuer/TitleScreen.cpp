@@ -133,7 +133,14 @@ void TitleScreen::Update()
 
 	if (titleSpriteALPHA < 1.0f)
 	{
-		titleSpriteALPHA += 0.5f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (!firstRun)
+		{
+			titleSpriteALPHA += 0.5f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		else
+		{
+			firstRun = false;
+		}
 	}
 	else
 	{

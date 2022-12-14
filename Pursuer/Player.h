@@ -132,7 +132,7 @@ protected:
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation
-	XMFLOAT3 position = { 0.0f, 4.0f, -397.0f };
+	XMFLOAT3 position = { 0.0f, 20.0f, -750.0f };
 	// Local World matrix
 	XMMATRIX matWorld;
 	// Model
@@ -187,6 +187,7 @@ public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };
 	bool dodge = false;
 	bool isPlayerDead = false;
+	bool baseAreaOpeningCutscene = true;
 	float stamina = 100.0f;
 	float hp = 10.0f; // Base of 10.0f
 };

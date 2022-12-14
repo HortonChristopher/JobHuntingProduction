@@ -76,6 +76,7 @@ private:
 	float particleYPosition = 23.0f;
 public:
 	bool initialization = true;
+	bool firstRun = true;
 	bool deletion = false;
 	bool tutorialStart = false;
 	int selection = 0;

@@ -95,6 +95,7 @@ void TutorialEnemy::Update()
 			newPosition.x = rand() % 401 - 150 + homePosition.x;
 			newPosition.z = rand() % 401 - 150 + homePosition.y;
 			timer = 0.0f;
+			set = false;
 			enumStatus = WANDER;
 		}
 		break;

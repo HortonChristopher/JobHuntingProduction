@@ -250,186 +250,189 @@ void Player::Update()
 		break;
 	}
 
-	if (input->TriggerMouseLeft() && attackTime == 0.0f && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
+	if (!baseAreaOpeningCutscene)
 	{
-		attackTime = 53.0f;
-		stamina -= 20.0f;
-	}
-
-	if (attackTime > 0)
-	{
-		attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-	}
-	else
-	{
-		attackTime = 0;
-	}
-
-	if (attackTime > 0)
-	{
-		enumStatus = ATTACK;
-	}
-
-	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
-	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
-	const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
-	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
-
-	if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
-		input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
-	{
-		if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
+		if (input->TriggerMouseLeft() && attackTime == 0.0f && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
 		{
-			movementAllowed = true;
+			attackTime = 53.0f;
+			stamina -= 20.0f;
+		}
+
+		if (attackTime > 0)
+		{
+			attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 		else
 		{
-			movementAllowed = false;
+			attackTime = 0;
 		}
-	}
-	else
-	{
-		if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
-		{
-			enumStatus = STAND;
-		}
-		movementAllowed = false;
-	}
 
-	if (movementAllowed)
-	{
+		if (attackTime > 0)
+		{
+			enumStatus = ATTACK;
+		}
+
+		XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
+		const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
+		const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
+		const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
+
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 		{
-			moveDirection = {};
-
-			if (input->PushKey(DIK_A))
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
 			{
-				moveDirection += camDirectionX * -1;
+				movementAllowed = true;
 			}
-			else if (input->PushKey(DIK_D))
+			else
 			{
-				moveDirection += camDirectionX;
+				movementAllowed = false;
 			}
-			if (input->PushKey(DIK_S))
+		}
+		else
+		{
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
 			{
-				moveDirection += camDirectionZ * -1;
+				enumStatus = STAND;
 			}
-			else if (input->PushKey(DIK_W))
-			{
-				moveDirection += camDirectionZ;
-			}
-			if (input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
-			{
-				auto vector = input->GetLStickDirection();
+			movementAllowed = false;
+		}
 
-				moveDirection = camDirectionX * vector.x + camDirectionZ * vector.y;
-			}
-
-			moveDirection.Normalize();
-			direction.Normalize();
-
-			float cosA;
-			cosA = direction.Dot(moveDirection);
-
-			if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-			{
-				cosA = 1.0f;
-			}
-			if (cosA > 1.0f)
-			{
-				cosA = 1.0f;
-			}
-			else if (cosA < -1.0f)
-			{
-				cosA = -1.0f;
-			}
-
-			float rotY = (float)acos(cosA) * 180 / 3.14159365f;
-			const Vector3 CrossVec = direction.Cross(moveDirection);
-
-			float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
-			{
-				if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
-				{
-					position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-					position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-					position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-					stamina -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				}
-				else
-				{
-					position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-					position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-					position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				}
-			}
-
-			if (rotSpeed > abs(rotY))
-			{
-				rotSpeed = rotY;
-			}
-
-			if (CrossVec.y < 0)
-			{
-				rotSpeed *= -1;
-			}
-
-			rotation.y += rotSpeed;
-
-			XMMATRIX matRotation = XMMatrixRotationY(XMConvertToRadians(rotSpeed));
-			XMVECTOR dir = { direction.x, direction.y, direction.z, 0 };
-			dir = XMVector3TransformNormal(dir, matRotation);
-			direction = dir;
-
-			SetPosition(position);
-			if (!input->PushKey(DIK_SPACE))
-			{
-				SetRotation(rotation);
-			}
-
+		if (movementAllowed)
+		{
 			if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 				input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 			{
-				if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+				moveDirection = {};
+
+				if (input->PushKey(DIK_A))
 				{
-					if (input->PushKey(DIK_A) || input->PushLStickLeft())
+					moveDirection += camDirectionX * -1;
+				}
+				else if (input->PushKey(DIK_D))
+				{
+					moveDirection += camDirectionX;
+				}
+				if (input->PushKey(DIK_S))
+				{
+					moveDirection += camDirectionZ * -1;
+				}
+				else if (input->PushKey(DIK_W))
+				{
+					moveDirection += camDirectionZ;
+				}
+				if (input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+				{
+					auto vector = input->GetLStickDirection();
+
+					moveDirection = camDirectionX * vector.x + camDirectionZ * vector.y;
+				}
+
+				moveDirection.Normalize();
+				direction.Normalize();
+
+				float cosA;
+				cosA = direction.Dot(moveDirection);
+
+				if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+				{
+					cosA = 1.0f;
+				}
+				if (cosA > 1.0f)
+				{
+					cosA = 1.0f;
+				}
+				else if (cosA < -1.0f)
+				{
+					cosA = -1.0f;
+				}
+
+				float rotY = (float)acos(cosA) * 180 / 3.14159365f;
+				const Vector3 CrossVec = direction.Cross(moveDirection);
+
+				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
+				{
+					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
 					{
-						enumStatus = STRAFEL;
+						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						stamina -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 					}
-					else if (input->PushKey(DIK_D) || input->PushLStickRight())
+					else
 					{
-						enumStatus = STRAFER;
+						position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 					}
-					else if (input->PushKey(DIK_S) || input->PushLStickDown())
+				}
+
+				if (rotSpeed > abs(rotY))
+				{
+					rotSpeed = rotY;
+				}
+
+				if (CrossVec.y < 0)
+				{
+					rotSpeed *= -1;
+				}
+
+				rotation.y += rotSpeed;
+
+				XMMATRIX matRotation = XMMatrixRotationY(XMConvertToRadians(rotSpeed));
+				XMVECTOR dir = { direction.x, direction.y, direction.z, 0 };
+				dir = XMVector3TransformNormal(dir, matRotation);
+				direction = dir;
+
+				SetPosition(position);
+				if (!input->PushKey(DIK_SPACE))
+				{
+					SetRotation(rotation);
+				}
+
+				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
+					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+				{
+					if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 					{
-						enumStatus = STRAFEB;
+						if (input->PushKey(DIK_A) || input->PushLStickLeft())
+						{
+							enumStatus = STRAFEL;
+						}
+						else if (input->PushKey(DIK_D) || input->PushLStickRight())
+						{
+							enumStatus = STRAFER;
+						}
+						else if (input->PushKey(DIK_S) || input->PushLStickDown())
+						{
+							enumStatus = STRAFEB;
+						}
+						else
+						{
+							enumStatus = RUN;
+						}
 					}
 					else
 					{
 						enumStatus = RUN;
 					}
 				}
-				else
-				{
-					enumStatus = RUN;
-				}
 			}
 		}
-	}
 
-	if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
-	{
-		stamina -= 40.0f;
-		enumStatus = DODGE;
-	}
-
-	if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
-	{
-		if (stamina < 100.0f)
+		if (input->PushKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->PushControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
 		{
-			stamina += 10.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			stamina -= 40.0f;
+			enumStatus = DODGE;
+		}
+
+		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+		{
+			if (stamina < 100.0f)
+			{
+				stamina += 10.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 		}
 	}
 
