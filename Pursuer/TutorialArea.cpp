@@ -335,8 +335,33 @@ void TutorialArea::Update()
 		}
 		break;
 	case DODGETUTORIAL:
+		if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
+		{
+			if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+			{
+				enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
+				enemyFBX->modelChange = true;
+				enemyFBX->HP -= 1.0f;
+				ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
+				playerFBX->ableToDamage = false;
+				progress += 20.0f;
+			}
+		}
+		else if (playerFBX->attackTime == 0.0f)
+		{
+			playerFBX->ableToDamage = true;
+		}
+
 		tutorialActive = false;
-		playerFBX->tutorialPart = 2;
+		playerFBX->tutorialPart = 4;
+		if (playerFBX->GetPosition().z >= 500.0f)
+		{
+			deletion = true;
+		}
+		break;
+	case TUTORIALEND:
+		tutorialActive = false;
+		playerFBX->tutorialPart = 4;
 		if (playerFBX->GetPosition().z >= 500.0f)
 		{
 			deletion = true;
@@ -386,14 +411,14 @@ void TutorialArea::Update()
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 
 	//Debug Start
-	char msgbuf[256];
+	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "X: %f\n", distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
+	//sprintf_s(msgbuf, 256, "X: %f\n", distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
 	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
