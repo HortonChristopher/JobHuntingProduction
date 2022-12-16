@@ -250,7 +250,7 @@ void TutorialPlayer::Update()
 		break;
 	}
 
-	if (tutorialPart > 2)
+	if (tutorialPart > 2 && tutorialPart != 4)
 	{
 		if (input->TriggerMouseLeft() && attackTime == 0.0f && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
 		{

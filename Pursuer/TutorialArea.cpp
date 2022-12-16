@@ -102,6 +102,11 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(16, L"Resources/Tutorial3_2_k.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(17, L"Resources/Tutorial3_2_c.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(18, L"Resources/Tutorial3_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(19, L"Resources/Tutorial4_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(20, L"Resources/Tutorial4_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(21, L"Resources/Tutorial4_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(22, L"Resources/Tutorial4_3_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(23, L"Resources/Tutorial4_3_c.png")) { assert(0); return; }
 
 	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
@@ -111,6 +116,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(94, L"Resources/TutorialMission1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(93, L"Resources/TutorialMission2.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(92, L"Resources/TutorialMission3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(91, L"Resources/TutorialMission4.png")) { assert(0); return; }
 
 	if (!Sprite::LoadTexture(85, L"Resources/LoadingBar.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(86, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
@@ -121,11 +127,11 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(90, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
-	for (int i = 0; i < 17; i++)
+	for (int i = 0; i < 22; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
-	for (int i = 94; i > 91; i--)
+	for (int i = 94; i > 90; i--)
 	{
 		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
 		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
@@ -335,6 +341,25 @@ void TutorialArea::Update()
 		}
 		break;
 	case DODGETUTORIAL:
+		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
+		{
+			if (tutorialPage < 2)
+			{
+				tutorialPage++;
+			}
+			else if (tutorialPage == 2)
+			{
+				tutorialActive = false;
+				playerFBX->tutorialPart = 4;
+			}
+			else if (tutorialPage == 3)
+			{
+				progress = 0.0f;
+				tutorialPage = 0;
+				tutorialStatus = TUTORIALEND;
+			}
+		}
+
 		if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
 		{
 			if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
@@ -466,13 +491,12 @@ void TutorialArea::Draw()
 
 	// 3D Object Drawing
 	playerFBX->Draw(cmdList);
-	playerAttackRangeOBJ->Draw();
+	//playerAttackRangeOBJ->Draw();
 	if (tutorialStatus > 3)
 	{
 		enemyFBX->Draw(cmdList);
 		enemyAttackRangeOBJ->Draw();
 	}
-	//playerPositionOBJ->Draw();
 	groundOBJ->Draw();
 	outsideGroundOBJ->Draw();
 	skydomeOBJ->Draw();
@@ -577,6 +601,34 @@ void TutorialArea::Draw()
 			}
 			break;
 		case DODGETUTORIAL:
+			switch (tutorialPage)
+			{
+			case 0:
+				staminaTutorialMaskSPRITE->Draw();
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[17]->Draw();
+				break;
+			case 1:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[18]->Draw();
+				break;
+			case 2:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[19]->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextSPRITE[20]->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextSPRITE[21]->Draw();
+				}
+				break;
+			case 3:
+				//tutorialTextFrameSPRITE->Draw();
+				//tutorialTextSPRITE[22]->Draw();
+				break;
+			}
 			break;
 		}
 	}
@@ -599,6 +651,8 @@ void TutorialArea::Draw()
 			missionBarSPRITE->Draw();
 			break;
 		case DODGETUTORIAL:
+			tutorialMissionSPRITE[3]->Draw();
+			missionBarSPRITE->Draw();
 			break;
 		}
 	}
