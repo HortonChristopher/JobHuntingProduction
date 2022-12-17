@@ -124,21 +124,6 @@ void BaseArea::Update()
 		}
 	}
 
-	if (input->TriggerMouseLeft() && attackTime == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0.0f)
-	{
-		attackTime = 53.0f;
-	}
-
-	if (attackTime > 0.0f)
-	{
-		attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-	}
-	else
-	{
-		attackTime = 0.0f;
-		ableToDamage = true;
-	}
-
 	objectPosition = playerFBX->GetPosition();
 	objectRotation = playerFBX->GetRotation();
 
@@ -257,7 +242,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerHPDamage
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 70.0f && baseAreaEnemyFBX[i]->attackTimer < 85.0f && baseAreaEnemyFBX[i]->ableToDamage)
 		{
@@ -298,7 +283,7 @@ void BaseArea::Update()
 				knockback = false;
 			}
 		}
-	}
+	}*/
 
 	if (playerFBX->hp <= 0.0f)
 	{
@@ -346,33 +331,48 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerAttack
-	if (attackTime > 10.0f && attackTime < 50.0f && ableToDamage)
+	if (playerFBX->enumStatus == Player::ATTACK)
 	{
-		for (int i = 0; i < 4; i++)
+		if (playerFBX->timer >= 54.2f && playerFBX->timer <= 62.2f ||
+			playerFBX->timer >= 90.35f && playerFBX->timer <= 98.3f ||
+			playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
 		{
-			if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 25.0f, 25.0f) && baseAreaEnemyAliveBOOL[i] == true)
+			if (playerFBX->enumStatus == Player::ATTACK && playerFBX->ableToDamage)
 			{
-				baseAreaEnemyFBX[i]->HP -= 1.0f;
-				if (baseAreaEnemyFBX[i]->HP < 0.9f)
+				for (int i = 0; i < 4; i++)
 				{
-					baseAreaEnemyAliveBOOL[i] = false;
-					enemyDefeated++;
-					baseAreaEnemyFBX[i]->dead = true;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyRespawnTimerFLOAT[i] = 600;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 25.0f, 25.0f) && baseAreaEnemyAliveBOOL[i] == true)
+					{
+						baseAreaEnemyFBX[i]->HP -= 1.0f;
+						if (baseAreaEnemyFBX[i]->HP < 0.9f)
+						{
+							baseAreaEnemyAliveBOOL[i] = false;
+							enemyDefeated++;
+							baseAreaEnemyFBX[i]->dead = true;
+							baseAreaEnemyFBX[i]->modelChange = true;
+							baseAreaEnemyRespawnTimerFLOAT[i] = 600;
+							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+						}
+						else
+						{
+							baseAreaEnemyFBX[i]->timer = 0.0f;
+							baseAreaEnemyFBX[i]->modelChange = true;
+							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+						}
+						ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
+						playerFBX->ableToDamage = false;
+					}
 				}
-				else
-				{
-					baseAreaEnemyFBX[i]->timer = 0.0f;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
-				}
-				ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
-				ableToDamage = false;
 			}
 		}
+
+		if (playerFBX->timer > 62.2f && playerFBX->timer < 90.35f ||
+			playerFBX->timer > 98.3f && playerFBX->timer < 152.6f)
+		{
+			playerFBX->ableToDamage = true;
+		}
 	}
+	
 #pragma endregion
 
 	if (enemyDefeated > 4)

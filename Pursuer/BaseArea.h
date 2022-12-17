@@ -151,7 +151,6 @@ private:
 	float fadeSpriteALPHA = 1.0f;
 
 	bool gameStart = false;
-	bool ableToDamage = true;
 
 	float knockbackTime = 0.0f;
 	bool knockback = false;

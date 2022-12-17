@@ -214,6 +214,7 @@ void Player::Update()
 			animationNo = 7;
 			animationSet = false;
 		}
+
 		switch (attackCombo)
 		{
 		case 0:

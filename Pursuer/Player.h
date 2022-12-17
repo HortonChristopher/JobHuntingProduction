@@ -148,7 +148,7 @@ protected:
 	FBX3DModel* modelStrafeR = nullptr; // 20 frames
 	FBX3DModel* modelStrafeB = nullptr; // 24 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames Float: 56
-	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 (endTime / 4) * 2; 3rd: 76-80 Float: 253 
+	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 endTime / 2; 3rd: 76-80 Float: 253 
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
@@ -179,10 +179,8 @@ protected:
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 90.0f; // 1.5f using frame speed
 	float rollSpeed = 45.0f; // 0.75 using frame speed
-	float timer = 0.0f;
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
-	int attackCombo = 0; // Which attack the animation stops at
 	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
@@ -192,4 +190,7 @@ public:
 	bool baseAreaOpeningCutscene = true;
 	float stamina = 100.0f;
 	float hp = 10.0f; // Base of 10.0f
+	int attackCombo = 0; // Which attack the animation stops at
+	bool ableToDamage = false;
+	float timer = 0.0f;
 };
