@@ -214,12 +214,39 @@ void Player::Update()
 			animationNo = 7;
 			animationSet = false;
 		}
-		if (currentTime > endTime && timer > 0.0f)
+		switch (attackCombo)
 		{
-			debugTimer = timer;
-			timer = 0.0f;
-			enumStatus = STAND;
+		case 0:
+			break;
+		case 1:
+			if (currentTime > endTime / 3 && timer > 0.0f)
+			{
+				debugTimer = timer;
+				timer = 0.0f;
+				attackCombo = 0;
+				enumStatus = STAND;
+			}
+			break;
+		case 2:
+			if (currentTime > endTime / 2 && timer > 0.0f)
+			{
+				debugTimer = timer;
+				timer = 0.0f;
+				attackCombo = 0;
+				enumStatus = STAND;
+			}
+			break;
+		case 3:
+			if (currentTime > endTime && timer > 0.0f)
+			{
+				debugTimer = timer;
+				timer = 0.0f;
+				attackCombo = 0;
+				enumStatus = STAND;
+			}
+			break;
 		}
+		
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case DAMAGED:
@@ -254,24 +281,24 @@ void Player::Update()
 
 	if (!baseAreaOpeningCutscene)
 	{
-		if (input->TriggerMouseLeft() && attackTime == 0.0f && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
+		if (input->TriggerMouseLeft() && stamina >= 25.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina >= 25.0f)
 		{
-			attackTime = 53.0f;
-			stamina -= 20.0f;
-		}
-
-		if (attackTime > 0)
-		{
-			attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		}
-		else
-		{
-			attackTime = 0;
-		}
-
-		if (attackTime > 0)
-		{
-			enumStatus = ATTACK;
+			switch (attackCombo)
+			{
+			case 0:
+				attackCombo++;
+				enumStatus = ATTACK;
+				stamina -= 25.0f;
+				break;
+			case 1:
+				attackCombo++;
+				stamina -= 25.0f;
+				break;
+			case 2:
+				attackCombo++;
+				stamina -= 25.0f;
+				break;
+			}
 		}
 
 		XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
@@ -478,8 +505,8 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 7:
-			SetModel(modelAttacking);
-			//SetModel(modelComboAttack);
+			//SetModel(modelAttacking);
+			SetModel(modelComboAttack);
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -517,14 +544,14 @@ void Player::Update()
 	}
 
 	//Debug Start
-	//char msgbuf[256];
+	char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "Float Animation Time: %f\n", debugTimer);
+	sprintf_s(msgbuf, 256, "Float Animation Time: %f\n", debugTimer);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	//OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
