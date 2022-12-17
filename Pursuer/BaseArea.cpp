@@ -242,7 +242,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerHPDamage
-	/*for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 70.0f && baseAreaEnemyFBX[i]->attackTimer < 85.0f && baseAreaEnemyFBX[i]->ableToDamage)
 		{
@@ -283,7 +283,7 @@ void BaseArea::Update()
 				knockback = false;
 			}
 		}
-	}*/
+	}
 
 	if (playerFBX->hp <= 0.0f)
 	{
@@ -371,6 +371,11 @@ void BaseArea::Update()
 		{
 			playerFBX->ableToDamage = true;
 		}
+	}
+	else
+	{
+		playerFBX->ableToDamage = true;
+		playerFBX->attackCombo = 0;
 	}
 	
 #pragma endregion
