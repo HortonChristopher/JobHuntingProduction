@@ -35,6 +35,7 @@ void Player::Initialize()
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
+	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("ProtoHeal");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -278,6 +279,48 @@ void Player::Update()
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
+	case HEAL:
+		if (animationNo != 10)
+		{
+			timer = 0.0f;
+			healed = false;
+			for (int i = 0; i < 3; i++)
+			{
+				healParticlePosition[i] = position;
+			}
+			animationNo = 10;
+			animationSet = false;
+		}
+		if (timer >= 80.0f)
+		{
+			healParticlePosition[0].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (!healed)
+			{
+				hp += 4.0f;
+				if (hp >= 10.0f)
+				{
+					hp = 10.0f;
+				}
+				healed = true;
+			}
+		}
+		if (timer >= 90.0f)
+		{
+			healParticlePosition[1].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		if (timer >= 100.0f)
+		{
+			healParticlePosition[2].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			debugTimer = timer;
+			timer = 0.0f;
+			healed = false;
+			enumStatus = STAND;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
 	}
 
 	if (!baseAreaOpeningCutscene)
@@ -302,6 +345,13 @@ void Player::Update()
 			}
 		}
 
+		if (input->TriggerKey(DIK_H) && healRemaining > 0 && enumStatus != HEAL||
+			input->TriggerControllerButton(XINPUT_GAMEPAD_Y) && healRemaining > 0 && enumStatus != HEAL)
+		{
+			enumStatus = HEAL;
+			healRemaining--;
+		}
+
 		XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
 		const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
 		const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
@@ -310,7 +360,7 @@ void Player::Update()
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
 			{
 				movementAllowed = true;
 			}
@@ -321,7 +371,7 @@ void Player::Update()
 		}
 		else
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
 			{
 				enumStatus = STAND;
 			}
@@ -520,6 +570,12 @@ void Player::Update()
 			SetModel(modelDeath);
 			isPlay = false;
 			animationSet = true;
+			break;
+		case 10:
+			SetModel(modelHeal);
+			isPlay = false;
+			animationSet = true;
+			break;
 		}
 	}
 
@@ -538,7 +594,7 @@ void Player::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED)
+		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED && enumStatus != HEAL)
 		{
 			currentTime = startTime;
 		}

@@ -380,6 +380,37 @@ void BaseArea::Update()
 	
 #pragma endregion
 
+	if (playerFBX->enumStatus == Player::HEAL)
+	{
+		if (playerFBX->timer >= 80.0f)
+		{
+			for (int i = 0; i < 180; i++)
+			{
+				ParticleCreationHeal(playerFBX->healParticlePosition[0].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+					playerFBX->healParticlePosition[0].y,
+					playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+			}
+		}
+		if (playerFBX->timer >= 90.0f)
+		{
+			for (int i = 0; i < 180; i++)
+			{
+				ParticleCreationHeal(playerFBX->healParticlePosition[1].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+					playerFBX->healParticlePosition[1].y,
+					playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+			}
+		}
+		if (playerFBX->timer >= 100.0f)
+		{
+			for (int i = 0; i < 180; i++)
+			{
+				ParticleCreationHeal(playerFBX->healParticlePosition[2].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+					playerFBX->healParticlePosition[2].y,
+					playerFBX->healParticlePosition[2].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+			}
+		}
+	}
+
 	if (enemyDefeated > 4)
 	{
 		result = 2;
@@ -663,6 +694,29 @@ void BaseArea::ParticleCreation(float x, float y, float z, int life, float offse
 		pos.x = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + x;
 		pos.y = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + y + offset;
 		pos.z = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + z;
+
+		const float rnd_vel = 0.1f; // 0.1f
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f; // 0.001f
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// ’Ç‰Á
+		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
+}
+
+void BaseArea::ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		XMFLOAT3 pos{};
+		pos.x = x;
+		pos.y = y;
+		pos.z = z + offset;
 
 		const float rnd_vel = 0.1f; // 0.1f
 		XMFLOAT3 vel{};

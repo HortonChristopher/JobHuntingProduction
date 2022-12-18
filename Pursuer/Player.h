@@ -12,6 +12,8 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include <string>
+#include <array>
+#include <vector>
 
 class Player
 {
@@ -56,7 +58,8 @@ public:
 		DODGE = 7,
 		ATTACK = 8,
 		DAMAGED = 9,
-		DEAD = 10
+		DEAD = 10,
+		HEAL = 11
 	};
 
 	status enumStatus = STAND;
@@ -152,6 +155,7 @@ protected:
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
+	FBX3DModel* modelHeal = nullptr; // 81 frames float 160.0f
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	// Stand(0), Walk(1), Run(2), Strafe Left(3), Strafe Right(4), Strafe Back(5),
@@ -191,6 +195,9 @@ public:
 	float stamina = 100.0f;
 	float hp = 10.0f; // Base of 10.0f
 	int attackCombo = 0; // Which attack the animation stops at
+	int healRemaining = 2;
+	bool healed = false;
+	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} }};
 	bool ableToDamage = false;
 	float timer = 0.0f;
 };

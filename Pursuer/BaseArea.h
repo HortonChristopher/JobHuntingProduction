@@ -58,6 +58,8 @@ public:
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
+	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);
+
 	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
 
 	void thread1();
