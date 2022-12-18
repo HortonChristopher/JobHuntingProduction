@@ -35,6 +35,7 @@ void EnemyHuman::Initialize()
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
 	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
+	modelInjureRun = FbxLoader::GetInstance()->LoadModelFromFile("ProtoInjureRun");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -323,6 +324,14 @@ void EnemyHuman::Update()
 			break;
 		}
 		break;
+	case FLEE:
+		if (animationNo != 8)
+		{
+			animationSet = false;
+			animationNo = 8;
+			modelChange = false;
+		}
+		break;
 	default:
 		timer = 0.0f;
 		enumStatus = STAND;
@@ -370,6 +379,11 @@ void EnemyHuman::Update()
 			break;
 		case 7:
 			SetModel(modelParticleAttack);
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 8:
+			SetModel(modelInjureRun);
 			isPlay = false;
 			animationSet = true;
 			break;

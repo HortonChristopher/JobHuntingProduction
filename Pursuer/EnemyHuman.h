@@ -54,7 +54,8 @@ public:
 		COOLDOWN = 5,
 		DAMAGED = 6,
 		DEAD = 7,
-		PARTICLEATTACK = 8
+		PARTICLEATTACK = 8,
+		FLEE = 9
 	};
 
 	status enumStatus = STAND;
@@ -145,7 +146,6 @@ protected:
 	XMFLOAT2 homePosition = { 0, 0 };
 
 	bool aggro = false;
-	bool aggroSet = false;
 	bool aggroSwitch = false;
 
 	bool attack = false;
@@ -161,6 +161,7 @@ protected:
 	FBX3DModel* modelDeath = nullptr; // 91 frames
 	FBX3DModel* modelJumpBack = nullptr; // 63 frames
 	FBX3DModel* modelParticleAttack = nullptr; // 81 frames
+	FBX3DModel* modelInjureRun = nullptr; // 20 frames
 
 	// 1 frame timed
 	FbxTime frameTime;
@@ -191,8 +192,9 @@ protected:
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 public:
 	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
-	float HP = 5.0f;
+	float HP = 5.0f; // Default 10.0f
 	bool dead = false;
+	bool aggroSet = false;
 	bool modelChange = false;
 	bool wander = false;
 	bool ableToDamage = true;
@@ -200,5 +202,8 @@ public:
 	bool particleAttackActive = false;
 	float attackTimer = 0.0f;
 	float timer = 238.0f;
+	bool fleeSet = false;
+	bool helpCall = false;
+	int closestEnemy = 0;
 	int particleAttackStage = 0;
 };

@@ -601,14 +601,14 @@ void Player::Update()
 	}
 
 	//Debug Start
-	char msgbuf[256];
+	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	sprintf_s(msgbuf, 256, "Float Animation Time: %f\n", debugTimer);
+	//sprintf_s(msgbuf, 256, "Float Animation Time: %f\n", debugTimer);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End

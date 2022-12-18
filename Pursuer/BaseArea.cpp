@@ -189,7 +189,47 @@ void BaseArea::Update()
 #pragma region EnemyAggro
 	for (int i = 0; i < 4; i++)
 	{
-		if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[i] == true)
+		if (baseAreaEnemyFBX[i]->HP <= 2.0f && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall)
+		{
+			if (!baseAreaEnemyFBX[i]->fleeSet)
+			{
+				baseAreaEnemyFBX[i]->SetAggroSwitch(true);
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
+				float min = FLT_MAX;
+				baseAreaEnemyFBX[i]->closestEnemy = 0;
+				for (int j = 0; j < 4; j++)
+				{
+					if (!baseAreaEnemyFBX[j]->dead && j != i)
+					{
+						float x = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
+						float y = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
+						if (abs(sqrt(x * x + y * y)) < min)
+						{
+							min = abs(sqrt(x * x + y * y));
+							baseAreaEnemyFBX[i]->closestEnemy = j;
+						}
+					}
+				}
+				baseAreaEnemyFBX[i]->fleeSet = true;
+			}
+			float x2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
+			float y2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
+			float hypotenuse = sqrt((x2 * x2) + (y2 * y2));
+			float radians = atan2(y2, x2);
+			float degrees = XMConvertToDegrees(radians);
+			baseAreaEnemyFBX[i]->SetRotation({ baseAreaEnemyFBX[i]->GetRotation().x, -degrees + 90.0f, baseAreaEnemyFBX[i]->GetRotation().z});
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse),
+											   baseAreaEnemyFBX[i]->GetPosition().y,
+											   baseAreaEnemyFBX[i]->GetPosition().z + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y2 / hypotenuse) });
+			if (Distance(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition()) <= 35.0f)
+			{
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->SetEnumStatus(EnemyHuman::AGGRO);
+				baseAreaEnemyFBX[i]->helpCall = true;
+			}
+		}
+		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[i] == true ||
+				baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			//baseAreaEnemyFBX[i]->SetAggro(true);
 			/*if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK || baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
@@ -228,10 +268,10 @@ void BaseArea::Update()
 				}
 			}
 		}
-		else
+		else if (baseAreaEnemyFBX[i]->HP <= 2.0f && baseAreaEnemyFBX[i]->helpCall)
 		{
-			baseAreaEnemyFBX[i]->SetAggroSwitch(true);
-			//baseAreaEnemyFBX[i]->SetAttack(false);
+			//baseAreaEnemyFBX[i]->SetAggroSwitch(true);
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 		}
 
 		if (baseAreaEnemyFBX[i]->particleAttackActive)
@@ -731,6 +771,12 @@ void BaseArea::ParticleCreationHeal(float x, float y, float z, int life, float o
 		// ’Ç‰Á
 		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
 	}
+}
+
+float BaseArea::Distance(XMFLOAT3 player, XMFLOAT3 center)
+{
+	float d = sqrtf(pow(center.x - player.x, 2.0f) + pow(center.y - player.y, 2.0f) + pow(center.z - player.z, 2.0f));
+	return d;
 }
 
 XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
