@@ -95,6 +95,8 @@ public:
 	void SetAggroSwitch(bool aggroswitch) { this->aggroSwitch = aggroswitch; }
 	void SetEnumStatus(status enumStatus) { this->enumStatus = enumStatus; }
 
+	void Reset();
+
 	const XMFLOAT3& GetPosition() { return position; }
 	const XMFLOAT3& GetRotation() { return rotation; }
 

@@ -217,7 +217,7 @@ void EnemyHuman::Update()
 		}
 		SetPosition(cooldownPosition);
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer > 119.0f)
+		if (timer > 20.0f)
 		{
 			timer = 0.0f;
 			ableToDamage = true;
@@ -319,6 +319,8 @@ void EnemyHuman::Update()
 				timer = 0.0f;
 				particleAttackActive = false;
 				particleAttackStage = 0;
+				modelChange = true;
+				aggroSet = false;
 				enumStatus = AGGRO;
 			}
 			break;
@@ -689,6 +691,25 @@ void EnemyHuman::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	// Model Drawing
 	model->Draw(cmdList);
+}
+
+void EnemyHuman::Reset()
+{
+	aggro = false;
+	aggroSwitch = false;
+	attack = false;
+	attackAnimation = false;
+	animationSet = false;
+	aggroSet = false;
+	modelChange = false;
+	wander = false;
+	ableToDamage = true;
+	set = false;
+	particleAttackActive = false;
+	attackTimer = 0.0f;
+	timer = 238.0f;
+	particleAttackStage = 0;
+	modelChange = true;
 }
 
 void EnemyHuman::PlayAnimation()

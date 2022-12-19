@@ -189,7 +189,7 @@ void BaseArea::Update()
 #pragma region EnemyAggro
 	for (int i = 0; i < 4; i++)
 	{
-		if (baseAreaEnemyFBX[i]->HP <= 2.0f && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall)
+		if (baseAreaEnemyFBX[i]->HP <= 2.0f && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 		{
 			if (!baseAreaEnemyFBX[i]->fleeSet)
 			{
@@ -221,15 +221,18 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse),
 											   baseAreaEnemyFBX[i]->GetPosition().y,
 											   baseAreaEnemyFBX[i]->GetPosition().z + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y2 / hypotenuse) });
-			if (Distance(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition()) <= 35.0f)
+			if (Distance(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition()) <= 35.0f && !baseAreaEnemyFBX[i]->helpCall)
 			{
+				baseAreaEnemyFBX[i]->aggroSet = false;
+				baseAreaEnemyFBX[i]->Reset();
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->aggroSet = false;
 				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->SetEnumStatus(EnemyHuman::AGGRO);
 				baseAreaEnemyFBX[i]->helpCall = true;
 			}
 		}
 		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[i] == true ||
-				baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && baseAreaEnemyAliveBOOL[i] == true)
+				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			//baseAreaEnemyFBX[i]->SetAggro(true);
 			/*if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK || baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
@@ -250,9 +253,9 @@ void BaseArea::Update()
 					}
 					else
 					{
-						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
 						baseAreaEnemyFBX[i]->particleAttackStage = 0;
 						baseAreaEnemyFBX[i]->modelChange = true;
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
 					}
 				}
 			}
@@ -267,11 +270,6 @@ void BaseArea::Update()
 					}
 				}
 			}
-		}
-		else if (baseAreaEnemyFBX[i]->HP <= 2.0f && baseAreaEnemyFBX[i]->helpCall)
-		{
-			//baseAreaEnemyFBX[i]->SetAggroSwitch(true);
-			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 		}
 
 		if (baseAreaEnemyFBX[i]->particleAttackActive)
