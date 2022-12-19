@@ -156,7 +156,9 @@ private:
 	bool gameStart = false;
 
 	float knockbackTime = 0.0f;
+	float enemyKnockbackTime = 0.0f;
 	bool knockback = false;
+	bool enemyKnockback = false;
 public:
 	bool initialization = true;
 	bool deletion = false;

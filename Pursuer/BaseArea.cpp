@@ -189,7 +189,7 @@ void BaseArea::Update()
 #pragma region EnemyAggro
 	for (int i = 0; i < 4; i++)
 	{
-		if (baseAreaEnemyFBX[i]->HP <= 2.0f && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
+		if (baseAreaEnemyFBX[i]->HP <= 2.0f && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 		{
 			if (!baseAreaEnemyFBX[i]->fleeSet)
 			{
@@ -231,8 +231,8 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->helpCall = true;
 			}
 		}
-		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[i] == true ||
-				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && baseAreaEnemyAliveBOOL[i] == true)
+		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true ||
+				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			//baseAreaEnemyFBX[i]->SetAggro(true);
 			/*if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK || baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
@@ -382,6 +382,12 @@ void BaseArea::Update()
 					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 25.0f, 25.0f) && baseAreaEnemyAliveBOOL[i] == true)
 					{
 						baseAreaEnemyFBX[i]->HP -= 1.0f;
+						if (playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+						{
+							enemyKnockbackTime = 0.0f;
+							enemyKnockback = true;
+						}
+
 						if (baseAreaEnemyFBX[i]->HP < 0.9f)
 						{
 							baseAreaEnemyAliveBOOL[i] = false;
@@ -397,9 +403,36 @@ void BaseArea::Update()
 							baseAreaEnemyFBX[i]->modelChange = true;
 							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
 						}
-						ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
+						if (playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+						{
+							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 90, 5.0f, 20.0f);
+						}
+						else
+						{
+							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
+						}
 						playerFBX->ableToDamage = false;
 					}
+				}
+			}
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (enemyKnockback)
+			{
+				XMFLOAT3 xyz = playerFBX->GetPosition() - baseAreaEnemyFBX[i]->GetPosition();
+				XMFLOAT3 knockbackPrevPosition = baseAreaEnemyFBX[i]->GetPosition();
+				float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
+				baseAreaEnemyFBX[i]->SetPosition({
+						knockbackPrevPosition.x -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+						knockbackPrevPosition.y += 3.0f,
+						knockbackPrevPosition.z -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+				enemyKnockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (enemyKnockbackTime >= 30.0f)
+				{
+					enemyKnockbackTime = 0.0f;
+					enemyKnockback = false;
 				}
 			}
 		}
