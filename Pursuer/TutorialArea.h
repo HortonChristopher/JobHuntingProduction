@@ -98,7 +98,7 @@ private:
 
 	// Sprite Generation
 	Sprite* tutorialTextFrameSPRITE = nullptr;
-	std::array<Sprite*, 22> tutorialTextSPRITE = { {} };
+	std::array<Sprite*, 26> tutorialTextSPRITE = { {} };
 	std::array<Sprite*, 4> tutorialMissionSPRITE = { {} };
 	Sprite* missionBarSPRITE = nullptr;
 	Sprite* missionBarFrameSPRITE = nullptr;

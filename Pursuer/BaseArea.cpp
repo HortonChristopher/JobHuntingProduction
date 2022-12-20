@@ -196,10 +196,10 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->SetAggroSwitch(true);
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
 				float min = FLT_MAX;
-				baseAreaEnemyFBX[i]->closestEnemy = 0;
+				baseAreaEnemyFBX[i]->closestEnemy = 10;
 				for (int j = 0; j < 4; j++)
 				{
-					if (!baseAreaEnemyFBX[j]->dead && j != i)
+					if (!baseAreaEnemyFBX[j]->dead && j != i && !baseAreaEnemyFBX[j]->helpCall)
 					{
 						float x = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 						float y = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
@@ -209,6 +209,13 @@ void BaseArea::Update()
 							baseAreaEnemyFBX[i]->closestEnemy = j;
 						}
 					}
+				}
+				if (baseAreaEnemyFBX[i]->closestEnemy == 10)
+				{
+					baseAreaEnemyFBX[i]->aggroSet = false;
+					baseAreaEnemyFBX[i]->Reset();
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+					baseAreaEnemyFBX[i]->helpCall = true;
 				}
 				baseAreaEnemyFBX[i]->fleeSet = true;
 			}

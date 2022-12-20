@@ -102,11 +102,15 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(16, L"Resources/Tutorial3_2_k.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(17, L"Resources/Tutorial3_2_c.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(18, L"Resources/Tutorial3_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(25, L"Resources/Tutorial3_4.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(19, L"Resources/Tutorial4_1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(20, L"Resources/Tutorial4_2.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(21, L"Resources/Tutorial4_3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(22, L"Resources/Tutorial4_3_k.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(23, L"Resources/Tutorial4_3_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(24, L"Resources/Tutorial4_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(26, L"Resources/Tutorial4_5.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(27, L"Resources/Tutorial4_6.png")) { assert(0); return; }
 
 	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
@@ -127,7 +131,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(90, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
-	for (int i = 0; i < 22; i++)
+	for (int i = 0; i < 26; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
@@ -343,7 +347,7 @@ void TutorialArea::Update()
 	case DODGETUTORIAL:
 		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
 		{
-			if (tutorialPage < 2)
+			if (tutorialPage < 2 || tutorialPage > 3 && tutorialPage < 5)
 			{
 				tutorialPage++;
 			}
@@ -352,7 +356,7 @@ void TutorialArea::Update()
 				tutorialActive = false;
 				playerFBX->tutorialPart = 4;
 			}
-			else if (tutorialPage == 3)
+			else if (tutorialPage == 5)
 			{
 				progress = 0.0f;
 				tutorialPage = 0;
@@ -377,12 +381,6 @@ void TutorialArea::Update()
 			playerFBX->ableToDamage = true;
 		}
 
-		tutorialActive = false;
-		playerFBX->tutorialPart = 4;
-		if (playerFBX->GetPosition().z >= 500.0f)
-		{
-			deletion = true;
-		}
 		break;
 	case TUTORIALEND:
 		tutorialActive = false;
@@ -598,6 +596,10 @@ void TutorialArea::Draw()
 				tutorialTextFrameSPRITE->Draw();
 				tutorialTextSPRITE[16]->Draw();
 				break;
+			case 3:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[23]->Draw();
+				break;
 			}
 			break;
 		case DODGETUTORIAL:
@@ -625,10 +627,20 @@ void TutorialArea::Draw()
 				}
 				break;
 			case 3:
-				//tutorialTextFrameSPRITE->Draw();
-				//tutorialTextSPRITE[22]->Draw();
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[22]->Draw();
+				break;
+			case 4:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[24]->Draw();
+				break;
+			case 5:
+				tutorialTextFrameSPRITE->Draw();
+				tutorialTextSPRITE[25]->Draw();
 				break;
 			}
+			break;
+		case TUTORIALEND:
 			break;
 		}
 	}
@@ -653,6 +665,8 @@ void TutorialArea::Draw()
 		case DODGETUTORIAL:
 			tutorialMissionSPRITE[3]->Draw();
 			missionBarSPRITE->Draw();
+			break;
+		case TUTORIALEND:
 			break;
 		}
 	}

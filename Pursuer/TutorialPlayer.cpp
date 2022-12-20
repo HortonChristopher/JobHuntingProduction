@@ -213,11 +213,37 @@ void TutorialPlayer::Update()
 			animationNo = 7;
 			animationSet = false;
 		}
-		if (currentTime > endTime && timer > 0.0f)
+
+		switch (attackCombo)
 		{
-			timer = 0.0f;
-			enumStatus = STAND;
+		case 0:
+			break;
+		case 1:
+			if (currentTime > endTime / 3 && timer > 0.0f)
+			{
+				timer = 0.0f;
+				attackCombo = 0;
+				enumStatus = STAND;
+			}
+			break;
+		case 2:
+			if (currentTime > endTime / 2 && timer > 0.0f)
+			{
+				timer = 0.0f;
+				attackCombo = 0;
+				enumStatus = STAND;
+			}
+			break;
+		case 3:
+			if (currentTime > endTime && timer > 0.0f)
+			{
+				timer = 0.0f;
+				attackCombo = 0;
+				enumStatus = STAND;
+			}
+			break;
 		}
+
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case DAMAGED:
@@ -245,6 +271,47 @@ void TutorialPlayer::Update()
 		{
 			timer = 0.0f;
 			isPlayerDead = true;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
+	case HEAL:
+		if (animationNo != 10)
+		{
+			timer = 0.0f;
+			healed = false;
+			for (int i = 0; i < 3; i++)
+			{
+				healParticlePosition[i] = position;
+			}
+			animationNo = 10;
+			animationSet = false;
+		}
+		if (timer >= 80.0f)
+		{
+			healParticlePosition[0].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (!healed)
+			{
+				hp += 4.0f;
+				if (hp >= 10.0f)
+				{
+					hp = 10.0f;
+				}
+				healed = true;
+			}
+		}
+		if (timer >= 90.0f)
+		{
+			healParticlePosition[1].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		if (timer >= 100.0f)
+		{
+			healParticlePosition[2].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			timer = 0.0f;
+			healed = false;
+			enumStatus = STAND;
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;

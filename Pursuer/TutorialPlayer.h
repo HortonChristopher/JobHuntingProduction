@@ -56,7 +56,8 @@ public:
 		DODGE = 7,
 		ATTACK = 8,
 		DAMAGED = 9,
-		DEAD = 10
+		DEAD = 10,
+		HEAL = 11
 	};
 
 	status enumStatus = WALK;
@@ -149,9 +150,11 @@ protected:
 	FBX3DModel* modelStrafeR = nullptr; // 20 frames
 	FBX3DModel* modelStrafeB = nullptr; // 24 frames
 	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
+	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 endTime / 2; 3rd: 76-80 Float: 253 
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
+	FBX3DModel* modelHeal = nullptr; // 81 frames float 160.0f
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	// Stand(0), Walk(1), Run(2), Strafe Left(3), Strafe Right(4), Strafe Back(5),
@@ -179,8 +182,8 @@ protected:
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 90.0f; // 1.5f using frame speed
 	float rollSpeed = 45.0f; // 0.75 using frame speed
-	float timer = 0.0f;
 	float dodgeCameraTime = 0.0f;
+	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };
@@ -190,6 +193,11 @@ public:
 	bool isPlayerDead = false;
 	float stamina = 100.0f;
 	float hp = 10.0f; // Base of 10.0f
+	int attackCombo = 0; // Which attack the animation stops at
+	int healRemaining = 2;
+	bool healed = false;
+	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} } };
 	bool movementAllowed = false;
 	int tutorialPart = 0;
+	float timer = 0.0f;
 };
