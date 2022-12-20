@@ -384,7 +384,7 @@ void TutorialArea::Update()
 		break;
 	case TUTORIALEND:
 		tutorialActive = false;
-		playerFBX->tutorialPart = 4;
+		playerFBX->tutorialPart = 5;
 		if (playerFBX->GetPosition().z >= 500.0f)
 		{
 			deletion = true;

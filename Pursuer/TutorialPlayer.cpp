@@ -31,9 +31,11 @@ void TutorialPlayer::Initialize()
 	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
 	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("StrafeBack");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
+	modelComboAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoMeleeCombo");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
+	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("ProtoHeal");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -319,24 +321,34 @@ void TutorialPlayer::Update()
 
 	if (tutorialPart > 2 && tutorialPart != 4)
 	{
-		if (input->TriggerMouseLeft() && attackTime == 0.0f && stamina >= 20.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && attackTime == 0 && stamina >= 20.0f)
+		if (input->TriggerMouseLeft() && stamina >= 25.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina >= 25.0f)
 		{
-			attackTime = 53.0f;
-			stamina -= 20.0f;
+			switch (attackCombo)
+			{
+			case 0:
+				attackCombo++;
+				enumStatus = ATTACK;
+				stamina -= 25.0f;
+				break;
+			case 1:
+				attackCombo++;
+				stamina -= 25.0f;
+				break;
+			case 2:
+				attackCombo++;
+				stamina -= 25.0f;
+				break;
+			}
 		}
+	}
 
-		if (attackTime > 0)
+	if (tutorialPart > 4)
+	{
+		if (input->TriggerKey(DIK_H) && healRemaining > 0 && enumStatus != HEAL ||
+			input->TriggerControllerButton(XINPUT_GAMEPAD_Y) && healRemaining > 0 && enumStatus != HEAL)
 		{
-			attackTime -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		}
-		else
-		{
-			attackTime = 0.0f;
-		}
-
-		if (attackTime > 0)
-		{
-			enumStatus = ATTACK;
+			enumStatus = HEAL;
+			healRemaining--;
 		}
 	}
 
@@ -428,7 +440,7 @@ void TutorialPlayer::Update()
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						stamina -= 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						stamina -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 					}
 					else
 					{
@@ -549,7 +561,8 @@ void TutorialPlayer::Update()
 			animationSet = true;
 			break;
 		case 7:
-			SetModel(modelAttacking);
+			//SetModel(modelAttacking);
+			SetModel(modelComboAttack);
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -580,7 +593,7 @@ void TutorialPlayer::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED)
+		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED && enumStatus != HEAL)
 		{
 			currentTime = startTime;
 		}
