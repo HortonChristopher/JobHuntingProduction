@@ -127,6 +127,8 @@ private:
 	bool tutorialActive = true;
 	float progress = 0.0f;
 	int tutorialPage = 0;
+	float enemyKnockbackTime = 0.0f;
+	bool enemyKnockback = false;
 public:
 	bool initialize = false;
 	bool deletion = false;

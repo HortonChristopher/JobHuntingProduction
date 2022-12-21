@@ -318,25 +318,74 @@ void TutorialArea::Update()
 
 		if (!tutorialActive)
 		{
-			if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
+			if (playerFBX->enumStatus == TutorialPlayer::ATTACK)
 			{
-				if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+				if (playerFBX->timer >= 54.2f && playerFBX->timer <= 62.2f ||
+					playerFBX->timer >= 90.35f && playerFBX->timer <= 98.3f ||
+					playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
 				{
-					enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
-					enemyFBX->modelChange = true;
-					ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
-					playerFBX->ableToDamage = false;
-					progress += 20.0f;
+					if (playerFBX->enumStatus == TutorialPlayer::ATTACK && playerFBX->ableToDamage)
+					{
+						if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+						{
+							if (playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+							{
+								enemyKnockbackTime = 0.0f;
+								enemyKnockback = true;
+							}
+
+							enemyFBX->timer = 0.0f;
+							enemyFBX->modelChange = true;
+							enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
+							progress += 15.0f;
+
+							if (playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+							{
+								ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 90, 5.0f, 20.0f);
+							}
+							else
+							{
+								ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
+							}
+							playerFBX->ableToDamage = false;
+						}
+					}
+				}
+
+				if (enemyKnockback)
+				{
+					XMFLOAT3 xyz = playerFBX->GetPosition() - enemyFBX->GetPosition();
+					XMFLOAT3 knockbackPrevPosition = enemyFBX->GetPosition();
+					float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
+					enemyFBX->SetPosition({
+							knockbackPrevPosition.x -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+							knockbackPrevPosition.y,
+							knockbackPrevPosition.z -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					enemyKnockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					if (enemyKnockbackTime >= 30.0f)
+					{
+						enemyKnockbackTime = 0.0f;
+						enemyKnockback = false;
+					}
+				}
+
+				if (playerFBX->timer > 62.2f && playerFBX->timer < 90.35f ||
+					playerFBX->timer > 98.3f && playerFBX->timer < 152.6f)
+				{
+					playerFBX->ableToDamage = true;
 				}
 			}
-			else if (playerFBX->attackTime == 0.0f)
+			else
 			{
 				playerFBX->ableToDamage = true;
+				playerFBX->attackCombo = 0;
 			}
+
 			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
 
 			if (progress >= 100.0f)
 			{
+				progress = 100.0f;
 				tutorialPage = 2;
 				playerFBX->tutorialPart = 0;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
@@ -347,7 +396,7 @@ void TutorialArea::Update()
 	case DODGETUTORIAL:
 		if (input->TriggerKey(DIK_SPACE) && tutorialActive == true || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && tutorialActive == true)
 		{
-			if (tutorialPage < 2 || tutorialPage > 3 && tutorialPage < 5)
+			if (tutorialPage < 2 || tutorialPage > 2 && tutorialPage < 5)
 			{
 				tutorialPage++;
 			}
@@ -364,21 +413,35 @@ void TutorialArea::Update()
 			}
 		}
 
-		if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
+		if (!tutorialActive)
 		{
-			if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+			if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
 			{
-				enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
-				enemyFBX->modelChange = true;
-				enemyFBX->HP -= 1.0f;
-				ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
-				playerFBX->ableToDamage = false;
-				progress += 20.0f;
+				if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+				{
+					enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
+					enemyFBX->modelChange = true;
+					enemyFBX->HP -= 1.0f;
+					ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
+					playerFBX->ableToDamage = false;
+					progress += 20.0f;
+				}
+			}
+			else if (playerFBX->attackTime == 0.0f)
+			{
+				playerFBX->ableToDamage = true;
 			}
 		}
-		else if (playerFBX->attackTime == 0.0f)
+
+		missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
+
+		if (progress >= 100.0f)
 		{
-			playerFBX->ableToDamage = true;
+			progress = 100.0f;
+			tutorialPage = 3;
+			playerFBX->tutorialPart = 0;
+			playerFBX->SetEnumStatus(TutorialPlayer::STAND);
+			tutorialActive = true;
 		}
 
 		break;

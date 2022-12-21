@@ -223,7 +223,7 @@ void TutorialEnemy::Update()
 		}
 		SetPosition(cooldownPosition);
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer > 119.0f)
+		if (timer > 45.0f)
 		{
 			timer = 0.0f;
 			ableToDamage = true;
