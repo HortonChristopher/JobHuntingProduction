@@ -633,6 +633,17 @@ void TutorialArea::Update()
 		arenaClamp = false;
 	}
 
+	if (tutorialStatus != INTROCUTSCENE)
+	{
+		for (float i = 0.0f; i < 360.0f; i++)
+		{
+			if (distance(playerFBX->GetPosition(), { cosf(XMConvertToRadians(i)) * 495.0f, 0.0f, sinf(XMConvertToRadians(i)) * 495.0f }) <= 20.0f)
+			{
+				ParticleCreationEdge(cosf(XMConvertToRadians(i)) * 495.0f, 0.0f, sinf(XMConvertToRadians(i)) * 495.0f, 30, 5.0f, 3.0f);
+			}
+		}
+	}
+
 	if (tutorialStatus > 2)
 	{
 		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 20.0f });
@@ -957,6 +968,33 @@ void TutorialArea::ParticleCreationHeal(float x, float y, float z, int life, flo
 		XMFLOAT3 acc{};
 		const float rnd_acc = 0.001f; // 0.001f
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// ’Ç‰Á
+		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
+}
+
+void TutorialArea::ParticleCreationEdge(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		XMFLOAT3 pos{};
+		pos.x = x;
+		pos.y = y + offset;
+		pos.z = z;
+
+		const float rnd_vel = 0.1f; // 0.1f
+		XMFLOAT3 vel{};
+		//vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.x = 0.0f;
+		vel.y = 0.0f;
+		vel.z = 0.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f; // 0.001f
+		//acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+		acc.y = 0.0f;
 
 		// ’Ç‰Á
 		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);

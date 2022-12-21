@@ -70,13 +70,12 @@ public:
 	void Draw();
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
+	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);
+	void ParticleCreationEdge(float x, float y, float z, int life, float offset, float start_scale);
 	float distance(XMFLOAT3 player, XMFLOAT3 center);
 
 	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
-
-	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
-
 private:
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
