@@ -108,6 +108,11 @@ private:
 	Sprite* HPBarFrameSPRITE = nullptr;
 	Sprite* STBarSPRITE = nullptr;
 	Sprite* STBarFrameSPRITE = nullptr;
+	Sprite* healSPRITE = nullptr;
+	Sprite* healControllerSPRITE = nullptr;
+	Sprite* healKeyboardSPRITE = nullptr;
+	Sprite* loadingBarSPRITE = nullptr;
+	Sprite* loadingBarFrameSPRITE = nullptr;
 
 	// Player aspects
 	Player* playerFBX = nullptr;

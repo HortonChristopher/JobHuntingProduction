@@ -114,6 +114,11 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 
 	if (!Sprite::LoadTexture(28, L"Resources/DamageOverlay.png")) { assert(0); return; } // Damage Overlay
 
+	if (!Sprite::LoadTexture(29, L"Resources/Heal.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(30, L"Resources/HealK.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(31, L"Resources/HealC.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(32, L"Resources/HealTutorialMask.png")) { assert(0); return; } // Heal Graphic
+
 	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
 	if (!Sprite::LoadTexture(97, L"Resources/MinimapTutorialMask.png")) { assert(0); return; }
@@ -155,8 +160,11 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	minimapTutorialMaskSPRITE = Sprite::Create(97, { 0.0f, 0.0f });
 	tutorialMinimapEnemySPRITE = Sprite::Create(98, { 0.0f, 0.0f });
 	tutorialMinimapPlayerSPRITE = Sprite::Create(99, { 0.0f, 0.0f });
-
 	tutorialAreaDamageOverlaySPRITE = Sprite::Create(28, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+	healSPRITE = Sprite::Create(29, { 1102.0f, 542.0f });
+	healKeyboardSPRITE = Sprite::Create(30, { 1102.0f, 542.0f });
+	healControllerSPRITE = Sprite::Create(31, { 1102.0f, 542.0f });
+	healTutorialMaskSPRITE = Sprite::Create(32, { 0.0f, 0.0f });
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -215,6 +223,8 @@ void TutorialArea::Update()
 	camera->Update();
 
 	skydomeOBJ->SetPosition(playerFBX->GetPosition());
+
+	std::ostringstream healTracker;
 
 	switch (tutorialStatus)
 	{
@@ -609,6 +619,13 @@ void TutorialArea::Update()
 			}
 		}
 
+#pragma region healTracker
+		healTracker << playerFBX->healRemaining
+			<< std::fixed << std::setprecision(0)
+			<< std::setw(2) << std::setfill('0');
+		debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
+#pragma endregion
+
 		tutorialActive = false;
 		playerFBX->tutorialPart = 5;
 		if (playerFBX->GetPosition().z >= 500.0f)
@@ -868,6 +885,7 @@ void TutorialArea::Draw()
 				tutorialTextSPRITE[22]->Draw();
 				break;
 			case 4:
+				healTutorialMaskSPRITE->Draw();
 				tutorialTextFrameSPRITE->Draw();
 				tutorialTextSPRITE[24]->Draw();
 				break;
@@ -926,6 +944,14 @@ void TutorialArea::Draw()
 	if (damageOverlayDisplay)
 	{
 		tutorialAreaDamageOverlaySPRITE->Draw();
+	}
+
+	if (tutorialStatus == DODGETUTORIAL && tutorialPage > 3
+		|| tutorialStatus == TUTORIALEND)
+	{
+		healSPRITE->Draw();
+		healKeyboardSPRITE->Draw();
+		healControllerSPRITE->Draw();
 	}
 
 	// Sprite post draw

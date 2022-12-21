@@ -7,6 +7,8 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 
+extern int keyOrMouse;
+
 BaseArea::BaseArea()
 {
 }
@@ -98,6 +100,7 @@ void BaseArea::Update()
 	
 	// Debug Text string
 	std::ostringstream missionTracker;
+	std::ostringstream healTracker;
 
 	if (!screenShake)
 	{
@@ -130,41 +133,41 @@ void BaseArea::Update()
 	skydomeOBJ->SetPosition(objectPosition);
 
 #pragma region LockOn
-	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	{
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-		{
-			playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
-			objectRotation = playerFBX->GetRotation();
-			camera->Update();
-		}
-		float min = FLT_MAX;
-		int closestEnemy = 0;
-		for (int i = 0; i < 4; i++)
-		{
-			if (!baseAreaEnemyFBX[i]->dead)
-			{
-				float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
-				float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
-				if (abs(sqrt(x * x + y * y)) < min)
-				{
-					min = abs(sqrt(x * x + y * y));
-					closestEnemy = i;
-				}
-			}
-		}
-		float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-		float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
-		float radians = atan2(y2, x2);
-		float degrees = XMConvertToDegrees(radians);
-		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
-		objectRotation = playerFBX->GetRotation();
-		camera->SetTarget(playerFBX->GetPosition());
-		camera->SetDistance(48.0f);
-		/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-		camera->SetDistance(min + 48.0f);*/
-		camera->Update();
-	}
+	//if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	//{
+	//	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	//	{
+	//		playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
+	//		objectRotation = playerFBX->GetRotation();
+	//		camera->Update();
+	//	}
+	//	float min = FLT_MAX;
+	//	int closestEnemy = 0;
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		if (!baseAreaEnemyFBX[i]->dead)
+	//		{
+	//			float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+	//			float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+	//			if (abs(sqrt(x * x + y * y)) < min)
+	//			{
+	//				min = abs(sqrt(x * x + y * y));
+	//				closestEnemy = i;
+	//			}
+	//		}
+	//	}
+	//	float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+	//	float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+	//	float radians = atan2(y2, x2);
+	//	float degrees = XMConvertToDegrees(radians);
+	//	playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+	//	objectRotation = playerFBX->GetRotation();
+	//	camera->SetTarget(playerFBX->GetPosition());
+	//	camera->SetDistance(48.0f);
+	//	/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+	//	camera->SetDistance(min + 48.0f);*/
+	//	camera->Update();
+	//}
 #pragma endregion
 
 #pragma region DebugAttackRange
@@ -576,7 +579,7 @@ void BaseArea::Update()
 
 			if (Distance(playerFBX->GetPosition(), { 400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i) }) <= 25.0f)
 			{
-				ParticleCreationEdge(-400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i), 30, 5.0f, 3.0f);
+				ParticleCreationEdge(400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i), 30, 5.0f, 3.0f);
 			}
 		}
 	}
@@ -617,6 +620,13 @@ void BaseArea::Update()
 		<< std::fixed << std::setprecision(0)
 		<< std::setw(2) << std::setfill('0');
 	debugText->Print(missionTracker.str(), 1173.0f, 160.0f, 1.0f);
+#pragma endregion
+
+#pragma region healTracker
+	healTracker << playerFBX->healRemaining
+		<< std::fixed << std::setprecision(0)
+		<< std::setw(2) << std::setfill('0');
+	debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
 #pragma endregion
 
 	/*float test;
@@ -742,6 +752,15 @@ void BaseArea::Draw()
 	baseAreaMissionSPRITE->Draw();
 	baseAreaMinimapSPRITE->Draw();
 	baseAreaMinimapPlayerSPRITE->Draw();
+	healSPRITE->Draw();
+	if (keyOrMouse == 0)
+	{
+		healKeyboardSPRITE->Draw();
+	}
+	else
+	{
+		healControllerSPRITE->Draw();
+	}
 	/*for (int i = 0; i < 1; i++)
 	{
 		baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
@@ -896,6 +915,9 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(11, L"Resources/EnemyHumanHPBar.png")) { assert(0); return; } // Enemy HP Bar
 	if (!Sprite::LoadTexture(12, L"Resources/EnemyHumanHPBarFrame.png")) { assert(0); return; } // Enemy HP Bar Frame
 	if (!Sprite::LoadTexture(13, L"Resources/DamageOverlay.png")) { assert(0); return; } // Damage Overlay
+	if (!Sprite::LoadTexture(14, L"Resources/Heal.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(15, L"Resources/HealK.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(16, L"Resources/HealC.png")) { assert(0); return; } // Heal Graphic
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -913,6 +935,9 @@ void BaseArea::thread1()
 	}
 	fadeSPRITE = Sprite::Create(10, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 	baseAreaDamageOverlaySPRITE = Sprite::Create(13, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+	healSPRITE = Sprite::Create(14, { 1102.0f, 542.0f });
+	healKeyboardSPRITE = Sprite::Create(15, { 1102.0f, 542.0f });
+	healControllerSPRITE = Sprite::Create(16, { 1102.0f, 542.0f });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 }

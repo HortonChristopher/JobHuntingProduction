@@ -114,6 +114,10 @@ private:
 	Sprite* tutorialMinimapSPRITE = nullptr;
 	Sprite* tutorialMinimapPlayerSPRITE = nullptr;
 	Sprite* tutorialMinimapEnemySPRITE = nullptr;
+	Sprite* healSPRITE = nullptr;
+	Sprite* healControllerSPRITE = nullptr;
+	Sprite* healKeyboardSPRITE = nullptr;
+	Sprite* healTutorialMaskSPRITE = nullptr;
 
 	// Damage Overlay
 	Sprite* tutorialAreaDamageOverlaySPRITE = nullptr;

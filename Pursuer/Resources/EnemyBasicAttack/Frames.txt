@@ -1,3 +1,0 @@
-Total: 101 frames
-Attack start: frame 35
-Attack end: frame 55
