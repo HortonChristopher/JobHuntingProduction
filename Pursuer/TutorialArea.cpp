@@ -112,6 +112,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(26, L"Resources/Tutorial4_5.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(27, L"Resources/Tutorial4_6.png")) { assert(0); return; }
 
+	if (!Sprite::LoadTexture(28, L"Resources/DamageOverlay.png")) { assert(0); return; } // Damage Overlay
+
 	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
 	if (!Sprite::LoadTexture(97, L"Resources/MinimapTutorialMask.png")) { assert(0); return; }
@@ -153,6 +155,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	minimapTutorialMaskSPRITE = Sprite::Create(97, { 0.0f, 0.0f });
 	tutorialMinimapEnemySPRITE = Sprite::Create(98, { 0.0f, 0.0f });
 	tutorialMinimapPlayerSPRITE = Sprite::Create(99, { 0.0f, 0.0f });
+
+	tutorialAreaDamageOverlaySPRITE = Sprite::Create(28, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -358,9 +362,9 @@ void TutorialArea::Update()
 					XMFLOAT3 knockbackPrevPosition = enemyFBX->GetPosition();
 					float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
 					enemyFBX->SetPosition({
-							knockbackPrevPosition.x -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+							knockbackPrevPosition.x -= 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
 							knockbackPrevPosition.y,
-							knockbackPrevPosition.z -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+							knockbackPrevPosition.z -= 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 					enemyKnockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 					if (enemyKnockbackTime >= 30.0f)
 					{
@@ -403,6 +407,7 @@ void TutorialArea::Update()
 			else if (tutorialPage == 2)
 			{
 				tutorialActive = false;
+				enemyFBX->SetEnumStatus(TutorialEnemy::AGGRO);
 				playerFBX->tutorialPart = 4;
 			}
 			else if (tutorialPage == 5)
@@ -415,21 +420,139 @@ void TutorialArea::Update()
 
 		if (!tutorialActive)
 		{
-			if (playerFBX->attackTime > 10.0f && playerFBX->attackTime < 50.0f && playerFBX->ableToDamage)
+			objectPosition = playerFBX->GetPosition();
+
+			float distance = sqrt((enemyFBX->GetPosition().x - playerFBX->GetPosition().x) * (enemyFBX->GetPosition().x - playerFBX->GetPosition().x) + (enemyFBX->GetPosition().z - playerFBX->GetPosition().z) * (enemyFBX->GetPosition().z - playerFBX->GetPosition().z));
+			if (distance < 8.0f)
 			{
-				if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
+				//baseAreaEnemyFBX[i]->SetAttack(true);
+				if (enemyFBX->enumStatus != TutorialEnemy::DAMAGED && enemyFBX->enumStatus != TutorialEnemy::PARTICLEATTACK && enemyFBX->enumStatus != TutorialEnemy::ATTACK && enemyFBX->enumStatus != TutorialEnemy::COOLDOWN)
 				{
-					enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
-					enemyFBX->modelChange = true;
-					enemyFBX->HP -= 1.0f;
-					ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 60, 5.0f, 10.0f);
-					playerFBX->ableToDamage = false;
-					progress += 20.0f;
+					if (progress < 80.0f)
+					{
+						enemyFBX->SetEnumStatus(TutorialEnemy::ATTACK);
+					}
+					else
+					{
+						enemyFBX->particleAttackStage = 0;
+						enemyFBX->modelChange = true;
+						enemyFBX->SetEnumStatus(TutorialEnemy::PARTICLEATTACK);
+					}
 				}
 			}
-			else if (playerFBX->attackTime == 0.0f)
+			else
 			{
-				playerFBX->ableToDamage = true;
+				if (enemyFBX->enumStatus != TutorialEnemy::DAMAGED && enemyFBX->enumStatus != TutorialEnemy::COOLDOWN && enemyFBX->enumStatus != TutorialEnemy::PARTICLEATTACK && enemyFBX->enumStatus != TutorialEnemy::ATTACK)
+				{
+					if (enemyFBX->enumStatus != TutorialEnemy::AGGRO)
+					{
+						enemyFBX->SetAggroSwitch(true);
+						enemyFBX->SetEnumStatus(TutorialEnemy::AGGRO);
+					}
+				}
+			}
+
+			if (enemyFBX->enumStatus == TutorialEnemy::ATTACK || enemyFBX->enumStatus == TutorialEnemy::PARTICLEATTACK && enemyFBX->particleAttackStage == 1)
+			{
+				if (playerFBX->enumStatus == TutorialPlayer::DODGE && playerFBX->dodgedAttack == false)
+				{
+					progress += 19.9f;
+					playerFBX->dodgedAttack = true;
+				}
+			}
+			else
+			{
+				if (playerFBX->dodgedAttack == true)
+				{
+					progress += 0.1f;
+				}
+				playerFBX->dodgedAttack = false;
+			}
+
+			if (enemyFBX->particleAttackActive)
+			{
+				ParticleCreation(enemyFBX->particleAttackPosition.x, enemyFBX->particleAttackPosition.y, enemyFBX->particleAttackPosition.z, 60, 0.0f, 10.0f);
+			}
+
+			if (intersect(enemyAttackRangeOBJ->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && enemyFBX->attackTimer > 70.0f && enemyFBX->attackTimer < 85.0f && enemyFBX->ableToDamage)
+			{
+				enemyFBX->ableToDamage = false;
+				damageOverlaySpriteALPHA = 1.0f;
+				damageOverlayDisplay = true;
+				screenShake = true;
+				tutorialAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+				if (playerFBX->hp >= 2.0f)
+				{
+					playerFBX->hp -= 1.0f;
+				}
+				else
+				{
+					playerFBX->hp = 1.0f;
+				}
+				playerFBX->SetEnumStatus(TutorialPlayer::DAMAGED);
+			}
+
+			if (intersect(enemyFBX->particleAttackPosition, playerFBX->GetPosition(), 3.0f, 12.0f, 12.0f) && enemyFBX->particleAttackActive && enemyFBX->ableToDamage)
+			{
+				enemyFBX->ableToDamage = false;
+				damageOverlaySpriteALPHA = 1.0f;
+				damageOverlayDisplay = true;
+				screenShake = true;
+				tutorialAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+				if (playerFBX->hp >= 4.0f)
+				{
+					playerFBX->hp -= 3.0f;
+				}
+				else
+				{
+					playerFBX->hp = 1.0f;
+				}
+				playerFBX->SetEnumStatus(TutorialPlayer::DAMAGED);
+				knockback = true;
+			}
+
+			if (knockback && enemyFBX->enumStatus == TutorialEnemy::PARTICLEATTACK)
+			{
+				XMFLOAT3 xyz = enemyFBX->GetPosition() - playerFBX->GetPosition();
+				XMFLOAT3 knockbackPrevPosition = playerFBX->GetPosition();
+				float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
+				playerFBX->SetPosition({
+						knockbackPrevPosition.x -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+						knockbackPrevPosition.y,
+						knockbackPrevPosition.z -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+				knockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (knockbackTime >= 30.0f)
+				{
+					knockbackTime = 0.0f;
+					knockback = false;
+				}
+			}
+
+			// Damage overlay display
+			if (damageOverlayDisplay)
+			{
+				if (playerFBX->enumStatus != TutorialPlayer::DEAD)
+				{
+					damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				tutorialAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+				if (damageOverlaySpriteALPHA <= 0.0f)
+				{
+					damageOverlayDisplay = false;
+				}
+			}
+
+			// Screen Shake Effect
+			if (screenShake)
+			{
+				camera->SetTarget(ScreenShake(playerFBX->GetPosition()));
+				camera->Update();
+				shakeTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (shakeTimer >= 15.0f)
+				{
+					shakeTimer = 0.0f;
+					screenShake = false;
+				}
 			}
 		}
 
@@ -437,15 +560,55 @@ void TutorialArea::Update()
 
 		if (progress >= 100.0f)
 		{
-			progress = 100.0f;
-			tutorialPage = 3;
-			playerFBX->tutorialPart = 0;
-			playerFBX->SetEnumStatus(TutorialPlayer::STAND);
-			tutorialActive = true;
+			if (enemyFBX->enumStatus != TutorialEnemy::DEAD)
+			{
+				enemyFBX->modelChange = true;
+				enemyFBX->SetEnumStatus(TutorialEnemy::DEAD);
+			}
+
+			if (tutorialPage == 2)
+			{
+				progress = 100.0f;
+				tutorialPage = 3;
+				playerFBX->tutorialPart = 0;
+				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
+				tutorialActive = true;
+			}
 		}
 
 		break;
 	case TUTORIALEND:
+		if (playerFBX->enumStatus == TutorialPlayer::HEAL)
+		{
+			if (playerFBX->timer >= 80.0f)
+			{
+				for (int i = 0; i < 180; i++)
+				{
+					ParticleCreationHeal(playerFBX->healParticlePosition[0].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+						playerFBX->healParticlePosition[0].y,
+						playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+				}
+			}
+			if (playerFBX->timer >= 90.0f)
+			{
+				for (int i = 0; i < 180; i++)
+				{
+					ParticleCreationHeal(playerFBX->healParticlePosition[1].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+						playerFBX->healParticlePosition[1].y,
+						playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+				}
+			}
+			if (playerFBX->timer >= 100.0f)
+			{
+				for (int i = 0; i < 180; i++)
+				{
+					ParticleCreationHeal(playerFBX->healParticlePosition[2].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+						playerFBX->healParticlePosition[2].y,
+						playerFBX->healParticlePosition[2].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+				}
+			}
+		}
+
 		tutorialActive = false;
 		playerFBX->tutorialPart = 5;
 		if (playerFBX->GetPosition().z >= 500.0f)
@@ -556,7 +719,7 @@ void TutorialArea::Draw()
 	if (tutorialStatus > 3)
 	{
 		enemyFBX->Draw(cmdList);
-		enemyAttackRangeOBJ->Draw();
+		//enemyAttackRangeOBJ->Draw();
 	}
 	groundOBJ->Draw();
 	outsideGroundOBJ->Draw();
@@ -749,6 +912,11 @@ void TutorialArea::Draw()
 		HPBarFrameSPRITE->Draw();
 	}
 
+	if (damageOverlayDisplay)
+	{
+		tutorialAreaDamageOverlaySPRITE->Draw();
+	}
+
 	// Sprite post draw
 	Sprite::PostDraw();
 #pragma endregion
@@ -772,10 +940,44 @@ int TutorialArea::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float
 	return (cornerDistance_sq <= (circleR * circleR));
 }
 
+void TutorialArea::ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		XMFLOAT3 pos{};
+		pos.x = x;
+		pos.y = y;
+		pos.z = z + offset;
+
+		const float rnd_vel = 0.1f; // 0.1f
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f; // 0.001f
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// ’Ç‰Á
+		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
+}
+
 float TutorialArea::distance(XMFLOAT3 player, XMFLOAT3 center)
 {
 	float d = sqrtf(pow(center.x - player.x, 2.0f) + pow(center.y - player.y, 2.0f) + pow(center.z - player.z, 2.0f));
 	return d;
+}
+
+XMFLOAT3 TutorialArea::ScreenShake(XMFLOAT3 playerPosition)
+{
+	XMFLOAT3 shakePosition;
+
+	shakePosition.x = playerPosition.x + (rand() % 3 - 1);
+	shakePosition.y = playerPosition.y + (rand() % 3 - 1);
+	shakePosition.z = playerPosition.z + (rand() % 3 - 1);
+
+	return shakePosition;
 }
 
 void TutorialArea::ParticleCreation(float x, float y, float z, int life, float offset, float start_scale)

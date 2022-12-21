@@ -145,7 +145,6 @@ protected:
 	XMFLOAT2 homePosition = { 0, 0 };
 
 	bool aggro = false;
-	bool aggroSet = false;
 	bool aggroSwitch = false;
 
 	bool attack = false;
@@ -202,4 +201,5 @@ public:
 	float timer = 238.0f;
 	bool tutorial = true;
 	int particleAttackStage = 0;
+	bool aggroSet = false;
 };

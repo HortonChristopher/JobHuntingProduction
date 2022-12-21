@@ -199,4 +199,5 @@ public:
 	bool movementAllowed = false;
 	int tutorialPart = 0;
 	float timer = 0.0f;
+	bool dodgedAttack = false;
 };

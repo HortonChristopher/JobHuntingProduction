@@ -70,7 +70,10 @@ public:
 	void Draw();
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
+	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);
 	float distance(XMFLOAT3 player, XMFLOAT3 center);
+
+	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 
@@ -113,6 +116,15 @@ private:
 	Sprite* tutorialMinimapPlayerSPRITE = nullptr;
 	Sprite* tutorialMinimapEnemySPRITE = nullptr;
 
+	// Damage Overlay
+	Sprite* tutorialAreaDamageOverlaySPRITE = nullptr;
+	float damageOverlaySpriteALPHA = 1.0f;
+	bool damageOverlayDisplay = false;
+
+	// Screen shake
+	bool screenShake = false;
+	float shakeTimer = 0.0f;
+
 	// Player aspects
 	TutorialPlayer* playerFBX = nullptr;
 	PlayerPositionObject* playerPositionOBJ = nullptr;
@@ -129,6 +141,8 @@ private:
 	int tutorialPage = 0;
 	float enemyKnockbackTime = 0.0f;
 	bool enemyKnockback = false;
+	float knockbackTime = 0.0f;
+	bool knockback = false;
 public:
 	bool initialize = false;
 	bool deletion = false;

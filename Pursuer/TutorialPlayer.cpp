@@ -362,7 +362,7 @@ void TutorialPlayer::Update()
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
 			{
 				movementAllowed = true;
 			}
@@ -373,7 +373,7 @@ void TutorialPlayer::Update()
 		}
 		else
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
 			{
 				enumStatus = STAND;
 			}
@@ -575,6 +575,11 @@ void TutorialPlayer::Update()
 			SetModel(modelDeath);
 			isPlay = false;
 			animationSet = true;
+		case 10:
+			SetModel(modelHeal);
+			isPlay = false;
+			animationSet = true;
+			break;
 		}
 	}
 

@@ -191,7 +191,7 @@ void TutorialEnemy::Update()
 				set = false;
 				timer = 0.0f;
 				aggroSwitch = false;
-				enumStatus = STAND;
+				//enumStatus = STAND;
 			}
 		}
 		break;
@@ -282,10 +282,6 @@ void TutorialEnemy::Update()
 			position.x -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
 			position.z -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-			if (currentTime < endTime / 2 && timer > 0.0f)
-			{
-				position.y += 1.0f;
-			}
 			SetPosition(position);
 			if (currentTime > endTime && timer > 0.0f)
 			{
@@ -332,6 +328,7 @@ void TutorialEnemy::Update()
 				timer = 0.0f;
 				particleAttackActive = false;
 				particleAttackStage = 0;
+				aggroSet = false;
 				enumStatus = AGGRO;
 			}
 			break;
