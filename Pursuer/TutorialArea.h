@@ -94,7 +94,7 @@ private:
 	Model* outsideGroundMODEL = nullptr;
 	Object3d* skydomeOBJ = nullptr;
 	Model* skydomeMODEL = nullptr;
-	
+
 	Object3d* playerAttackRangeOBJ = nullptr;
 	Object3d* enemyAttackRangeOBJ = nullptr;
 
@@ -104,7 +104,7 @@ private:
 	std::array<Sprite*, 4> tutorialMissionSPRITE = { {} };
 	Sprite* missionBarSPRITE = nullptr;
 	Sprite* missionBarFrameSPRITE = nullptr;
-		// HP and Stamina Bar Sprites
+	// HP and Stamina Bar Sprites
 	Sprite* HPBarSPRITE = nullptr;
 	Sprite* HPBarFrameSPRITE = nullptr;
 	Sprite* STBarSPRITE = nullptr;
@@ -128,6 +128,9 @@ private:
 	bool screenShake = false;
 	float shakeTimer = 0.0f;
 
+	bool doorClose = false;
+	bool doorOpenCutscene = false;
+
 	// Player aspects
 	TutorialPlayer* playerFBX = nullptr;
 	PlayerPositionObject* playerPositionOBJ = nullptr;
@@ -137,8 +140,13 @@ private:
 	TutorialEnemy* enemyFBX = nullptr;
 	PlayerPositionObject* enemyPositionOBJ = nullptr;
 
+	std::array<TouchableObject*, 2> doorOBJ = { {} };
+	Model* doorMODEL = nullptr;
+
 	bool arenaClamp = false;
 	XMFLOAT3 fromOriginToObject = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 targetDifference = { 0.0f, 0.0f, 0.0f };
+	int targetMove = 0;
 	bool tutorialActive = true;
 	float progress = 0.0f;
 	int tutorialPage = 0;

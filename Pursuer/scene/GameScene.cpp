@@ -56,7 +56,7 @@ void GameScene::Update()
 
 		if (titleScreen->gameStart)
 		{
-			if (titleScreen->selection == 0)
+			if (titleScreen->tutorialSelectionYesBOOL == true)
 			{
 				tutorialArea = new TutorialArea;
 				tutorialArea->initialize = true;
@@ -64,7 +64,7 @@ void GameScene::Update()
 				titleScreen = nullptr;
 				page = 2;
 			}
-			else if (titleScreen->selection == 1)
+			else if (titleScreen->tutorialSelectionYesBOOL == false)
 			{
 				baseArea = new BaseArea;
 				baseArea->initialization = true;

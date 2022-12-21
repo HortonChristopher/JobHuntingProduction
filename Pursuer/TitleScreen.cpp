@@ -4,6 +4,8 @@ using namespace DirectX;
 
 extern DeltaTime* deltaTime;
 
+extern int keyOrMouse;
+
 TitleScreen::TitleScreen()
 {
 }
@@ -49,12 +51,15 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(99, L"Resources/TitleTutorialSelection_1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(100, L"Resources/TitleTutorialSelection_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(101, L"Resources/TitleTutorialSelection_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(102, L"Resources/TitleTutorialSelection_c.png")) { assert(0); return; }
 	titleSPRITE = Sprite::Create(8, { 0,0 }, { 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
 	titleStartStopSPRITE = Sprite::Create(9, { 0,0 });
 	fadeSPRITE = Sprite::Create(10, { 0,0 }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 	for (int i = 0; i < 2; i++)
 	{
 		tutorialSelectionSPRITE[i] = Sprite::Create(i + 99, { 390.0f, 300.0f });
+		keyboardControllerSelectionSPRITE[i] = Sprite::Create(i + 101, { 390.0f, 300.0f });
 	}
 
 	// Debug text initialization
@@ -73,7 +78,7 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
 	// Ground scale
-	groundOBJ->SetScale({ 400, 200, 400 });
+	groundOBJ->SetScale({ 800, 200, 800 });
 	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
 
 	// Ground position
@@ -102,6 +107,44 @@ void TitleScreen::Update()
 
 	degrees += 10.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
+	if (keyboardContrllerSelectionBOOL && !selectionBOOL)
+	{
+		if (selection == 0)
+		{
+			if (input->TriggerKey(DIK_S) || input->TriggerLStickDown())
+			{
+				selection = 1;
+			}
+		}
+		else
+		{
+			if (input->TriggerKey(DIK_W) || input->TriggerLStickUp())
+			{
+				selection = 0;
+			}
+		}
+
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+		{
+			if (selection == 0)
+			{
+				keyOrMouse = 1;
+			}
+			else
+			{
+				keyOrMouse = 0;
+			}
+
+			selectionBOOL = true;
+		}
+
+		if (input->TriggerKey(DIK_X) || input->TriggerControllerButton(XINPUT_GAMEPAD_B))
+		{
+			selection = 0;
+			keyboardContrllerSelectionBOOL = false;
+		}
+	}
+
 	if (tutorialSelectionBOOL && !selectionBOOL)
 	{
 		if (selection == 0)
@@ -121,7 +164,17 @@ void TitleScreen::Update()
 
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 		{
-			selectionBOOL = true;
+			if (selection == 0)
+			{
+				tutorialSelectionYesBOOL = true;
+			}
+			else
+			{
+				tutorialSelectionYesBOOL = false;
+			}
+
+			tutorialSelectionBOOL = false;
+			keyboardContrllerSelectionBOOL = true;
 		}
 
 		if (input->TriggerKey(DIK_X) || input->TriggerControllerButton(XINPUT_GAMEPAD_B))
@@ -246,7 +299,7 @@ void TitleScreen::Draw()
 	// 3D Object Drawing
 
 	skydomeOBJ->Draw();
-	extendedGroundOBJ->Draw();
+	//extendedGroundOBJ->Draw();
 	groundOBJ->Draw();
 
 	if (titleSpriteALPHA >= 1.0f)
@@ -277,6 +330,18 @@ void TitleScreen::Draw()
 		else
 		{
 			tutorialSelectionSPRITE[1]->Draw();
+		}
+	}
+
+	if (keyboardContrllerSelectionBOOL)
+	{
+		if (selection == 0)
+		{
+			keyboardControllerSelectionSPRITE[1]->Draw();
+		}
+		else
+		{
+			keyboardControllerSelectionSPRITE[0]->Draw();
 		}
 	}
 

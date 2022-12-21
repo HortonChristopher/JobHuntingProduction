@@ -58,6 +58,13 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	this->input = input;
 	this->audio = audio;
 
+	// Loading debug text
+	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
+
+	// Debug text initialization
+	debugText = DebugText::GetInstance();
+	debugText->Initialize(debugTextTexNumber);
+
 	// Camera initialization
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
@@ -176,10 +183,17 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	skydomeMODEL = Model::CreateFromOBJ("skydome");
 	positionMODEL = Model::CreateFromOBJ("yuka");
 	outsideGroundMODEL = Model::CreateFromOBJ("Landscape2");
+	doorMODEL = Model::CreateFromOBJ("DoorRed");
 	
 	// Touchable Objection Creation
 	groundOBJ = TouchableObject::Create(groundMODEL);
 	outsideGroundOBJ = TouchableObject::Create(outsideGroundMODEL);
+	for (int i = 0; i < 2; i++)
+	{
+		doorOBJ[i] = TouchableObject::Create(doorMODEL);
+		doorOBJ[i]->SetScale({ 50, 40, 10 });
+		doorOBJ[i]->SetPosition({ 0.0f, 80.0f - (50.0f * i), -520.0f + (1020.0f * i)});
+	}
 	skydomeOBJ->SetModel(skydomeMODEL);
 	skydomeOBJ->SetScale({ 5,5,5 });
 	playerAttackRangeOBJ->SetModel(positionMODEL);
@@ -219,12 +233,13 @@ void TutorialArea::Update()
 {
 	lightGroup->Update();
 	particleMan->Update();
-	camera->SetTarget(playerFBX->GetPosition());
+	if (!doorOpenCutscene)
+	{
+		camera->SetTarget(playerFBX->GetPosition());
+	}
 	camera->Update();
 
 	skydomeOBJ->SetPosition(playerFBX->GetPosition());
-
-	std::ostringstream healTracker;
 
 	switch (tutorialStatus)
 	{
@@ -255,6 +270,23 @@ void TutorialArea::Update()
 				tutorialPage = 0;
 				tutorialStatus = STAMINATUTORIAL;
 			}
+		}
+
+		if (doorOBJ[0]->GetPosition().y > 30.0f)
+		{
+			doorClose = true;
+		}
+		else
+		{
+			doorClose = false;
+		}
+
+		if (doorClose)
+		{
+			XMFLOAT3 doorPosition = doorOBJ[0]->GetPosition();
+			doorPosition.y -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			doorOBJ[0]->SetPosition(doorPosition);
+			doorOBJ[0]->Update();
 		}
 
 		if (!tutorialActive)
@@ -424,6 +456,8 @@ void TutorialArea::Update()
 			{
 				progress = 0.0f;
 				tutorialPage = 0;
+				doorOpenCutscene = true;
+				targetDifference = doorOBJ[1]->GetPosition() - playerFBX->GetPosition();
 				tutorialStatus = TUTORIALEND;
 			}
 		}
@@ -588,59 +622,113 @@ void TutorialArea::Update()
 
 		break;
 	case TUTORIALEND:
-		if (playerFBX->enumStatus == TutorialPlayer::HEAL)
+		std::ostringstream healTracker;
+
+		if (doorOpenCutscene)
 		{
-			if (playerFBX->timer >= 80.0f)
+			playerFBX->tutorialPart = 0;
+
+			if (targetMove < 59)
 			{
-				for (int i = 0; i < 180; i++)
-				{
-					ParticleCreationHeal(playerFBX->healParticlePosition[0].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
-						playerFBX->healParticlePosition[0].y,
-						playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
-				}
+				camera->SetTarget({ camera->GetTarget().x + targetDifference.x / 60.0f, camera->GetTarget().y + targetDifference.y / 60.0f, camera->GetTarget().z + targetDifference.z / 60.0f });
+				targetMove++;
 			}
-			if (playerFBX->timer >= 90.0f)
+			else if (targetMove >= 59)
 			{
-				for (int i = 0; i < 180; i++)
+				if (doorOBJ[1]->GetPosition().y < 150.0f)
 				{
-					ParticleCreationHeal(playerFBX->healParticlePosition[1].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
-						playerFBX->healParticlePosition[1].y,
-						playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					doorClose = true;
 				}
-			}
-			if (playerFBX->timer >= 100.0f)
-			{
-				for (int i = 0; i < 180; i++)
+				else
 				{
-					ParticleCreationHeal(playerFBX->healParticlePosition[2].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
-						playerFBX->healParticlePosition[2].y,
-						playerFBX->healParticlePosition[2].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					doorClose = false;
+				}
+
+				if (doorClose)
+				{
+					XMFLOAT3 doorPosition = doorOBJ[1]->GetPosition();
+					doorPosition.y += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					doorOBJ[1]->SetPosition(doorPosition);
+					doorOBJ[1]->Update();
+				}
+
+				if (doorOBJ[1]->GetPosition().y >= 150.0f)
+				{
+					camera->SetTarget(playerFBX->GetPosition());
+					doorOpenCutscene = false;
 				}
 			}
 		}
 
+		if (!doorOpenCutscene)
+		{
+			if (playerFBX->enumStatus == TutorialPlayer::HEAL)
+			{
+				if (playerFBX->timer >= 80.0f)
+				{
+					for (int i = 0; i < 180; i++)
+					{
+						ParticleCreationHeal(playerFBX->healParticlePosition[0].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+							playerFBX->healParticlePosition[0].y,
+							playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					}
+				}
+				if (playerFBX->timer >= 90.0f)
+				{
+					for (int i = 0; i < 180; i++)
+					{
+						ParticleCreationHeal(playerFBX->healParticlePosition[1].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+							playerFBX->healParticlePosition[1].y,
+							playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					}
+				}
+				if (playerFBX->timer >= 100.0f)
+				{
+					for (int i = 0; i < 180; i++)
+					{
+						ParticleCreationHeal(playerFBX->healParticlePosition[2].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+							playerFBX->healParticlePosition[2].y,
+							playerFBX->healParticlePosition[2].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					}
+				}
+			}
+
 #pragma region healTracker
-		healTracker << playerFBX->healRemaining
-			<< std::fixed << std::setprecision(0)
-			<< std::setw(2) << std::setfill('0');
-		debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
+			healTracker << playerFBX->healRemaining
+				<< std::fixed << std::setprecision(0)
+				<< std::setw(2) << std::setfill('0');
+			debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
 #pragma endregion
 
-		tutorialActive = false;
-		playerFBX->tutorialPart = 5;
-		if (playerFBX->GetPosition().z >= 500.0f)
-		{
-			deletion = true;
+			tutorialActive = false;
+			playerFBX->tutorialPart = 5;
+			if (playerFBX->GetPosition().z >= 500.0f)
+			{
+				deletion = true;
+			}
 		}
 		break;
 	}
 
-	if (distance(playerFBX->GetPosition(), groundOBJ->GetPosition()) >= 490.0f && tutorialStatus != INTROCUTSCENE && tutorialStatus != TUTORIALEND)
+	if (tutorialStatus == TUTORIALEND && distance(playerFBX->GetPosition(), groundOBJ->GetPosition()) >= 490.0f)
+	{
+		if (playerFBX->GetPosition().x >= 45.0f || playerFBX->GetPosition().x <= -45.0f || playerFBX->GetPosition().z <= 475.0f)
+		{
+			if (!arenaClamp)
+			{
+				fromOriginToObject = playerFBX->GetPosition() - groundOBJ->GetPosition();
+				fromOriginToObject = fromOriginToObject * (490.0f / distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
+			}
+			playerFBX->SetPosition(groundOBJ->GetPosition() + fromOriginToObject);
+			arenaClamp = true;
+		}
+	}
+	else if (distance(playerFBX->GetPosition(), groundOBJ->GetPosition()) >= 490.0f && tutorialStatus != INTROCUTSCENE)
 	{
 		if (!arenaClamp)
 		{
 			fromOriginToObject = playerFBX->GetPosition() - groundOBJ->GetPosition();
-			fromOriginToObject* (490.0f / distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
+			fromOriginToObject = fromOriginToObject * (490.0f / distance(playerFBX->GetPosition(), groundOBJ->GetPosition()));
 		}
 		playerFBX->SetPosition(groundOBJ->GetPosition() + fromOriginToObject);
 		arenaClamp = true;
@@ -650,7 +738,21 @@ void TutorialArea::Update()
 		arenaClamp = false;
 	}
 
-	if (tutorialStatus != INTROCUTSCENE)
+	if (tutorialStatus != INTROCUTSCENE && tutorialStatus == TUTORIALEND)
+	{
+		for (float i = 0.0f; i < 360.0f; i++)
+		{
+			if (i > 84.0f && i < 96.0f)
+			{
+
+			}
+			else if (distance(playerFBX->GetPosition(), { cosf(XMConvertToRadians(i)) * 495.0f, 0.0f, sinf(XMConvertToRadians(i)) * 495.0f }) <= 20.0f)
+			{
+				ParticleCreationEdge(cosf(XMConvertToRadians(i)) * 495.0f, 0.0f, sinf(XMConvertToRadians(i)) * 495.0f, 30, 5.0f, 3.0f);
+			}
+		}
+	}
+	else if (tutorialStatus != INTROCUTSCENE && tutorialStatus != TUTORIALEND)
 	{
 		for (float i = 0.0f; i < 360.0f; i++)
 		{
@@ -712,6 +814,10 @@ void TutorialArea::Update()
 		enemyAttackRangeOBJ->Update();
 		enemyPositionOBJ->Update();
 	}
+	for (int i = 0; i < 2; i++)
+	{
+		doorOBJ[i]->Update();
+	}
 	playerPositionOBJ->Update();
 	collisionManager->CheckAllCollisions();
 #pragma endregion
@@ -752,6 +858,11 @@ void TutorialArea::Draw()
 	groundOBJ->Draw();
 	outsideGroundOBJ->Draw();
 	skydomeOBJ->Draw();
+
+	for (int i = 0; i < 2; i++)
+	{
+		doorOBJ[i]->Draw();
+	}
 
 	// Particle drawing
 	particleMan->Draw(cmdList);
@@ -950,9 +1061,18 @@ void TutorialArea::Draw()
 		|| tutorialStatus == TUTORIALEND)
 	{
 		healSPRITE->Draw();
-		healKeyboardSPRITE->Draw();
-		healControllerSPRITE->Draw();
+		if (keyOrMouse == 0)
+		{
+			healKeyboardSPRITE->Draw();
+		}
+		else
+		{
+			healControllerSPRITE->Draw();
+		}
 	}
+
+	// Debug text drawing
+	debugText->DrawAll(cmdList);
 
 	// Sprite post draw
 	Sprite::PostDraw();
