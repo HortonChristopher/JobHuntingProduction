@@ -556,6 +556,29 @@ void BaseArea::Update()
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
 			camera->SetTarget(playerFBX->GetPosition());
 		}
+
+		for (float i = 0.0f; i < 100.0f; i++)
+		{
+			if (Distance(playerFBX->GetPosition(), { -400.0f + (8 * i), playerFBX->GetPosition().y, -400.0f}) <= 25.0f)
+			{
+				ParticleCreationEdge(-400.0f + (8 * i), playerFBX->GetPosition().y, -400.0f, 30, 5.0f, 3.0f);
+			}
+
+			if (Distance(playerFBX->GetPosition(), { -400.0f + (8 * i), playerFBX->GetPosition().y, 400.0f }) <= 25.0f)
+			{
+				ParticleCreationEdge(-400.0f + (8 * i), playerFBX->GetPosition().y, 400.0f, 30, 5.0f, 3.0f);
+			}
+
+			if (Distance(playerFBX->GetPosition(), { -400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i) }) <= 25.0f)
+			{
+				ParticleCreationEdge(-400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i), 30, 5.0f, 3.0f);
+			}
+
+			if (Distance(playerFBX->GetPosition(), { 400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i) }) <= 25.0f)
+			{
+				ParticleCreationEdge(-400.0f, playerFBX->GetPosition().y, -400.0f + (8 * i), 30, 5.0f, 3.0f);
+			}
+		}
 	}
 #pragma endregion
 
@@ -694,7 +717,7 @@ void BaseArea::Draw()
 	// End Debug
 
 	skydomeOBJ->Draw();
-	extendedGroundOBJ->Draw();
+	//extendedGroundOBJ->Draw();
 	groundOBJ->Draw();
 	tutorialGroundOBJ->Draw();
 
@@ -805,6 +828,29 @@ void BaseArea::ParticleCreationHeal(float x, float y, float z, int life, float o
 		XMFLOAT3 acc{};
 		const float rnd_acc = 0.001f; // 0.001f
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// ’Ç‰Á
+		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
+}
+
+void BaseArea::ParticleCreationEdge(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		XMFLOAT3 pos{};
+		pos.x = x;
+		pos.y = y + offset;
+		pos.z = z;
+
+		const float rnd_vel = 0.1f; // 0.1f
+		XMFLOAT3 vel{};
+		vel.x = 0.0f;
+		vel.y = 0.0f;
+		vel.z = 0.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f; // 0.001f
+		acc.y = 0.0f;
 
 		// ’Ç‰Á
 		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
@@ -953,13 +999,13 @@ void BaseArea::thread3()
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
 	// Ground scale
-	groundOBJ->SetScale({ 400,200,400 });
+	groundOBJ->SetScale({ 800,200,800 });
 	tutorialGroundOBJ->SetScale({ 50, 10, 50 });
 	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
 
 	// Ground positions
 	groundOBJ->SetPosition({ 0, -15, 0 });
-	tutorialGroundOBJ->SetPosition({ 0.0f, 18.0f, -1150.0f });
+	tutorialGroundOBJ->SetPosition({ 0.0f, 18.0f, -1450.0f });
 	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
 
 	srand((unsigned int)time(NULL));

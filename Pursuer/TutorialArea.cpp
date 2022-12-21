@@ -984,16 +984,12 @@ void TutorialArea::ParticleCreationEdge(float x, float y, float z, int life, flo
 
 		const float rnd_vel = 0.1f; // 0.1f
 		XMFLOAT3 vel{};
-		//vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.x = 0.0f;
 		vel.y = 0.0f;
 		vel.z = 0.0f;
 
 		XMFLOAT3 acc{};
 		const float rnd_acc = 0.001f; // 0.001f
-		//acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 		acc.y = 0.0f;
 
 		// ’Ç‰Á

@@ -59,6 +59,7 @@ public:
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);
+	void ParticleCreationEdge(float x, float y, float z, int life, float offset, float start_scale);
 	float Distance(XMFLOAT3 player, XMFLOAT3 center);
 
 	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
