@@ -169,7 +169,6 @@
     <ClInclude Include="collision\BaseCollider.h" />
     <ClInclude Include="collision\Collision.h" />
     <ClInclude Include="collision\CollisionAttribute.h" />
-    <ClInclude Include="collision\CollisionInfo.h" />
     <ClInclude Include="collision\CollisionManager.h" />
     <ClInclude Include="collision\CollisionPrimitive.h" />
     <ClInclude Include="collision\CollisionTypes.h" />
@@ -179,6 +178,7 @@
     <ClInclude Include="collision\RaycastHit.h" />
     <ClInclude Include="collision\SphereCollider.h" />
     <ClInclude Include="collision\TouchableObject.h" />
+    <ClInclude Include="dynamics\CollisionInfo.h" />
     <ClInclude Include="FbxLoader\FbxLoader.h" />
     <ClInclude Include="math\DeltaTime.h" />
     <ClInclude Include="math\Easing.h" />

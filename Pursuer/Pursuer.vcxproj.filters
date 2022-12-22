@@ -218,9 +218,6 @@
     <ClInclude Include="collision\CollisionAttribute.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="collision\CollisionInfo.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="collision\CollisionManager.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
@@ -289,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="3d\Object3d.h">
       <Filter>Header Files\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamics\CollisionInfo.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
