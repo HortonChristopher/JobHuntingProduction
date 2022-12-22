@@ -47,11 +47,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(ProjectDir)\lib\fbx_sdk\lib;$(ProjectDir)\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\fbx_sdk\lib;$(ProjectDir)\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,38 +106,38 @@
     <ClCompile Include="3d\LightGroup.cpp" />
     <ClCompile Include="3d\FBX3DModel.cpp" />
     <ClCompile Include="3d\FBXGeneration.cpp" />
+    <ClCompile Include="3d\Object3d.cpp" />
     <ClCompile Include="3d\ParticleManager.cpp" />
     <ClCompile Include="audio\Audio.cpp" />
-    <ClCompile Include="BaseArea.cpp" />
+    <ClCompile Include="behavior\EnemyHuman.cpp" />
+    <ClCompile Include="behavior\Player.cpp" />
+    <ClCompile Include="behavior\TutorialEnemy.cpp" />
+    <ClCompile Include="behavior\TutorialPlayer.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="CollisionManager.cpp" />
-    <ClCompile Include="CollisionPrimitive.cpp" />
-    <ClCompile Include="DeltaTime.cpp" />
-    <ClCompile Include="Easing.cpp" />
-    <ClCompile Include="EnemyHuman.cpp" />
+    <ClCompile Include="collision\Collision.cpp" />
+    <ClCompile Include="collision\CollisionManager.cpp" />
+    <ClCompile Include="collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="collision\MeshCollider.cpp" />
+    <ClCompile Include="collision\PlayerPositionObject.cpp" />
+    <ClCompile Include="collision\SphereCollider.cpp" />
+    <ClCompile Include="collision\TouchableObject.cpp" />
     <ClCompile Include="FbxLoader\FbxLoader.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshCollider.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Object3d.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerPositionObject.cpp" />
+    <ClCompile Include="math\DeltaTime.cpp" />
+    <ClCompile Include="math\Easing.cpp" />
+    <ClCompile Include="math\Vector.cpp" />
+    <ClCompile Include="model\Material.cpp" />
+    <ClCompile Include="model\Mesh.cpp" />
+    <ClCompile Include="model\Model.cpp" />
+    <ClCompile Include="scene\BaseArea.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="SphereCollider.cpp" />
-    <ClCompile Include="TitleScreen.cpp" />
-    <ClCompile Include="TouchableObject.cpp" />
-    <ClCompile Include="TutorialArea.cpp" />
-    <ClCompile Include="TutorialEnemy.cpp" />
-    <ClCompile Include="TutorialPlayer.cpp" />
-    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="scene\TitleScreen.cpp" />
+    <ClCompile Include="scene\TutorialArea.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\imgui\imgui.vcxproj">
@@ -153,45 +153,45 @@
     <ClInclude Include="3d\LightGroup.h" />
     <ClInclude Include="3d\FBX3DModel.h" />
     <ClInclude Include="3d\FBXGeneration.h" />
+    <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="3d\ParticleManager.h" />
     <ClInclude Include="3d\PointLight.h" />
     <ClInclude Include="3d\SpotLight.h" />
     <ClInclude Include="audio\Audio.h" />
-    <ClInclude Include="BaseArea.h" />
-    <ClInclude Include="BaseCollider.h" />
+    <ClInclude Include="behavior\EnemyHuman.h" />
+    <ClInclude Include="behavior\Player.h" />
+    <ClInclude Include="behavior\TutorialEnemy.h" />
+    <ClInclude Include="behavior\TutorialPlayer.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\DebugCamera.h" />
     <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="base\DirectXCommon.h" />
-    <ClInclude Include="Collision.h" />
-    <ClInclude Include="CollisionAttribute.h" />
-    <ClInclude Include="CollisionInfo.h" />
-    <ClInclude Include="CollisionManager.h" />
-    <ClInclude Include="CollisionPrimitive.h" />
-    <ClInclude Include="CollisionTypes.h" />
-    <ClInclude Include="DeltaTime.h" />
-    <ClInclude Include="Easing.h" />
-    <ClInclude Include="EnemyHuman.h" />
+    <ClInclude Include="collision\BaseCollider.h" />
+    <ClInclude Include="collision\Collision.h" />
+    <ClInclude Include="collision\CollisionAttribute.h" />
+    <ClInclude Include="collision\CollisionInfo.h" />
+    <ClInclude Include="collision\CollisionManager.h" />
+    <ClInclude Include="collision\CollisionPrimitive.h" />
+    <ClInclude Include="collision\CollisionTypes.h" />
+    <ClInclude Include="collision\MeshCollider.h" />
+    <ClInclude Include="collision\PlayerPositionObject.h" />
+    <ClInclude Include="collision\QueryCallback.h" />
+    <ClInclude Include="collision\RaycastHit.h" />
+    <ClInclude Include="collision\SphereCollider.h" />
+    <ClInclude Include="collision\TouchableObject.h" />
     <ClInclude Include="FbxLoader\FbxLoader.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshCollider.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Object3d.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerPositionObject.h" />
-    <ClInclude Include="QueryCallback.h" />
-    <ClInclude Include="RaycastHit.h" />
+    <ClInclude Include="math\DeltaTime.h" />
+    <ClInclude Include="math\Easing.h" />
+    <ClInclude Include="math\Vector.h" />
+    <ClInclude Include="model\Material.h" />
+    <ClInclude Include="model\Mesh.h" />
+    <ClInclude Include="model\Model.h" />
+    <ClInclude Include="scene\BaseArea.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="SphereCollider.h" />
-    <ClInclude Include="TitleScreen.h" />
-    <ClInclude Include="TouchableObject.h" />
-    <ClInclude Include="TutorialArea.h" />
-    <ClInclude Include="TutorialEnemy.h" />
-    <ClInclude Include="TutorialPlayer.h" />
-    <ClInclude Include="Vector.h" />
+    <ClInclude Include="scene\TitleScreen.h" />
+    <ClInclude Include="scene\TutorialArea.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\FBXPS.hlsl">

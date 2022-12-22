@@ -39,33 +39,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionPrimitive.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshCollider.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereCollider.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="TouchableObject.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="DeltaTime.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Easing.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="3d\FBX3DModel.cpp">
       <Filter>Source Files\FBX</Filter>
     </ClCompile>
@@ -80,15 +53,6 @@
     </ClCompile>
     <ClCompile Include="camera\DebugCamera.cpp">
       <Filter>Source Files\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Model</Filter>
     </ClCompile>
     <ClCompile Include="2d\DebugText.cpp">
       <Filter>Source Files\2D</Filter>
@@ -105,13 +69,7 @@
     <ClCompile Include="2d\PostEffect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="BaseArea.cpp">
-      <Filter>Source Files\AreaScene</Filter>
-    </ClCompile>
     <ClCompile Include="scene\GameScene.cpp">
-      <Filter>Source Files\AreaScene</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScreen.cpp">
       <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
     <ClCompile Include="base\DirectXCommon.cpp">
@@ -126,65 +84,71 @@
     <ClCompile Include="input\Input.cpp">
       <Filter>Source Files\Audio &amp; Input</Filter>
     </ClCompile>
-    <ClCompile Include="Object3d.cpp">
-      <Filter>Source Files\3D</Filter>
+    <ClCompile Include="math\DeltaTime.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerPositionObject.cpp">
-      <Filter>Source Files\3D</Filter>
+    <ClCompile Include="math\Easing.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyHuman.cpp">
+    <ClCompile Include="math\Vector.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="model\Material.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\Mesh.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\Model.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\Collision.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionManager.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionPrimitive.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\MeshCollider.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\PlayerPositionObject.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\SphereCollider.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\TouchableObject.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="behavior\EnemyHuman.cpp">
       <Filter>Source Files\Behavior</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="behavior\Player.cpp">
       <Filter>Source Files\Behavior</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialArea.cpp">
+    <ClCompile Include="behavior\TutorialEnemy.cpp">
+      <Filter>Source Files\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="behavior\TutorialPlayer.cpp">
+      <Filter>Source Files\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Object3d.cpp">
+      <Filter>Source Files\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\BaseArea.cpp">
       <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialPlayer.cpp">
-      <Filter>Source Files\Behavior</Filter>
+    <ClCompile Include="scene\TitleScreen.cpp">
+      <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialEnemy.cpp">
-      <Filter>Source Files\Behavior</Filter>
+    <ClCompile Include="scene\TutorialArea.cpp">
+      <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collision.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionAttribute.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionInfo.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionPrimitive.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionTypes.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="DeltaTime.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Easing.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="TouchableObject.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="RaycastHit.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollider.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="3d\FBX3DModel.h">
       <Filter>Header Files\FBX</Filter>
     </ClInclude>
@@ -194,26 +158,11 @@
     <ClInclude Include="FbxLoader\FbxLoader.h">
       <Filter>Header Files\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="MeshCollider.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseCollider.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="camera\DebugCamera.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
     <ClInclude Include="camera\Camera.h">
       <Filter>Header Files\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\Model</Filter>
     </ClInclude>
     <ClInclude Include="2d\Sprite.h">
       <Filter>Header Files\2D</Filter>
@@ -242,13 +191,7 @@
     <ClInclude Include="2d\PostEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="BaseArea.h">
-      <Filter>Header Files\AreaScene</Filter>
-    </ClInclude>
     <ClInclude Include="scene\GameScene.h">
-      <Filter>Header Files\AreaScene</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScreen.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
     <ClInclude Include="base\DirectXCommon.h">
@@ -266,29 +209,86 @@
     <ClInclude Include="input\Input.h">
       <Filter>Header Files\Audio &amp; Input</Filter>
     </ClInclude>
-    <ClInclude Include="QueryCallback.h">
+    <ClInclude Include="collision\BaseCollider.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Object3d.h">
-      <Filter>Header Files\3D</Filter>
+    <ClInclude Include="collision\Collision.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerPositionObject.h">
-      <Filter>Header Files\3D</Filter>
+    <ClInclude Include="collision\CollisionAttribute.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="collision\CollisionInfo.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionManager.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionPrimitive.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionTypes.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\MeshCollider.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\PlayerPositionObject.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\QueryCallback.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\RaycastHit.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\SphereCollider.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\TouchableObject.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="model\Material.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\Mesh.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\Model.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="math\DeltaTime.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Easing.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="behavior\EnemyHuman.h">
       <Filter>Header Files\Behavior</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHuman.h">
+    <ClInclude Include="behavior\Player.h">
       <Filter>Header Files\Behavior</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialArea.h">
+    <ClInclude Include="behavior\TutorialEnemy.h">
+      <Filter>Header Files\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="behavior\TutorialPlayer.h">
+      <Filter>Header Files\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\BaseArea.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialPlayer.h">
-      <Filter>Header Files\Behavior</Filter>
+    <ClInclude Include="scene\TitleScreen.h">
+      <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialEnemy.h">
-      <Filter>Header Files\Behavior</Filter>
+    <ClInclude Include="scene\TutorialArea.h">
+      <Filter>Header Files\AreaScene</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Object3d.h">
+      <Filter>Header Files\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
