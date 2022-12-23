@@ -244,15 +244,9 @@ void BaseArea::Update()
 		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true ||
 				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 		{
-			//baseAreaEnemyFBX[i]->SetAggro(true);
-			/*if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK || baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
-			{
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-			}*/
 			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
 			if (distance < 8.0f)
 			{
-				//baseAreaEnemyFBX[i]->SetAttack(true);
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN)
 				{
 					int random = rand() % 10;
@@ -271,7 +265,6 @@ void BaseArea::Update()
 			}
 			else
 			{
-				//baseAreaEnemyFBX[i]->SetAttack(false);
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK)
 				{
 					if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
@@ -461,6 +454,7 @@ void BaseArea::Update()
 	
 #pragma endregion
 
+#pragma region playerHeal
 	if (playerFBX->enumStatus == Player::HEAL)
 	{
 		if (playerFBX->timer >= 80.0f)
@@ -491,6 +485,7 @@ void BaseArea::Update()
 			}
 		}
 	}
+#pragma endregion
 
 	if (enemyDefeated > 4)
 	{
@@ -896,28 +891,28 @@ XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
 void BaseArea::thread1()
 {
 	// Loading debug text
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(debugTextTexNumber, "debugfont.png")) { assert(0); return; }
 
 	// Debug text initialization
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextTexNumber);
 
 	// Sprite texture loading
-	if (!Sprite::LoadTexture(1, L"Resources/HPBar.png")) { assert(0); return; } // HP bar texture
-	if (!Sprite::LoadTexture(2, L"Resources/HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
-	if (!Sprite::LoadTexture(3, L"Resources/STBar.png")) { assert(0); return; } // ST bar texture
-	if (!Sprite::LoadTexture(4, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
-	if (!Sprite::LoadTexture(5, L"Resources/Mission1.png")) { assert(0); return; } // Base mission texture
-	if (!Sprite::LoadTexture(6, L"Resources/BaseAreaMinimap.png")) { assert(0); return; } // Minimap texture
-	if (!Sprite::LoadTexture(7, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
-	if (!Sprite::LoadTexture(8, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
-	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; } // Black Screen
-	if (!Sprite::LoadTexture(11, L"Resources/EnemyHumanHPBar.png")) { assert(0); return; } // Enemy HP Bar
-	if (!Sprite::LoadTexture(12, L"Resources/EnemyHumanHPBarFrame.png")) { assert(0); return; } // Enemy HP Bar Frame
-	if (!Sprite::LoadTexture(13, L"Resources/DamageOverlay.png")) { assert(0); return; } // Damage Overlay
-	if (!Sprite::LoadTexture(14, L"Resources/Heal.png")) { assert(0); return; } // Heal Graphic
-	if (!Sprite::LoadTexture(15, L"Resources/HealK.png")) { assert(0); return; } // Heal Graphic
-	if (!Sprite::LoadTexture(16, L"Resources/HealC.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(1, "HPBar.png")) { assert(0); return; } // HP bar texture
+	if (!Sprite::LoadTexture(2, "HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
+	if (!Sprite::LoadTexture(3, "STBar.png")) { assert(0); return; } // ST bar texture
+	if (!Sprite::LoadTexture(4, "STBarFrame.png")) { assert(0); return; } // ST bar frame texture
+	if (!Sprite::LoadTexture(5, "Mission1.png")) { assert(0); return; } // Base mission texture
+	if (!Sprite::LoadTexture(6, "BaseAreaMinimap.png")) { assert(0); return; } // Minimap texture
+	if (!Sprite::LoadTexture(7, "PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
+	if (!Sprite::LoadTexture(8, "EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
+	if (!Sprite::LoadTexture(10, "BlackScreen.png")) { assert(0); return; } // Black Screen
+	if (!Sprite::LoadTexture(11, "EnemyHumanHPBar.png")) { assert(0); return; } // Enemy HP Bar
+	if (!Sprite::LoadTexture(12, "EnemyHumanHPBarFrame.png")) { assert(0); return; } // Enemy HP Bar Frame
+	if (!Sprite::LoadTexture(13, "DamageOverlay.png")) { assert(0); return; } // Damage Overlay
+	if (!Sprite::LoadTexture(14, "Heal.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(15, "HealK.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(16, "HealC.png")) { assert(0); return; } // Heal Graphic
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });

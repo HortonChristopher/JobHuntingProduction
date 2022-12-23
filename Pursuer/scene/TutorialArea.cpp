@@ -59,7 +59,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	this->audio = audio;
 
 	// Loading debug text
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(debugTextTexNumber, "debugfont.png")) { assert(0); return; }
 
 	// Debug text initialization
 	debugText = DebugText::GetInstance();
@@ -91,58 +91,58 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	PlayerPositionObject::SetCamera(camera);
 
 	// Sprite Generation
-	if (!Sprite::LoadTexture(1, L"Resources/TutorialTextFrame.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(2, L"Resources/Tutorial1_1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(3, L"Resources/Tutorial1_2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(4, L"Resources/Tutorial1_3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(5, L"Resources/Tutorial1_3_k.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(6, L"Resources/Tutorial1_3_c.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(7, L"Resources/Tutorial1_4.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(8, L"Resources/Tutorial2_1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(9, L"Resources/Tutorial2_2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(10, L"Resources/Tutorial2_3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(11, L"Resources/Tutorial2_3_k.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(12, L"Resources/Tutorial2_3_c.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(13, L"Resources/Tutorial2_4.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(14, L"Resources/Tutorial3_1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(15, L"Resources/Tutorial3_2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(16, L"Resources/Tutorial3_2_k.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(17, L"Resources/Tutorial3_2_c.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(18, L"Resources/Tutorial3_3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(25, L"Resources/Tutorial3_4.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(19, L"Resources/Tutorial4_1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(20, L"Resources/Tutorial4_2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(21, L"Resources/Tutorial4_3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(22, L"Resources/Tutorial4_3_k.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(23, L"Resources/Tutorial4_3_c.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(24, L"Resources/Tutorial4_4.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(26, L"Resources/Tutorial4_5.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(27, L"Resources/Tutorial4_6.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(1, "TutorialTextFrame.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(2, "Tutorial1_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(3, "Tutorial1_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(4, "Tutorial1_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(5, "Tutorial1_3_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(6, "Tutorial1_3_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(7, "Tutorial1_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(8, "Tutorial2_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(9, "Tutorial2_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(10, "Tutorial2_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(11, "Tutorial2_3_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(12, "Tutorial2_3_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(13, "Tutorial2_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(14, "Tutorial3_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(15, "Tutorial3_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(16, "Tutorial3_2_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(17, "Tutorial3_2_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(18, "Tutorial3_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(25, "Tutorial3_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(19, "Tutorial4_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(20, "Tutorial4_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(21, "Tutorial4_3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(22, "Tutorial4_3_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(23, "Tutorial4_3_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(24, "Tutorial4_4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(26, "Tutorial4_5.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(27, "Tutorial4_6.png")) { assert(0); return; }
 
-	if (!Sprite::LoadTexture(28, L"Resources/DamageOverlay.png")) { assert(0); return; } // Damage Overlay
+	if (!Sprite::LoadTexture(28, "DamageOverlay.png")) { assert(0); return; } // Damage Overlay
 
-	if (!Sprite::LoadTexture(29, L"Resources/Heal.png")) { assert(0); return; } // Heal Graphic
-	if (!Sprite::LoadTexture(30, L"Resources/HealK.png")) { assert(0); return; } // Heal Graphic
-	if (!Sprite::LoadTexture(31, L"Resources/HealC.png")) { assert(0); return; } // Heal Graphic
-	if (!Sprite::LoadTexture(32, L"Resources/HealTutorialMask.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(29, "Heal.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(30, "HealK.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(31, "HealC.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(32, "HealTutorialMask.png")) { assert(0); return; } // Heal Graphic
 
-	if (!Sprite::LoadTexture(99, L"Resources/PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
-	if (!Sprite::LoadTexture(98, L"Resources/EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
-	if (!Sprite::LoadTexture(97, L"Resources/MinimapTutorialMask.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(96, L"Resources/TutorialMinimap.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(95, L"Resources/StaminaTutorialMask.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(94, L"Resources/TutorialMission1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(93, L"Resources/TutorialMission2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(92, L"Resources/TutorialMission3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(91, L"Resources/TutorialMission4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(99, "PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
+	if (!Sprite::LoadTexture(98, "EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
+	if (!Sprite::LoadTexture(97, "MinimapTutorialMask.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(96, "TutorialMinimap.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(95, "StaminaTutorialMask.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(94, "TutorialMission1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(93, "TutorialMission2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(92, "TutorialMission3.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(91, "TutorialMission4.png")) { assert(0); return; }
 
-	if (!Sprite::LoadTexture(85, L"Resources/LoadingBar.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(86, L"Resources/LoadingBarFrame.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(85, "LoadingBar.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(86, "LoadingBarFrame.png")) { assert(0); return; }
 
-	if (!Sprite::LoadTexture(87, L"Resources/HPBar.png")) { assert(0); return; } // HP bar texture
-	if (!Sprite::LoadTexture(88, L"Resources/HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
-	if (!Sprite::LoadTexture(89, L"Resources/STBar.png")) { assert(0); return; } // ST bar texture
-	if (!Sprite::LoadTexture(90, L"Resources/STBarFrame.png")) { assert(0); return; } // ST bar frame texture
+	if (!Sprite::LoadTexture(87, "HPBar.png")) { assert(0); return; } // HP bar texture
+	if (!Sprite::LoadTexture(88, "HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
+	if (!Sprite::LoadTexture(89, "STBar.png")) { assert(0); return; } // ST bar texture
+	if (!Sprite::LoadTexture(90, "STBarFrame.png")) { assert(0); return; } // ST bar frame texture
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
 	for (int i = 0; i < 26; i++)

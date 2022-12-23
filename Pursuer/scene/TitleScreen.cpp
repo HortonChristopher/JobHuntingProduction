@@ -44,15 +44,15 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	Object3d::SetCamera(camera);
 
 	// Loading debug text
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(debugTextTexNumber, "debugfont.png")) { assert(0); return; }
 
-	if (!Sprite::LoadTexture(8, L"Resources/Title.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(9, L"Resources/TitleStartStop.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(10, L"Resources/BlackScreen.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(99, L"Resources/TitleTutorialSelection_1.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(100, L"Resources/TitleTutorialSelection_2.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(101, L"Resources/TitleTutorialSelection_k.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(102, L"Resources/TitleTutorialSelection_c.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(8, "Title.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(9, "TitleStartStop.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(10, "BlackScreen.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(99, "TitleTutorialSelection_1.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(100, "TitleTutorialSelection_2.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(101, "TitleTutorialSelection_k.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(102, "TitleTutorialSelection_c.png")) { assert(0); return; }
 	titleSPRITE = Sprite::Create(8, { 0,0 }, { 1.0f, 1.0f, 1.0f, titleSpriteALPHA });
 	titleStartStopSPRITE = Sprite::Create(9, { 0,0 });
 	fadeSPRITE = Sprite::Create(10, { 0,0 }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });

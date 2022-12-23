@@ -201,7 +201,7 @@ bool Sprite::StaticInitialize(ID3D12Device* device, int window_width, int window
 	return true;
 }
 
-bool Sprite::LoadTexture(UINT texnumber, const wchar_t * filename)
+bool Sprite::LoadTexture(UINT texnumber, const std::string& filename)
 {
 	// nullptrチェック
 	assert(device);
@@ -210,9 +210,13 @@ bool Sprite::LoadTexture(UINT texnumber, const wchar_t * filename)
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
+	std::string filepath = "Resources/Sprite/" + filename;
+	wchar_t wfilepath[128];
+
+	MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
 
 	result = LoadFromWICFile(
-		filename, WIC_FLAGS_NONE,
+		wfilepath, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		assert(0);
