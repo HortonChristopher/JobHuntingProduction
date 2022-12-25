@@ -6,7 +6,7 @@
 using namespace std;
 
 // 静的メンバ変数の実体 The entity of a static member variable
-const std::string Model::baseDirectory = "Resources/";
+const std::string Model::baseDirectory = "Resources/3DObj/";
 ID3D12Device* Model::device = nullptr;
 UINT Model::descriptorHandleIncrementSize = 0;
 
