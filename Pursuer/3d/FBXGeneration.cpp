@@ -50,7 +50,7 @@ void FBXGeneration::Initialize()
 	FBXGeneration::CreateGraphicsPipeline();
 
 	// Set time for 1 frame at 60fps
-	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
+	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 }
 
 void FBXGeneration::Update()

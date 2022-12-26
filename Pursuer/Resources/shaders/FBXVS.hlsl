@@ -47,24 +47,6 @@ SkinOutput ComputeSkin(VSInput input)
 	return output;
 }
 
-// Skinning Calculation
-//SkinOutput ComputeSkin(VSInput input)
-//{
-//	// Clear zero
-//	SkinOutput output;
-//
-//	uint iBone; // Bone number to calculate
-//	matrix m; // Skinning line
-//
-//	// Bone 0 only
-//	iBone = input.boneIndices.x;
-//	m = matSkinning[iBone];
-//	output.pos = mul(m, input.pos);
-//	output.normal = mul((float3x3)m, input.normal);
-//
-//	return output;
-//}
-
 // Entry point
 VSOutput main(VSInput input)
 {

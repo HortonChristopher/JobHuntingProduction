@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 #include <DirectXMath.h>
 #include <DirectXTex.h>
 #include <Windows.h>
@@ -50,6 +51,12 @@ private: // Alias
 public: // Constant
 	// Maximum number of bone instances
 	static const int MAX_BONE_INDICES = 4;
+
+	static const int MAX_BONES = 32;
+	struct ConstBufferDataSkin
+	{
+		std::array<XMMATRIX, MAX_BONES> bones;
+	};
 
 public: // Subclass
 	// Vertex data structure
