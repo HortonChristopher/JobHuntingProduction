@@ -26,6 +26,8 @@ public: // メンバ関数
 	/// </summary>
 	~DirectXCommon();
 
+	static DirectXCommon* GetInstance();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>

@@ -16,6 +16,12 @@ DirectXCommon::~DirectXCommon()
 	Finalize();
 }
 
+DirectXCommon* DirectXCommon::GetInstance()
+{
+	static DirectXCommon instance;
+	return &instance;
+}
+
 void DirectXCommon::Initialize(WinApp* winApp)
 {
 	// nullptrチェック
