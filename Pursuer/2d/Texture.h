@@ -34,7 +34,7 @@ public:
 	inline static ComPtr <ID3D12Resource> GetTextureBuffers(std::string name) { return textureBuffers[name]; }
 	
 	// Get Meta Data
-	static DirectX::TexMetadata& GetMetadata(std::string name) { return metaData[name]; }
+	//static DirectX::TexMetadata& GetMetadata(std::string name) { return metaData[name]; }
 
 	// Get Basic Descriptor Heap
 	inline static ComPtr<ID3D12DescriptorHeap> GetBasicDescriptorHeap() {

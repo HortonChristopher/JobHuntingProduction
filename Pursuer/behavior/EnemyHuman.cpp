@@ -29,9 +29,9 @@ void EnemyHuman::Initialize()
 {
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
-	//modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
-	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
+	//modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
