@@ -82,6 +82,15 @@ void EnemyHuman::Initialize()
 
 void EnemyHuman::Update()
 {
+	if (animationNo == 2)
+	{
+		SetScale({ 0.2f, 0.2f, 0.2f });
+	}
+	else
+	{
+		SetScale({ 3,3,3 });
+	}
+
 	switch (enumStatus)
 	{
 	case STAND:
