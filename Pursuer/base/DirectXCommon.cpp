@@ -190,13 +190,13 @@ bool DirectXCommon::InitializeDXGIDevice()
 	HRESULT result = S_FALSE;
 
 #ifdef _DEBUG
-	ComPtr<ID3D12Debug> debugController;
+	ComPtr<ID3D12Debug1> debugController;
 	//ComPtr<ID3D12Debug1> debugController;
 	//デバッグレイヤーをオンに	
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
 	{
 		debugController->EnableDebugLayer();
-		//debugController->SetEnableGPUBasedValidation(true);
+		debugController->SetEnableGPUBasedValidation(true);
 	}
 #endif
 

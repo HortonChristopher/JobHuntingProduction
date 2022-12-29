@@ -216,7 +216,7 @@ void FbxLoader::ParseMeshFaces(FBX3DModel* model, FbxMesh* fbxMesh)
     auto& vertices = model->vertices;
     auto& indices = model->indices;
 
-    // 1 files does not support multiple mesh models
+    // 1 file does not support multiple mesh models
     assert(indices.size() == 0);
 
     // Number of faces
