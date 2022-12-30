@@ -419,6 +419,11 @@ void EnemyHuman::Update()
 		position.z = -398.0f;
 	}
 
+	if (model->GetModelTransform() == NULL)
+	{
+		assert(0);
+	}
+
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation
@@ -434,6 +439,11 @@ void EnemyHuman::Update()
 	matWorld *= matScale; // Reflect scaling in the world matrix
 	matWorld *= matRot; // Reflect the rotation in the world matrix
 	matWorld *= matTrans; // Reflect translation in world matrix
+
+	if (model->GetModelTransform() = nullptr)
+	{
+		assert(0);
+	}
 
 	// View projection matrix
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
