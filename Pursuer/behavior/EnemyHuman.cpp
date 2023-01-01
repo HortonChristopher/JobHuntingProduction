@@ -27,11 +27,10 @@ ComPtr<ID3D12PipelineState> EnemyHuman::pipelinestate;
 
 void EnemyHuman::Initialize()
 {
-	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("EnemyStand");
+	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
-	//modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
+	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
@@ -82,7 +81,7 @@ void EnemyHuman::Initialize()
 
 void EnemyHuman::Update()
 {
-	if (animationNo == 2)
+	if (animationNo < 3)
 	{
 		SetScale({ 0.2f, 0.2f, 0.2f });
 	}
@@ -419,11 +418,6 @@ void EnemyHuman::Update()
 		position.z = -398.0f;
 	}
 
-	if (model->GetModelTransform() == NULL)
-	{
-		assert(0);
-	}
-
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation
@@ -439,11 +433,6 @@ void EnemyHuman::Update()
 	matWorld *= matScale; // Reflect scaling in the world matrix
 	matWorld *= matRot; // Reflect the rotation in the world matrix
 	matWorld *= matTrans; // Reflect translation in world matrix
-
-	if (model->GetModelTransform() = nullptr)
-	{
-		assert(0);
-	}
 
 	// View projection matrix
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
