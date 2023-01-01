@@ -31,10 +31,14 @@ void EnemyHuman::Initialize()
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
-	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
-	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
+	//modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
+	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjure");
+	//modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
+	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDeath");
+	//modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
+	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
+	//modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
+	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
 	modelInjureRun = FbxLoader::GetInstance()->LoadModelFromFile("ProtoInjureRun");
 
 	HRESULT result;
@@ -75,13 +79,13 @@ void EnemyHuman::Initialize()
 
 	SetPosition(position);
 	SetModel(modelStanding);
-	SetScale({ 3,3,3 });
+	SetScale({ 0.2f, 0.2f, 0.2f });
 	srand((unsigned int)time(NULL));
 }
 
 void EnemyHuman::Update()
 {
-	if (animationNo < 3)
+	if (animationNo < 3 || animationNo > 3 && animationNo < 8)
 	{
 		SetScale({ 0.2f, 0.2f, 0.2f });
 	}
