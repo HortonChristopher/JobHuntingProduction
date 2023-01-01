@@ -31,15 +31,11 @@ void EnemyHuman::Initialize()
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
-	//modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjure");
-	//modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDeath");
-	//modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
 	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
-	//modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
 	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
-	modelInjureRun = FbxLoader::GetInstance()->LoadModelFromFile("ProtoInjureRun");
+	modelInjureRun = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjureRun");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -85,15 +81,6 @@ void EnemyHuman::Initialize()
 
 void EnemyHuman::Update()
 {
-	if (animationNo < 3 || animationNo > 3 && animationNo < 8)
-	{
-		SetScale({ 0.2f, 0.2f, 0.2f });
-	}
-	else
-	{
-		SetScale({ 3,3,3 });
-	}
-
 	switch (enumStatus)
 	{
 	case STAND:
@@ -205,20 +192,30 @@ void EnemyHuman::Update()
 	case ATTACK:
 		if (!attackAnimation)
 		{
+			attackTimer = 0.0f;
 			animationSet = false;
 			animationNo = 3;
 			attackAnimation = true;
 		}
-		attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (attackTimer > 135.0f)
+
+		if (attackTimer > 53.3f && attackTimer < 63.2f)
+		{
+			attackDamagePossible = true;
+		}
+		else
+		{
+			attackDamagePossible = false;
+		}
+
+		if (currentTime > endTime && attackTimer > 0.0f)
 		{
 			attackTimer = 0.0f;
-			//attack = false;
 			modelChange = true;
 			attackAnimation = false;
 			timer = 0.0f;
 			enumStatus = COOLDOWN;
 		}
+		attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case COOLDOWN:
 		if (modelChange)
@@ -478,7 +475,7 @@ void EnemyHuman::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (animationNo != 5 && animationNo != 6 && animationNo != 7)
+		if (animationNo != 3 && animationNo != 5 && animationNo != 6 && animationNo != 7)
 		{
 			if (currentTime > endTime)
 			{
@@ -508,7 +505,7 @@ void EnemyHuman::Update()
 	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
-	//sprintf_s(msgbuf, 256, "%d\n", enumStatus);
+	//sprintf_s(msgbuf, 256, "%f \n", endAnimationDEBUG);
 	//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
 	//OutputDebugStringA(msgbuf);

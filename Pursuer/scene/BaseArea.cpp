@@ -176,7 +176,7 @@ void BaseArea::Update()
 
 	for (int i = 0; i < 4; i++)
 	{
-		attackRangeOBJ[i + 1]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 5)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 5)) });
+		attackRangeOBJ[i + 1]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 15)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 15)) });
 		attackRangeOBJ[i + 1]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
 	}
 #pragma endregion
@@ -285,7 +285,7 @@ void BaseArea::Update()
 #pragma region playerHPDamage
 	for (int i = 0; i < 4; i++)
 	{
-		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackTimer > 70.0f && baseAreaEnemyFBX[i]->attackTimer < 85.0f && baseAreaEnemyFBX[i]->ableToDamage)
+		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackDamagePossible && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = 1.0f;
@@ -709,16 +709,11 @@ void BaseArea::Draw()
 	}
 
 	// Debug only
-	/*if (attackTime > 10.0f && attackTime < 20.0f)
-	{
-		attackRangeOBJ[0]->Draw();
-	}
-
 	for (int i = 0; i < 4; i++)
 	{
 		attackRangeOBJ[i + 1]->Draw();
-		enemyVisionRangeOBJ[i]->Draw();
-	}*/
+		//enemyVisionRangeOBJ[i]->Draw();
+	}
 	// End Debug
 
 	skydomeOBJ->Draw();
