@@ -8,6 +8,7 @@ using namespace DirectX;
 /// Static Member Variable Entity
 /// </summary>
 const std::string FbxLoader::baseDirectory = "Resources/FBX/";
+const std::string FbxLoader::materialDirectory = "Resources/Material/";
 const std::string FbxLoader::defaultTextureFileName = "white1x1.png";
 
 FbxLoader* FbxLoader::GetInstance()
@@ -335,7 +336,8 @@ void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
                     string name = ExtractFileName(path_str);
 
                     // Read texture
-                    LoadTexture(model, baseDirectory + model->name + "/" + name);
+                    //LoadTexture(model, baseDirectory + model->name + "/" + name);
+                    LoadTexture(model, materialDirectory + name);
                     textureLoaded = true;
                 }
             }
@@ -344,7 +346,8 @@ void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
         // If there is no texture, paste a white texture
         if (!textureLoaded)
         {
-            LoadTexture(model, baseDirectory + defaultTextureFileName);
+            //LoadTexture(model, baseDirectory + defaultTextureFileName);
+            LoadTexture(model, materialDirectory + defaultTextureFileName);
         }
     }
 }

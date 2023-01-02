@@ -17,6 +17,9 @@ public:
 	// Model Storage Route Bus
 	static const string baseDirectory;
 
+	// Material Directory Route
+	static const string materialDirectory;
+
 	// Standard texture file name when there is no texture
 	static const string defaultTextureFileName;
 
