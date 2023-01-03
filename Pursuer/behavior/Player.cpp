@@ -26,7 +26,7 @@ void Player::Initialize()
 {
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("PlayerWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRun");
 	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("StrafeRight");
 	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
 	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("StrafeBack");
@@ -79,7 +79,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	if (animationNo < 2)
+	if (animationNo < 3)
 	{
 		SetScale({ 0.1f, 0.1f, 0.1f });
 	}
