@@ -24,8 +24,8 @@ extern DeltaTime* deltaTime;
 
 void Player::Initialize()
 {
-	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
+	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
+	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("PlayerWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
 	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("StrafeRight");
 	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
@@ -79,6 +79,15 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	if (animationNo < 2)
+	{
+		SetScale({ 0.1f, 0.1f, 0.1f });
+	}
+	else
+	{
+		SetScale({ 3,3,3 });
+	}
+
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation

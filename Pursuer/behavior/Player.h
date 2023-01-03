@@ -29,7 +29,7 @@ protected: // Alias
 
 public: // Constant
 	// Maximum Bone Number
-	static const int MAX_BONES = 32;
+	static const int MAX_BONES = 512;
 
 public:
 	// Data structure for constant buffer (for coordinate transformation matrix)
