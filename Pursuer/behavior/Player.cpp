@@ -73,7 +73,7 @@ void Player::Initialize()
 
 	input = Input::GetInstance();
 
-	SetScale({ 3,3,3 });
+	SetScale({ 0.1f, 0.1f, 0.1f });
 	SetModel(modelStanding);
 }
 
