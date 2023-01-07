@@ -27,15 +27,14 @@ void Player::Initialize()
 	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("PlayerWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRun");
-	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("StrafeRight");
-	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("StrafeLeft");
-	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("StrafeBack");
-	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoAttack");
-	modelComboAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoMeleeCombo");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
-	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDodgeRoll");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
-	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("ProtoHeal");
+	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeL");
+	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeR");
+	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeB");
+	modelComboAttack = FbxLoader::GetInstance()->LoadModelFromFile("PlayerComboAttack");
+	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDamaged");
+	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDodgeRoll");
+	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDeath");
+	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("PlayerHeal");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -79,15 +78,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	if (animationNo < 3)
-	{
-		SetScale({ 0.1f, 0.1f, 0.1f });
-	}
-	else
-	{
-		SetScale({ 3,3,3 });
-	}
-
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation
@@ -565,7 +555,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 7:
-			//SetModel(modelAttacking);
 			SetModel(modelComboAttack);
 			isPlay = false;
 			animationSet = true;
