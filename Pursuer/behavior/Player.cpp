@@ -80,64 +80,6 @@ void Player::Update()
 {
 	SetScale({ 0.1f, 0.1f, 0.1f });
 
-	XMMATRIX matScale, matRot, matTrans;
-
-	// Achievements of scales, rotation, translation
-	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
-	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
-	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
-	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
-	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
-
-	// World Line Composition
-	matWorld = XMMatrixIdentity(); // Reset transformation
-	matWorld *= matScale; // Reflect scaling in the world matrix
-	matWorld *= matRot; // Reflect the rotation in the world matrix
-	matWorld *= matTrans; // Reflect translation in world matrix
-
-	// View projection matrix
-	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
-
-	// Model mesh transformation
-	const XMMATRIX& modelTransform = model->GetModelTransform();
-
-	// Camera coordinates
-	const XMFLOAT3& cameraPos = camera->GetEye();
-
-	HRESULT result;
-
-	// Data transfer to constant buffer
-	ConstBufferDataTransform* constMap = nullptr;
-	result = constBuffTransform->Map(0, nullptr, (void**)&constMap);
-	if (SUCCEEDED(result))
-	{
-		constMap->viewproj = matViewProjection;
-		constMap->world = modelTransform * matWorld;
-		constMap->cameraPos = cameraPos;
-		constBuffTransform->Unmap(0, nullptr);
-	}
-
-	// Bone array
-	std::vector<FBX3DModel::Bone>& bones = model->GetBones();
-
-	// Constant buffer data transfer
-	ConstBufferDataSkin* constMapSkin = nullptr;
-	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
-
-	for (int i = 0; i < bones.size(); i++)
-	{
-		// Current posture matrix
-		XMMATRIX matCurrentPose;
-		// Get the current posture matrix
-		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
-		// Convert to XMMATRIX
-		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
-		// Synthesize into a skinning matrix
-		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
-	}
-	constBuffSkin->Unmap(0, nullptr);
-
 	switch (enumStatus)
 	{
 	case STAND:
@@ -224,7 +166,6 @@ void Player::Update()
 		case 1:
 			if (currentTime > endTime / 3 && timer > 0.0f)
 			{
-				debugTimer = timer;
 				timer = 0.0f;
 				attackCombo = 0;
 				enumStatus = STAND;
@@ -233,7 +174,6 @@ void Player::Update()
 		case 2:
 			if (currentTime > endTime / 2 && timer > 0.0f)
 			{
-				debugTimer = timer;
 				timer = 0.0f;
 				attackCombo = 0;
 				enumStatus = STAND;
@@ -242,7 +182,6 @@ void Player::Update()
 		case 3:
 			if (currentTime > endTime && timer > 0.0f)
 			{
-				debugTimer = timer;
 				timer = 0.0f;
 				attackCombo = 0;
 				enumStatus = STAND;
@@ -342,6 +281,8 @@ void Player::Update()
 			case 2:
 				attackCombo++;
 				stamina -= 25.0f;
+				break;
+			case 3:
 				break;
 			}
 		}
@@ -580,6 +521,64 @@ void Player::Update()
 	}
 
 	SetScale({ 0.1f, 0.1f, 0.1f });
+
+	XMMATRIX matScale, matRot, matTrans;
+
+	// Achievements of scales, rotation, translation
+	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
+	matRot = XMMatrixIdentity();
+	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
+	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
+	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
+
+	// World Line Composition
+	matWorld = XMMatrixIdentity(); // Reset transformation
+	matWorld *= matScale; // Reflect scaling in the world matrix
+	matWorld *= matRot; // Reflect the rotation in the world matrix
+	matWorld *= matTrans; // Reflect translation in world matrix
+
+	// View projection matrix
+	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
+
+	// Model mesh transformation
+	const XMMATRIX& modelTransform = model->GetModelTransform();
+
+	// Camera coordinates
+	const XMFLOAT3& cameraPos = camera->GetEye();
+
+	HRESULT result;
+
+	// Data transfer to constant buffer
+	ConstBufferDataTransform* constMap = nullptr;
+	result = constBuffTransform->Map(0, nullptr, (void**)&constMap);
+	if (SUCCEEDED(result))
+	{
+		constMap->viewproj = matViewProjection;
+		constMap->world = modelTransform * matWorld;
+		constMap->cameraPos = cameraPos;
+		constBuffTransform->Unmap(0, nullptr);
+	}
+
+	// Bone array
+	std::vector<FBX3DModel::Bone>& bones = model->GetBones();
+
+	// Constant buffer data transfer
+	ConstBufferDataSkin* constMapSkin = nullptr;
+	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+
+	for (int i = 0; i < bones.size(); i++)
+	{
+		// Current posture matrix
+		XMMATRIX matCurrentPose;
+		// Get the current posture matrix
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		// Convert to XMMATRIX
+		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		// Synthesize into a skinning matrix
+		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	}
+	constBuffSkin->Unmap(0, nullptr);
 
 	if (isPlay == false)
 	{
