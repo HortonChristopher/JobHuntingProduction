@@ -27,7 +27,7 @@ protected: // Alias
 
 public: // Constant
 	// Maximum Bone Number
-	static const int MAX_BONES = 32;
+	static const int MAX_BONES = 256;
 
 public:
 	// Data structure for constant buffer (for coordinate transformation matrix)
@@ -148,7 +148,6 @@ protected:
 	FBX3DModel* modelStrafeL = nullptr; // 20 frames
 	FBX3DModel* modelStrafeR = nullptr; // 20 frames
 	FBX3DModel* modelStrafeB = nullptr; // 24 frames
-	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
 	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 endTime / 2; 3rd: 76-80 Float: 253 
 	FBX3DModel* modelDamaged = nullptr; // 54 frames
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames

@@ -27,14 +27,14 @@ ComPtr<ID3D12PipelineState> TutorialEnemy::pipelinestate;
 
 void TutorialEnemy::Initialize()
 {
-	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("ProtoStanding");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("ProtoWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("ProtoRunning");
+	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("EnemyStand");
+	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyWalk");
+	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
 	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDamaged");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("ProtoDeath");
-	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoJumpBack");
-	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("ProtoParticleAttack");
+	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjure");
+	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDeath");
+	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
+	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
 
 	HRESULT result;
 	// Creation of Constant Buffer
@@ -74,7 +74,7 @@ void TutorialEnemy::Initialize()
 
 	SetPosition(position);
 	SetModel(modelStanding);
-	SetScale({ 3,3,3 });
+	SetScale({ 0.2f, 0.2f, 0.2f });
 	srand((unsigned int)time(NULL));
 }
 
