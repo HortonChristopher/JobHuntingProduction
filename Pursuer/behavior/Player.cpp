@@ -78,6 +78,8 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	SetScale({ 0.1f, 0.1f, 0.1f });
+
 	XMMATRIX matScale, matRot, matTrans;
 
 	// Achievements of scales, rotation, translation
@@ -576,6 +578,8 @@ void Player::Update()
 			break;
 		}
 	}
+
+	SetScale({ 0.1f, 0.1f, 0.1f });
 
 	if (isPlay == false)
 	{
