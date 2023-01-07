@@ -1,3 +1,0 @@
-76 frames
-start: 27
-end: 32
