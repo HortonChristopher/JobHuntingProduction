@@ -711,7 +711,7 @@ void BaseArea::Draw()
 	// Debug only
 	for (int i = 0; i < 4; i++)
 	{
-		attackRangeOBJ[i + 1]->Draw();
+		//attackRangeOBJ[i + 1]->Draw();
 		//enemyVisionRangeOBJ[i]->Draw();
 	}
 	// End Debug

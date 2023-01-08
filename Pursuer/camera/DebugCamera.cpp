@@ -103,11 +103,11 @@ void DebugCamera::Update()
 	}*/
 
 	// Change the distance with wheel input
-	if (mouseMove.lZ != 0 && !title) {
+	/*if (mouseMove.lZ != 0 && !title) {
 		distance -= mouseMove.lZ / 100.0f;
 		distance = max(distance, 1.0f);
 		dirty = true;
-	}
+	}*/
 
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
