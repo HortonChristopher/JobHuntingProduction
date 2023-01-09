@@ -147,6 +147,12 @@
     <ClCompile Include="scene\TutorialArea.cpp">
       <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
+    <ClCompile Include="scene\GameOverCutscene.cpp">
+      <Filter>Source Files\AreaScene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\Loading.cpp">
+      <Filter>Source Files\AreaScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -289,6 +295,12 @@
     </ClInclude>
     <ClInclude Include="dynamics\CollisionInfo.h">
       <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GameOverCutscene.h">
+      <Filter>Header Files\AreaScene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\Loading.h">
+      <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -132,10 +132,12 @@
     <ClCompile Include="model\Mesh.cpp" />
     <ClCompile Include="model\Model.cpp" />
     <ClCompile Include="scene\BaseArea.cpp" />
+    <ClCompile Include="scene\GameOverCutscene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="scene\Loading.cpp" />
     <ClCompile Include="scene\TitleScreen.cpp" />
     <ClCompile Include="scene\TutorialArea.cpp" />
   </ItemGroup>
@@ -187,9 +189,11 @@
     <ClInclude Include="model\Mesh.h" />
     <ClInclude Include="model\Model.h" />
     <ClInclude Include="scene\BaseArea.h" />
+    <ClInclude Include="scene\GameOverCutscene.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="scene\Loading.h" />
     <ClInclude Include="scene\TitleScreen.h" />
     <ClInclude Include="scene\TutorialArea.h" />
   </ItemGroup>

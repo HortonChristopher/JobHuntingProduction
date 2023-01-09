@@ -78,8 +78,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	SetScale({ 0.1f, 0.1f, 0.1f });
-
 	switch (enumStatus)
 	{
 	case STAND:
@@ -519,8 +517,6 @@ void Player::Update()
 			break;
 		}
 	}
-
-	SetScale({ 0.1f, 0.1f, 0.1f });
 
 	XMMATRIX matScale, matRot, matTrans;
 

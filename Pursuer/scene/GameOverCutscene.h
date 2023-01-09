@@ -30,7 +30,7 @@
 #include <time.h>
 #include <thread>
 
-class BaseArea
+class GameOverCutscene
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
@@ -46,27 +46,14 @@ private: // 静的メンバ変数
 	static const int debugTextTexNumber = 0;
 
 public:
-	BaseArea();
-	~BaseArea();
+	GameOverCutscene();
+	~GameOverCutscene();
 
 	void Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio);
 
 	void Update();
 
 	void Draw();
-
-	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
-
-	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
-	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);
-	void ParticleCreationEdge(float x, float y, float z, int life, float offset, float start_scale);
-	float Distance(XMFLOAT3 player, XMFLOAT3 center);
-
-	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
-
-	void thread1();
-	void thread2();
-	void thread3();
 
 private:
 	DirectXCommon* dxCommon = nullptr;
@@ -122,11 +109,11 @@ private:
 	// Base area enemy aspects
 	std::array<EnemyHuman*, 4> baseAreaEnemyFBX = { {} };
 	std::array<PlayerPositionObject*, 4> baseAreaEnemyPositionOBJ = { {} };
-		// Base area enemy alive bool
+	// Base area enemy alive bool
 	std::array<bool, 4> baseAreaEnemyAliveBOOL = { {true, true, true, true} };
-		// Base area enemy respawn timer
+	// Base area enemy respawn timer
 	std::array<float, 4> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f} };
-		// Base area enemy spawn positions
+	// Base area enemy spawn positions
 	std::array<XMFLOAT3, 4> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 30.0f, 200.0f}, // Enemy 1
 															{200.0f, 30.0f, 0.0f}, // Enemy 2
 															{0.0f, 30.0f, -200.0f}, // Enemy 3

@@ -91,6 +91,8 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	th1.join();
 	th2.join();
 	th3.join();
+
+	initializeFinished = true;
 }
 
 void BaseArea::Update()
@@ -115,14 +117,16 @@ void BaseArea::Update()
 		camera->Update();
 	}
 
-	if (!gameStart)
+	if (!gameStart && initializeFinished == true)
 	{
 		fadeSpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
 		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 
 		if (fadeSpriteALPHA <= 0.0f)
 		{
 			fadeSpriteALPHA = 0.0f;
+			fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 			gameStart = true;
 		}
 	}
@@ -519,16 +523,18 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-	if (playerFBX->baseAreaOpeningCutscene)
+#pragma region openingCutscene
+	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true)
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
 		if (playerFBX->GetPosition().z >= -398.0f)
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
 			playerFBX->baseAreaOpeningCutscene = false;
 		}
 	}
+#pragma endregion
 
 #pragma region areaBoundaryLimits
 	if (!playerFBX->baseAreaOpeningCutscene)
@@ -666,7 +672,7 @@ void BaseArea::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().x);
+	//sprintf_s(msgbuf, 256, "X: %f\n", fadeSpriteALPHA);
 	//sprintf_s(msgbuf2, 256, "Y: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().y);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	//OutputDebugStringA(msgbuf);

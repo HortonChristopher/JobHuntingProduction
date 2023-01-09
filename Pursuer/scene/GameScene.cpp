@@ -57,20 +57,18 @@ void GameScene::Update()
 		if (titleScreen->gameStart)
 		{
 			if (titleScreen->tutorialSelectionYesBOOL == true)
-			{
-				tutorialArea = new TutorialArea;
-				tutorialArea->initialize = true;
+			{	
+				tutorialOrBase = 0;
 				titleScreen->~TitleScreen();
 				titleScreen = nullptr;
-				page = 2;
+				page = 1;
 			}
 			else if (titleScreen->tutorialSelectionYesBOOL == false)
 			{
-				baseArea = new BaseArea;
-				baseArea->initialization = true;
+				tutorialOrBase = 1;
 				titleScreen->~TitleScreen();
 				titleScreen = nullptr;
-				page = 3;
+				page = 1;
 			}
 			else if (titleScreen->selection == 2)
 			{
@@ -79,24 +77,39 @@ void GameScene::Update()
 		}
 	}
 
-	/*if (page == 1)
+	if (page == 1)
 	{
-		if (input->TriggerKey(DIK_T) || input->TriggerControllerButton(XINPUT_GAMEPAD_START))
+		if (tutorialOrBase == 0)
 		{
 			tutorialArea = new TutorialArea;
-			tutorialArea->initialize = true;
+			if (baseArea != nullptr)
+			{
+				baseArea = nullptr;
+			}
+			tutorialArea->Initialize(dxCommon, input, audio);
+		}
+		else if (tutorialOrBase == 1)
+		{
+			baseArea = new BaseArea;
+			if (tutorialArea != nullptr)
+			{
+				tutorialArea = nullptr;
+			}
+			baseArea->Initialize(dxCommon, input, audio);
+		}
+
+		if (tutorialArea != nullptr)
+		{
 			page = 2;
 		}
-	}*/
+		else if (baseArea != nullptr)
+		{
+			page = 3;
+		}
+	}
 
 	if (page == 2)
 	{
-		if (tutorialArea->initialize)
-		{
-			tutorialArea->Initialize(dxCommon, input, audio);
-			tutorialArea->initialize = false;
-		}
-
 		if (tutorialArea != nullptr)
 		{
 			tutorialArea->Update();
@@ -105,23 +118,17 @@ void GameScene::Update()
 		if (tutorialArea->deletion)
 		{
 			tutorialArea->~TutorialArea();
-			baseArea = new BaseArea;
-			baseArea->initialization = true;
-			page = 3;
+			page = 1;
+			tutorialOrBase = 1;
 			tutorialArea->deletion = false;
 		}
 	}
 
 	if (page == 3)
 	{
-		if (baseArea->initialization)
+		if (baseArea != nullptr)
 		{
-			if (tutorialArea != nullptr)
-			{
-				tutorialArea = nullptr;
-			}
-			baseArea->Initialize(dxCommon, input, audio);
-			baseArea->initialization = false;
+			baseArea->Update();
 		}
 
 		if (baseArea->deletion)
@@ -137,11 +144,6 @@ void GameScene::Update()
 			}
 			baseArea->deletion = false;
 			baseArea = nullptr;
-		}
-
-		if (baseArea != nullptr)
-		{
-			baseArea->Update();
 		}
 	}
 
@@ -160,9 +162,10 @@ void GameScene::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", object2->timer);
+	//sprintf_s(msgbuf, 256, "Page: %d\n", page);
 	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
+
 	//OutputDebugStringA(msgbuf);
 	//OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);

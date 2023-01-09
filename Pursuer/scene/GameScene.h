@@ -70,6 +70,8 @@ private: // メンバ変数
 
 	Sprite* gameOverSPRITE = nullptr;
 	Sprite* gameClearSPRITE = nullptr;
+
+	int tutorialOrBase = 0; // 0 = tutorial, 1 = base
 public:
 	int page = 0;
 	bool mainLoop = true;
