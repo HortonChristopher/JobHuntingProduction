@@ -131,7 +131,7 @@ protected:
 	//DeltaTime* deltaTime = nullptr;
 
 	// Local scale
-	XMFLOAT3 scale = { 0.2f, 0.2f, 0.2f };
+	XMFLOAT3 scale = { 0.15f, 0.15f, 0.15f };
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation

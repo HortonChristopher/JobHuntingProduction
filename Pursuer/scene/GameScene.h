@@ -72,6 +72,9 @@ private: // メンバ変数
 	GameOverCutscene* gameOverCutscene = nullptr;
 	GameClearCutscene* gameClearCutscene = nullptr;
 
+	Sprite* fadeSPRITE = nullptr;
+	float fadeSpriteAlpha = 1.0f;
+
 	int tutorialOrBase = 0; // 0 = tutorial, 1 = base
 public:
 	int page = 0;

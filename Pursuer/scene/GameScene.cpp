@@ -38,6 +38,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);
+
+	if (!Sprite::LoadTexture(115, "BlackScreen.png")) { assert(0); return; } // Black Screen
+	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteAlpha });
 }
 
 void GameScene::Update()
@@ -239,6 +242,10 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	if (page == 1)
+	{
+		fadeSPRITE->Draw();
+	}
 	
 	// スプライト描画後処理
 	Sprite::PostDraw();

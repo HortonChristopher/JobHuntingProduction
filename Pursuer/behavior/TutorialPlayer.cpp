@@ -72,7 +72,7 @@ void TutorialPlayer::Initialize()
 
 	input = Input::GetInstance();
 
-	SetScale({ 0.1f, 0.1f, 0.1f });
+	SetScale(scale);
 	SetModel(modelStanding);
 }
 

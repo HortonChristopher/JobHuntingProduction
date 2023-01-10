@@ -126,6 +126,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(31, "HealC.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(32, "HealTutorialMask.png")) { assert(0); return; } // Heal Graphic
 
+	if (!Sprite::LoadTexture(115, "BlackScreen.png")) { assert(0); return; } // Black Screen
 	if (!Sprite::LoadTexture(99, "PlayerMinimapSprite.png")) { assert(0); return; } // Player minimap texture
 	if (!Sprite::LoadTexture(98, "EnemyMinimapSprite.png")) { assert(0); return; } // Enemy minimap texture
 	if (!Sprite::LoadTexture(97, "MinimapTutorialMask.png")) { assert(0); return; }
@@ -172,6 +173,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	healKeyboardSPRITE = Sprite::Create(30, { 1102.0f, 542.0f });
 	healControllerSPRITE = Sprite::Create(31, { 1102.0f, 542.0f });
 	healTutorialMaskSPRITE = Sprite::Create(32, { 0.0f, 0.0f });
+	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, {1.0f, 1.0f, 1.0f, fadeSpriteAlpha});
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -239,7 +241,10 @@ void TutorialArea::Update()
 	}
 	camera->Update();
 
-	skydomeOBJ->SetPosition(playerFBX->GetPosition());
+	if (!doorOpenCutscene)
+	{
+		skydomeOBJ->SetPosition(playerFBX->GetPosition());
+	}
 
 	switch (tutorialStatus)
 	{
@@ -640,6 +645,7 @@ void TutorialArea::Update()
 			if (targetMove < 59)
 			{
 				camera->SetTarget({ camera->GetTarget().x + targetDifference.x / 60.0f, camera->GetTarget().y + targetDifference.y / 60.0f, camera->GetTarget().z + targetDifference.z / 60.0f });
+				skydomeOBJ->SetPosition({ camera->GetTarget().x + targetDifference.x / 60.0f, camera->GetTarget().y + targetDifference.y / 60.0f, camera->GetTarget().z + targetDifference.z / 60.0f });
 				targetMove++;
 			}
 			else if (targetMove >= 59)
@@ -664,6 +670,7 @@ void TutorialArea::Update()
 				if (doorOBJ[1]->GetPosition().y >= 150.0f)
 				{
 					camera->SetTarget(playerFBX->GetPosition());
+					skydomeOBJ->SetPosition(playerFBX->GetPosition());
 					doorOpenCutscene = false;
 				}
 			}
@@ -713,7 +720,17 @@ void TutorialArea::Update()
 			playerFBX->tutorialPart = 5;
 			if (playerFBX->GetPosition().z >= 500.0f)
 			{
-				deletion = true;
+				playerFBX->tutorialPart = 0;
+				playerFBX->SetEnumStatus(TutorialPlayer::RUN);
+				playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
+				playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+				fadeSpriteAlpha += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteAlpha });
+				if (fadeSpriteAlpha >= 1.0f)
+				{
+					fadeSpriteAlpha = 1.0f;
+					deletion = true;
+				}
 			}
 		}
 		break;
@@ -1077,6 +1094,14 @@ void TutorialArea::Draw()
 		else
 		{
 			healControllerSPRITE->Draw();
+		}
+	}
+
+	if (tutorialStatus == TUTORIALEND)
+	{
+		if (fadeSpriteAlpha > 0.0f)
+		{
+			fadeSPRITE->Draw();
 		}
 	}
 

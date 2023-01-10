@@ -118,6 +118,8 @@ private:
 	Sprite* healControllerSPRITE = nullptr;
 	Sprite* healKeyboardSPRITE = nullptr;
 	Sprite* healTutorialMaskSPRITE = nullptr;
+	Sprite* fadeSPRITE = nullptr;
+	float fadeSpriteAlpha = 0.0f;
 
 	// Damage Overlay
 	Sprite* tutorialAreaDamageOverlaySPRITE = nullptr;
