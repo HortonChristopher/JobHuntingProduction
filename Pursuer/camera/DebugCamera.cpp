@@ -24,8 +24,8 @@ DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 void DebugCamera::Update()
 {
 	bool dirty = false;
-	float angleX = 0;
-	float angleY = 0;
+	float angleX = 0.0f;
+	float angleY = 0.0f;
 
 	// Get mouse input
 	Input::MouseMove mouseMove = input->GetMouseMove();
@@ -62,6 +62,15 @@ void DebugCamera::Update()
 	//	}
 	//}
 	// Rotate the camera if the right mouse button is pressed
+	else if (cutscene)
+	{
+		angleX += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		dirty = true;
+	}
+	else if (cutsceneActive)
+	{
+
+	}
 	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
 	{
 		float dy;
@@ -112,8 +121,14 @@ void DebugCamera::Update()
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
 		XMMATRIX matRotNew = XMMatrixIdentity();
-		//matRotNew *= XMMatrixRotationX(-angleX);
-		matRotNew *= XMMatrixRotationY(-angleY);
+		if (cutscene)
+		{
+			matRotNew *= XMMatrixRotationX(-angleX);
+		}
+		else
+		{
+			matRotNew *= XMMatrixRotationY(-angleY);
+		}
 		// 累積の回転行列を合成
 		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
 		// クォータニオンを使用する方が望ましい

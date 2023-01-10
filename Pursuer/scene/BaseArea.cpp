@@ -527,7 +527,7 @@ void BaseArea::Update()
 	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true)
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
 		if (playerFBX->GetPosition().z >= -398.0f)
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
@@ -857,14 +857,10 @@ void BaseArea::ParticleCreationEdge(float x, float y, float z, int life, float o
 		pos.y = y + offset;
 		pos.z = z;
 
-		const float rnd_vel = 0.1f; // 0.1f
 		XMFLOAT3 vel{};
-		vel.x = 0.0f;
-		vel.y = 0.0f;
-		vel.z = 0.0f;
+		vel.x = vel.y = vel.z = 0.0f;
 
 		XMFLOAT3 acc{};
-		const float rnd_acc = 0.001f; // 0.001f
 		acc.y = 0.0f;
 
 		// ’Ç‰Á

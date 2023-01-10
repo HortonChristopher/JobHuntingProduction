@@ -52,6 +52,7 @@ void GameScene::Update()
 {
 	if (page < 1)
 	{
+		gameOverCutscene = nullptr;
 		titleScreen->Update();
 
 		if (titleScreen->gameStart)
@@ -96,6 +97,8 @@ void GameScene::Update()
 				tutorialArea = nullptr;
 			}
 			baseArea->Initialize(dxCommon, input, audio);
+			//gameOverCutscene = new GameOverCutscene;
+			//gameOverCutscene->Initialize(dxCommon, input, audio);
 		}
 
 		if (tutorialArea != nullptr)
@@ -106,6 +109,8 @@ void GameScene::Update()
 		{
 			page = 3;
 		}
+
+		//page = 4;
 	}
 
 	if (page == 2)
@@ -136,6 +141,8 @@ void GameScene::Update()
 			baseArea->~BaseArea();
 			if (baseArea->result == 1)
 			{
+				gameOverCutscene = new GameOverCutscene;
+				gameOverCutscene->Initialize(dxCommon, input, audio);
 				page = 4;
 			}
 			else if (baseArea->result == 2)
@@ -147,7 +154,26 @@ void GameScene::Update()
 		}
 	}
 
-	if (page > 3)
+	if (page == 4)
+	{
+		if (gameOverCutscene != nullptr)
+		{
+			gameOverCutscene->Update();
+		}
+
+		if (gameOverCutscene->cutsceneStatus == GameOverCutscene::GAMEOVERSCREEN)
+		{
+			if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+			{
+				titleScreen = new TitleScreen;
+				titleScreen->Initialize(dxCommon, input, audio);
+				gameOverCutscene->~GameOverCutscene();
+				page = 0;
+			}
+		}
+	}
+
+	if (page == 5)
 	{
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 		{
@@ -189,6 +215,10 @@ void GameScene::Draw()
 	{
 		baseArea->Draw();
 	}
+	if (page == 4)
+	{
+		gameOverCutscene->Draw();
+	}
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
@@ -197,10 +227,10 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	if (page == 4)
+	/*if (page == 4)
 	{
 		gameOverSPRITE->Draw();
-	}
+	}*/
 	if (page == 5)
 	{
 		gameClearSPRITE->Draw();

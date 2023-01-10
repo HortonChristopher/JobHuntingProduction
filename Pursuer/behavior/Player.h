@@ -192,7 +192,7 @@ public:
 	bool isPlayerDead = false;
 	bool baseAreaOpeningCutscene = true;
 	float stamina = 100.0f;
-	float hp = 10.0f; // Base of 10.0f
+	float hp = 1.0f; // Base of 10.0f
 	int attackCombo = 0; // Which attack the animation stops at
 	int healRemaining = 2;
 	bool healed = false;

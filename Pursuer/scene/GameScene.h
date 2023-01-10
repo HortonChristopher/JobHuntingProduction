@@ -10,6 +10,7 @@
 #include "BaseArea.h"
 #include "TitleScreen.h"
 #include "TutorialArea.h"
+#include "GameOverCutscene.h"
 
 /// <summary>
 /// ゲームシーン
@@ -67,6 +68,7 @@ private: // メンバ変数
 	TitleScreen* titleScreen = nullptr;
 	TutorialArea* tutorialArea = nullptr;
 	BaseArea* baseArea = nullptr;
+	GameOverCutscene* gameOverCutscene = nullptr;
 
 	Sprite* gameOverSPRITE = nullptr;
 	Sprite* gameClearSPRITE = nullptr;
