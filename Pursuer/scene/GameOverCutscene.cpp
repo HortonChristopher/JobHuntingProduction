@@ -13,7 +13,20 @@ GameOverCutscene::GameOverCutscene()
 
 GameOverCutscene::~GameOverCutscene()
 {
-
+	safe_delete(camera);
+	collisionManager = nullptr;
+	particleMan = nullptr;
+	debugText = nullptr;
+	safe_delete(skydomeMODEL);
+	safe_delete(groundMODEL);
+	safe_delete(positionMODEL);
+	safe_delete(skydomeOBJ);
+	safe_delete(groundOBJ);
+	safe_delete(cutsceneEnemyFBX); 
+	safe_delete(cutsceneEnemyPositionOBJ);
+	safe_delete(cutsceneDamageOverlaySPRITE);
+	safe_delete(fadeSPRITE);
+	safe_delete(gameOverSPRITE);
 }
 
 void GameOverCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
@@ -71,6 +84,7 @@ void GameOverCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* 
 	skydomeOBJ = Object3d::Create();
 	skydomeMODEL = Model::CreateFromOBJ("skydome");
 	skydomeOBJ->SetModel(skydomeMODEL);
+	skydomeOBJ->SetPosition({ 0.0f, 0.0f, 0.0f });
 	skydomeOBJ->SetScale({ 5,5,5 });
 	
 	groundMODEL = Model::CreateFromOBJ("Landscape2");
@@ -101,14 +115,24 @@ void GameOverCutscene::Update()
 	lightGroup->Update();
 	particleMan->Update();
 
-	skydomeOBJ->SetPosition({0.0f, 0.0f, 0.0f});
-
 	cutsceneEnemyPositionOBJ->SetPosition(cutsceneEnemyFBX->GetPosition());
 
 	camera->Update();
 
 	switch (cutsceneStatus)
 	{
+	case PAUSE:
+		cutsceneEnemyFBX->SetEnumStatus(EnemyHuman::STAND);
+
+		degrees += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+		if (degrees >= 20.0f)
+		{
+			degrees = 0.0f;
+			cutsceneStatus = ENEMYATTACK;
+			break;
+		}
+		break;
 	case ENEMYATTACK:
 		cutsceneEnemyFBX->SetEnumStatus(EnemyHuman::ATTACK);
 		if (cutsceneEnemyFBX->attackTimer >= 58.3f)

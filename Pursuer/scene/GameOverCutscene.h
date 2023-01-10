@@ -48,14 +48,15 @@ private: // ê√ìIÉÅÉìÉoïœêî
 public:
 	enum CutsceneStatus
 	{
-		ENEMYATTACK = 0,
-		PLAYERDAMAGE = 1,
-		CAMERAMOVE = 2,
-		GRAYSCREEN = 3,
-		GAMEOVERSCREEN = 4
+		PAUSE = 0,
+		ENEMYATTACK = 1,
+		PLAYERDAMAGE = 2,
+		CAMERAMOVE = 3,
+		GRAYSCREEN = 4,
+		GAMEOVERSCREEN = 5
 	};
 
-	CutsceneStatus cutsceneStatus = ENEMYATTACK;
+	CutsceneStatus cutsceneStatus = PAUSE;
 
 public:
 	GameOverCutscene();

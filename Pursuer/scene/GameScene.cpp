@@ -36,12 +36,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	this->input = input;
 	this->audio = audio;
 
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(201, "p4.png")) { assert(0); return; }
-
-	// 背景スプライト生成
-	gameClearSPRITE = Sprite::Create(201, { 0,0 });
-
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);
 }
@@ -95,8 +89,11 @@ void GameScene::Update()
 				tutorialArea = nullptr;
 			}
 			baseArea->Initialize(dxCommon, input, audio);
+			// Debug Testing
 			//gameOverCutscene = new GameOverCutscene;
 			//gameOverCutscene->Initialize(dxCommon, input, audio);
+			//gameClearCutscene = new GameClearCutscene;
+			//gameClearCutscene->Initialize(dxCommon, input, audio);
 		}
 
 		if (tutorialArea != nullptr)
@@ -108,7 +105,9 @@ void GameScene::Update()
 			page = 3;
 		}
 
+		// Debug Testing
 		//page = 4;
+		//page = 5;
 	}
 
 	if (page == 2)
@@ -145,6 +144,8 @@ void GameScene::Update()
 			}
 			else if (baseArea->result == 2)
 			{
+				gameClearCutscene = new GameClearCutscene;
+				gameClearCutscene->Initialize(dxCommon, input, audio);
 				page = 5;
 			}
 			baseArea->deletion = false;
@@ -173,11 +174,20 @@ void GameScene::Update()
 
 	if (page == 5)
 	{
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+		if (gameClearCutscene != nullptr)
 		{
-			titleScreen = new TitleScreen;
-			titleScreen->Initialize(dxCommon, input, audio);
-			page = 0;
+			gameClearCutscene->Update();
+		}
+
+		if (gameClearCutscene->cutsceneStatus == GameClearCutscene::GAMECLEARSCREEN)
+		{
+			if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+			{
+				titleScreen = new TitleScreen;
+				titleScreen->Initialize(dxCommon, input, audio);
+				gameClearCutscene->~GameClearCutscene();
+				page = 0;
+			}
 		}
 	}
 
@@ -217,6 +227,10 @@ void GameScene::Draw()
 	{
 		gameOverCutscene->Draw();
 	}
+	if (page == 5)
+	{
+		gameClearCutscene->Draw();
+	}
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
@@ -225,10 +239,6 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	if (page == 5)
-	{
-		gameClearSPRITE->Draw();
-	}
 	
 	// スプライト描画後処理
 	Sprite::PostDraw();

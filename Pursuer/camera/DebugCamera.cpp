@@ -67,6 +67,26 @@ void DebugCamera::Update()
 		angleX += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
+	else if (wCutscene)
+	{
+		switch (wCutscenePart)
+		{
+		case 0:
+			angleY -= XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			dirty = true;
+			break;
+		case 1:
+			angleY += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			dirty = true;
+			break;
+		case 2:
+			break;
+		case 3:
+			angleX += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			dirty = true;
+			break;
+		}
+	}
 	else if (cutsceneActive)
 	{
 
