@@ -132,6 +132,7 @@
     <ClCompile Include="model\Mesh.cpp" />
     <ClCompile Include="model\Model.cpp" />
     <ClCompile Include="scene\BaseArea.cpp" />
+    <ClCompile Include="scene\GameClearCutscene.cpp" />
     <ClCompile Include="scene\GameOverCutscene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="input\Input.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="model\Mesh.h" />
     <ClInclude Include="model\Model.h" />
     <ClInclude Include="scene\BaseArea.h" />
+    <ClInclude Include="scene\GameClearCutscene.h" />
     <ClInclude Include="scene\GameOverCutscene.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="input\Input.h" />

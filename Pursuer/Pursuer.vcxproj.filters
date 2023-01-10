@@ -153,6 +153,9 @@
     <ClCompile Include="scene\Loading.cpp">
       <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
+    <ClCompile Include="scene\GameClearCutscene.cpp">
+      <Filter>Source Files\AreaScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -300,6 +303,9 @@
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
     <ClInclude Include="scene\Loading.h">
+      <Filter>Header Files\AreaScene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GameClearCutscene.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
   </ItemGroup>
