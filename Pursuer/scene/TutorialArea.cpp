@@ -244,12 +244,21 @@ void TutorialArea::Update()
 	switch (tutorialStatus)
 	{
 	case INTROCUTSCENE:
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
-		if (playerFBX->GetPosition().z >= -450.0f)
+		if (startTimer >= 80.0f)
 		{
-			tutorialStatus = MOVEMENTTUTORIAL;
+			playerFBX->SetEnumStatus(TutorialPlayer::WALK);
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+			if (playerFBX->GetPosition().z >= -450.0f)
+			{
+				tutorialStatus = MOVEMENTTUTORIAL;
+				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
+				break;
+			}
+		}
+		else
+		{
 			playerFBX->SetEnumStatus(TutorialPlayer::STAND);
-			break;
+			startTimer += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 		break;
 	case MOVEMENTTUTORIAL:

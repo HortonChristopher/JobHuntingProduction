@@ -119,15 +119,22 @@ void BaseArea::Update()
 
 	if (!gameStart && initializeFinished == true)
 	{
-		fadeSpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-
-		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
-
-		if (fadeSpriteALPHA <= 0.0f)
+		if (startTimer >= 350.0f)
 		{
-			fadeSpriteALPHA = 0.0f;
+			fadeSpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
 			fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
-			gameStart = true;
+
+			if (fadeSpriteALPHA <= 0.0f)
+			{
+				fadeSpriteALPHA = 0.0f;
+				fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+				gameStart = true;
+			}
+		}
+		else
+		{
+			startTimer += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 	}
 
@@ -524,7 +531,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region openingCutscene
-	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true)
+	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > 350.0f)
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });

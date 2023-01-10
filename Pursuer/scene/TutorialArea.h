@@ -154,6 +154,9 @@ private:
 	bool enemyKnockback = false;
 	float knockbackTime = 0.0f;
 	bool knockback = false;
+
+	// Used due to heavy loading
+	float startTimer = 0.0f;
 public:
 	bool initialize = false;
 	bool deletion = false;
