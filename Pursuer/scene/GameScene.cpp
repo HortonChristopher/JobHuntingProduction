@@ -92,11 +92,6 @@ void GameScene::Update()
 				tutorialArea = nullptr;
 			}
 			baseArea->Initialize(dxCommon, input, audio);
-			// Debug Testing
-			//gameOverCutscene = new GameOverCutscene;
-			//gameOverCutscene->Initialize(dxCommon, input, audio);
-			//gameClearCutscene = new GameClearCutscene;
-			//gameClearCutscene->Initialize(dxCommon, input, audio);
 		}
 
 		if (tutorialArea != nullptr)
@@ -107,10 +102,6 @@ void GameScene::Update()
 		{
 			page = 3;
 		}
-
-		// Debug Testing
-		//page = 4;
-		//page = 5;
 	}
 
 	if (page == 2)
@@ -193,20 +184,6 @@ void GameScene::Update()
 			}
 		}
 	}
-
-	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
-
-	//sprintf_s(msgbuf, 256, "Page: %d\n", page);
-	//sprintf_s(msgbuf2, 256, "Z: %f\n", object1->GetPosition().z);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
-	//Debug End
 }
 
 void GameScene::Draw()
