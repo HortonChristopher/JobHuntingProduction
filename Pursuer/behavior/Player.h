@@ -131,7 +131,7 @@ protected:
 	Input* input = nullptr;
 
 	// Local scale
-	XMFLOAT3 scale = { 0.1f, 0.1f, 0.1f };
+	XMFLOAT3 scale = { 0.075f, 0.075f, 0.075f };
 	// Local Rotation
 	XMFLOAT3 rotation = { 0,0,0 };
 	// Local transformation

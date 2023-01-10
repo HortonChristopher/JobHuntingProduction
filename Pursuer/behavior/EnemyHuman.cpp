@@ -75,7 +75,7 @@ void EnemyHuman::Initialize()
 
 	SetPosition(position);
 	SetModel(modelStanding);
-	SetScale({ 0.2f, 0.2f, 0.2f });
+	SetScale(scale);
 	srand((unsigned int)time(NULL));
 }
 
