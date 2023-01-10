@@ -295,7 +295,7 @@ void EnemyHuman::Update()
 			if (modelChange)
 			{
 				timer = 0.0f;
-				particleAttackPosition = { position.x, position.y + 5.0f, position.z };
+				particleAttackPosition = { position.x, position.y + 8.0f, position.z };
 				animationSet = false;
 				animationNo = 7;
 				modelChange = false;
