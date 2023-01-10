@@ -37,11 +37,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	this->audio = audio;
 
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(200, "p3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(201, "p4.png")) { assert(0); return; }
 
 	// 背景スプライト生成
-	gameOverSPRITE = Sprite::Create(200, { 0,0 });
 	gameClearSPRITE = Sprite::Create(201, { 0,0 });
 
 	titleScreen = new TitleScreen;
@@ -227,10 +225,6 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	/*if (page == 4)
-	{
-		gameOverSPRITE->Draw();
-	}*/
 	if (page == 5)
 	{
 		gameClearSPRITE->Draw();

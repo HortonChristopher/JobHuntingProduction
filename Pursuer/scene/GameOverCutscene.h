@@ -106,6 +106,8 @@ private:
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 0.0f;
 
+	Sprite* gameOverSPRITE = nullptr;
+
 	float degrees = 0.0f;
 public:
 	bool initialization = true;

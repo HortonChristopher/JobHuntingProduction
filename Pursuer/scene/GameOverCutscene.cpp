@@ -62,9 +62,11 @@ void GameOverCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* 
 
 	if (!Sprite::LoadTexture(10, "BlackScreen.png")) { assert(0); return; } // Black Screen
 	if (!Sprite::LoadTexture(13, "DamageOverlay.png")) { assert(0); return; } // Damage Overlay
+	if (!Sprite::LoadTexture(200, "p3.png")) { assert(0); return; }
 
 	fadeSPRITE = Sprite::Create(10, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 	cutsceneDamageOverlaySPRITE = Sprite::Create(13, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+	gameOverSPRITE = Sprite::Create(200, { 0,0 });
 
 	skydomeOBJ = Object3d::Create();
 	skydomeMODEL = Model::CreateFromOBJ("skydome");
@@ -227,6 +229,11 @@ void GameOverCutscene::Draw()
 	if (fadeSpriteALPHA > 0.0f)
 	{
 		fadeSPRITE->Draw();
+	}
+
+	if (cutsceneStatus == GAMEOVERSCREEN)
+	{
+		gameOverSPRITE->Draw();
 	}
 
 	// Sprite post draw

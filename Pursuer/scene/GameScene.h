@@ -70,7 +70,6 @@ private: // メンバ変数
 	BaseArea* baseArea = nullptr;
 	GameOverCutscene* gameOverCutscene = nullptr;
 
-	Sprite* gameOverSPRITE = nullptr;
 	Sprite* gameClearSPRITE = nullptr;
 
 	int tutorialOrBase = 0; // 0 = tutorial, 1 = base
