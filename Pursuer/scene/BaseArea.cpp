@@ -500,6 +500,7 @@ void BaseArea::Update()
 
 	if (enemyDefeated > 4)
 	{
+		enemyDefeated = 5;
 		fadeSpriteALPHA += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 		if (fadeSpriteALPHA >= 1.0f)
