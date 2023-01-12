@@ -532,6 +532,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::STAND);
 			baseAreaEnemyFBX[i]->set = false;
 			baseAreaEnemyFBX[i]->timer = 238.0f;
+			baseAreaEnemyFBX[i]->helpCall = false;
 			baseAreaEnemyAliveBOOL[i] = true;
 		}
 	}
