@@ -22,7 +22,11 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-
+	safe_delete(titleScreen);
+	safe_delete(tutorialArea);
+	safe_delete(baseArea);
+	safe_delete(gameOverCutscene);
+	safe_delete(gameClearCutscene);
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)

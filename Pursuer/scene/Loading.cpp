@@ -6,7 +6,10 @@ Loading::Loading()
 
 Loading::~Loading()
 {
-
+	safe_delete(camera);
+	collisionManager = nullptr;
+	particleMan = nullptr;
+	debugText = nullptr;
 }
 
 void Loading::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
