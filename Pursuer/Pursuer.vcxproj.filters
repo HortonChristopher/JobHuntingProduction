@@ -34,6 +34,12 @@
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>Shader Files\Sprite</Filter>
     </FxCompile>
+    <FxCompile Include="ShadowMapVS.hlsl">
+      <Filter>Shader Files\Tools</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowMapPS.hlsl">
+      <Filter>Shader Files\Tools</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -155,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="scene\GameClearCutscene.cpp">
       <Filter>Source Files\AreaScene</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\ShadowMap.cpp">
+      <Filter>Source Files\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +317,9 @@
     <ClInclude Include="scene\GameClearCutscene.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
+    <ClInclude Include="tools\ShadowMap.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -324,6 +336,9 @@
     </None>
     <None Include="Resources\shaders\Sprite.hlsli">
       <Filter>Shader Files\Sprite</Filter>
+    </None>
+    <None Include="ShadowMap.hlsli">
+      <Filter>Shader Files\Tools</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +443,15 @@
     </Filter>
     <Filter Include="Source Files\Behavior">
       <UniqueIdentifier>{9beaf53f-8a84-4125-af0e-6690d6c785a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tools">
+      <UniqueIdentifier>{ff782712-5661-4643-9b0a-e56416ff83f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools">
+      <UniqueIdentifier>{0262a1d2-be52-446d-94f4-3636f8f58463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\Tools">
+      <UniqueIdentifier>{4dcec18d-8302-408d-8937-36472268550f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
