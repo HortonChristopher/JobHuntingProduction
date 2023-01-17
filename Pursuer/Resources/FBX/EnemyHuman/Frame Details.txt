@@ -1,0 +1,9 @@
+Standing: 0 - 360
+Walking: 360 - 444
+Running: 444 - 475
+Attacking: 475 - 624
+Damaged: 624 - 730
+Dead: 730 - 947
+Jump: 947 - 1028
+Particle Attack: 1028 - 1190
+Injure Run: 1190 - 1227

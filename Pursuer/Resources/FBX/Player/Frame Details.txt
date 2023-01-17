@@ -1,0 +1,11 @@
+Standing: 0 - 360
+Walking: 360 - 417
+Running: 417 - 448
+Strafe Left: 448 - 488
+Strafe Right: 488 - 528
+Strafe Back: 528 - 567
+Combo Attack: 567 - 819
+Injured: 819 - 925
+Dodge Roll: 925 - 999
+Dead: 999 - 1140
+Heal: 1140 - 1300
