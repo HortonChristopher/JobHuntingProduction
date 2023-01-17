@@ -3,9 +3,19 @@
 #include <d3d12.h>
 #include <DirectXMath.h>
 #include <wrl/client.h>
+#include <unordered_map>
 #include "Vector.h"
 #include "DirectXCommon.h"
 #include "Input.h"
+
+enum BLENDTYPE
+{
+	NOBLEND,
+	ALPHA,
+	ADD,
+	SUB,
+	COLORFLIP,
+};
 
 class ShadowMap
 {
@@ -30,7 +40,7 @@ private:
 		DirectX::XMFLOAT2 uv;
 	};
 
-	std::array<VERTEX, 4> vertices;
+	std::array<Vertex, 4> vertices;
 	D3D12_VERTEX_BUFFER_VIEW vbView{}; // Vertex Buffer View
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff; // Vertex Buffer
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff; // Constant Buffer
@@ -41,6 +51,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraSRVHeap; // For texture
 	ID3D12GraphicsCommandList* cmdList;
 	ID3D12Device* dev;
+
+	static std::unordered_map<std::string, D3D_PRIMITIVE_TOPOLOGY>primitiveTopologies;
+	static std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>>rootsignature;
+	static std::unordered_map<std::string, std::unordered_map<BLENDTYPE, Microsoft::WRL::ComPtr<ID3D12PipelineState>>> pipelinestate;
 
 	const int resourceWidth = 1920;
 	const int resourceHeight = 1080;

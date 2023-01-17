@@ -70,6 +70,10 @@ public: // メンバ関数
 	/// <returns>描画コマンドリスト</returns>
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList.Get(); }
 
+	ComPtr<ID3D12DescriptorHeap>& GetRTVHeap() { return rtvHeaps; }
+	ComPtr<ID3D12DescriptorHeap>& GetDSVHeap() { return dsvHeap; }
+	std::vector<ComPtr<ID3D12Resource>>& GetBackBuffers() { return backBuffers; }
+
 private: // メンバ変数
 	// ウィンドウズアプリケーション管理
 	WinApp* winApp;

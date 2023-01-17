@@ -34,12 +34,6 @@
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>Shader Files\Sprite</Filter>
     </FxCompile>
-    <FxCompile Include="ShadowMapVS.hlsl">
-      <Filter>Shader Files\Tools</Filter>
-    </FxCompile>
-    <FxCompile Include="ShadowMapPS.hlsl">
-      <Filter>Shader Files\Tools</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -336,9 +330,6 @@
     </None>
     <None Include="Resources\shaders\Sprite.hlsli">
       <Filter>Shader Files\Sprite</Filter>
-    </None>
-    <None Include="ShadowMap.hlsli">
-      <Filter>Shader Files\Tools</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
