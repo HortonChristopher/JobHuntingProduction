@@ -49,19 +49,21 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 void GameScene::Update()
 {
-	if (page < 1)
+	switch (page)
 	{
+	case 0:
 		gameOverCutscene = nullptr;
 		titleScreen->Update();
 
 		if (titleScreen->gameStart)
 		{
 			if (titleScreen->tutorialSelectionYesBOOL == true)
-			{	
+			{
 				tutorialOrBase = 0;
 				titleScreen->~TitleScreen();
 				titleScreen = nullptr;
 				page = 1;
+				break;
 			}
 			else if (titleScreen->tutorialSelectionYesBOOL == false)
 			{
@@ -69,16 +71,16 @@ void GameScene::Update()
 				titleScreen->~TitleScreen();
 				titleScreen = nullptr;
 				page = 1;
+				break;
 			}
 			else if (titleScreen->selection == 2)
 			{
 				mainLoop = false;
+				break;
 			}
 		}
-	}
-
-	if (page == 1)
-	{
+		break;
+	case 1:
 		if (tutorialOrBase == 0)
 		{
 			tutorialArea = new TutorialArea;
@@ -101,15 +103,15 @@ void GameScene::Update()
 		if (tutorialArea != nullptr)
 		{
 			page = 2;
+			break;
 		}
 		else if (baseArea != nullptr)
 		{
 			page = 3;
+			break;
 		}
-	}
-
-	if (page == 2)
-	{
+		break;
+	case 2:
 		if (tutorialArea != nullptr)
 		{
 			tutorialArea->Update();
@@ -121,11 +123,10 @@ void GameScene::Update()
 			page = 1;
 			tutorialOrBase = 1;
 			tutorialArea->deletion = false;
+			break;
 		}
-	}
-
-	if (page == 3)
-	{
+		break;
+	case 3:
 		if (baseArea != nullptr)
 		{
 			baseArea->Update();
@@ -148,11 +149,10 @@ void GameScene::Update()
 			}
 			baseArea->deletion = false;
 			baseArea = nullptr;
+			break;
 		}
-	}
-
-	if (page == 4)
-	{
+		break;
+	case 4:
 		if (gameOverCutscene != nullptr)
 		{
 			gameOverCutscene->Update();
@@ -166,12 +166,11 @@ void GameScene::Update()
 				titleScreen->Initialize(dxCommon, input, audio);
 				gameOverCutscene->~GameOverCutscene();
 				page = 0;
+				break;
 			}
 		}
-	}
-
-	if (page == 5)
-	{
+		break;
+	case 5:
 		if (gameClearCutscene != nullptr)
 		{
 			gameClearCutscene->Update();
@@ -185,8 +184,10 @@ void GameScene::Update()
 				titleScreen->Initialize(dxCommon, input, audio);
 				gameClearCutscene->~GameClearCutscene();
 				page = 0;
+				break;
 			}
 		}
+		break;
 	}
 }
 
@@ -194,26 +195,26 @@ void GameScene::Draw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
-
-	if (page < 1)
+	
+	switch (page)
 	{
+	case 0:
 		titleScreen->Draw();
-	}
-	if (page == 2)
-	{
+		break;
+	case 1:
+		break;
+	case 2:
 		tutorialArea->Draw();
-	}
-	if (page == 3)
-	{
+		break;
+	case 3:
 		baseArea->Draw();
-	}
-	if (page == 4)
-	{
+		break;
+	case 4:
 		gameOverCutscene->Draw();
-	}
-	if (page == 5)
-	{
+		break;
+	case 5:
 		gameClearCutscene->Draw();
+		break;
 	}
 
 #pragma region 前景スプライト描画
