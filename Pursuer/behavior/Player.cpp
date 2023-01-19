@@ -35,6 +35,7 @@ void Player::Initialize()
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDodgeRoll");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDeath");
 	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("PlayerHeal");
+	modelPlayer = FbxLoader::GetInstance()->LoadModelFromFile("Player");
 
 	HRESULT result;
 	// Creation of Constant Buffer

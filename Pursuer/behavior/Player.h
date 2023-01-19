@@ -155,6 +155,7 @@ protected:
 	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
 	FBX3DModel* modelDeath = nullptr; // 91 frames
 	FBX3DModel* modelHeal = nullptr; // 81 frames float 160.0f
+	FBX3DModel* modelPlayer = nullptr; // Combined Animation Model
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	// Stand(0), Walk(1), Run(2), Strafe Left(3), Strafe Right(4), Strafe Back(5),

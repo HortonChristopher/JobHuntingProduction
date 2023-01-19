@@ -36,6 +36,7 @@ void EnemyHuman::Initialize()
 	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
 	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
 	modelInjureRun = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjureRun");
+	modelEnemy = FbxLoader::GetInstance()->LoadModelFromFile("EnemyHuman");
 
 	HRESULT result;
 	// Creation of Constant Buffer
