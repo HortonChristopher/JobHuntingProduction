@@ -133,3 +133,163 @@ void FBX3DModel::Draw(ID3D12GraphicsCommandList* cmdList)
 	// Draw command
 	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
 }
+
+void FBX3DModel::AddAnimation(const std::string& animationName, const int startFrame, const int endFrame)
+{
+	AnimationTime time;
+	time.startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
+	time.endTime.SetTime(0, 0, 0, endFrame, 0, FbxTime::EMode::eFrames60);
+	animations[animationName] = time;
+}
+
+const FBX3DModel::AnimationTime& FBX3DModel::GetAnimation(const std::string& animationName)
+{
+	return animations[animationName];
+}
+
+void FBX3DModel::AnimationInit()
+{
+	// Get animation number 0
+	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
+	// Get animation name
+	const char* animstackname = animstack->GetName();
+	// Get animation time
+	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
+	// Get starting time
+	startTime = takeinfo->mLocalTimeSpan.GetStart();
+	// Get ending time
+	endTime = takeinfo->mLocalTimeSpan.GetStop();
+	// Set currentTime to startTime
+	currentTime = startTime;
+	// Set playing state to true
+	isPlay = true;
+}
+
+void FBX3DModel::SetAnimationFrame(const int startFrame, const int endFrame, const int FrameTime)
+{
+	startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
+	currentTime = startTime;
+	endTime.SetTime(0, 0, 0, endFrame, 0, FbxTime::EMode::eFrames60);
+	if (startFrame > endFrame)
+		frameTime.SetTime(0, 0, 0, -FrameTime, 0, FbxTime::EMode::eFrames60);
+	else
+		frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
+	isPlay = true;
+}
+
+void FBX3DModel::SetAnimation(const std::string& animationName, const int FrameTime)
+{
+	isPlay = true;
+
+	// If animation name isn't registered, set to frame 0
+	if (animations.count(animationName) == 0)
+	{
+		startTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
+		endTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
+		frameTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
+		return;
+	}
+	nowAnimationName = animationName;
+	startTime = animations[animationName].startTime;
+	endTime = animations[animationName].endTime;
+	currentTime = startTime;
+
+	if (startTime > endTime)
+		frameTime.SetTime(0, 0, 0, -FrameTime, 0, FbxTime::EMode::eFrames60);
+	else
+		frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
+}
+
+bool FBX3DModel::PlayAnimation(bool endless)
+{
+	if (!isPlay)
+		return false;
+
+	currentTime += frameTime;
+	if ((currentTime >= endTime && frameTime > 0) || (currentTime <= endTime && frameTime < 0))
+	{
+		if (!endless)
+		{
+			currentTime = endTime;
+			isPlay = false;
+			return false;
+		}
+		currentTime = startTime;
+	}
+	//定数バッファのデータ転送
+	ConstBufferDataSkin* constMapSkin = nullptr;
+	HRESULT result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	assert(SUCCEEDED(result));
+	for (int i = 0; i < bones.size(); i++)
+	{
+		//今の姿勢
+		XMMATRIX matCurrentPose;
+		//今の姿勢行列を取得
+		FbxAMatrix fbxCurrentPose =
+			bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		//XMMATRIXに変換
+		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		//合成してスキニングして行列に
+		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	}
+	constBuffSkin->Unmap(0, nullptr);
+
+	return true;
+}
+
+bool FBX3DModel::PlayAnimation(const std::string& animationName, bool endless, const int frameTime)
+{
+	if (nowAnimationName == animationName)
+	{
+		return PlayAnimation(endless);
+	}
+	if (!blend)
+	{
+		nowAnimationName = animationName;
+		lerpAnimeName = animationName;
+		SetAnimation(animationName, frameTime);
+		lerpTime = 0.0f;
+		return PlayAnimation(endless);
+	}
+
+	const auto nextAnimationTime = animations[animationName].startTime;
+	if (lerpAnimeName != animationName)
+	{
+		lerpAnimeName = animationName;
+		motionBlendTime = ClucLerpTime(currentTime, nextAnimationTime);
+
+	}
+	lerpTime += 1.0f / motionBlendTime;
+	//定数バッファのデータ転送
+	ConstBufferDataSkin* constMapSkin = nullptr;
+	HRESULT result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	assert(SUCCEEDED(result));
+	for (int i = 0; i < bones.size(); i++)
+	{
+
+		XMMATRIX matCurrentPose, matStartPose, matEndPose;
+		////今の姿勢行列を取得
+		//FbxAMatrix fbxStartPose =
+		//	bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		////今の姿勢行列を取得
+		//FbxAMatrix fbxEndPose =
+		//	bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(nextAnimationTime);
+
+		//XMMATRIXに変換
+		FbxLoader::ConvertMatrixFromFbx(&matStartPose, blendStartBorn[i]);
+		FbxLoader::ConvertMatrixFromFbx(&matEndPose, blendEndBorn[i]);
+		matCurrentPose = SlerpMatrix(matStartPose, matEndPose, lerpTime);
+		//合成してスキニングして行列に
+		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	}
+	constBuffSkin->Unmap(0, nullptr);
+
+	if (lerpTime >= 1.0f)
+	{
+		nowAnimationName = animationName;
+		SetAnimation(animationName, frameTime);
+		lerpTime = 0.0f;
+	}
+
+	return true;
+}

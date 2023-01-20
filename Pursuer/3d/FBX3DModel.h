@@ -10,6 +10,7 @@
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <fbxsdk.h>
+#include <unordered_map>
 
 struct Node
 {
@@ -88,6 +89,12 @@ public: // Subclass
 		}
 	};
 
+	struct AnimationTime
+	{
+		FbxTime startTime;
+		FbxTime endTime;
+	};
+
 public:
 	// Friend Class
 	friend class FbxLoader;
@@ -102,6 +109,20 @@ public:
 	// Drawing
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	void AddAnimation(const std::string& animationName, const int startFrame, const int endFrame);
+
+	const AnimationTime& GetAnimation(const std::string& animationName);
+
+	void AnimationInit();
+
+	void SetAnimationFrame(const int startFrame, const int endFrame, const int FrameTime = 1);
+
+	void SetAnimation(const std::string& animationName, const int FrameTime = 1);
+
+	bool PlayAnimation(bool endless = false);
+
+	bool PlayAnimation(const std::string& animationName, bool endless = false, const int frameTime = 1);
+
 	// Get model transformation matrix
 	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
 
@@ -110,6 +131,9 @@ public:
 
 	// getter
 	std::vector<Bone>& GetBones() { return bones; }
+
+public:
+	std::unordered_map<std::string, AnimationTime> animations;
 
 private:
 	FbxScene* fbxScene = nullptr;
