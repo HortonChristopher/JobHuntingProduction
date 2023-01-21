@@ -1,5 +1,8 @@
 #include "FBX3DModel.h"
 
+#include <d3dcompiler.h>
+#pragma comment(lib, "d3dcompiler.lib")
+
 FBX3DModel::~FBX3DModel()
 {
 	// Release FBX scene
@@ -142,7 +145,7 @@ void FBX3DModel::GraphicsPipelineCreation()
 	ComPtr<ID3DBlob> errorBlob; // Error object
 
 	assert(device);
-
+	
 	// Load and compile vertex shader
 	result = D3DCompileFromFile(
 		L"Resources/shaders/FBXVS.hlsl",    // Shader file name
