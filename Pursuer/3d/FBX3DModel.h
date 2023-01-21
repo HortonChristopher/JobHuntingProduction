@@ -109,6 +109,8 @@ public:
 	// Drawing
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	void GraphicsPipelineCreation();
+
 	void AddAnimation(const std::string& animationName, const int startFrame, const int endFrame);
 
 	const AnimationTime& GetAnimation(const std::string& animationName);
@@ -120,8 +122,6 @@ public:
 	void SetAnimation(const std::string& animationName, const int FrameTime = 1);
 
 	bool PlayAnimation(bool endless = false);
-
-	bool PlayAnimation(const std::string& animationName, bool endless = false, const int frameTime = 1);
 
 	// Get model transformation matrix
 	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
