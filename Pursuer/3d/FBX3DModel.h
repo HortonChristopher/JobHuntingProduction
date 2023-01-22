@@ -109,7 +109,7 @@ public:
 	// Drawing
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-	void GraphicsPipelineCreation();
+	void GraphicsPipelineCreation(ID3D12Device* device, ComPtr<ID3D12RootSignature> rootsignature, ComPtr<ID3D12PipelineState> pipelinestate);
 
 	void AddAnimation(const std::string& animationName, const int startFrame, const int endFrame);
 

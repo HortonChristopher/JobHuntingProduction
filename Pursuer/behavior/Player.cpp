@@ -66,7 +66,7 @@ void Player::Initialize()
 	constBuffSkin->Unmap(0, nullptr);
 
 	// Create graphics pipeline
-	Player::CreateGraphicsPipeline();
+	modelPlayer->FBX3DModel::GraphicsPipelineCreation(device, rootsignature, pipelinestate);
 
 	// Set time for 1 second at 60fps
 	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
@@ -74,7 +74,7 @@ void Player::Initialize()
 	input = Input::GetInstance();
 
 	SetScale(scale);
-	SetModel(modelStanding);
+	SetModel(modelPlayer);
 }
 
 void Player::Update()

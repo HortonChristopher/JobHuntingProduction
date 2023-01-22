@@ -137,7 +137,7 @@ void FBX3DModel::Draw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
 }
 
-void FBX3DModel::GraphicsPipelineCreation()
+void FBX3DModel::GraphicsPipelineCreation(ID3D12Device* device, ComPtr<ID3D12RootSignature> rootsignature, ComPtr<ID3D12PipelineState> pipelinestate)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // Vertex shader object
@@ -314,20 +314,20 @@ const FBX3DModel::AnimationTime& FBX3DModel::GetAnimation(const std::string& ani
 
 void FBX3DModel::AnimationInit()
 {
-	// Get animation number 0
-	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
-	// Get animation name
-	const char* animstackname = animstack->GetName();
-	// Get animation time
-	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
-	// Get starting time
-	startTime = takeinfo->mLocalTimeSpan.GetStart();
-	// Get ending time
-	endTime = takeinfo->mLocalTimeSpan.GetStop();
-	// Set currentTime to startTime
-	currentTime = startTime;
-	// Set playing state to true
-	isPlay = true;
+	//// Get animation number 0
+	//FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
+	//// Get animation name
+	//const char* animstackname = animstack->GetName();
+	//// Get animation time
+	//FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
+	//// Get starting time
+	//startTime = takeinfo->mLocalTimeSpan.GetStart();
+	//// Get ending time
+	//endTime = takeinfo->mLocalTimeSpan.GetStop();
+	//// Set currentTime to startTime
+	//currentTime = startTime;
+	//// Set playing state to true
+	//isPlay = true;
 }
 
 void FBX3DModel::SetAnimationFrame(const int startFrame, const int endFrame, const int FrameTime)
@@ -344,61 +344,61 @@ void FBX3DModel::SetAnimationFrame(const int startFrame, const int endFrame, con
 
 void FBX3DModel::SetAnimation(const std::string& animationName, const int FrameTime)
 {
-	isPlay = true;
+	//isPlay = true;
 
-	// If animation name isn't registered, set to frame 0
-	if (animations.count(animationName) == 0)
-	{
-		startTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
-		endTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
-		frameTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
-		return;
-	}
-	nowAnimationName = animationName;
-	startTime = animations[animationName].startTime;
-	endTime = animations[animationName].endTime;
-	currentTime = startTime;
+	//// If animation name isn't registered, set to frame 0
+	//if (animations.count(animationName) == 0)
+	//{
+	//	startTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
+	//	endTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
+	//	frameTime.SetTime(0, 0, 0, 0, 0, FbxTime::EMode::eFrames60);
+	//	return;
+	//}
+	//nowAnimationName = animationName;
+	//startTime = animations[animationName].startTime;
+	//endTime = animations[animationName].endTime;
+	//currentTime = startTime;
 
-	if (startTime > endTime)
-		frameTime.SetTime(0, 0, 0, -FrameTime, 0, FbxTime::EMode::eFrames60);
-	else
-		frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
+	//if (startTime > endTime)
+	//	frameTime.SetTime(0, 0, 0, -FrameTime, 0, FbxTime::EMode::eFrames60);
+	//else
+	//	frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
 }
 
 bool FBX3DModel::PlayAnimation(bool endless)
 {
-	if (!isPlay)
-		return false;
+	//if (!isPlay)
+	//	return false;
 
-	currentTime += frameTime;
+	//currentTime += frameTime;
 
-	if ((currentTime >= endTime && frameTime > 0) || (currentTime <= endTime && frameTime < 0))
-	{
-		if (!endless)
-		{
-			currentTime = endTime;
-			isPlay = false;
-			return false;
-		}
-		currentTime = startTime;
-	}
-	// Constant Buffer Data
-	ConstBufferDataSkin* constMapSkin = nullptr;
-	HRESULT result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
-	assert(SUCCEEDED(result));
-	for (int i = 0; i < bones.size(); i++)
-	{
-		// Current posture
-		XMMATRIX matCurrentPose;
-		// Get current pose matrix
-		FbxAMatrix fbxCurrentPose =
-			bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
-		// Convert to XMMATRIX
-		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
-		// Composite and skin to matrix
-		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
-	}
-	constBuffSkin->Unmap(0, nullptr);
+	//if ((currentTime >= endTime && frameTime > 0) || (currentTime <= endTime && frameTime < 0))
+	//{
+	//	if (!endless)
+	//	{
+	//		currentTime = endTime;
+	//		isPlay = false;
+	//		return false;
+	//	}
+	//	currentTime = startTime;
+	//}
+	//// Constant Buffer Data
+	//ConstBufferDataSkin* constMapSkin = nullptr;
+	//HRESULT result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	//assert(SUCCEEDED(result));
+	//for (int i = 0; i < bones.size(); i++)
+	//{
+	//	// Current posture
+	//	XMMATRIX matCurrentPose;
+	//	// Get current pose matrix
+	//	FbxAMatrix fbxCurrentPose =
+	//		bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+	//	// Convert to XMMATRIX
+	//	FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+	//	// Composite and skin to matrix
+	//	constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	//}
+	//constBuffSkin->Unmap(0, nullptr);
 
-	return true;
+	//return true;
 }
