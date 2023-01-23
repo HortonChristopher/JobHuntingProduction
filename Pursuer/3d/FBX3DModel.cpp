@@ -3,6 +3,8 @@
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
+extern DeltaTime* deltaTime;
+
 FBX3DModel::~FBX3DModel()
 {
 	// Release FBX scene
@@ -330,7 +332,7 @@ void FBX3DModel::AnimationInit()
 	//isPlay = true;
 }
 
-void FBX3DModel::SetAnimationFrame(const int startFrame, const int endFrame, const int FrameTime)
+void FBX3DModel::PlayAnimationInit(const int startFrame, const int endFrame, const int FrameTime, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, bool isPlay)
 {
 	startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
 	currentTime = startTime;
@@ -365,40 +367,46 @@ void FBX3DModel::SetAnimation(const std::string& animationName, const int FrameT
 	//	frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
 }
 
-bool FBX3DModel::PlayAnimation(bool endless)
+bool FBX3DModel::PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, ComPtr<ID3D12Resource> constBuffSkin)
 {
-	//if (!isPlay)
-	//	return false;
+	if (!isPlay)
+		return false;
 
-	//currentTime += frameTime;
+	// Advance one frame/second
+	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
+	double sec = frameTime.GetSecondDouble();
+	sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	frameTime.SetSecondDouble(sec);
+	currentTime += frameTime;
 
-	//if ((currentTime >= endTime && frameTime > 0) || (currentTime <= endTime && frameTime < 0))
-	//{
-	//	if (!endless)
-	//	{
-	//		currentTime = endTime;
-	//		isPlay = false;
-	//		return false;
-	//	}
-	//	currentTime = startTime;
-	//}
-	//// Constant Buffer Data
-	//ConstBufferDataSkin* constMapSkin = nullptr;
-	//HRESULT result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
-	//assert(SUCCEEDED(result));
-	//for (int i = 0; i < bones.size(); i++)
-	//{
-	//	// Current posture
-	//	XMMATRIX matCurrentPose;
-	//	// Get current pose matrix
-	//	FbxAMatrix fbxCurrentPose =
-	//		bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
-	//	// Convert to XMMATRIX
-	//	FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
-	//	// Composite and skin to matrix
-	//	constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
-	//}
-	//constBuffSkin->Unmap(0, nullptr);
+	if ((currentTime >= endTime && frameTime > 0) || (currentTime <= endTime && frameTime < 0))
+	{
+		if (!endless)
+		{
+			currentTime = endTime;
+			isPlay = false;
+			return false;
+		}
+		currentTime = startTime;
+	}
 
-	//return true;
+	// Constant Buffer Data
+	ConstBufferDataSkin* constMapSkin = nullptr;
+	HRESULT result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	assert(SUCCEEDED(result));
+	for (int i = 0; i < bones.size(); i++)
+	{
+		// Current posture
+		XMMATRIX matCurrentPose;
+		// Get current pose matrix
+		FbxAMatrix fbxCurrentPose =
+			bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		// Convert to XMMATRIX
+		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		// Composite and skin to matrix
+		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	}
+	constBuffSkin->Unmap(0, nullptr);
+
+	return true;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FbxLoader/FbxLoader.h"
+#include "DeltaTime.h"
 #include <string>
 #include <vector>
 #include <array>
@@ -53,7 +55,8 @@ public: // Constant
 	// Maximum number of bone instances
 	static const int MAX_BONE_INDICES = 4;
 
-	static const int MAX_BONES = 32;
+	static const int MAX_BONES = 256;
+
 	struct ConstBufferDataSkin
 	{
 		std::array<XMMATRIX, MAX_BONES> bones;
@@ -117,11 +120,11 @@ public:
 
 	void AnimationInit();
 
-	void SetAnimationFrame(const int startFrame, const int endFrame, const int FrameTime = 1);
+	void PlayAnimationInit(const int startFrame, const int endFrame, const int FrameTime = 1, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, bool isPlay);
 
 	void SetAnimation(const std::string& animationName, const int FrameTime = 1);
 
-	bool PlayAnimation(bool endless = false);
+	bool PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, ComPtr<ID3D12Resource> constBuffSkin);
 
 	// Get model transformation matrix
 	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }

@@ -558,45 +558,49 @@ void Player::Update()
 	}
 
 	// Bone array
-	std::vector<FBX3DModel::Bone>& bones = model->GetBones();
+	//std::vector<FBX3DModel::Bone>& bones = model->GetBones();
 
-	// Constant buffer data transfer
-	ConstBufferDataSkin* constMapSkin = nullptr;
-	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	//// Constant buffer data transfer
+	//ConstBufferDataSkin* constMapSkin = nullptr;
+	//result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
 
-	for (int i = 0; i < bones.size(); i++)
-	{
-		// Current posture matrix
-		XMMATRIX matCurrentPose;
-		// Get the current posture matrix
-		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
-		// Convert to XMMATRIX
-		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
-		// Synthesize into a skinning matrix
-		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
-	}
-	constBuffSkin->Unmap(0, nullptr);
+	//for (int i = 0; i < bones.size(); i++)
+	//{
+	//	// Current posture matrix
+	//	XMMATRIX matCurrentPose;
+	//	// Get the current posture matrix
+	//	FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+	//	// Convert to XMMATRIX
+	//	FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+	//	// Synthesize into a skinning matrix
+	//	constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	//}
+	//constBuffSkin->Unmap(0, nullptr);
 
 	if (isPlay == false)
 	{
-		PlayAnimation();
+		//PlayAnimation();
+		modelPlayer->PlayAnimationInit();
 	}
 
-	if (isPlay)
-	{
-		// Advance one frame/second
-		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
-		double sec = frameTime.GetSecondDouble();
-		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		frameTime.SetSecondDouble(sec);
-		currentTime += frameTime;
+	modelPlayer->PlayAnimation();
 
-		// Return to the previous position after playing to the end
-		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED && enumStatus != HEAL)
-		{
-			currentTime = startTime;
-		}
-	}
+
+	//if (isPlay)
+	//{
+	//	// Advance one frame/second
+	//	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
+	//	double sec = frameTime.GetSecondDouble();
+	//	sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//	frameTime.SetSecondDouble(sec);
+	//	currentTime += frameTime;
+
+	//	// Return to the previous position after playing to the end
+	//	if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED && enumStatus != HEAL)
+	//	{
+	//		currentTime = startTime;
+	//	}
+	//}
 
 	//Debug Start
 	//char msgbuf[256];
