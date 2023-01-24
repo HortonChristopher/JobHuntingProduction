@@ -53,7 +53,7 @@ public:
 	/// </summary>
 	/// <param name="modelName">Model Name</param>
 	//void LoadModelFromFile(const string& modelName);
-	FBX3DModel* LoadModelFromFile(const string& modelName);
+	FBX3DModel* LoadModelFromFile(const std::string& modelName);
 
 	/// <summary>
 	/// Recursively analyze node configuration
@@ -82,7 +82,7 @@ public:
 	void ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh);
 
 	// Texture reading
-	void LoadTexture(FBX3DModel* model, const std::string& fullpath);
+	void LoadTexture(FBX3DModel* model, const string& fullpath);
 
 	std::string ExtractFileName(const std::string& path);
 

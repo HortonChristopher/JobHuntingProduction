@@ -24,7 +24,7 @@ extern DeltaTime* deltaTime;
 
 void Player::Initialize()
 {
-	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
+	/*modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
 	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("PlayerWalk");
 	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRun");
 	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeL");
@@ -34,7 +34,7 @@ void Player::Initialize()
 	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDamaged");
 	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDodgeRoll");
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDeath");
-	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("PlayerHeal");
+	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("PlayerHeal");*/
 	modelPlayer = FbxLoader::GetInstance()->LoadModelFromFile("Player");
 
 	HRESULT result;
@@ -66,7 +66,8 @@ void Player::Initialize()
 	constBuffSkin->Unmap(0, nullptr);
 
 	// Create graphics pipeline
-	modelPlayer->FBX3DModel::GraphicsPipelineCreation(device, rootsignature, pipelinestate);
+	//modelPlayer->FBX3DModel::GraphicsPipelineCreation(device, rootsignature, pipelinestate);
+	CreateGraphicsPipeline();
 
 	// Set time for 1 second at 60fps
 	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
@@ -163,7 +164,7 @@ void Player::Update()
 		case 0:
 			break;
 		case 1:
-			if (currentTime > endTime / 3 && timer > 0.0f)
+			if (currentTime - startTime > (endTime - startTime) / 3 && timer > 0.0f)
 			{
 				timer = 0.0f;
 				attackCombo = 0;
@@ -171,7 +172,7 @@ void Player::Update()
 			}
 			break;
 		case 2:
-			if (currentTime > endTime / 2 && timer > 0.0f)
+			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f)
 			{
 				timer = 0.0f;
 				attackCombo = 0;
@@ -179,7 +180,7 @@ void Player::Update()
 			}
 			break;
 		case 3:
-			if (currentTime > endTime && timer > 0.0f)
+			if (currentTime - startTime > endTime - startTime && timer > 0.0f)
 			{
 				timer = 0.0f;
 				attackCombo = 0;
@@ -462,57 +463,90 @@ void Player::Update()
 		switch (animationNo)
 		{
 		case 0:
-			SetModel(modelStanding);
+			//SetModel(modelStanding);
+			startFrame = 1;
+			endFrame = 359;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 1:
-			SetModel(modelWalking);
+			//SetModel(modelWalking);
+			startFrame = 361;
+			endFrame = 416;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 2:
-			SetModel(modelRunning);
+			//SetModel(modelRunning);
+			startFrame = 418;
+			endFrame = 447;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 3:
-			SetModel(modelStrafeL);
+			//SetModel(modelStrafeL);
+			startFrame = 449;
+			endFrame = 487;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			SetModel(modelStrafeR);
+			//SetModel(modelStrafeR);
+			startFrame = 489;
+			endFrame = 527;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 5:
-			SetModel(modelStrafeB);
+			//SetModel(modelStrafeB);
+			startFrame = 529;
+			endFrame = 566;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 6:
-			SetModel(modelDodgeRoll);
+			//SetModel(modelDodgeRoll);
+			startFrame = 926;
+			endFrame = 998;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 7:
-			SetModel(modelComboAttack);
+			///SetModel(modelComboAttack);
+			startFrame = 568;
+			endFrame = 818;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 8:
-			SetModel(modelDamaged);
+			//SetModel(modelDamaged);
+			startFrame = 820;
+			endFrame = 924;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 9:
-			SetModel(modelDeath);
+			//SetModel(modelDeath);
+			startFrame = 1000;
+			endFrame = 1139;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 10:
-			SetModel(modelHeal);
+			//SetModel(modelHeal);
+			startFrame = 1141;
+			endFrame = 1299;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -558,61 +592,61 @@ void Player::Update()
 	}
 
 	// Bone array
-	//std::vector<FBX3DModel::Bone>& bones = model->GetBones();
+	std::vector<FBX3DModel::Bone>& bones = model->GetBones();
 
-	//// Constant buffer data transfer
-	//ConstBufferDataSkin* constMapSkin = nullptr;
-	//result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	// Constant buffer data transfer
+	ConstBufferDataSkin* constMapSkin = nullptr;
+	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
 
-	//for (int i = 0; i < bones.size(); i++)
-	//{
-	//	// Current posture matrix
-	//	XMMATRIX matCurrentPose;
-	//	// Get the current posture matrix
-	//	FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
-	//	// Convert to XMMATRIX
-	//	FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
-	//	// Synthesize into a skinning matrix
-	//	constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
-	//}
-	//constBuffSkin->Unmap(0, nullptr);
+	for (int i = 0; i < bones.size(); i++)
+	{
+		// Current posture matrix
+		XMMATRIX matCurrentPose;
+		// Get the current posture matrix
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		// Convert to XMMATRIX
+		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		// Synthesize into a skinning matrix
+		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	}
+	constBuffSkin->Unmap(0, nullptr);
 
 	if (isPlay == false)
 	{
-		//PlayAnimation();
-		modelPlayer->PlayAnimationInit();
+		PlayAnimation();
+		//modelPlayer->PlayAnimationInit(startFrame, endFrame, 1, startTime, endTime, frameTime, currentTime, isPlay);
 	}
 
-	modelPlayer->PlayAnimation();
+	//modelPlayer->PlayAnimation(repeatAnimation, isPlay, startTime, endTime, frameTime, currentTime);
 
+	if (isPlay)
+	{
+		// Advance one frame/second
+		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
+		double sec = frameTime.GetSecondDouble();
+		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		frameTime.SetSecondDouble(sec);
+		currentTime += frameTime;
 
-	//if (isPlay)
-	//{
-	//	// Advance one frame/second
-	//	frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
-	//	double sec = frameTime.GetSecondDouble();
-	//	sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-	//	frameTime.SetSecondDouble(sec);
-	//	currentTime += frameTime;
-
-	//	// Return to the previous position after playing to the end
-	//	if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED && enumStatus != HEAL)
-	//	{
-	//		currentTime = startTime;
-	//	}
-	//}
+		// Return to the previous position after playing to the end
+		if (currentTime > endTime && repeatAnimation == true)
+		{
+			currentTime = startTime;
+		}
+	}
 
 	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
+	/*char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "Float Animation Time: %f\n", debugTimer);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", camera->GetEye().y);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
+	sprintf_s(msgbuf, 256, "Float Animation Time: %d\n", currentTime);
+	sprintf_s(msgbuf2, 256, "Y: %d\n", startTime);
+	sprintf_s(msgbuf3, 256, "Z: %d\n", endTime);
+
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);*/
 	//Debug End
 }
 
@@ -818,14 +852,13 @@ void Player::PlayAnimation()
 	// Animation time information
 	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
 
-	// Get start time
-	startTime = takeinfo->mLocalTimeSpan.GetStart();
-
-	// Get end time
-	endTime = takeinfo->mLocalTimeSpan.GetStop();
-
-	// Match start time
+	startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
 	currentTime = startTime;
+	endTime.SetTime(0, 0, 0, endFrame, 0, FbxTime::EMode::eFrames60);
+	if (startFrame > endFrame)
+		frameTime.SetTime(0, 0, -1, 0, 0, FbxTime::EMode::eFrames60);
+	else
+		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 
 	// Make request during playback
 	isPlay = true;

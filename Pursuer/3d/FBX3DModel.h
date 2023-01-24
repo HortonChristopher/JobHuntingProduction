@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FbxLoader/FbxLoader.h"
+//#include "FbxLoader/FbxLoader.h"
 #include "DeltaTime.h"
 #include <string>
 #include <vector>
@@ -120,11 +120,11 @@ public:
 
 	void AnimationInit();
 
-	void PlayAnimationInit(const int startFrame, const int endFrame, const int FrameTime = 1, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, bool isPlay);
+	void PlayAnimationInit(const int startFrame, const int endFrame, const int FrameTime, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, bool isPlay);
 
 	void SetAnimation(const std::string& animationName, const int FrameTime = 1);
 
-	bool PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, ComPtr<ID3D12Resource> constBuffSkin);
+	bool PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime);
 
 	// Get model transformation matrix
 	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
@@ -139,6 +139,8 @@ public:
 	std::unordered_map<std::string, AnimationTime> animations;
 
 private:
+	ComPtr<ID3D12Resource> constBuffSkin; // 定数バッファ
+
 	FbxScene* fbxScene = nullptr;
 
 	// Model Name

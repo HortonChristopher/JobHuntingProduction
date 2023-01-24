@@ -1,4 +1,5 @@
 #include "FBX3DModel.h"
+#include "FbxLoader/FbxLoader.h"
 
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
@@ -334,13 +335,20 @@ void FBX3DModel::AnimationInit()
 
 void FBX3DModel::PlayAnimationInit(const int startFrame, const int endFrame, const int FrameTime, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, bool isPlay)
 {
+	// Get animation number 0
+	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
+	// Get animation name
+	const char* animstackname = animstack->GetName();
+	// Get animation time
+	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
+
 	startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
 	currentTime = startTime;
 	endTime.SetTime(0, 0, 0, endFrame, 0, FbxTime::EMode::eFrames60);
 	if (startFrame > endFrame)
-		frameTime.SetTime(0, 0, 0, -FrameTime, 0, FbxTime::EMode::eFrames60);
+		frameTime.SetTime(0, 0, -FrameTime, 0, 0, FbxTime::EMode::eFrames60);
 	else
-		frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
+		frameTime.SetTime(0, 0, FrameTime, 0, 0, FbxTime::EMode::eFrames60);
 	isPlay = true;
 }
 
@@ -367,7 +375,7 @@ void FBX3DModel::SetAnimation(const std::string& animationName, const int FrameT
 	//	frameTime.SetTime(0, 0, 0, FrameTime, 0, FbxTime::EMode::eFrames60);
 }
 
-bool FBX3DModel::PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, ComPtr<ID3D12Resource> constBuffSkin)
+bool FBX3DModel::PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime)
 {
 	if (!isPlay)
 		return false;

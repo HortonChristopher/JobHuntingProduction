@@ -169,15 +169,18 @@ protected:
 
 	// Animation start time
 	FbxTime startTime;
+	int startFrame = 0;
 
 	// Animation end time
 	FbxTime endTime;
+	int endFrame = 0;
 
 	// Animation current time
 	FbxTime currentTime;
 
 	// Animation is playing
 	bool isPlay = false;
+	bool repeatAnimation = false;
 
 	float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
