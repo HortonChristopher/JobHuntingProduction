@@ -166,20 +166,23 @@ protected:
 	FBX3DModel* modelInjureRun = nullptr; // 20 frames
 	FBX3DModel* modelEnemy = nullptr; // Combined Animation Model
 
-	// 1 frame timed
+	// 1 frame time
 	FbxTime frameTime;
 
 	// Animation start time
 	FbxTime startTime;
+	int startFrame = 0;
 
 	// Animation end time
 	FbxTime endTime;
+	int endFrame = 0;
 
 	// Animation current time
 	FbxTime currentTime;
 
 	// Animation is playing
 	bool isPlay = false;
+	bool repeatAnimation = false;
 	                                                                
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4), Death(5), JumpBack(6), ParticleAttack(7)
