@@ -27,15 +27,6 @@ ComPtr<ID3D12PipelineState> EnemyHuman::pipelinestate;
 
 void EnemyHuman::Initialize()
 {
-	/*modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("EnemyStand");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
-	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjure");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDeath");
-	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
-	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
-	modelInjureRun = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjureRun");*/
 	modelEnemy = FbxLoader::GetInstance()->LoadModelFromFile("EnemyHuman");
 
 	HRESULT result;

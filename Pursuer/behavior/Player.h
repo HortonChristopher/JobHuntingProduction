@@ -144,17 +144,6 @@ protected:
 	Vector3 direction = { 0, 0, 1 };
 	Vector3 moveDirection = {};
 
-	FBX3DModel* modelStanding = nullptr; // 180 frames
-	FBX3DModel* modelWalking = nullptr; // 30 frames
-	FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	FBX3DModel* modelStrafeL = nullptr; // 20 frames
-	FBX3DModel* modelStrafeR = nullptr; // 20 frames
-	FBX3DModel* modelStrafeB = nullptr; // 24 frames
-	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 endTime / 2; 3rd: 76-80 Float: 253 
-	FBX3DModel* modelDamaged = nullptr; // 54 frames
-	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
-	FBX3DModel* modelDeath = nullptr; // 91 frames
-	FBX3DModel* modelHeal = nullptr; // 81 frames float 160.0f
 	FBX3DModel* modelPlayer = nullptr; // Combined Animation Model
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted

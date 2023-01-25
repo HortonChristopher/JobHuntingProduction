@@ -155,15 +155,6 @@ protected:
 
 	bool FirstRun = false;
 
-	FBX3DModel* modelStanding = nullptr; // 180 frames
-	FBX3DModel* modelWalking = nullptr; // 30 frames
-	FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	FBX3DModel* modelAttacking = nullptr; // 30(?) frames float 150.0f
-	FBX3DModel* modelDamaged = nullptr; // 54 frames
-	FBX3DModel* modelDeath = nullptr; // 91 frames
-	FBX3DModel* modelJumpBack = nullptr; // 63 frames
-	FBX3DModel* modelParticleAttack = nullptr; // 81 frames
-	FBX3DModel* modelInjureRun = nullptr; // 20 frames
 	FBX3DModel* modelEnemy = nullptr; // Combined Animation Model
 
 	// 1 frame time

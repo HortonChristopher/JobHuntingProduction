@@ -67,6 +67,7 @@ public:
 	void thread1();
 	void thread2();
 	void thread3();
+	void thread4();
 
 private:
 	DirectXCommon* dxCommon = nullptr;

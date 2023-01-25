@@ -1042,3 +1042,8 @@ void BaseArea::thread3()
 
 	srand((unsigned int)time(NULL));
 }
+
+void BaseArea::thread4()
+{
+
+}

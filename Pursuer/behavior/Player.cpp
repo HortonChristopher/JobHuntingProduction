@@ -24,17 +24,6 @@ extern DeltaTime* deltaTime;
 
 void Player::Initialize()
 {
-	/*modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("PlayerWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRun");
-	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeL");
-	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeR");
-	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeB");
-	modelComboAttack = FbxLoader::GetInstance()->LoadModelFromFile("PlayerComboAttack");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDamaged");
-	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDodgeRoll");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDeath");
-	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("PlayerHeal");*/
 	modelPlayer = FbxLoader::GetInstance()->LoadModelFromFile("Player");
 
 	HRESULT result;
