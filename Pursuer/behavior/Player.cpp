@@ -452,7 +452,6 @@ void Player::Update()
 		switch (animationNo)
 		{
 		case 0:
-			//SetModel(modelStanding);
 			startFrame = 1;
 			endFrame = 359;
 			repeatAnimation = true;
@@ -460,7 +459,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 1:
-			//SetModel(modelWalking);
 			startFrame = 361;
 			endFrame = 416;
 			repeatAnimation = true;
@@ -468,7 +466,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 2:
-			//SetModel(modelRunning);
 			startFrame = 418;
 			endFrame = 447;
 			repeatAnimation = true;
@@ -476,7 +473,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 3:
-			//SetModel(modelStrafeL);
 			startFrame = 449;
 			endFrame = 487;
 			repeatAnimation = true;
@@ -484,7 +480,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 4:
-			//SetModel(modelStrafeR);
 			startFrame = 489;
 			endFrame = 527;
 			repeatAnimation = true;
@@ -492,7 +487,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 5:
-			//SetModel(modelStrafeB);
 			startFrame = 529;
 			endFrame = 566;
 			repeatAnimation = true;
@@ -500,7 +494,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 6:
-			//SetModel(modelDodgeRoll);
 			startFrame = 926;
 			endFrame = 998;
 			repeatAnimation = false;
@@ -508,7 +501,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 7:
-			///SetModel(modelComboAttack);
 			startFrame = 568;
 			endFrame = 818;
 			repeatAnimation = false;
@@ -516,7 +508,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 8:
-			//SetModel(modelDamaged);
 			startFrame = 820;
 			endFrame = 924;
 			repeatAnimation = false;
@@ -524,7 +515,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 9:
-			//SetModel(modelDeath);
 			startFrame = 1000;
 			endFrame = 1139;
 			repeatAnimation = false;
@@ -532,7 +522,6 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 10:
-			//SetModel(modelHeal);
 			startFrame = 1141;
 			endFrame = 1299;
 			repeatAnimation = false;

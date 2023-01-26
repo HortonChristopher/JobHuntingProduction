@@ -199,7 +199,7 @@ void EnemyHuman::Update()
 			attackDamagePossible = false;
 		}
 
-		if (currentTime > endTime && attackTimer > 0.0f)
+		if (currentTime >= endTime && attackTimer > 0.0f)
 		{
 			attackTimer = 0.0f;
 			modelChange = true;
@@ -347,7 +347,6 @@ void EnemyHuman::Update()
 		switch (animationNo)
 		{
 		case 0:
-			//SetModel(modelStanding);
 			startFrame = 1;
 			endFrame = 359;
 			repeatAnimation = true;
@@ -355,7 +354,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 1:
-			//SetModel(modelWalking);
 			startFrame = 361;
 			endFrame = 443;
 			repeatAnimation = true;
@@ -363,7 +361,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 2:
-			//SetModel(modelRunning);
 			startFrame = 445;
 			endFrame = 474;
 			repeatAnimation = true;
@@ -371,7 +368,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 3:
-			//SetModel(modelAttacking);
 			startFrame = 476;
 			endFrame = 623;
 			repeatAnimation = false;
@@ -379,7 +375,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 4:
-			//SetModel(modelDamaged);
 			startFrame = 625;
 			endFrame = 729;
 			repeatAnimation = false;
@@ -387,7 +382,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 5:
-			//SetModel(modelDeath);
 			startFrame = 731;
 			endFrame = 946;
 			repeatAnimation = false;
@@ -395,7 +389,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 6:
-			//SetModel(modelJumpBack);
 			startFrame = 948;
 			endFrame = 1027;
 			repeatAnimation = false;
@@ -403,7 +396,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 7:
-			//SetModel(modelParticleAttack);
 			startFrame = 1029;
 			endFrame = 1189;
 			repeatAnimation = false;
@@ -411,7 +403,6 @@ void EnemyHuman::Update()
 			animationSet = true;
 			break;
 		case 8:
-			//SetModel(modelInjureRun);
 			startFrame = 1191;
 			endFrame = 1226;
 			repeatAnimation = true;
@@ -498,7 +489,8 @@ void EnemyHuman::Update()
 		{
 			currentTime = startTime;
 		}
-		else if (currentTime > endTime && repeatAnimation == false && enumStatus != PARTICLEATTACK)
+		else if (currentTime > endTime && repeatAnimation == false 
+			&& enumStatus != PARTICLEATTACK && enumStatus!= ATTACK)
 		{
 			currentTime = endTime;
 		}

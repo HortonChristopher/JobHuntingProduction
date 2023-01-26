@@ -35,6 +35,7 @@ void TutorialEnemy::Initialize()
 	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDeath");
 	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
 	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
+	modelTutorialEnemy = FbxLoader::GetInstance()->LoadModelFromFile("EnemyHuman");
 
 	HRESULT result;
 	// Creation of Constant Buffer

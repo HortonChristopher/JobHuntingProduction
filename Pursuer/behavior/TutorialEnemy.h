@@ -160,6 +160,7 @@ protected:
 	FBX3DModel* modelDeath = nullptr; // 91 frames
 	FBX3DModel* modelJumpBack = nullptr; // 63 frames
 	FBX3DModel* modelParticleAttack = nullptr; // 81 frames
+	FBX3DModel* modelTutorialEnemy = nullptr;
 
 	// 1 frame timed
 	FbxTime frameTime;
