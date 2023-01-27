@@ -146,7 +146,7 @@ void GameClearCutscene::Update()
 	case PLAYERATTACK:
 		degrees += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
-		if (degrees >= 350.0f)
+		if (degrees >= 120.0f)
 		{
 			camera->wCutscene = true;
 			degrees = 0.0f;
