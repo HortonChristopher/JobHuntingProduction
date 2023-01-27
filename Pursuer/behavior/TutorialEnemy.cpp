@@ -27,14 +27,6 @@ ComPtr<ID3D12PipelineState> TutorialEnemy::pipelinestate;
 
 void TutorialEnemy::Initialize()
 {
-	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("EnemyStand");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("EnemyRun");
-	modelAttacking = FbxLoader::GetInstance()->LoadModelFromFile("EnemyBasicAttack");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("EnemyInjure");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("EnemyDeath");
-	modelJumpBack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyJumpBack");
-	modelParticleAttack = FbxLoader::GetInstance()->LoadModelFromFile("EnemyParticleAttack");
 	modelTutorialEnemy = FbxLoader::GetInstance()->LoadModelFromFile("EnemyHuman");
 
 	HRESULT result;
@@ -74,7 +66,7 @@ void TutorialEnemy::Initialize()
 	input = Input::GetInstance();
 
 	SetPosition(position);
-	SetModel(modelStanding);
+	SetModel(modelTutorialEnemy);
 	SetScale(scale);
 	srand((unsigned int)time(NULL));
 }
@@ -224,7 +216,7 @@ void TutorialEnemy::Update()
 		}
 		SetPosition(cooldownPosition);
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (timer > 45.0f)
+		if (timer > 20.0f)
 		{
 			timer = 0.0f;
 			ableToDamage = true;
@@ -241,16 +233,17 @@ void TutorialEnemy::Update()
 			modelChange = false;
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (currentTime > endTime)
+		if (timer > 53.0f)
 		{
-			timer = 238.0f;
 			aggroSet = false;
 			if (!tutorial)
 			{
+				timer = 0.0f;
 				enumStatus = AGGRO;
 			}
 			else
 			{
+				timer = 238.0f;
 				enumStatus = STAND;
 			}
 			modelChange = true;
@@ -300,7 +293,7 @@ void TutorialEnemy::Update()
 				animationNo = 7;
 				modelChange = false;
 			}
-			if (currentTime > endTime / 2 && timer > 0.0f && !particleAttackActive)
+			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f && !particleAttackActive)
 			{
 				particleAttackActive = true;
 				timer = 0.0f;
@@ -323,12 +316,13 @@ void TutorialEnemy::Update()
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
-			if (timer >= 150.0f && particleAttackActive)
+			if (currentTime - startTime > (endTime - startTime) && particleAttackActive)
 			{
 				ableToDamage = true;
 				timer = 0.0f;
 				particleAttackActive = false;
 				particleAttackStage = 0;
+				modelChange = true;
 				aggroSet = false;
 				enumStatus = AGGRO;
 			}
@@ -346,42 +340,58 @@ void TutorialEnemy::Update()
 		switch (animationNo)
 		{
 		case 0:
-			SetModel(modelStanding);
+			startFrame = 1;
+			endFrame = 359;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 1:
-			SetModel(modelWalking);
+			startFrame = 361;
+			endFrame = 443;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 2:
-			SetModel(modelRunning);
+			startFrame = 445;
+			endFrame = 474;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 3:
-			SetModel(modelAttacking);
+			startFrame = 476;
+			endFrame = 623;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			SetModel(modelDamaged);
+			startFrame = 625;
+			endFrame = 729;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 5:
-			SetModel(modelDeath);
+			startFrame = 731;
+			endFrame = 946;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 6:
-			SetModel(modelJumpBack);
+			startFrame = 948;
+			endFrame = 1027;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 7:
-			SetModel(modelParticleAttack);
+			startFrame = 1029;
+			endFrame = 1189;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -461,12 +471,14 @@ void TutorialEnemy::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (animationNo < 4)
+		if (currentTime > endTime && repeatAnimation == true)
 		{
-			if (currentTime > endTime)
-			{
-				currentTime = startTime;
-			}
+			currentTime = startTime;
+		}
+		else if (currentTime > endTime && repeatAnimation == false
+			&& enumStatus != PARTICLEATTACK && enumStatus != ATTACK)
+		{
+			currentTime = endTime;
 		}
 	}
 
@@ -702,14 +714,13 @@ void TutorialEnemy::PlayAnimation()
 	// Animation time information
 	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
 
-	// Get start time
-	startTime = takeinfo->mLocalTimeSpan.GetStart();
-
-	// Get end time
-	endTime = takeinfo->mLocalTimeSpan.GetStop();
-
-	// Match start time
+	startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
 	currentTime = startTime;
+	endTime.SetTime(0, 0, 0, endFrame, 0, FbxTime::EMode::eFrames60);
+	if (startFrame > endFrame)
+		frameTime.SetTime(0, 0, -1, 0, 0, FbxTime::EMode::eFrames60);
+	else
+		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 
 	// Make request during playback
 	isPlay = true;

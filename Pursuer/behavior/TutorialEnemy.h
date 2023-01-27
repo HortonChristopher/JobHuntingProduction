@@ -152,30 +152,33 @@ protected:
 
 	bool FirstRun = false;
 
-	FBX3DModel* modelStanding = nullptr; // 180 frames
-	FBX3DModel* modelWalking = nullptr; // 30 frames
-	FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	FBX3DModel* modelAttacking = nullptr; // 30(?) frames
-	FBX3DModel* modelDamaged = nullptr; // 54 frames
-	FBX3DModel* modelDeath = nullptr; // 91 frames
-	FBX3DModel* modelJumpBack = nullptr; // 63 frames
-	FBX3DModel* modelParticleAttack = nullptr; // 81 frames
+	//FBX3DModel* modelStanding = nullptr; // 180 frames
+	//FBX3DModel* modelWalking = nullptr; // 30 frames
+	//FBX3DModel* modelRunning = nullptr; // 20(?) frames
+	//FBX3DModel* modelAttacking = nullptr; // 30(?) frames
+	//FBX3DModel* modelDamaged = nullptr; // 54 frames
+	//FBX3DModel* modelDeath = nullptr; // 91 frames
+	//FBX3DModel* modelJumpBack = nullptr; // 63 frames
+	//FBX3DModel* modelParticleAttack = nullptr; // 81 frames
 	FBX3DModel* modelTutorialEnemy = nullptr;
 
-	// 1 frame timed
+	// 1 frame time
 	FbxTime frameTime;
 
 	// Animation start time
 	FbxTime startTime;
+	int startFrame = 0;
 
 	// Animation end time
 	FbxTime endTime;
+	int endFrame = 0;
 
 	// Animation current time
 	FbxTime currentTime;
 
 	// Animation is playing
 	bool isPlay = false;
+	bool repeatAnimation = false;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
 	int animationNo = 0; // Stand(0), Walk(1), Run(2), Attack(3), Damaged(4), Death(5), JumpBack(6), ParticleAttack(7)

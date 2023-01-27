@@ -205,10 +205,10 @@ void BaseArea::Update()
 	{
 		if (baseAreaEnemyFBX[i]->HP <= 2.0f && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 		{
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
 			if (!baseAreaEnemyFBX[i]->fleeSet)
 			{
 				baseAreaEnemyFBX[i]->SetAggroSwitch(true);
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
 				float min = FLT_MAX;
 				baseAreaEnemyFBX[i]->closestEnemy = 10;
 				for (int j = 0; j < 4; j++)
@@ -250,6 +250,7 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->aggroSet = false;
 				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->SetEnumStatus(EnemyHuman::AGGRO);
 				baseAreaEnemyFBX[i]->helpCall = true;
+				baseAreaEnemyFBX[i]->fleeSet = false;
 			}
 		}
 		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true ||
@@ -533,6 +534,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->set = false;
 			baseAreaEnemyFBX[i]->timer = 238.0f;
 			baseAreaEnemyFBX[i]->helpCall = false;
+			baseAreaEnemyFBX[i]->Reset();
 			baseAreaEnemyAliveBOOL[i] = true;
 		}
 	}

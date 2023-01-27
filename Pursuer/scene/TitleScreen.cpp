@@ -198,7 +198,7 @@ void TitleScreen::Update()
 	else
 	{
 		titleSpriteALPHA = 1.0f;
-		if (!selectionBOOL && !particleMovement)
+		if (!selectionBOOL && !particleMovement && !tutorialSelectionBOOL && !keyboardContrllerSelectionBOOL)
 		{
 			if (selection == 0)
 			{
@@ -208,7 +208,6 @@ void TitleScreen::Update()
 				}
 				else if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
 				{
-					//selectionBOOL = true;
 					selection = 0;
 					tutorialSelectionBOOL = true;
 				}

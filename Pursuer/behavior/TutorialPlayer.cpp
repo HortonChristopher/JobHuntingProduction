@@ -24,17 +24,6 @@ extern DeltaTime* deltaTime;
 
 void TutorialPlayer::Initialize()
 {
-	modelStanding = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStand");
-	modelWalking = FbxLoader::GetInstance()->LoadModelFromFile("PlayerWalk");
-	modelRunning = FbxLoader::GetInstance()->LoadModelFromFile("PlayerRun");
-	modelStrafeL = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeL");
-	modelStrafeR = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeR");
-	modelStrafeB = FbxLoader::GetInstance()->LoadModelFromFile("PlayerStrafeB");
-	modelComboAttack = FbxLoader::GetInstance()->LoadModelFromFile("PlayerComboAttack");
-	modelDamaged = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDamaged");
-	modelDodgeRoll = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDodgeRoll");
-	modelDeath = FbxLoader::GetInstance()->LoadModelFromFile("PlayerDeath");
-	modelHeal = FbxLoader::GetInstance()->LoadModelFromFile("PlayerHeal");
 	modelTutorialPlayer = FbxLoader::GetInstance()->LoadModelFromFile("Player");
 
 	HRESULT result;
@@ -74,7 +63,7 @@ void TutorialPlayer::Initialize()
 	input = Input::GetInstance();
 
 	SetScale(scale);
-	SetModel(modelStanding);
+	SetModel(modelTutorialPlayer);
 }
 
 void TutorialPlayer::Update()
@@ -163,7 +152,7 @@ void TutorialPlayer::Update()
 		case 0:
 			break;
 		case 1:
-			if (currentTime > endTime / 3 && timer > 0.0f)
+			if (currentTime - startTime > (endTime - startTime) / 3 && timer > 0.0f)
 			{
 				timer = 0.0f;
 				attackCombo = 0;
@@ -171,7 +160,7 @@ void TutorialPlayer::Update()
 			}
 			break;
 		case 2:
-			if (currentTime > endTime / 2 && timer > 0.0f)
+			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f)
 			{
 				timer = 0.0f;
 				attackCombo = 0;
@@ -179,7 +168,7 @@ void TutorialPlayer::Update()
 			}
 			break;
 		case 3:
-			if (currentTime > endTime && timer > 0.0f)
+			if (currentTime - startTime > endTime - startTime && timer > 0.0f)
 			{
 				timer = 0.0f;
 				attackCombo = 0;
@@ -468,56 +457,79 @@ void TutorialPlayer::Update()
 		switch (animationNo)
 		{
 		case 0:
-			SetModel(modelStanding);
+			startFrame = 1;
+			endFrame = 359;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 1:
-			SetModel(modelWalking);
+			startFrame = 361;
+			endFrame = 416;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 2:
-			SetModel(modelRunning);
+			startFrame = 418;
+			endFrame = 447;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 3:
-			SetModel(modelStrafeL);
+			startFrame = 449;
+			endFrame = 487;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			SetModel(modelStrafeR);
+			startFrame = 489;
+			endFrame = 527;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 5:
-			SetModel(modelStrafeB);
+			startFrame = 529;
+			endFrame = 566;
+			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 6:
-			SetModel(modelDodgeRoll);
+			startFrame = 926;
+			endFrame = 998;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 7:
-			SetModel(modelComboAttack);
+			startFrame = 568;
+			endFrame = 818;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 8:
-			SetModel(modelDamaged);
+			startFrame = 820;
+			endFrame = 924;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 9:
-			SetModel(modelDeath);
+			startFrame = 1000;
+			endFrame = 1139;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
+			break;
 		case 10:
-			SetModel(modelHeal);
+			startFrame = 1141;
+			endFrame = 1299;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
@@ -597,7 +609,7 @@ void TutorialPlayer::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime && enumStatus != DEAD && enumStatus != DODGE && enumStatus != ATTACK && enumStatus != DAMAGED && enumStatus != HEAL)
+		if (currentTime > endTime && repeatAnimation == true)
 		{
 			currentTime = startTime;
 		}
@@ -819,14 +831,13 @@ void TutorialPlayer::PlayAnimation()
 	// Animation time information
 	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
 
-	// Get start time
-	startTime = takeinfo->mLocalTimeSpan.GetStart();
-
-	// Get end time
-	endTime = takeinfo->mLocalTimeSpan.GetStop();
-
-	// Match start time
+	startTime.SetTime(0, 0, 0, startFrame, 0, FbxTime::EMode::eFrames60);
 	currentTime = startTime;
+	endTime.SetTime(0, 0, 0, endFrame, 0, FbxTime::EMode::eFrames60);
+	if (startFrame > endFrame)
+		frameTime.SetTime(0, 0, -1, 0, 0, FbxTime::EMode::eFrames60);
+	else
+		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 
 	// Make request during playback
 	isPlay = true;

@@ -69,7 +69,6 @@ private:
 	bool tutorialSelectionBOOL = false;
 
 	std::array<Sprite*, 2> keyboardControllerSelectionSPRITE = { {} };
-	bool keyboardContrllerSelectionBOOL = false;
 
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 0.0f;
@@ -85,5 +84,6 @@ public:
 	bool tutorialSelectionYesBOOL = false;
 	int selection = 0;
 	bool gameStart = false;
+	bool keyboardContrllerSelectionBOOL = false;
 };
 

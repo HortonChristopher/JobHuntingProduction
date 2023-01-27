@@ -732,6 +732,7 @@ void EnemyHuman::Reset()
 	timer = 238.0f;
 	particleAttackStage = 0;
 	modelChange = true;
+	enumStatus = STAND;
 }
 
 void EnemyHuman::PlayAnimation()

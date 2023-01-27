@@ -57,7 +57,7 @@ void GameScene::Update()
 
 		if (titleScreen->gameStart)
 		{
-			if (titleScreen->tutorialSelectionYesBOOL == true)
+			if (titleScreen->tutorialSelectionYesBOOL == true && titleScreen->keyboardContrllerSelectionBOOL)
 			{
 				tutorialOrBase = 0;
 				titleScreen->~TitleScreen();
@@ -65,7 +65,7 @@ void GameScene::Update()
 				page = 1;
 				break;
 			}
-			else if (titleScreen->tutorialSelectionYesBOOL == false)
+			else if (titleScreen->tutorialSelectionYesBOOL == false && titleScreen->keyboardContrllerSelectionBOOL)
 			{
 				tutorialOrBase = 1;
 				titleScreen->~TitleScreen();

@@ -128,10 +128,10 @@ private:
 		// Base area enemy respawn timer
 	std::array<float, 4> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f} };
 		// Base area enemy spawn positions
-	std::array<XMFLOAT3, 4> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 30.0f, 200.0f}, // Enemy 1
-															{200.0f, 30.0f, 0.0f}, // Enemy 2
-															{0.0f, 30.0f, -200.0f}, // Enemy 3
-															{-200.0f, 30.0f, 0.0f}} }; // Enemy 4
+	std::array<XMFLOAT3, 4> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 20.0f, 200.0f}, // Enemy 1
+															{200.0f, 20.0f, 0.0f}, // Enemy 2
+															{0.0f, 20.0f, -200.0f}, // Enemy 3
+															{-200.0f, 20.0f, 0.0f}} }; // Enemy 4
 
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
