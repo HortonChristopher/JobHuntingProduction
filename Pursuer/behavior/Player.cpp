@@ -201,7 +201,7 @@ void Player::Update()
 			animationNo = 9;
 			animationSet = false;
 		}
-		if (currentTime > endTime && timer > 0.0f)
+		if (currentTime - startTime > endTime - startTime && timer > 0.0f)
 		{
 			timer = 0.0f;
 			isPlayerDead = true;
@@ -607,7 +607,11 @@ void Player::Update()
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime && repeatAnimation == true)
+		if (currentTime > endTime && enumStatus == DEAD)
+		{
+			currentTime = endTime + 1;
+		}
+		else if (currentTime > endTime && repeatAnimation == true)
 		{
 			currentTime = startTime;
 		}
