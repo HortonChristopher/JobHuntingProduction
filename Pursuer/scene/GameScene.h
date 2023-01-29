@@ -12,6 +12,7 @@
 #include "TutorialArea.h"
 #include "GameOverCutscene.h"
 #include "GameClearCutscene.h"
+#include "Loading.h"
 
 /// <summary>
 /// ゲームシーン
@@ -71,6 +72,7 @@ private: // メンバ変数
 	BaseArea* baseArea = nullptr;
 	GameOverCutscene* gameOverCutscene = nullptr;
 	GameClearCutscene* gameClearCutscene = nullptr;
+	Loading* loadingScreen = nullptr;
 
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteAlpha = 1.0f;
