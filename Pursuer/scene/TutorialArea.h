@@ -19,6 +19,7 @@
 #include "TouchableObject.h"
 #include "PlayerPositionObject.h"
 #include "CollisionManager.h"
+#include "Loading.h"
 
 #include <chrono>
 #include <vector>

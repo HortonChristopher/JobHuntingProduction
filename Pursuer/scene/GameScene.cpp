@@ -13,6 +13,7 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
+extern float loadingProgress;
 
 extern int keyOrMouse = 0; // 0 = keyboard, 1 = mouse
 
@@ -54,9 +55,17 @@ void GameScene::Update()
 	case 0:
 		gameOverCutscene = nullptr;
 		titleScreen->Update();
+		loadingProgress = 0.1f;
 
 		if (titleScreen->gameStart)
 		{
+			if (loadingScreen == nullptr)
+			{
+				loadingScreen = new Loading;
+				loadingScreen->Initialize(dxCommon, input, audio);
+			}
+			showLoading = true;
+
 			if (titleScreen->tutorialSelectionYesBOOL == true && titleScreen->keyboardContrllerSelectionBOOL)
 			{
 				tutorialOrBase = 0;
@@ -83,21 +92,19 @@ void GameScene::Update()
 	case 1:
 		if (tutorialOrBase == 0)
 		{
-			tutorialArea = new TutorialArea;
-			if (baseArea != nullptr)
-			{
-				baseArea = nullptr;
-			}
-			tutorialArea->Initialize(dxCommon, input, audio);
+			std::thread th1(&GameScene::thread1, this);
+			std::thread th3(&GameScene::thread3, this);
+			th3.join();
+			th1.join();
+			showLoading = false;
 		}
 		else if (tutorialOrBase == 1)
 		{
-			baseArea = new BaseArea;
-			if (tutorialArea != nullptr)
-			{
-				tutorialArea = nullptr;
-			}
-			baseArea->Initialize(dxCommon, input, audio);
+			std::thread th2(&GameScene::thread2, this);
+			std::thread th3(&GameScene::thread3, this);
+			th3.join();
+			th2.join();
+			showLoading = false;
 		}
 
 		if (tutorialArea != nullptr)
@@ -117,6 +124,11 @@ void GameScene::Update()
 			tutorialArea->Update();
 		}
 
+		if (loadingProgress > 0.0f)
+		{
+			loadingProgress = 0.0f;
+		}
+
 		if (tutorialArea->deletion)
 		{
 			tutorialArea->~TutorialArea();
@@ -130,6 +142,11 @@ void GameScene::Update()
 		if (baseArea != nullptr)
 		{
 			baseArea->Update();
+		}
+
+		if (loadingProgress > 0.0f)
+		{
+			loadingProgress = 0.0f;
 		}
 
 		if (baseArea->deletion)
@@ -199,9 +216,17 @@ void GameScene::Draw()
 	switch (page)
 	{
 	case 0:
-		titleScreen->Draw();
+		if (showLoading)
+		{
+			loadingScreen->Draw();
+		}
+		else
+		{
+			titleScreen->Draw();
+		}
 		break;
 	case 1:
+		loadingScreen->Draw();
 		break;
 	case 2:
 		tutorialArea->Draw();
@@ -224,12 +249,45 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	if (page == 1)
+	/*if (page == 1)
 	{
 		fadeSPRITE->Draw();
-	}
+	}*/
 	
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion
+}
+
+void GameScene::thread1()
+{
+	tutorialArea = new TutorialArea;
+	if (baseArea != nullptr)
+	{
+		baseArea = nullptr;
+	}
+	tutorialArea->Initialize(dxCommon, input, audio);
+}
+
+void GameScene::thread2()
+{
+	baseArea = new BaseArea;
+	if (tutorialArea != nullptr)
+	{
+		tutorialArea = nullptr;
+	}
+	baseArea->Initialize(dxCommon, input, audio);
+}
+
+void GameScene::thread3()
+{
+	while (loadingProgress < 100.0f)
+	{
+		//Debug Start
+		/*char msgbuf[256];
+		sprintf_s(msgbuf, 256, "Loading: %f\n", loadingProgress);
+		OutputDebugStringA(msgbuf);*/
+		//Debug End
+	}
+	loadingScreen->Update();
 }

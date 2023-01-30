@@ -6,6 +6,7 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
+extern float loadingProgress;
 
 extern int keyOrMouse;
 
@@ -71,6 +72,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	// Collision Manager initialization
 	collisionManager = CollisionManager::GetInstance();
 
+	loadingProgress += 10.0f;
+
 	// Particle Manager initialization/generation
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
@@ -89,6 +92,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	TutorialEnemy::SetCamera(camera);
 	TutorialPlayer::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
+
+	loadingProgress += 10.0f;
 
 	// Sprite Generation
 	if (!Sprite::LoadTexture(1, "TutorialTextFrame.png")) { assert(0); return; }
@@ -119,6 +124,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(26, "Tutorial4_5.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(27, "Tutorial4_6.png")) { assert(0); return; }
 
+	loadingProgress += 10.0f;
+
 	if (!Sprite::LoadTexture(28, "DamageOverlay.png")) { assert(0); return; } // Damage Overlay
 
 	if (!Sprite::LoadTexture(29, "Heal.png")) { assert(0); return; } // Heal Graphic
@@ -137,6 +144,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(92, "TutorialMission3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(91, "TutorialMission4.png")) { assert(0); return; }
 
+	loadingProgress += 10.0f;
+
 	if (!Sprite::LoadTexture(85, "LoadingBar.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(86, "LoadingBarFrame.png")) { assert(0); return; }
 
@@ -144,6 +153,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(88, "HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
 	if (!Sprite::LoadTexture(89, "STBar.png")) { assert(0); return; } // ST bar texture
 	if (!Sprite::LoadTexture(90, "STBarFrame.png")) { assert(0); return; } // ST bar frame texture
+
+	loadingProgress += 10.0f;
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
 	for (int i = 0; i < 26; i++)
@@ -155,6 +166,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
 		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
 	}
+	loadingProgress += 10.0f;
 	missionBarSPRITE = Sprite::Create(85, { 1150.0f, 150.0f });
 	missionBarFrameSPRITE = Sprite::Create(86, { 1150.0f, 150.0f });
 	missionBarSPRITE->SetSize({ 100.0f, 30.0f });
@@ -174,6 +186,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	healControllerSPRITE = Sprite::Create(31, { 1102.0f, 542.0f });
 	healTutorialMaskSPRITE = Sprite::Create(32, { 0.0f, 0.0f });
 	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, {1.0f, 1.0f, 1.0f, fadeSpriteAlpha});
+	loadingProgress += 10.0f;
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -200,6 +213,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	skydomeOBJ->SetScale({ 5,5,5 });
 	playerAttackRangeOBJ->SetModel(positionMODEL);
 	enemyAttackRangeOBJ->SetModel(positionMODEL);
+	loadingProgress += 10.0f;
 
 	// Player initialization
 	playerFBX = new TutorialPlayer;
@@ -214,6 +228,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	enemyPositionOBJ = PlayerPositionObject::Create();
 	playerPositionOBJ->SetModel(positionMODEL);
 	enemyFBX->SetPosition({ 0.0f, 0.0f, 0.0f });
+	loadingProgress += 10.0f;
 
 	// Ground Aspects
 	groundOBJ->SetPosition({ 0, 0, 0 });
@@ -229,6 +244,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	camera->SetDistance(48.0f);
 
 	srand((unsigned int)time(NULL));
+	loadingProgress += 10.0f;
 }
 
 void TutorialArea::Update()
@@ -249,7 +265,7 @@ void TutorialArea::Update()
 	switch (tutorialStatus)
 	{
 	case INTROCUTSCENE:
-		if (startTimer >= 80.0f)
+		if (startTimer >= 60.0f)
 		{
 			playerFBX->SetEnumStatus(TutorialPlayer::WALK);
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });

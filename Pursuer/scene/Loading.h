@@ -61,9 +61,7 @@ private:
 	Input* input = nullptr;
 	Audio* audio = nullptr;
 	DebugText* debugText;
-	DebugCamera* camera = nullptr;
-	Sprite* spriteBG = nullptr;
-	ParticleManager* particleMan = nullptr;
-	CollisionManager* collisionManager = nullptr;
-	LightGroup* lightGroup = nullptr;
+
+	Sprite* loadingScreenSprite = nullptr;
+	Sprite* loadingScreenSpriteBar = nullptr;
 };

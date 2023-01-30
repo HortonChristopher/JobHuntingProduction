@@ -6,6 +6,7 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
+extern float loadingProgress;
 
 extern int keyOrMouse;
 
@@ -85,6 +86,8 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	Player::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
 
+	loadingProgress += 10.0f;
+
 	std::thread th1(&BaseArea::thread1, this); // 2D Initialization
 	std::thread th2(&BaseArea::thread2, this); // 3D Initialization (other than touchable objects)
 	std::thread th3(&BaseArea::thread3, this); // Model and Touchable Object Initialization
@@ -117,9 +120,10 @@ void BaseArea::Update()
 		camera->Update();
 	}
 
+#pragma region openingCutscene
 	if (!gameStart && initializeFinished == true)
 	{
-		if (startTimer >= 350.0f)
+		if (startTimer >= 60.0f)
 		{
 			fadeSpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
@@ -137,6 +141,18 @@ void BaseArea::Update()
 			startTimer += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 	}
+
+	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > 60.0f)
+	{
+		playerFBX->SetEnumStatus(Player::WALK);
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		if (playerFBX->GetPosition().z >= -398.0f)
+		{
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
+			playerFBX->baseAreaOpeningCutscene = false;
+		}
+	}
+#pragma endregion
 
 	objectPosition = playerFBX->GetPosition();
 	objectRotation = playerFBX->GetRotation();
@@ -540,19 +556,6 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-#pragma region openingCutscene
-	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > 350.0f)
-	{
-		playerFBX->SetEnumStatus(Player::WALK);
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
-		if (playerFBX->GetPosition().z >= -398.0f)
-		{
-			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
-			playerFBX->baseAreaOpeningCutscene = false;
-		}
-	}
-#pragma endregion
-
 #pragma region areaBoundaryLimits
 	if (!playerFBX->baseAreaOpeningCutscene)
 	{
@@ -911,6 +914,8 @@ void BaseArea::thread1()
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextTexNumber);
 
+	loadingProgress += 10.0f;
+
 	// Sprite texture loading
 	if (!Sprite::LoadTexture(1, "HPBar.png")) { assert(0); return; } // HP bar texture
 	if (!Sprite::LoadTexture(2, "HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
@@ -927,6 +932,8 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(14, "Heal.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(15, "HealK.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(16, "HealC.png")) { assert(0); return; } // Heal Graphic
+
+	loadingProgress += 10.0f;
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -949,6 +956,8 @@ void BaseArea::thread1()
 	healControllerSPRITE = Sprite::Create(16, { 1102.0f, 542.0f });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
+
+	loadingProgress += 10.0f;
 }
 
 void BaseArea::thread2()
@@ -973,6 +982,8 @@ void BaseArea::thread2()
 		baseAreaEnemyFBX[i]->SetHomePosition({ baseAreaEnemySpawnXMFLOAT3[i].x, baseAreaEnemySpawnXMFLOAT3[i].z });
 	}
 
+	loadingProgress += 10.0f;
+
 	// Camera initial values
 	camera->SetTarget(playerFBX->GetPosition());
 	camera->SetUp({ 0, 1, 0 });
@@ -992,6 +1003,8 @@ void BaseArea::thread2()
 		attackRangeOBJ[i]->SetScale({ 15, 1, 15 });
 	}
 
+	loadingProgress += 10.0f;
+
 	// Vision range initial values
 	for (int i = 0; i < 4; i++)
 	{
@@ -1007,6 +1020,8 @@ void BaseArea::thread2()
 	{
 		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 	}
+
+	loadingProgress += 10.0f;
 }
 
 void BaseArea::thread3()
@@ -1020,6 +1035,8 @@ void BaseArea::thread3()
 	attackRangeMODEL = Model::CreateFromOBJ("yuka");
 	visionRangeMODEL = Model::CreateFromOBJ("yuka");
 
+	loadingProgress += 10.0f;
+
 	// Setting 3D model
 	skydomeOBJ->SetModel(skydomeMODEL);
 	for (int i = 0; i < 5; i++) { attackRangeOBJ[i]->SetModel(attackRangeMODEL); }
@@ -1032,6 +1049,8 @@ void BaseArea::thread3()
 	tutorialGroundOBJ = TouchableObject::Create(tutorialGroundMODEL);
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
+	loadingProgress += 10.0f;
+
 	// Ground scale
 	groundOBJ->SetScale({ 800,200,800 });
 	tutorialGroundOBJ->SetScale({ 50, 10, 50 });
@@ -1043,6 +1062,8 @@ void BaseArea::thread3()
 	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
 
 	srand((unsigned int)time(NULL));
+
+	loadingProgress += 10.0f;
 }
 
 void BaseArea::thread4()

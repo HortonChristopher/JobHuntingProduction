@@ -1,53 +1,28 @@
 #include "Loading.h"
 
+extern float loadingProgress = 0.1f;
+
 Loading::Loading()
 {
 }
 
 Loading::~Loading()
 {
-	safe_delete(camera);
-	collisionManager = nullptr;
-	particleMan = nullptr;
 	debugText = nullptr;
+	loadingScreenSprite = nullptr;
+	loadingScreenSpriteBar = nullptr;
 }
 
 void Loading::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 {
-	// Checking for nullptr
+	// nullptrチェック
 	assert(dxCommon);
 	assert(input);
 	assert(audio);
 
-	// Assigning variables to this
 	this->dxCommon = dxCommon;
 	this->input = input;
 	this->audio = audio;
-
-	// Camera initialization
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
-
-	// Collision Manager initialization
-	collisionManager = CollisionManager::GetInstance();
-
-	// Particle Manager initialization/generation
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
-
-	// Light Group Creation
-	lightGroup = LightGroup::Create();
-
-	// Setting DxCommon device
-	FBXGeneration::SetDevice(dxCommon->GetDevice());
-	EnemyHuman::SetDevice(dxCommon->GetDevice());
-	Player::SetDevice(dxCommon->GetDevice());
-
-	// Setting camera
-	Object3d::SetCamera(camera);
-	FBXGeneration::SetCamera(camera);
-	EnemyHuman::SetCamera(camera);
-	Player::SetCamera(camera);
-	PlayerPositionObject::SetCamera(camera);
 
 	// Loading debug text
 	if (!Sprite::LoadTexture(debugTextTexNumber, "debugfont.png")) { assert(0); return; }
@@ -55,11 +30,30 @@ void Loading::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	// Debug text initialization
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextTexNumber);
+
+	if (!Sprite::LoadTexture(300, "LoadingScreen.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(299, "LoadingScreenBar.png")) { assert(0); return; }
+
+	loadingScreenSprite = Sprite::Create(300, { 0.0f, 0.0f });
+	loadingScreenSpriteBar = Sprite::Create(299, { 299.0f, 364.0f });
+	loadingScreenSpriteBar->SetSize({0.1f, 54.0f});
 }
 
 void Loading::Update()
 {
+	if (loadingProgress < 0.1f)
+	{
+		loadingProgress = 0.1f;
+	}
+	if (loadingProgress > 100.0f)
+	{
+		loadingProgress = 100.0f;
+	}
 
+	while (loadingProgress < 100.0f)
+	{
+		loadingScreenSpriteBar->SetSize({ loadingProgress * 68.2f, 54.0f });
+	}
 }
 
 void Loading::Draw()
@@ -84,20 +78,22 @@ void Loading::Draw()
 #pragma endregion
 
 #pragma region 3DDrawing
-	Object3d::PreDraw(cmdList);
+	//Object3d::PreDraw(cmdList);
 
-	// 3D Object Drawing
+	//// 3D Object Drawing
 
-	// Particle drawing
-	particleMan->Draw(cmdList);
+	//// Particle drawing
+	//particleMan->Draw(cmdList);
 
-	Object3d::PostDraw();
+	//Object3d::PostDraw();
 #pragma endregion
 
 #pragma region foregroundSpriteDrawing
 	Sprite::PreDraw(cmdList);
 
 	// Foreground sprite drawing
+	loadingScreenSprite->Draw();
+	loadingScreenSpriteBar->Draw();
 
 	// Debug text drawing
 	debugText->DrawAll(cmdList);

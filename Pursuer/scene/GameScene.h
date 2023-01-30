@@ -59,6 +59,10 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void thread1();
+	void thread2();
+	void thread3();
+
 public:
 	//Player* object1 = nullptr;
 
@@ -73,6 +77,7 @@ private: // メンバ変数
 	GameOverCutscene* gameOverCutscene = nullptr;
 	GameClearCutscene* gameClearCutscene = nullptr;
 	Loading* loadingScreen = nullptr;
+	bool showLoading = false;
 
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteAlpha = 1.0f;
