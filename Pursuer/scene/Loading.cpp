@@ -1,6 +1,7 @@
 #include "Loading.h"
 
 extern float loadingProgress = 0.1f;
+extern std::atomic<float> loadingPercent = 0.1f;
 
 Loading::Loading()
 {
