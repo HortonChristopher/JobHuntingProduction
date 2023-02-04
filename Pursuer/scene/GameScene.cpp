@@ -14,6 +14,7 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 extern float loadingProgress;
+extern std::atomic<float> loadingPercent;
 
 extern int keyOrMouse = 0; // 0 = keyboard, 1 = mouse
 
