@@ -284,11 +284,12 @@ void GameScene::thread3()
 {
 	while (loadingProgress < 100.0f)
 	{
+		loadingScreen->Update(loadingProgress);
+
 		//Debug Start
 		/*char msgbuf[256];
 		sprintf_s(msgbuf, 256, "Loading: %f\n", loadingProgress);
 		OutputDebugStringA(msgbuf);*/
 		//Debug End
 	}
-	loadingScreen->Update();
 }

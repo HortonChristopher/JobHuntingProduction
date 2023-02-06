@@ -54,7 +54,7 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio);
 
-	void Update();
+	void Update(float percent);
 
 	void Draw();
 private:
