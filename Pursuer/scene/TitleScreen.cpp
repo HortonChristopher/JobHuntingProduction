@@ -78,7 +78,7 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
 	// Ground scale
-	groundOBJ->SetScale({ 800, 200, 800 });
+	groundOBJ->SetScale({ 2, 0.5f, 1 });
 	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
 
 	// Ground position

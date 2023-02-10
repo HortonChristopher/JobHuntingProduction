@@ -37,7 +37,7 @@ void Loading::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	loadingScreenSprite = Sprite::Create(300, { 0.0f, 0.0f });
 	loadingScreenSpriteBar = Sprite::Create(299, { 299.0f, 364.0f });
-	loadingScreenSpriteBar->SetSize({0.1f, 54.0f});
+	loadingScreenSpriteBar->SetSize({ 10.0f * 68.2f, 54.0f});
 }
 
 void Loading::Update(float percent)
@@ -51,7 +51,7 @@ void Loading::Update(float percent)
 		loadingProgress = 100.0f;
 	}
 
-	loadingScreenSpriteBar->SetSize({ loadingProgress * 68.2f, 54.0f });
+	loadingScreenSpriteBar->SetSize({ 55.0f * 68.2f, 54.0f });
 	//loadingScreenSpriteBar->SetSize({ loadingPercent * 68.2f, 54.0f });
 }
 

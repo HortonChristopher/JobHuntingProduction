@@ -1053,7 +1053,7 @@ void BaseArea::thread3()
 	loadingProgress += 10.0f;
 
 	// Ground scale
-	groundOBJ->SetScale({ 800,200,800 });
+	groundOBJ->SetScale({ 2,0.5f,2 });
 	tutorialGroundOBJ->SetScale({ 50, 10, 50 });
 	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
 
