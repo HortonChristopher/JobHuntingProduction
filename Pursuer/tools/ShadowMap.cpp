@@ -168,16 +168,16 @@ void ShadowMap::Initialize()
 		dsvHeap->GetCPUDescriptorHandleForHeapStart());
 
 	// Shader resource view creation
-	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // Configuration Structure
-	//srvDesc.Format = texBuff->GetDesc().Format; // RGBA Format
-	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2D Texture
-	//srvDesc.Texture2D.MipLevels = 1;
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // Configuration Structure
+	srvDesc.Format = shadowResource.Get()->GetDesc().Format; // RGBA Format
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2D Texture
+	srvDesc.Texture2D.MipLevels = 1;
 
-	//dev->CreateShaderResourceView(texbuffs[name].Get(), // Buffer associated with the view
-	//	&srvDesc, // Texture setting information
-	//	CD3DX12_CPU_DESCRIPTOR_HANDLE(basicDescHeap->GetCPUDescriptorHandleForHeapStart(),
-	//		texIndex, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	dev->CreateShaderResourceView(shadowResource.Get(), // Buffer associated with the view
+		&srvDesc, // Texture setting information
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(basicDescHeap->GetCPUDescriptorHandleForHeapStart(),
+			texIndex, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 }
 
 void ShadowMap::PreDraw()
