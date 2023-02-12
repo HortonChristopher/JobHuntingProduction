@@ -227,22 +227,22 @@ void ShadowMap::Draw()
 	constBuff->Unmap(0, nullptr);
 
 	// Set Pipeline
-	/*auto cmdList = DirectXCommon::GetInstance()->GetCommandList();
+	auto cmdList = DirectXCommon::GetInstance()->GetCommandList();
 	cmdList->SetGraphicsRootSignature(rootsignature[keyName].Get());
 	cmdList->SetPipelineState(pipelinestate[keyName][blendType].Get());
 	cmdList->IASetPrimitiveTopology(primitiveTopologies[keyName]);
 
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);*/
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	// Array of descriptor heaps
-	/*ID3D12DescriptorHeap* ppHeaps[] = { Texture::GetBasicDescHeap().Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { Texture::GetBasicDescHeap().Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
-	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());*/
+	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 
 	// Index buffer set command
-	/*cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(Texture::GetBasicDescHeap().Get()->GetGPUDescriptorHandleForHeapStart(), Texture::GetTexIndex("shadowMap"),
-		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));*/
+	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(Texture::GetBasicDescHeap().Get()->GetGPUDescriptorHandleForHeapStart(), Texture::GetTexIndex("shadowMap"),
+		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
 	cmdList->DrawInstanced(4, 1, 0, 0);
 }
