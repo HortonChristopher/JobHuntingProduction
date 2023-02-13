@@ -49,6 +49,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraRTVHeap; // For Render Targets
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraSRVHeap; // For texture
+	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>basicDescHeap;
 	ID3D12GraphicsCommandList* cmdList;
 	ID3D12Device* dev;
 
