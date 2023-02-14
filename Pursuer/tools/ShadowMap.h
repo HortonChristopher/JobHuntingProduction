@@ -29,6 +29,13 @@ public:
 	void Draw();
 
 	void PostDraw();
+
+	inline static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetBasicDescHeap() 
+	{
+		if (basicDescHeap == nullptr)
+			assert(0);
+		return basicDescHeap;
+	};
 private:
 	struct ConstBufferData {
 		DirectX::XMFLOAT4 color;
