@@ -36,6 +36,15 @@ public:
 			assert(0);
 		return basicDescHeap;
 	};
+
+	// Root signature
+	static Microsoft::WRL::ComPtr<ID3D12RootSignature> rootsignature;
+	// Pipeline state
+	static Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelinestate;
+	// Primitive Topology
+	static D3D_PRIMITIVE_TOPOLOGY primitiveTopologies;
+
+	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>basicDescHeap;
 private:
 	struct ConstBufferData {
 		DirectX::XMFLOAT4 color;
@@ -56,14 +65,15 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraRTVHeap; // For Render Targets
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> peraSRVHeap; // For texture
-	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>basicDescHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeap;
 	ID3D12GraphicsCommandList* cmdList;
 	ID3D12Device* dev;
 
-	static std::unordered_map<std::string, D3D_PRIMITIVE_TOPOLOGY>primitiveTopologies;
-	static std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>>rootsignature;
-	static std::unordered_map<std::string, std::unordered_map<BLENDTYPE, Microsoft::WRL::ComPtr<ID3D12PipelineState>>> pipelinestate;
+	//static std::unordered_map<std::string, D3D_PRIMITIVE_TOPOLOGY>primitiveTopologies;
+	//static std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>>rootsignature;
+	//static std::unordered_map<std::string, std::unordered_map<BLENDTYPE, Microsoft::WRL::ComPtr<ID3D12PipelineState>>> pipelinestate;
 
 	const int resourceWidth = 1920;
 	const int resourceHeight = 1080;
+	const int texIndex = 800;
 };
