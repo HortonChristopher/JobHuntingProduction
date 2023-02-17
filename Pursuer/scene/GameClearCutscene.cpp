@@ -87,7 +87,7 @@ void GameClearCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio*
 
 	groundMODEL = Model::CreateFromOBJ("Landscape2");
 	groundOBJ = TouchableObject::Create(groundMODEL);
-	groundOBJ->SetScale({ 800,200,800 });
+	groundOBJ->SetScale({ 2,0.5f,2 });
 	groundOBJ->SetPosition({ 0, -15, 0 });
 
 	srand((unsigned int)time(NULL));

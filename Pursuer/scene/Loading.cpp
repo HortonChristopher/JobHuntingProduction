@@ -51,7 +51,7 @@ void Loading::Update(float percent)
 		loadingProgress = 100.0f;
 	}
 
-	loadingScreenSpriteBar->SetSize({ 55.0f * 68.2f, 54.0f });
+	loadingScreenSpriteBar->SetSize({ 10.0f * 68.2f, 54.0f });
 	//loadingScreenSpriteBar->SetSize({ loadingPercent * 68.2f, 54.0f });
 }
 
