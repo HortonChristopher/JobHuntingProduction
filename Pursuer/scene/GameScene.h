@@ -14,6 +14,9 @@
 #include "GameClearCutscene.h"
 #include "Loading.h"
 
+#include <atomic>
+#include <iostream>
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -62,6 +65,8 @@ public: // メンバ関数
 	void thread1();
 	void thread2();
 	void thread3();
+
+	void addLoadingPercent(float percent);
 
 public:
 	//Player* object1 = nullptr;

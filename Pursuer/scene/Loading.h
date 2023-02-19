@@ -32,6 +32,7 @@
 #include <time.h>
 #include <thread>
 #include <atomic>
+#include <iostream>
 
 class Loading
 {
@@ -57,6 +58,8 @@ public:
 	void Update(float percent);
 
 	void Draw();
+
+	void addLoadingPercent(float percent);
 private:
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -65,4 +68,6 @@ private:
 
 	Sprite* loadingScreenSprite = nullptr;
 	Sprite* loadingScreenSpriteBar = nullptr;
+
+	float percentage = 0.0f;
 };

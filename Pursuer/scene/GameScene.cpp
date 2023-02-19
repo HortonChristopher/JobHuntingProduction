@@ -13,8 +13,9 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
-extern float loadingProgress;
-extern std::atomic<float> loadingPercent;
+extern float loadingProgress = 0.0f;
+extern std::atomic<float> loadingPercent{0.0f};
+extern bool change = false;
 
 extern int keyOrMouse = 0; // 0 = keyboard, 1 = mouse
 
@@ -284,12 +285,15 @@ void GameScene::thread3()
 {
 	while (loadingProgress < 100.0f)
 	{
-		loadingScreen->Update(loadingProgress);
+		loadingScreen->addLoadingPercent(loadingProgress);
+		loadingScreen->Update(loadingPercent);
+	}
+}
 
-		//Debug Start
-		/*char msgbuf[256];
-		sprintf_s(msgbuf, 256, "Loading: %f\n", loadingProgress);
-		OutputDebugStringA(msgbuf);*/
-		//Debug End
+void GameScene::addLoadingPercent(float percent)
+{
+	if (loadingScreen != nullptr)
+	{
+		loadingScreen->addLoadingPercent(percent);
 	}
 }

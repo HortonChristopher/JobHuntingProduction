@@ -88,6 +88,7 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	PlayerPositionObject::SetCamera(camera);
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	std::thread th1(&BaseArea::thread1, this); // 2D Initialization
 	std::thread th2(&BaseArea::thread2, this); // 3D Initialization (other than touchable objects)
@@ -916,6 +917,7 @@ void BaseArea::thread1()
 	debugText->Initialize(debugTextTexNumber);
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	// Sprite texture loading
 	if (!Sprite::LoadTexture(1, "HPBar.png")) { assert(0); return; } // HP bar texture
@@ -935,6 +937,7 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(16, "HealC.png")) { assert(0); return; } // Heal Graphic
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -959,6 +962,7 @@ void BaseArea::thread1()
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 }
 
 void BaseArea::thread2()
@@ -984,6 +988,7 @@ void BaseArea::thread2()
 	}
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	// Camera initial values
 	camera->SetTarget(playerFBX->GetPosition());
@@ -1005,6 +1010,7 @@ void BaseArea::thread2()
 	}
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	// Vision range initial values
 	for (int i = 0; i < 4; i++)
@@ -1023,6 +1029,7 @@ void BaseArea::thread2()
 	}
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 }
 
 void BaseArea::thread3()
@@ -1037,6 +1044,7 @@ void BaseArea::thread3()
 	visionRangeMODEL = Model::CreateFromOBJ("yuka");
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	// Setting 3D model
 	skydomeOBJ->SetModel(skydomeMODEL);
@@ -1051,6 +1059,7 @@ void BaseArea::thread3()
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 
 	// Ground scale
 	groundOBJ->SetScale({ 2,0.5f,2 });
@@ -1065,6 +1074,7 @@ void BaseArea::thread3()
 	srand((unsigned int)time(NULL));
 
 	loadingProgress += 10.0f;
+	//Loading::addLoadingPercent(10.0f);
 }
 
 void BaseArea::thread4()
