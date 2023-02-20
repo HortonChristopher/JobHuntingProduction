@@ -4,6 +4,10 @@
 #include <xaudio2.h>
 #include <wrl.h>
 
+#include <wrl.h>
+#include <map>
+#include <string>
+
 /// <summary>
 /// オーディオコールバック
 /// </summary>
@@ -60,6 +64,21 @@ public: // サブクラス
 		WAVEFORMAT	fmt;   // 波形フォーマット
 	};
 
+	//音声データ
+	struct SoundData
+	{
+		//波形フォーマット
+		WAVEFORMATEX wfex;
+
+		//バッファの先頭アドレス
+		BYTE* pBuffer;
+
+		//バッファのサイズ
+		unsigned int bufferSize;
+
+		IXAudio2SourceVoice* pSourceVoice;
+	};
+
 public: // メンバ関数
 
 	/// <summary>
@@ -68,12 +87,29 @@ public: // メンバ関数
 	/// <returns>成否</returns>
 	bool Initialize();
 
+	//解放処理
+	void Finalize();
+
+	//音声読み込み
+	void LoadWave(const std::string& filename);
+
+	//サウンドデータの解放
+	void UnLoad(SoundData* soundData);
+
 	// サウンドファイルの読み込みと再生
 	void PlayWave(const char* filename);
+
+	//サウンドファイルの停止
+	void StopWave(const std::string& filename);
 
 private: // メンバ変数
 	ComPtr<IXAudio2> xAudio2;
 	IXAudio2MasteringVoice* masterVoice;
 	XAudio2VoiceCallback voiceCallback;
+	//サウンドデータの連想配列
+	std::map<std::string, SoundData> soundDatas;
+	//サウンド格納ディレクトリ
+	std::string directoryPath_;
+	XAUDIO2_BUFFER buf{};
 };
 
