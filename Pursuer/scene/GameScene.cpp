@@ -268,6 +268,28 @@ void GameScene::Draw()
 #pragma endregion
 }
 
+void GameScene::CreatePipelines()
+{
+	switch (createPipelineLevel)
+	{
+	case 0:
+		PipelineSetup::CreatePipeline("Sprite", SPRITE);
+		break;
+	case 1:
+		PipelineSetup::CreatePipeline("FBX", FBX);
+		PipelineSetup::CreatePipeline("3DObj", OBJ);
+		break;
+	case 2:
+		PipelineSetup::CreatePipeline("Particle", PARTICLE, ADD);
+		break;
+	default:
+		createPipelineFinish = true;
+		break;
+	}
+
+	createPipelineLevel++;
+}
+
 void GameScene::thread1()
 {
 	tutorialArea = new TutorialArea;

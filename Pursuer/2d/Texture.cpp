@@ -1,4 +1,12 @@
 #include "Texture.h"
+#include "DirectXCommon.h"
+
+std::unordered_map<std::string, DirectX::TexMetadata> Texture::textureMetaData = {};
+std::unordered_map<std::string, ComPtr <ID3D12Resource>> Texture::textureIndexes = {};
+ComPtr <ID3D12DescriptorHeap> Texture::basicDescriptorHeap = nullptr;
+std::unordered_map<std::string, unsigned char>Texture::textureIndexes = {};
+unsigned char Texture::textureIndex = 0;
+std::unordered_map<std::string, DirectX::XMINT2> Texture::createTextureSize = {};
 
 void Texture::LoadTexture(const std::string& name, const std::string& textureName)
 {

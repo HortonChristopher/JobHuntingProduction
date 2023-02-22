@@ -110,7 +110,7 @@ void PipelineSetup::CreatePipeline(const std::string& keyName, const ShaderType 
 		SetVSLayout("TEXCOORD0a", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
 		SetVSLayout("TEXCOORD2a", inputLayout, DXGI_FORMAT_R32_UINT);
 
-		// ÉfÉvÉXÇÃèëÇ´çûÇ›Çã÷é~
+		// Prohibit the Writing of Depths
 		gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
 		primitiveTopologies[keyName] = D3D10_PRIMITIVE_TOPOLOGY_POINTLIST;

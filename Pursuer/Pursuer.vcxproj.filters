@@ -162,6 +162,9 @@
     <ClCompile Include="system\PipelineSetup.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="2d\Texture.cpp">
+      <Filter>Source Files\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -319,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="system\PipelineSetup.h">
       <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\Texture.h">
+      <Filter>Header Files\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
