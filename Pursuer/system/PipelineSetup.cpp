@@ -276,3 +276,118 @@ void PipelineSetup::CreatePipeline(const std::string& keyName, const ShaderType 
 		safe_delete(*it);
 	}
 }
+
+void PipelineSetup::CompileShader(const std::string& shaderName, ComPtr < ID3DBlob>& shaderBlob, ComPtr < ID3DBlob>& errorBlob, const SHADER shaderType)
+{
+	// Combine File Paths
+	std::string filepath = "Resources/Shader/" + shaderName + ".hlsl";
+	wchar_t wfilepath[128];
+
+	// Convert to Unicode String
+	MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
+
+	LPCSTR entryName = "", modelName = "";
+	switch (shaderType)
+	{
+	case VS:
+		entryName = "VSmain";
+		modelName = "vs_5_0";
+		break;
+	case GS:
+		entryName = "GSmain";
+		modelName = "gs_5_0";
+		break;
+	case PS:
+		entryName = "PSmain";
+		modelName = "ps_5_0";
+		break;
+
+	default:
+		break;
+	}
+
+	auto result = D3DCompileFromFile(
+		wfilepath,  // Shader File Name
+		nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, // Include-Enable
+		entryName, modelName, // Entry Point Name, Shader Model Designation
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // Setup for Debugging
+		0, &shaderBlob, &errorBlob);
+
+	if (FAILED(result)) {
+		// Copy Error Content from errorBlob to String Type
+		std::string errstr;
+		errstr.resize(errorBlob->GetBufferSize());
+
+		std::copy_n((char*)errorBlob->GetBufferPointer(),
+			errorBlob->GetBufferSize(),
+			errstr.begin());
+		errstr += "\n";
+		// Error Contents are Displayed in the Output Window
+		OutputDebugStringA(errstr.c_str());
+		exit(1);
+	}
+}
+
+void PipelineSetup::SetVSLayout(const LPCSTR& semantics, std::vector<D3D12_INPUT_ELEMENT_DESC>& arg_layouts, const DXGI_FORMAT& format)
+{
+	D3D12_INPUT_ELEMENT_DESC layout =
+	{
+		semantics, 0, format, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+	}; // UV coordinates
+	arg_layouts.push_back(layout);
+
+}
+
+void PipelineSetup::SetDescriptorConstantBuffer(std::vector<CD3DX12_ROOT_PARAMETER>& arg_rootparams, const int arg_constBuffNum, const int arg_descriptorNum, std::vector<CD3DX12_DESCRIPTOR_RANGE*>& arg_descRangeSRVs)
+{
+	int constBuffNumber = 0;
+	int descriptorNumber = 0;
+
+	// Setting Route Parameters
+	CD3DX12_ROOT_PARAMETER param;
+	arg_descRangeSRVs.resize(arg_descriptorNum);
+
+	// The Model's Texture Location is Fixed, Forcing Multiple Const buffers and texture areas to fit together when they are created.
+	if (arg_constBuffNum > 1)
+	{
+		for (; constBuffNumber < 2; constBuffNumber++)
+		{
+			param.InitAsConstantBufferView(constBuffNumber, 0, D3D12_SHADER_VISIBILITY_ALL); // Type
+			arg_rootparams.push_back(param);
+		}
+	}
+	else if (arg_constBuffNum == 1)
+	{
+		param.InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL); // Type
+		arg_rootparams.push_back(param);
+		constBuffNumber++;
+	}
+
+	if (arg_descriptorNum != 0)
+	{
+		arg_descRangeSRVs[descriptorNumber] = new CD3DX12_DESCRIPTOR_RANGE;
+		arg_descRangeSRVs[descriptorNumber]->Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, descriptorNumber);
+
+		param.InitAsDescriptorTable(1, arg_descRangeSRVs[descriptorNumber], D3D12_SHADER_VISIBILITY_ALL); // Type
+		arg_rootparams.push_back(param);
+		descriptorNumber++;
+	}
+
+	for (; constBuffNumber < arg_constBuffNum; constBuffNumber++)
+	{
+		param.InitAsConstantBufferView(constBuffNumber, 0, D3D12_SHADER_VISIBILITY_ALL); // Type
+		arg_rootparams.push_back(param);
+	}
+
+	for (; descriptorNumber < arg_descriptorNum; descriptorNumber++)
+	{
+		arg_descRangeSRVs[descriptorNumber] = new CD3DX12_DESCRIPTOR_RANGE;
+		arg_descRangeSRVs[descriptorNumber]->Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, descriptorNumber);
+
+		param.InitAsDescriptorTable(1, arg_descRangeSRVs[descriptorNumber], D3D12_SHADER_VISIBILITY_ALL); // Type
+		arg_rootparams.push_back(param);
+	}
+}
