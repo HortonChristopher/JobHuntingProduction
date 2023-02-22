@@ -62,6 +62,8 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	this->input = input;
 	this->audio = audio;
 
+	audio->Initialize();
+
 	// Camera initialization
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 

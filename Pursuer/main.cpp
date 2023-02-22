@@ -59,10 +59,10 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	}
 	// オーディオの初期化
 	audio = new Audio();
-	if (!audio->Initialize()) {
+	/*if (!audio->Initialize()) {
 		assert(0);
 		return 1;
-	}
+	}*/
 	// スプライト静的初期化
 	if (!Sprite::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height)) {
 		assert(0);

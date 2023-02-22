@@ -31,6 +31,10 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	this->audio = audio;
 	this->input = input;
 
+	audio->Initialize();
+	audio->LoadWave("Title.wav");
+	audio->PlayWave("Title.wav", audio->titleVolume, true);
+
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
 	// Particle Manager initialization/generation
@@ -256,6 +260,7 @@ void TitleScreen::Update()
 		
 		if (fadeSpriteALPHA >= 1.0f)
 		{
+			audio->StopWave("Title.wav");
 			gameStart = true;
 		}
 	}
