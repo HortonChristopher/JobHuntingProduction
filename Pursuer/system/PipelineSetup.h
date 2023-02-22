@@ -51,11 +51,9 @@ private:
 
 	enum SHADER
 	{
-		HS,
 		VS,
 		PS,
-		//GS,
-		//DS,
+		GS,
 	};
 
 	static void CompileShader(const std::string& shaderName, ComPtr < ID3DBlob>& shaderBlob, ComPtr < ID3DBlob>& errorBlob, const SHADER shaderType);
