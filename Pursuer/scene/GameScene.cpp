@@ -30,6 +30,7 @@ GameScene::~GameScene()
 	safe_delete(baseArea);
 	safe_delete(gameOverCutscene);
 	safe_delete(gameClearCutscene);
+	audio->Finalize();
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
@@ -42,6 +43,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	this->dxCommon = dxCommon;
 	this->input = input;
 	this->audio = audio;
+
+	audio->Initialize();
+	audio->LoadWave("Title.wav");
+	audio->LoadWave("MainArea.wav");
+	audio->LoadWave("GameOver.wav");
+	audio->LoadWave("GameClear.wav");
 
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);

@@ -62,7 +62,7 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	this->input = input;
 	this->audio = audio;
 
-	audio->Initialize();
+	audio->PlayWave("MainArea.wav", audio->gameplayVolume, true);
 
 	// Camera initialization
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
@@ -371,6 +371,7 @@ void BaseArea::Update()
 		if (fadeSpriteALPHA >= 1.0f)
 		{
 			fadeSpriteALPHA = 1.0f;
+			audio->StopWave("MainArea.wav");
 			result = 1;
 			deletion = true;
 		}
@@ -527,6 +528,7 @@ void BaseArea::Update()
 		if (fadeSpriteALPHA >= 1.0f)
 		{
 			fadeSpriteALPHA = 1.0f;
+			audio->StopWave("MainArea.wav");
 			result = 2;
 			deletion = true;
 		}

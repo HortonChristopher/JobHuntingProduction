@@ -60,6 +60,8 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	this->input = input;
 	this->audio = audio;
 
+	audio->PlayWave("MainArea.wav", audio->gameplayVolume, true);
+
 	// Loading debug text
 	if (!Sprite::LoadTexture(debugTextTexNumber, "debugfont.png")) { assert(0); return; }
 

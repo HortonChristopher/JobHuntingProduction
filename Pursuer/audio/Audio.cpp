@@ -88,7 +88,6 @@ void Audio::LoadWave(const std::string& filename)
 		assert(0);
 	}
 
-
 	//チャンク本体の読み込み
 	assert(format.chunk.size <= sizeof(format.fmt));
 	file.read((char*)&format.fmt, format.chunk.size);

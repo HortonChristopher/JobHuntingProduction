@@ -39,6 +39,8 @@ void GameClearCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio*
 	this->input = input;
 	this->audio = audio;
 
+	audio->PlayWave("GameClear.wav", audio->gameClearVolume, true);
+
 	// Camera initialization
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 

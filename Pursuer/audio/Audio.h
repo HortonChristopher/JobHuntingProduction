@@ -90,4 +90,7 @@ private: // メンバ変数 Member variables
 	
 public: // Member variables
 	const float titleVolume = 0.07f;
+	const float gameplayVolume = 0.07f;
+	const float gameOverVolume = 0.07f;
+	const float gameClearVolume = 0.07f;
 };

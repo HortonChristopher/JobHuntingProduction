@@ -41,6 +41,8 @@ void GameOverCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* 
 	this->input = input;
 	this->audio = audio;
 
+	audio->PlayWave("GameOver.wav", audio->gameOverVolume, true);
+
 	// Camera initialization
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
@@ -205,6 +207,11 @@ void GameOverCutscene::Update()
 		break;
 	case GAMEOVERSCREEN:
 		cutsceneEnemyFBX->SetEnumStatus(EnemyHuman::STAND);
+
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_A))
+		{
+			audio->StopWave("GameOver.wav");
+		}
 
 		break;
 	}
