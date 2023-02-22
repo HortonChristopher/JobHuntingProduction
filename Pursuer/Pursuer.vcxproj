@@ -141,6 +141,7 @@
     <ClCompile Include="scene\Loading.cpp" />
     <ClCompile Include="scene\TitleScreen.cpp" />
     <ClCompile Include="scene\TutorialArea.cpp" />
+    <ClCompile Include="system\PipelineSetup.cpp" />
     <ClCompile Include="tools\ShadowMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +200,7 @@
     <ClInclude Include="scene\Loading.h" />
     <ClInclude Include="scene\TitleScreen.h" />
     <ClInclude Include="scene\TutorialArea.h" />
+    <ClInclude Include="system\PipelineSetup.h" />
     <ClInclude Include="tools\ShadowMap.h" />
   </ItemGroup>
   <ItemGroup>

@@ -159,6 +159,9 @@
     <ClCompile Include="tools\ShadowMap.cpp">
       <Filter>Source Files\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="system\PipelineSetup.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -314,6 +317,9 @@
     <ClInclude Include="tools\ShadowMap.h">
       <Filter>Header Files\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="system\PipelineSetup.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -443,6 +449,12 @@
     </Filter>
     <Filter Include="Shader Files\Tools">
       <UniqueIdentifier>{4dcec18d-8302-408d-8937-36472268550f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{1c50e605-bd15-47d8-ac99-10eb3c420adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{b42815c1-06f2-45cd-aaa0-d323256c8bdc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
