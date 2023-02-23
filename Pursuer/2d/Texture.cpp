@@ -88,7 +88,6 @@ void Texture::CreateTexture(const std::string& name, const int& width, const int
 		1
 	);
 
-
 	ComPtr < ID3D12Resource> textureBuffer;
 	result = dev->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
@@ -117,9 +116,8 @@ void Texture::CreateTexture(const std::string& name, const int& width, const int
 	srvDescriptor.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDescriptor.Texture2D.MipLevels = 1;
 
-
-	dev->CreateShaderResourceView(textureBuffers[name].Get(),//ビューと関連付けるバッファ
-		&srvDescriptor,//テクスチャ設定情報
+	dev->CreateShaderResourceView(textureBuffers[name].Get(), // Buffer to Associate with View
+		&srvDescriptor, // Texture Setting Information
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(basicDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
 			textureIndex, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
@@ -140,7 +138,6 @@ void Texture::AddTexture(const std::string& name, ID3D12Resource* textureBuffer)
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
-
 
 	dev->CreateShaderResourceView(textureBuffers[name].Get(),
 		&srvDesc,

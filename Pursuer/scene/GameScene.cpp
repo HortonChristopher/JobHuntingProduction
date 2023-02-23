@@ -286,8 +286,28 @@ void GameScene::CreatePipelines()
 		createPipelineFinish = true;
 		break;
 	}
-
 	createPipelineLevel++;
+}
+
+void GameScene::LoadResources()
+{
+	switch (loadResourceLevel)
+	{
+	case 0:
+		// Texture Initialization
+		Texture::Initialize();
+		// Debug Text Loading
+		Texture::LoadTexture("DebugText", "debugfont.png");
+		// Black Screen Texture
+		Texture::LoadTexture("BlackScreen", "BlackScreen.png");
+		break;
+	case 1:
+		break;
+	default:
+		loadResourceFinish = true;
+		break;
+	}
+	loadResourceLevel++;
 }
 
 void GameScene::thread1()
