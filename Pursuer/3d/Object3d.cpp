@@ -173,6 +173,9 @@ void Object3d::CreateGraphicsPipeline()
 
 	// スタティックサンプラー Static sampler
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC( 0 );
+	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 
 	// ルートシグネチャの設定 Route signature settings
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
