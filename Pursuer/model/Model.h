@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
+#include <sstream>
 #include "Mesh.h"
 
 // モデルデータ Model data

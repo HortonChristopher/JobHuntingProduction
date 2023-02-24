@@ -329,7 +329,18 @@ void Model::LoadMaterial(const std::string & directoryPath, const std::string & 
 		// 先頭文字列がmap_Kdならテクスチャファイル名 Texture file name if the first string is map_Kd
 		if (key == "map_Kd") {
 			// テクスチャのファイル名読み込み Read texture file name
-			line_stream >> material->textureFilename;
+			std::vector<std::string> vstr;
+
+			while (line_stream >> material->textureFilename)
+			{
+				vstr.push_back(material->textureFilename);
+			}
+
+			if (vstr.size())
+			{
+				material->textureFilename = vstr[vstr.size() - 1];
+			}
+			//line_stream >> material->textureFilename;
 
 			// フルパスからファイル名を取り出す Extract the file name from the full path
 			size_t pos1;
