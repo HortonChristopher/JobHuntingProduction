@@ -300,6 +300,21 @@ void GameScene::LoadResources()
 		Texture::LoadTexture("DebugText", "debugfont.png");
 		// Black Screen Texture
 		Texture::LoadTexture("BlackScreen", "BlackScreen.png");
+		// Base Area Sprites
+		Texture::LoadTexture("HPBar", "HPBar.png");
+		Texture::LoadTexture("HPBarFrame", "HPBarFrame.png");
+		Texture::LoadTexture("STBar", "STBar.png");
+		Texture::LoadTexture("STBarFrame", "STBarFrame.png");
+		Texture::LoadTexture("Mission1", "Mission1.png");
+		Texture::LoadTexture("BaseAreaMinimap", "BaseAreaMinimap.png");
+		Texture::LoadTexture("PlayerMinimapSprite", "PlayerMinimapSprite.png");
+		Texture::LoadTexture("EnemyMinimapSprite", "EnemyMinimapSprite.png");
+		Texture::LoadTexture("EnemyHumanHPBar", "EnemyHumanHPBar.png");
+		Texture::LoadTexture("EnemyHumanHPBarFrame", "EnemyHumanHPBarFrame.png");
+		Texture::LoadTexture("DamageOverlay", "DamageOverlay.png");
+		Texture::LoadTexture("Heal", "Heal.png");
+		Texture::LoadTexture("HealK", "HealK.png");
+		Texture::LoadTexture("HealC", "HealC.png");
 		break;
 	case 1:
 		break;
