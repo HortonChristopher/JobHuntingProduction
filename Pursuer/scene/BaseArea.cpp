@@ -656,19 +656,22 @@ void BaseArea::Update()
 	debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
 #pragma endregion
 
-	/*float test;
+	float test;
 
 	test = 0.0f;
 
 	Vector2 testPosition;
 	Vector2 testPosition2;
 
-	baseAreaEnemyHPBarSPRITE[0]->SetPosition(testPosition.Convert(baseAreaEnemyFBX[3]->GetPosition(),
-		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720, 
-		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));
-	baseAreaEnemyHPBarFrameSPRITE[0]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[3]->GetPosition(),
-		camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-		test - 100.0f, baseAreaEnemyFBX[0]->GetPosition().y));*/
+	for (int i = 0; i < 4; i++)
+	{
+		baseAreaEnemyHPBarSPRITE[i]->SetPosition(testPosition.Convert(baseAreaEnemyFBX[i]->GetPosition(),
+			camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+			test - 100.0f, baseAreaEnemyFBX[i]->GetPosition().y));
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[i]->GetPosition(),
+			camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+			test - 100.0f, baseAreaEnemyFBX[i]->GetPosition().y));
+	}
 
 #pragma region updates
 	playerFBX->Update();
@@ -783,11 +786,11 @@ void BaseArea::Draw()
 	{
 		healControllerSPRITE->Draw();
 	}
-	/*for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
 		baseAreaEnemyHPBarSPRITE[i]->Draw();
-	}*/
+	}
 	for (int i = 0; i < 4; i++)
 	{
 		if (!baseAreaEnemyFBX[i]->dead)
