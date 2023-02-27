@@ -409,11 +409,11 @@ void Player::Update()
 					{
 						if (input->PushKey(DIK_A) || input->PushLStickLeft())
 						{
-							enumStatus = STRAFEL;
+							enumStatus = STRAFER;
 						}
 						else if (input->PushKey(DIK_D) || input->PushLStickRight())
 						{
-							enumStatus = STRAFER;
+							enumStatus = STRAFEL;
 						}
 						else if (input->PushKey(DIK_S) || input->PushLStickDown())
 						{

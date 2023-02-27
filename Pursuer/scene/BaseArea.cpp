@@ -164,41 +164,41 @@ void BaseArea::Update()
 	skydomeOBJ->SetPosition(objectPosition);
 
 #pragma region LockOn
-	//if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	//{
-	//	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	//	{
-	//		playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
-	//		objectRotation = playerFBX->GetRotation();
-	//		camera->Update();
-	//	}
-	//	float min = FLT_MAX;
-	//	int closestEnemy = 0;
-	//	for (int i = 0; i < 4; i++)
-	//	{
-	//		if (!baseAreaEnemyFBX[i]->dead)
-	//		{
-	//			float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
-	//			float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
-	//			if (abs(sqrt(x * x + y * y)) < min)
-	//			{
-	//				min = abs(sqrt(x * x + y * y));
-	//				closestEnemy = i;
-	//			}
-	//		}
-	//	}
-	//	float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-	//	float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
-	//	float radians = atan2(y2, x2);
-	//	float degrees = XMConvertToDegrees(radians);
-	//	playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
-	//	objectRotation = playerFBX->GetRotation();
-	//	camera->SetTarget(playerFBX->GetPosition());
-	//	camera->SetDistance(48.0f);
-	//	/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-	//	camera->SetDistance(min + 48.0f);*/
-	//	camera->Update();
-	//}
+	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
+		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
+			objectRotation = playerFBX->GetRotation();
+			camera->Update();
+		}
+		float min = FLT_MAX;
+		int closestEnemy = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			if (!baseAreaEnemyFBX[i]->dead)
+			{
+				float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+				float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+				if (abs(sqrt(x * x + y * y)) < min)
+				{
+					min = abs(sqrt(x * x + y * y));
+					closestEnemy = i;
+				}
+			}
+		}
+		float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+		float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+		float radians = atan2(y2, x2);
+		float degrees = XMConvertToDegrees(radians);
+		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+		objectRotation = playerFBX->GetRotation();
+		camera->SetTarget(playerFBX->GetPosition());
+		camera->SetDistance(48.0f);
+		/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+		camera->SetDistance(min + 48.0f);*/
+		camera->Update();
+	}
 #pragma endregion
 
 #pragma region DebugAttackRange
@@ -656,21 +656,27 @@ void BaseArea::Update()
 	debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
 #pragma endregion
 
-	float test;
-
-	test = 0.0f;
-
-	Vector2 testPosition;
-	Vector2 testPosition2;
+	std::array<Vector2, 4> enemyHPPosition;
+	std::array<Vector2, 4> enemyHPPositionFrame;
 
 	for (int i = 0; i < 4; i++)
 	{
-		baseAreaEnemyHPBarSPRITE[i]->SetPosition(testPosition.Convert(baseAreaEnemyFBX[i]->GetPosition(),
-			camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-			test - 100.0f, baseAreaEnemyFBX[i]->GetPosition().y));
-		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition(testPosition2.Convert(baseAreaEnemyFBX[i]->GetPosition(),
-			camera->GetViewMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-			test - 100.0f, baseAreaEnemyFBX[i]->GetPosition().y));
+		/*camera->Update();
+		baseAreaEnemyHPBarSPRITE[i]->SetPosition(enemyHPPosition[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
+			camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+			-1400.0f + playerFBX->GetPosition().x, -20.0f));
+		baseAreaEnemyHPBarSPRITE[i]->SetPosition({ baseAreaEnemyHPBarSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarSPRITE[i]->GetPosition().y });
+		baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 10.0f, 10.0f });
+		XMFLOAT2 testPosition = baseAreaEnemyHPBarSPRITE[i]->GetPosition();
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition(enemyHPPositionFrame[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
+			camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+			-1400.0f + playerFBX->GetPosition().x, -20.0f));
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().y });
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 50.0f, 10.0f });*/
+		baseAreaEnemyHPBarSPRITE[i]->SetPosition({1100.0f, 225.0f + (70.0f * i)});
+		baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 30.0f, 30.0f });
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ 1100.0f, 225.0f + (70.0f * i) });
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 150.0f, 30.0f });
 	}
 
 #pragma region updates
@@ -788,8 +794,11 @@ void BaseArea::Draw()
 	}
 	for (int i = 0; i < 4; i++)
 	{
-		baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
-		baseAreaEnemyHPBarSPRITE[i]->Draw();
+		if (Distance(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition()) < 160.0f)
+		{
+			baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
+			baseAreaEnemyHPBarSPRITE[i]->Draw();
+		}
 	}
 	for (int i = 0; i < 4; i++)
 	{

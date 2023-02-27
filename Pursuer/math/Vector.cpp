@@ -155,8 +155,8 @@ Vector2 Vector2::Convert(DirectX::XMFLOAT3 pos, DirectX::XMMATRIX viewMat, Direc
 	result.Transform(viewMat, projMat);
 	result.x /= result.z;
 	result.y /= result.z;
-	result.x = (result.x + 1.0f) * screenW / 2.0f;
-	result.y = (1.0f - result.y) * screenH / 2.0f;
+	result.x = (result.x + 1.0f) / 2.0f * screenW;
+	result.y = (1.0f - (result.y + 1.0f)) / 2.0f * screenH;
 	result.x += offsetX;
 	result.y -= offsetY;
 	return Vector2(result.x, result.y);
