@@ -52,6 +52,8 @@ void DebugCamera::Update()
 
 			dirty = true;
 
+			rotation += mouseMove.lX * scaleY;
+			rotation *= XM_PI;
 			prevRotation = objectRotation.y;
 		}
 		else
