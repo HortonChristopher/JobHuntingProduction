@@ -38,6 +38,9 @@ private:
 	float prevRotation = 0.0f;
 
 	float rotation = 0.0f;
+	bool first = false;
+
+	//LONG prevMouseMove = 0.0;
 	// 回転行列
 	XMMATRIX matRot = DirectX::XMMatrixIdentity();
 public:

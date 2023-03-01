@@ -21,6 +21,7 @@ ComPtr<ID3D12PipelineState> Player::pipelinestate;
 extern XMFLOAT3 objectPosition = { 0.0f, -10.0f, 0.0f };
 extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
 extern DeltaTime* deltaTime;
+extern bool lockOnActive;
 
 void Player::Initialize()
 {
@@ -405,7 +406,7 @@ void Player::Update()
 				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 				{
-					if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+					if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
 					{
 						if (input->PushKey(DIK_A) || input->PushLStickLeft())
 						{

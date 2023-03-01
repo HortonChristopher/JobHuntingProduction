@@ -10,6 +10,9 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 
+extern float degreeTransfer;
+extern bool lockOnActive;
+
 DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 	: Camera(window_width, window_height)
 {
@@ -36,29 +39,31 @@ void DebugCamera::Update()
 		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
-	else if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	else if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
 	{
 		//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 		{
-			/*if (objectRotation.y > 0.0f)
+			if (!first)
 			{
-				angleY -= XMConvertToRadians(objectRotation.y + 0.0f);
+				angleY += (XMConvertToRadians(objectRotation.y - 90.0f + degreeTransfer - rotation));
 			}
-			else if (objectRotation.y < 0.0f)
+			else
 			{
-				angleY += XMConvertToRadians(objectRotation.y + 0.0f);
-			}*/
+				angleY += (XMConvertToRadians(objectRotation.y - 90.0f - prevRotation + degreeTransfer - rotation));
+			}
+			degreeTransfer = 0.0f;
+			rotation = 0.0f;
 
+			first = true;
 			dirty = true;
 
-			rotation += mouseMove.lX * scaleY;
-			rotation *= XM_PI;
 			prevRotation = objectRotation.y;
 		}
 		else
 		{
 			angleY -= XMConvertToRadians(objectRotation.y - prevRotation);
+			rotation += angleY;
 
 			dirty = true;
 		}
@@ -114,6 +119,8 @@ void DebugCamera::Update()
 
 		//angleX = dx * XM_PI;
 		angleY = dy * XM_PI;
+		rotation += angleY;
+		//prevMouseMove = mouseMove.lX * scaleY;
 
 		dirty = true;
 	}

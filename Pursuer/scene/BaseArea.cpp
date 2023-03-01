@@ -10,6 +10,8 @@ extern float loadingProgress;
 extern std::atomic<float> loadingPercent;
 
 extern int keyOrMouse;
+extern float degreeTransfer = 0.0f;
+extern bool lockOnActive = false;
 
 BaseArea::BaseArea()
 {
@@ -113,7 +115,7 @@ void BaseArea::Update()
 
 	if (!screenShake)
 	{
-		if (!input->PushKey(DIK_SPACE) && !playerFBX->dodge)
+		if (!lockOnActive && !playerFBX->dodge)
 		{
 			camera->SetTarget(playerPositionOBJ->GetPosition());
 		}
@@ -166,12 +168,12 @@ void BaseArea::Update()
 #pragma region LockOn
 	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		/*if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 		{
 			playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
 			objectRotation = playerFBX->GetRotation();
 			camera->Update();
-		}
+		}*/
 		float min = FLT_MAX;
 		int closestEnemy = 0;
 		for (int i = 0; i < 4; i++)
@@ -187,17 +189,44 @@ void BaseArea::Update()
 				}
 			}
 		}
-		float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-		float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
-		float radians = atan2(y2, x2);
-		float degrees = XMConvertToDegrees(radians);
-		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
-		objectRotation = playerFBX->GetRotation();
+		if (min <= 96.0f)
+		{
+			lockOnActive = true;
+			float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+			float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+			float radians = atan2(y2, x2);
+			float degrees = XMConvertToDegrees(radians);
+			degreeTransfer = degrees;
+			degreeTransfer = 0.0f;
+			playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+			objectRotation = playerFBX->GetRotation();
+			//camera->SetTarget(playerFBX->GetPosition());
+			//camera->SetDistance(48.0f);
+			camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+			if (min > 0.0f)
+			{
+				camera->SetDistance(min + 48.0f);
+			}
+			else
+			{
+				camera->SetDistance(48.0f);
+			}
+			camera->Update();
+		}
+		else
+		{
+			lockOnActive = false;
+			camera->SetTarget(playerFBX->GetPosition());
+			camera->SetDistance(48.0f);
+			camera->Update();
+		}
+	}
+	else
+	{
 		camera->SetTarget(playerFBX->GetPosition());
 		camera->SetDistance(48.0f);
-		/*camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-		camera->SetDistance(min + 48.0f);*/
 		camera->Update();
+		lockOnActive = false;
 	}
 #pragma endregion
 
@@ -703,15 +732,15 @@ void BaseArea::Update()
 
 #pragma region debugTestStrings
 	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
+	char msgbuf[256];
+	char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", fadeSpriteALPHA);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", baseAreaEnemyHPBarSPRITE[0]->GetPosition().y);
+	sprintf_s(msgbuf, 256, "X: %f\n", camera->GetEye().x);
+	sprintf_s(msgbuf2, 256, "Z: %f\n", camera->GetEye().z + (446.0f - 48.0f));
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
 	//OutputDebugStringA(msgbuf3);
 	//Debug End
 #pragma endregion
