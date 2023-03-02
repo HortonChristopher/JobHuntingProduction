@@ -300,6 +300,9 @@ void GameScene::LoadResources()
 		Texture::LoadTexture("DebugText", "debugfont.png");
 		// Black Screen Texture
 		Texture::LoadTexture("BlackScreen", "BlackScreen.png");
+		// Loading Bar Texture
+		Texture::LoadTexture("LoadingBar", "LoadingBar.png");
+		Texture::LoadTexture("LoadingBarFrame", "LoadingBarFrame.png");
 		// Base Area Sprites
 		Texture::LoadTexture("HPBar", "HPBar.png");
 		Texture::LoadTexture("HPBarFrame", "HPBarFrame.png");
@@ -317,6 +320,42 @@ void GameScene::LoadResources()
 		Texture::LoadTexture("HealC", "HealC.png");
 		break;
 	case 1:
+		// Tutorial Area Sprites
+		Texture::LoadTexture("TutorialTextFrame", "TutorialTextFrame.png");
+		Texture::LoadTexture("Tutorial1_1", "Tutorial1_1.png");
+		Texture::LoadTexture("Tutorial1_2", "Tutorial1_2.png");
+		Texture::LoadTexture("Tutorial1_3", "Tutorial1_3.png");
+		Texture::LoadTexture("Tutorial1_3_k", "Tutorial1_3_k.png");
+		Texture::LoadTexture("Tutorial1_3_c", "Tutorial1_3_c.png");
+		Texture::LoadTexture("Tutorial1_4", "Tutorial1_4.png");
+		Texture::LoadTexture("Tutorial2_1", "Tutorial2_1.png");
+		Texture::LoadTexture("Tutorial2_2", "Tutorial2_2.png");
+		Texture::LoadTexture("Tutorial2_3", "Tutorial2_3.png");
+		Texture::LoadTexture("Tutorial2_3_k", "Tutorial2_3_k.png");
+		Texture::LoadTexture("Tutorial2_3_c", "Tutorial2_3_c.png");
+		Texture::LoadTexture("Tutorial2_4", "Tutorial2_4.png");
+		Texture::LoadTexture("Tutorial3_1", "Tutorial3_1.png");
+		Texture::LoadTexture("Tutorial3_2", "Tutorial3_2.png");
+		Texture::LoadTexture("Tutorial3_2_k", "Tutorial3_2_k.png");
+		Texture::LoadTexture("Tutorial3_2_c", "Tutorial3_2_c.png");
+		Texture::LoadTexture("Tutorial3_3", "Tutorial3_3.png");
+		Texture::LoadTexture("Tutorial3_4", "Tutorial3_4.png");
+		Texture::LoadTexture("Tutorial4_1", "Tutorial4_1.png");
+		Texture::LoadTexture("Tutorial4_2", "Tutorial4_2.png");
+		Texture::LoadTexture("Tutorial4_3", "Tutorial4_3.png");
+		Texture::LoadTexture("Tutorial4_3_k", "Tutorial4_3_k.png");
+		Texture::LoadTexture("Tutorial4_3_c", "Tutorial4_3_c.png");
+		Texture::LoadTexture("Tutorial4_4", "Tutorial4_4.png");
+		Texture::LoadTexture("Tutorial4_5", "Tutorial4_5.png");
+		Texture::LoadTexture("Tutorial4_6", "Tutorial4_6.png");
+		Texture::LoadTexture("HealTutorialMask", "HealTutorialMask.png");
+		Texture::LoadTexture("MinimapTutorialMask", "MinimapTutorialMask");
+		Texture::LoadTexture("TutorialMinimap", "TutorialMinimap.png");
+		Texture::LoadTexture("StaminaTutorialMask", "StaminaTutorialMask.png");
+		Texture::LoadTexture("TutorialMission1", "TutorialMission1.png");
+		Texture::LoadTexture("TutorialMission2", "TutorialMission2.png");
+		Texture::LoadTexture("TutorialMission3", "TutorialMission3.png");
+		Texture::LoadTexture("TutorialMission4", "TutorialMission4.png");
 		break;
 	default:
 		loadResourceFinish = true;
