@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Audio.h"
 #include "DeltaTime.h"
+#include "Texture.h"
 #include "BaseArea.h"
 #include "TitleScreen.h"
 #include "TutorialArea.h"
@@ -62,6 +63,11 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	// Pipeline Creation
+	void CreatePipelines();
+
+	void LoadResources(); // Loading 2D and 3D assets
+
 	void thread1();
 	void thread2();
 	void thread3();
@@ -86,6 +92,13 @@ private: // メンバ変数
 
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteAlpha = 1.0f;
+
+	int createPipelineLevel = 0; // Pipeline level
+	int loadResourceLevel = 0; // Resource level
+
+	bool createPipelineFinish = false;
+	bool loadResourceFinish = false;
+
 
 	int tutorialOrBase = 0; // 0 = tutorial, 1 = base
 public:

@@ -44,18 +44,17 @@ void DebugCamera::Update()
 		//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 		{
-			if (!first)
+			if (objectRotation.y >= degreeTransfer)
 			{
-				angleY += (XMConvertToRadians(objectRotation.y - 90.0f + degreeTransfer - rotation));
+				angleY += (XMConvertToRadians(objectRotation.y - degreeTransfer));
 			}
 			else
 			{
-				angleY += (XMConvertToRadians(objectRotation.y - 90.0f - prevRotation + degreeTransfer - rotation));
+				angleY -= (XMConvertToRadians(degreeTransfer - objectRotation.y));
 			}
 			degreeTransfer = 0.0f;
-			rotation = 0.0f;
+			//rotation = 0.0f;
 
-			first = true;
 			dirty = true;
 
 			prevRotation = objectRotation.y;
