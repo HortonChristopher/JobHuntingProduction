@@ -363,51 +363,27 @@ void Model::CreateDescriptorHeap()
 {
 	HRESULT result = S_FALSE;
 
-	// マテリアルの数 Number of materials
+	// マテリアルの数
 	size_t count = materials.size();
-
-	// デスクリプタヒープを生成	 Generate descriptor heap
+	// デスクリプタヒープを生成	
 	if (count > 0) {
 		D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 		descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように As visible from the shader
-		descHeapDesc.NumDescriptors = (UINT)count; // シェーダーリソースビューの数 Number of shader resource views
-		result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成 generation
+		descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
+		descHeapDesc.NumDescriptors = (UINT)count + 1; // シェーダーリソースビューの数
+		result = DirectXCommon::GetInstance()->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
 		if (FAILED(result)) {
 			assert(0);
 		}
 	}
-
-	// デスクリプタサイズを取得 Get descriptor size
-	descriptorHandleIncrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
 void Model::LoadTextures()
 {
-	int textureIndex = 0;
-	string directoryPath = baseDirectory + name + "/";
-
-	for (auto& m : materials) {
+	for (auto& m : materials)
+	{
 		Material* material = m.second;
-
-		// テクスチャあり With texture
-		if (material->textureFilename.size() > 0) {
-			CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), textureIndex, descriptorHandleIncrementSize);
-			CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), textureIndex, descriptorHandleIncrementSize);
-			// マテリアルにテクスチャ読み込み Import texture into material
-			material->LoadTexture(directoryPath, cpuDescHandleSRV, gpuDescHandleSRV);
-
-			textureIndex++;
-		}
-		// テクスチャなしNo texture
-		else {
-			CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), textureIndex, descriptorHandleIncrementSize);
-			CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), textureIndex, descriptorHandleIncrementSize);
-			// マテリアルにテクスチャ読み込み Import texture into material
-			material->LoadTexture(baseDirectory, cpuDescHandleSRV, gpuDescHandleSRV);
-
-			textureIndex++;
-		}
+		material->LoadTexture();
 	}
 }
 

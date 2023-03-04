@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "Mesh.h"
+#include "DirectXCommon.h"
 
 // モデルデータ Model data
 class Model
