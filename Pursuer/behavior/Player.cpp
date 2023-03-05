@@ -344,12 +344,17 @@ void Player::Update()
 				direction.Normalize();
 
 				float cosA;
-				cosA = direction.Dot(moveDirection);
-
 				if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 				{
-					cosA = 1.0f;
+					direction = { 0, 0, 1 };
+					rotation = { 0, 0, 0 };
 				}
+				cosA = direction.Dot(moveDirection);
+
+				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+				{
+					cosA = 1.0f;
+				}*/
 				if (cosA > 1.0f)
 				{
 					cosA = 1.0f;
