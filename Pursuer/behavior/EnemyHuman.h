@@ -55,7 +55,8 @@ public:
 		DAMAGED = 6,
 		DEAD = 7,
 		PARTICLEATTACK = 8,
-		FLEE = 9
+		FLEE = 9,
+		LANDINGATTACK = 10
 	};
 
 	status enumStatus = STAND;

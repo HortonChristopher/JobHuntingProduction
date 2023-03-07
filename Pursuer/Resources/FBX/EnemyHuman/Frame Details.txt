@@ -7,3 +7,4 @@ Dead: 730 - 947
 Jump: 947 - 1028
 Particle Attack: 1028 - 1190
 Injure Run: 1190 - 1227
+Hard Landing: 1227 - 1347
