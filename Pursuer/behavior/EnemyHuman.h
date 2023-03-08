@@ -56,7 +56,8 @@ public:
 		DEAD = 7,
 		PARTICLEATTACK = 8,
 		FLEE = 9,
-		LANDINGATTACK = 10
+		LANDINGATTACK = 10,
+		CHARGEATTACK = 11
 	};
 
 	status enumStatus = STAND;
@@ -209,6 +210,7 @@ public:
 	int closestEnemy = 0;
 	int particleAttackStage = 0;
 	int landingAttackStage = 0;
+	int chargeAttackStage = 0;
 	bool landed = false;
 	bool landingParticles = false;
 };

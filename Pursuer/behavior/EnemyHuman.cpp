@@ -414,6 +414,47 @@ void EnemyHuman::Update()
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 			break;
+		case CHARGEATTACK:
+			if (animationNo != 9)
+			{
+				animationSet = false;
+				animationNo = 9;
+				modelChange = false;
+				timer = 0.0f;
+				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
+				SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+			}
+
+			switch (chargeAttackStage)
+			{
+			case 0:
+				x = (landingAttackPosition.x - position.x);
+				y = (landingAttackPosition.y - position.y);
+				z = (landingAttackPosition.z - position.z);
+				hypotenuse = sqrt((x * x) + (z * z));
+				radians = atan2(y, x);
+				degrees = XMConvertToDegrees(radians);
+				x = (landingAttackPosition.x - position.x) / 160.0f;
+				y = (landingAttackPosition.y - position.y) / 160.0f;
+				z = (landingAttackPosition.z - position.z) / 160.0f;
+				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+
+				if (currentTime >= endTime && timer > 0.0f)
+				{
+					timer = 0.0f;
+					chargeAttackStage = 1;
+				}
+
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				break;
+			case 1:
+				break;
+			default:
+				timer = 0.0f;
+				enumStatus = STAND;
+				break;
+			}
+			break;
 		default:
 			enumStatus = AGGRO;
 			break;
