@@ -67,7 +67,7 @@ void PlayerPositionObject::Update()
 	// ワールド行列更新
 	UpdateWorldMatrix();
 
-	if (!onGround) {
+	if (!onGround && !notLandingAttack) {
 
 		const float fallAcc = -0.6f; // -0.01f
 		const float fallVYMin = -0.5f; // -0.5f

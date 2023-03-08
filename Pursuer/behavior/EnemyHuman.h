@@ -209,4 +209,6 @@ public:
 	int closestEnemy = 0;
 	int particleAttackStage = 0;
 	int landingAttackStage = 0;
+	bool landed = false;
+	bool landingParticles = false;
 };

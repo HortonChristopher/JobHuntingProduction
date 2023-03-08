@@ -41,4 +41,6 @@ private:
 	float Speed = 0.175f;
 
 	DirectX::XMVECTOR fallV;
+public:
+	bool notLandingAttack = false;
 };

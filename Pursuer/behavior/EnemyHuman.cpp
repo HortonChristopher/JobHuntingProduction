@@ -337,23 +337,98 @@ void EnemyHuman::Update()
 		}
 		break;
 	case LANDINGATTACK:
-		if (animationNo != 9)
+		switch (landingAttackStage)
 		{
-			animationSet = false;
-			animationNo = 9;
-			modelChange = false;
-		}
+		case 0:
+			if (animationNo != 6)
+			{
+				animationSet = false;
+				animationNo = 6;
+				modelChange = false;
+			}
 
-		if (currentTime >= endTime)
-		{
-			landingAttackPosition = { 0.0f, 0.0f, 0.0f };
-			enumStatus = COOLDOWN;
+			if (position.y < 100.0f)
+			{
+				position.y += 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				landingAttackPosition = objectPosition;
+			}
+			else
+			{
+				position.y = 100.0f;
+				x = (landingAttackPosition.x - position.x);
+				y = (landingAttackPosition.y - position.y);
+				z = (landingAttackPosition.z - position.z);
+				hypotenuse = sqrt((x * x) + (z * z));
+				radians = atan2(y, x);
+				degrees = XMConvertToDegrees(radians);
+				x = (landingAttackPosition.x - position.x) / 160.0f;
+				y = (landingAttackPosition.y - position.y) / 160.0f;
+				z = (landingAttackPosition.z - position.z) / 160.0f;
+				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				landingAttackStage = 1;
+			}
+			break;
+		case 1:
+			if (position.y > landingAttackPosition.y)
+			{
+				if (animationNo != 6)
+				{
+					animationSet = false;
+					animationNo = 6;
+					modelChange = false;
+					landed = true;
+				}
+
+				position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.y -= 150.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				if (animationNo != 9)
+				{
+					animationSet = false;
+					animationNo = 9;
+					modelChange = false;
+					if (position.y <= landingAttackPosition.y)
+					{
+						position.y = landingAttackPosition.y;
+					}
+					landed = false;
+					landingParticles = true;
+					timer = 0.0f;
+					SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
+					SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+				}
+
+				if (currentTime >= endTime && timer > 0.0f)
+				{
+					timer = 0.0f;
+					SetPosition({position.x, position.y + 8.0f, position.z});
+					modelChange = true;
+					enumStatus = COOLDOWN;
+					landed = false;
+					SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
+				}
+
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			break;
+		default:
+			enumStatus = AGGRO;
+			break;
 		}
+		
 		break;
 	default:
 		timer = 0.0f;
 		enumStatus = STAND;
 		break;
+	}
+
+	if (animationNo != 9)
+	{
+		SetScale({ 0.15f, 0.15f, 0.15f });
 	}
 
 	if (!animationSet)
@@ -535,15 +610,15 @@ void EnemyHuman::Update()
 	constBuffSkin->Unmap(0, nullptr);
 
 	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
-	//sprintf_s(msgbuf, 256, "%f \n", endAnimationDEBUG);
-	//sprintf_s(msgbuf2, 256, "Z: %f\n", y / hypotenuse);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
+	/*char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
+	sprintf_s(msgbuf, 256, "X: %f \n", landingAttackPosition.x);
+	sprintf_s(msgbuf2, 256, "Y: %f\n", landingAttackPosition.y);
+	sprintf_s(msgbuf3, 256, "Z: %f\n", landingAttackPosition.z);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);*/
 	//Debug End
 }
 

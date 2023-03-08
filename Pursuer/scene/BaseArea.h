@@ -96,6 +96,7 @@ private:
 
 	// Attack range visual objects (Debug Use Only)
 	std::array<Object3d*, 5> attackRangeOBJ = { {} }; // 0 = Player; 1 = Enemy1; 2 = Enemy2; 3 = Enemy3; 4 = Enemy4
+	std::array<Object3d*, 4> landingPositionOBJ = { {} }; // Unlike above, no player object needed (players don't have flying attacks)
 	Model* attackRangeMODEL = nullptr;
 
 	// Vision range visual objects (Debug Use Only)
