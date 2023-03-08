@@ -192,6 +192,7 @@ protected:
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 public:
 	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 landingAttackPosition = { 0.0f, 0.0f, 0.0f };
 	float HP = 5.0f; // Default 10.0f
 	bool dead = false;
 	bool aggroSet = false;
@@ -207,4 +208,5 @@ public:
 	bool helpCall = false;
 	int closestEnemy = 0;
 	int particleAttackStage = 0;
+	int landingAttackStage = 0;
 };

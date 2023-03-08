@@ -336,6 +336,20 @@ void EnemyHuman::Update()
 			modelChange = false;
 		}
 		break;
+	case LANDINGATTACK:
+		if (animationNo != 9)
+		{
+			animationSet = false;
+			animationNo = 9;
+			modelChange = false;
+		}
+
+		if (currentTime >= endTime)
+		{
+			landingAttackPosition = { 0.0f, 0.0f, 0.0f };
+			enumStatus = COOLDOWN;
+		}
+		break;
 	default:
 		timer = 0.0f;
 		enumStatus = STAND;
@@ -406,6 +420,13 @@ void EnemyHuman::Update()
 			startFrame = 1191;
 			endFrame = 1226;
 			repeatAnimation = true;
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 9:
+			startFrame = 1228;
+			endFrame = 1346;
+			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
