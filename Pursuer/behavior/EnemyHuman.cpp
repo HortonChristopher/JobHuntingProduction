@@ -428,6 +428,8 @@ void EnemyHuman::Update()
 			switch (chargeAttackStage)
 			{
 			case 0:
+				landingAttackPosition = objectPosition;
+
 				x = (landingAttackPosition.x - position.x);
 				y = (landingAttackPosition.y - position.y);
 				z = (landingAttackPosition.z - position.z);
@@ -442,6 +444,17 @@ void EnemyHuman::Update()
 				if (currentTime >= endTime && timer > 0.0f)
 				{
 					timer = 0.0f;
+					landingAttackPosition = objectPosition;
+					x = (landingAttackPosition.x - position.x);
+					y = (landingAttackPosition.y - position.y);
+					z = (landingAttackPosition.z - position.z);
+					hypotenuse = sqrt((x * x) + (z * z));
+					radians = atan2(y, x);
+					degrees = XMConvertToDegrees(radians);
+					x = (landingAttackPosition.x - position.x) / 160.0f;
+					y = (landingAttackPosition.y - position.y) / 160.0f;
+					z = (landingAttackPosition.z - position.z) / 160.0f;
+					SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 					chargeAttackStage = 1;
 				}
 
