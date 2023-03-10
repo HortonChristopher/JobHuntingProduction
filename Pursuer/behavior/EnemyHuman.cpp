@@ -461,6 +461,9 @@ void EnemyHuman::Update()
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				break;
 			case 1:
+				position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.y -= 150.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				break;
 			default:
 				timer = 0.0f;
