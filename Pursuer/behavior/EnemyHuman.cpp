@@ -431,14 +431,12 @@ void EnemyHuman::Update()
 				landingAttackPosition = objectPosition;
 
 				x = (landingAttackPosition.x - position.x);
-				y = (landingAttackPosition.y - position.y);
 				z = (landingAttackPosition.z - position.z);
 				hypotenuse = sqrt((x * x) + (z * z));
 				radians = atan2(y, x);
 				degrees = XMConvertToDegrees(radians);
-				x = (landingAttackPosition.x - position.x) / 160.0f;
-				y = (landingAttackPosition.y - position.y) / 160.0f;
-				z = (landingAttackPosition.z - position.z) / 160.0f;
+				x = (landingAttackPosition.x - position.x) * (x / hypotenuse);
+				z = (landingAttackPosition.z - position.z) * (z / hypotenuse);
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 
 				if (currentTime >= endTime && timer > 0.0f)
@@ -446,14 +444,12 @@ void EnemyHuman::Update()
 					timer = 0.0f;
 					landingAttackPosition = objectPosition;
 					x = (landingAttackPosition.x - position.x);
-					y = (landingAttackPosition.y - position.y);
 					z = (landingAttackPosition.z - position.z);
 					hypotenuse = sqrt((x * x) + (z * z));
 					radians = atan2(y, x);
 					degrees = XMConvertToDegrees(radians);
-					x = (landingAttackPosition.x - position.x) / 160.0f;
-					y = (landingAttackPosition.y - position.y) / 160.0f;
-					z = (landingAttackPosition.z - position.z) / 160.0f;
+					x = (landingAttackPosition.x - position.x) * (x / hypotenuse);
+					z = (landingAttackPosition.z - position.z) * (z / hypotenuse);
 					SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 					chargeAttackStage = 1;
 				}
@@ -461,9 +457,8 @@ void EnemyHuman::Update()
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				break;
 			case 1:
-				position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.y -= 150.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.x += x * 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				break;
 			default:
 				timer = 0.0f;
