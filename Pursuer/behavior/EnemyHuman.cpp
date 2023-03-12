@@ -457,8 +457,16 @@ void EnemyHuman::Update()
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				break;
 			case 1:
-				position.x += x * 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += z * 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.x += x * 450.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 450.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+				if (timer > 60.0f)
+				{
+					timer = 0.0f;
+					enumStatus = COOLDOWN;
+				}
 				break;
 			default:
 				timer = 0.0f;
