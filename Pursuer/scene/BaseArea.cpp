@@ -607,9 +607,14 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
+#pragma region clearCondition
 	if (enemyDefeated > 4)
 	{
 		enemyDefeated = 5;
+		for (int i = 0; i < 4; i++)
+		{
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+		}
 		fadeSpriteALPHA += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 		if (fadeSpriteALPHA >= 1.0f)
@@ -620,6 +625,7 @@ void BaseArea::Update()
 			deletion = true;
 		}
 	}
+#pragma endregion
 
 #pragma region enemyRespawn
 	for (int i = 0; i < 4; i++)
