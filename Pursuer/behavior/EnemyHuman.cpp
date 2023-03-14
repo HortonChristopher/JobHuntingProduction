@@ -435,8 +435,6 @@ void EnemyHuman::Update()
 				hypotenuse = sqrt((x * x) + (z * z));
 				radians = atan2(y, x);
 				degrees = XMConvertToDegrees(radians);
-				x = (landingAttackPosition.x - position.x) * (x / hypotenuse);
-				z = (landingAttackPosition.z - position.z) * (z / hypotenuse);
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 
 				if (currentTime >= endTime && timer > 0.0f)
@@ -448,8 +446,8 @@ void EnemyHuman::Update()
 					hypotenuse = sqrt((x * x) + (z * z));
 					radians = atan2(y, x);
 					degrees = XMConvertToDegrees(radians);
-					x = (landingAttackPosition.x - position.x) * (x / hypotenuse);
-					z = (landingAttackPosition.z - position.z) * (z / hypotenuse);
+					x = (landingAttackPosition.x - position.x) / 60.0f;
+					z = (landingAttackPosition.z - position.z) / 60.0f;
 					SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 					chargeAttackStage = 1;
 				}
@@ -457,14 +455,15 @@ void EnemyHuman::Update()
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				break;
 			case 1:
-				position.x += x * 450.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += z * 450.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 				if (timer > 60.0f)
 				{
 					timer = 0.0f;
+					modelChange = true;
 					enumStatus = COOLDOWN;
 				}
 				break;
