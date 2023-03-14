@@ -215,4 +215,5 @@ public:
 	int chargeAttackStage = 0;
 	bool landed = false;
 	bool landingParticles = false;
+	bool chargeAttackCheck = false;
 };

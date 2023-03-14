@@ -359,7 +359,7 @@ void EnemyHuman::Update()
 				y = (landingAttackPosition.y - position.y);
 				z = (landingAttackPosition.z - position.z);
 				hypotenuse = sqrt((x * x) + (z * z));
-				radians = atan2(y, x);
+				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
 				x = (landingAttackPosition.x - position.x) / 160.0f;
 				y = (landingAttackPosition.y - position.y) / 160.0f;
@@ -404,7 +404,7 @@ void EnemyHuman::Update()
 				if (currentTime >= endTime && timer > 0.0f)
 				{
 					timer = 0.0f;
-					SetPosition({position.x, position.y + 8.0f, position.z});
+					SetPosition({ position.x, position.y + 8.0f, position.z });
 					modelChange = true;
 					enumStatus = COOLDOWN;
 					landed = false;
@@ -414,70 +414,73 @@ void EnemyHuman::Update()
 				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 			break;
-		case CHARGEATTACK:
-			if (animationNo != 9)
+		}
+		break;
+	case CHARGEATTACK:
+		switch (chargeAttackStage)
+		{
+		case 0:
+			if (animationNo != 10)
 			{
 				animationSet = false;
-				animationNo = 9;
+				animationNo = 10;
 				modelChange = false;
 				timer = 0.0f;
 				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
 				SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+				chargeAttackCheck = true;
 			}
 
-			switch (chargeAttackStage)
-			{
-			case 0:
-				landingAttackPosition = objectPosition;
+			landingAttackPosition = objectPosition;
 
+			x = (landingAttackPosition.x - position.x);
+			z = (landingAttackPosition.z - position.z);
+			hypotenuse = sqrt((x * x) + (z * z));
+			radians = atan2(z, x);
+			degrees = XMConvertToDegrees(radians);
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+
+			if (currentTime >= endTime && timer > 0.0f)
+			{
+				timer = 0.0f;
+				landingAttackPosition = objectPosition;
 				x = (landingAttackPosition.x - position.x);
 				z = (landingAttackPosition.z - position.z);
 				hypotenuse = sqrt((x * x) + (z * z));
-				radians = atan2(y, x);
+				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
+				x = (landingAttackPosition.x - position.x) / 60.0f;
+				z = (landingAttackPosition.z - position.z) / 60.0f;
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-
-				if (currentTime >= endTime && timer > 0.0f)
-				{
-					timer = 0.0f;
-					landingAttackPosition = objectPosition;
-					x = (landingAttackPosition.x - position.x);
-					z = (landingAttackPosition.z - position.z);
-					hypotenuse = sqrt((x * x) + (z * z));
-					radians = atan2(y, x);
-					degrees = XMConvertToDegrees(radians);
-					x = (landingAttackPosition.x - position.x) / 60.0f;
-					z = (landingAttackPosition.z - position.z) / 60.0f;
-					SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-					chargeAttackStage = 1;
-				}
-
-				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				break;
-			case 1:
-				position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-
-				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-
-				if (timer > 60.0f)
-				{
-					timer = 0.0f;
-					modelChange = true;
-					enumStatus = COOLDOWN;
-				}
-				break;
-			default:
-				timer = 0.0f;
-				enumStatus = STAND;
-				break;
+				chargeAttackStage = 1;
 			}
+
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case 1:
+			position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+			if (timer > 45.0f)
+			{
+				timer = 0.0f;
+				modelChange = true;
+				SetPosition({ position.x, position.y + 8.0f, position.z });
+				enumStatus = COOLDOWN;
+				SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
+			}
+
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		default:
-			enumStatus = AGGRO;
+			timer = 0.0f;
+			enumStatus = STAND;
 			break;
 		}
-		
+		break;
+	case TWOENEMYSURROUND:
+		break;
+	case BACKATTACK:
 		break;
 	default:
 		timer = 0.0f;
@@ -485,7 +488,7 @@ void EnemyHuman::Update()
 		break;
 	}
 
-	if (animationNo != 9)
+	if (animationNo != 9 && animationNo != 10)
 	{
 		SetScale({ 0.15f, 0.15f, 0.15f });
 	}
@@ -560,6 +563,13 @@ void EnemyHuman::Update()
 		case 9:
 			startFrame = 1228;
 			endFrame = 1346;
+			repeatAnimation = false;
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 10:
+			startFrame = 1228;
+			endFrame = 1281;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;

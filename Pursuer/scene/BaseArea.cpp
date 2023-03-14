@@ -31,10 +31,10 @@ BaseArea::~BaseArea()
 	safe_delete(baseAreaMissionSPRITE);
 	safe_delete(skydomeMODEL);
 	safe_delete(groundMODEL);
-	safe_delete(extendedGroundMODEL);
+	//safe_delete(extendedGroundMODEL);
 	safe_delete(positionMODEL);
 	//safe_delete(attackRangeMODEL);
-	safe_delete(visionRangeMODEL);
+	//safe_delete(visionRangeMODEL);
 	safe_delete(skydomeOBJ);
 	for (int i = 0; i < 5; i++) { safe_delete(attackRangeOBJ[i]); }
 	for (int i = 0; i < 4; i++) { safe_delete(enemyVisionRangeOBJ[i]); }
@@ -326,10 +326,34 @@ void BaseArea::Update()
 				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
-			if (distance < 8.0f)
+			if (distance < 80.0f && distance > 8.0f && baseAreaEnemyFBX[i]->chargeAttackCheck == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 			{
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
+					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK)
+				{
+					/*int random = rand() % 10;
+
+					if (random < 5)
+					{
+						baseAreaEnemyFBX[i]->chargeAttackStage = 0;
+						baseAreaEnemyFBX[i]->modelChange = true;
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
+						baseAreaEnemyFBX[i]->chargeAttackCheck = true;
+					}
+					else
+					{
+						baseAreaEnemyFBX[i]->chargeAttackCheck = true;
+					}*/
+
+					baseAreaEnemyFBX[i]->chargeAttackStage = 0;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
+				}
+			}
+			else if (distance < 8.0f)
+			{
+				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
+					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK)
 				{
 					/*int random = rand() % 10;
 
@@ -352,7 +376,7 @@ void BaseArea::Update()
 			else
 			{
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
+					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK)
 				{
 					if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
 					{
@@ -412,7 +436,19 @@ void BaseArea::Update()
 			knockback = true;
 		}
 
-		if (knockback && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::PARTICLEATTACK || knockback && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		if (intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 && baseAreaEnemyFBX[i]->ableToDamage)
+		{
+			baseAreaEnemyFBX[i]->ableToDamage = false;
+			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlayDisplay = true;
+			screenShake = true;
+			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			playerFBX->hp -= 4.0f;
+			playerFBX->SetEnumStatus(Player::DAMAGED);
+			knockback = true;
+		}
+
+		if (knockback && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::PARTICLEATTACK || knockback && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK || knockback && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK)
 		{
 			XMFLOAT3 xyz = baseAreaEnemyFBX[i]->GetPosition() - playerFBX->GetPosition();
 			XMFLOAT3 knockbackPrevPosition = playerFBX->GetPosition();
@@ -430,6 +466,13 @@ void BaseArea::Update()
 					knockbackPrevPosition.x -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += 3.0f,
 					knockbackPrevPosition.z -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+			}
+			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK)
+			{
+				playerFBX->SetPosition({
+					knockbackPrevPosition.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			knockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			if (knockbackTime >= 30.0f)
@@ -821,7 +864,7 @@ void BaseArea::Update()
 	//char msgbuf2[256];
 	//char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", baseAreaEnemyFBX[i]->GetPosition().x);
+	//sprintf_s(msgbuf, 256, "X: %d\n", baseAreaEnemyFBX[i]->enumStatus);
 	//sprintf_s(msgbuf2, 256, "DT: %f\n", degreeTransfer);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	//OutputDebugStringA(msgbuf);
