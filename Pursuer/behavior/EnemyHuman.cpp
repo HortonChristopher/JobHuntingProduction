@@ -585,7 +585,7 @@ void EnemyHuman::Update()
 				}
 				break;
 			}
-			position.y += 4.0f;
+			position.y += 8.0f;
 			break;
 		case 1: // From here on it's the same as charge attack, but with a delay between each enemy doing the attack
 			if (animationNo != 10)

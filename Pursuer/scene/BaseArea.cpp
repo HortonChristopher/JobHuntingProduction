@@ -35,7 +35,7 @@ BaseArea::~BaseArea()
 	safe_delete(skydomeMODEL);
 	safe_delete(groundMODEL);
 	//safe_delete(extendedGroundMODEL);
-	safe_delete(positionMODEL);
+	//safe_delete(positionMODEL);
 	//safe_delete(attackRangeMODEL);
 	//safe_delete(visionRangeMODEL);
 	safe_delete(skydomeOBJ);
@@ -409,7 +409,7 @@ void BaseArea::Update()
 			ParticleCreation(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 30.0f);
 		}
 
-		for (int j = 0; j < 4; j++)
+		/*for (int j = 0; j < 4; j++)
 		{
 			if (i = j)
 			{
@@ -425,7 +425,7 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
 			}
-		}
+		}*/
 	}
 #pragma endregion
 
@@ -458,6 +458,7 @@ void BaseArea::Update()
 			screenShake = true;
 			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			playerFBX->hp -= 1.0f;
+			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 		}
 
@@ -469,6 +470,7 @@ void BaseArea::Update()
 			screenShake = true;
 			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			playerFBX->hp -= 3.0f;
+			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 			knockback = true;
 		}
@@ -481,6 +483,7 @@ void BaseArea::Update()
 			screenShake = true;
 			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			playerFBX->hp -= 5.0f;
+			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 			knockback = true;
 		}
@@ -494,6 +497,7 @@ void BaseArea::Update()
 			screenShake = true;
 			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			playerFBX->hp -= 4.0f;
+			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 			knockback = true;
 		}
@@ -537,6 +541,31 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->landingParticles = false;
 		}
 	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (playerFBX->damageAdvantage)
+		{
+			if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::COOLDOWN)
+			{
+				float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
+				if (distance < 40.0f)
+				{
+					baseAreaEnemyFBX[i]->chargeAttackStage = 0;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
+				}
+				else
+				{
+					baseAreaEnemyFBX[i]->landingAttackStage = 0;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
+				}
+			}
+		}
+	}
+
+	playerFBX->damageAdvantage = false;
 
 	if (playerFBX->hp <= 0.0f)
 	{

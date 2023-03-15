@@ -192,4 +192,5 @@ public:
 	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} }};
 	bool ableToDamage = false;
 	float timer = 0.0f;
+	bool damageAdvantage = false;
 };
