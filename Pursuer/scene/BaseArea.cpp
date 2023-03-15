@@ -33,7 +33,7 @@ BaseArea::~BaseArea()
 	safe_delete(STBarFrameSPRITE);
 	safe_delete(baseAreaMissionSPRITE);
 	safe_delete(skydomeMODEL);
-	safe_delete(groundMODEL);
+	//safe_delete(groundMODEL);
 	//safe_delete(extendedGroundMODEL);
 	//safe_delete(positionMODEL);
 	//safe_delete(attackRangeMODEL);
@@ -408,8 +408,12 @@ void BaseArea::Update()
 		{
 			ParticleCreation(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 30.0f);
 		}
+	}
+#pragma endregion
 
-		/*for (int j = 0; j < 4; j++)
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
 		{
 			if (i = j)
 			{
@@ -420,14 +424,12 @@ void BaseArea::Update()
 				&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::WANDER && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
 			{
 				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
-
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
 			}
-		}*/
+		}
 	}
-#pragma endregion
 
 	if (debugJetStream > 2)
 	{
@@ -522,6 +524,13 @@ void BaseArea::Update()
 					knockbackPrevPosition.z -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK)
+			{
+				playerFBX->SetPosition({
+					knockbackPrevPosition.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+			}
+			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK)
 			{
 				playerFBX->SetPosition({
 					knockbackPrevPosition.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
@@ -852,6 +861,11 @@ void BaseArea::Update()
 
 	for (int i = 0; i < 4; i++)
 	{
+		/*if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK)
+		{
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y + 4.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y + 4.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+		}*/
 		if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
 		{
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });

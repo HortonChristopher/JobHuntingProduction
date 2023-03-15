@@ -531,7 +531,7 @@ void EnemyHuman::Update()
 				hypotenuse2 = sqrt((x2 * x2) + (y * y));
 			}
 
-			if (currentTime >= endTime && timer > 0.0f)
+			if (currentTime >= endTime && timer > 0.0f /*&& position.x == landingAttackPosition.x && position.z == landingAttackPosition.z*/)
 			{
 				jetStreamAttackStage = 1;
 			}
@@ -547,7 +547,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.x += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					position.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
 				}
 				break;
 			case 1:
@@ -557,7 +557,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.x += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					position.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
 				}
 				break;
 			}
@@ -571,7 +571,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.z += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					position.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
 				}
 				break;
 			case 1:
@@ -581,7 +581,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.z += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					position.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
 				}
 				break;
 			}
