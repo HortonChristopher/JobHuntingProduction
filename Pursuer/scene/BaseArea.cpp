@@ -398,6 +398,23 @@ void BaseArea::Update()
 					}
 				}
 			}
+
+			for (int j = 0; j < 4; j++)
+			{
+				if (i = j)
+				{
+					continue;
+				}
+
+				if (intersect(baseAreaEnemyFBX[j]->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[j] == true && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::STAND
+					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::WANDER && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
+				{
+					if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
+					{
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+					}
+				}
+			}
 		}
 
 		if (baseAreaEnemyFBX[i]->particleAttackActive)
