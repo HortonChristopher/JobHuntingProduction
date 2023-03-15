@@ -701,6 +701,22 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
+#pragma region aggroEveryEnemyWhenOneKillAwayFromWinning
+	if (enemyDefeated > 3)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
+			{
+				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				}
+			}
+		}
+	}
+#pragma endregion
+
 #pragma region clearCondition
 	if (enemyDefeated > 4)
 	{
