@@ -547,7 +547,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
 				}
 				break;
 			case 1:
@@ -557,7 +557,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.x += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
 				}
 				break;
 			}
@@ -571,7 +571,7 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
 				}
 				break;
 			case 1:
@@ -581,11 +581,11 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.z += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
 				}
 				break;
 			}
-			position.y += 8.0f;
+			position.y += 5.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1: // From here on it's the same as charge attack, but with a delay between each enemy doing the attack
 			if (animationNo != 10)

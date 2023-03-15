@@ -861,12 +861,12 @@ void BaseArea::Update()
 
 	for (int i = 0; i < 4; i++)
 	{
-		/*if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK)
+		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
 		{
-			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y + 4.0f, baseAreaEnemyFBX[i]->GetPosition().z });
-			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y + 4.0f, baseAreaEnemyFBX[i]->GetPosition().z });
-		}*/
-		if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z});
+		}
+		else if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
 		{
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
