@@ -330,8 +330,7 @@ void BaseArea::Update()
 			debugJetStream++;
 			baseAreaEnemyFBX[i]->jetStreamCounted = true;
 		}
-		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true ||
-				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
+		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
 			if (distance < 80.0f && distance > 8.0f && baseAreaEnemyFBX[i]->chargeAttackCheck == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
@@ -398,23 +397,6 @@ void BaseArea::Update()
 					}
 				}
 			}
-
-			for (int j = 0; j < 4; j++)
-			{
-				if (i = j)
-				{
-					continue;
-				}
-
-				if (intersect(baseAreaEnemyFBX[j]->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[j] == true && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::STAND
-					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::WANDER && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
-				{
-					if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
-					{
-						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-					}
-				}
-			}
 		}
 
 		if (baseAreaEnemyFBX[i]->particleAttackActive)
@@ -425,6 +407,24 @@ void BaseArea::Update()
 		if (baseAreaEnemyFBX[i]->landingParticles)
 		{
 			ParticleCreation(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 30.0f);
+		}
+
+		for (int j = 0; j < 4; j++)
+		{
+			if (i = j)
+			{
+				continue;
+			}
+
+			if (intersect(baseAreaEnemyFBX[j]->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && baseAreaEnemyAliveBOOL[j] == true && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::STAND
+				&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::WANDER && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
+			{
+				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
+
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				}
+			}
 		}
 	}
 #pragma endregion
