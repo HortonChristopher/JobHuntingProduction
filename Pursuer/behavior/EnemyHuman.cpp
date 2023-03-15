@@ -16,6 +16,9 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 extern DeltaTime* deltaTime;
 
+extern int agroodEnemies;
+extern int debugJetStream;
+
 ///<summary>
 /// Static Member Variable Entity
 ///</summary>
@@ -440,7 +443,7 @@ void EnemyHuman::Update()
 			degrees = XMConvertToDegrees(radians);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 
-			if (currentTime >= endTime && timer > 0.0f)
+			if (currentTime >= endTime && timer > 0.0f) // Timer is 53.0f
 			{
 				timer = 0.0f;
 				landingAttackPosition = objectPosition;
@@ -481,6 +484,170 @@ void EnemyHuman::Update()
 	case TWOENEMYSURROUND:
 		break;
 	case BACKATTACK:
+		break;
+	case JETSTREAMATTACK:
+		switch (jetStreamAttackStage)
+		{
+		case 0:
+			if (animationNo != 6)
+			{
+				timer = 0.0f;
+				animationSet = false;
+				animationNo = 6;
+				modelChange = false;
+			}
+			
+			x = (objectPosition.x - position.x);
+			z = (objectPosition.z - position.z);
+			hypotenuse = sqrt((x * x) + (z * z));
+			radians = atan2(z, x);
+			degrees = XMConvertToDegrees(radians);
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+
+			if (timer == 0.0f)
+			{
+				if (objectPosition.x >= 0.0f)
+				{
+					landingAttackPosition.x = (objectPosition.x - 120.0f - (20.0f * (agrooNumber - 1)));
+					xQuadrant = 0;
+				}
+				else if (objectPosition.x < 0.0f)
+				{
+					landingAttackPosition.x = (objectPosition.x + 120.0f + (20.0f * (agrooNumber - 1)));
+					xQuadrant = 1;
+				}
+				if (objectPosition.z < 0.0f)
+				{
+					landingAttackPosition.z = (objectPosition.z + 120.0f);
+					yQuadrant = 1;
+				}
+				else if (objectPosition.z >= 0.0f)
+				{
+					landingAttackPosition.z = (objectPosition.z - 120.0f);
+					yQuadrant = 0;
+				}
+				x2 = (landingAttackPosition.x - position.x);
+				y = (landingAttackPosition.z - position.z);
+				hypotenuse2 = sqrt((x2 * x2) + (y * y));
+			}
+
+			if (currentTime >= endTime && timer > 0.0f)
+			{
+				jetStreamAttackStage = 1;
+			}
+
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+			switch (xQuadrant)
+			{
+			case 0:
+				if (position.x <= landingAttackPosition.x)
+				{
+					position.x = landingAttackPosition.x;
+				}
+				else
+				{
+					position.x += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+				}
+				break;
+			case 1:
+				if (position.x >= landingAttackPosition.x)
+				{
+					position.x = landingAttackPosition.x;
+				}
+				else
+				{
+					position.x += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+				}
+				break;
+			}
+
+			switch (yQuadrant)
+			{
+			case 0:
+				if (position.z <= landingAttackPosition.z)
+				{
+					position.z = landingAttackPosition.z;
+				}
+				else
+				{
+					position.z += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+				}
+				break;
+			case 1:
+				if (position.z >= landingAttackPosition.z)
+				{
+					position.z = landingAttackPosition.z;
+				}
+				else
+				{
+					position.z += 200.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+				}
+				break;
+			}
+			position.y += 4.0f;
+			/*char msgbuf[256];
+			sprintf_s(msgbuf, 256, "Timer: %f \n", timer);
+			OutputDebugStringA(msgbuf);*/
+			break;
+		case 1: // From here on it's the same as charge attack, but with a delay between each enemy doing the attack
+			if (animationNo != 10)
+			{
+				animationSet = false;
+				animationNo = 10;
+				modelChange = false;
+				timer = 0.0f;
+				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
+				SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+				chargeAttackCheck = true;
+			}
+
+			landingAttackPosition = objectPosition;
+
+			x = (landingAttackPosition.x - position.x);
+			z = (landingAttackPosition.z - position.z);
+			hypotenuse = sqrt((x * x) + (z * z));
+			radians = atan2(z, x);
+			degrees = XMConvertToDegrees(radians);
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+
+			if (currentTime >= endTime && timer > (60.0f * agrooNumber))
+			{
+				timer = 0.0f;
+				landingAttackPosition = objectPosition;
+				x = (landingAttackPosition.x - position.x);
+				z = (landingAttackPosition.z - position.z);
+				hypotenuse = sqrt((x * x) + (z * z));
+				radians = atan2(z, x);
+				degrees = XMConvertToDegrees(radians);
+				x = (landingAttackPosition.x - position.x) / 60.0f;
+				z = (landingAttackPosition.z - position.z) / 60.0f;
+				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				jetStreamAttackStage = 2;
+			}
+
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case 2:
+			position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+			if (timer > 45.0f)
+			{
+				timer = 0.0f;
+				modelChange = true;
+				SetPosition({ position.x, position.y + 8.0f, position.z });
+				enumStatus = COOLDOWN;
+				SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
+			}
+
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		default:
+			timer = 0.0f;
+			enumStatus = STAND;
+			break;
+		}
 		break;
 	default:
 		timer = 0.0f;

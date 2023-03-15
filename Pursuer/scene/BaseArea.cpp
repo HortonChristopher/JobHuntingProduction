@@ -13,6 +13,9 @@ extern int keyOrMouse;
 extern float degreeTransfer = 0.0f;
 extern bool lockOnActive = false;
 
+extern int agroodEnemies = 0;
+extern int debugJetStream = 0;
+
 BaseArea::BaseArea()
 {
 }
@@ -322,14 +325,25 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->fleeSet = false;
 			}
 		}
+		else if (agroodEnemies > 2 && baseAreaEnemyFBX[i]->debugJetAttacked == false && baseAreaEnemyFBX[i]->jetStreamCounted == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO)
+		{
+			debugJetStream++;
+			baseAreaEnemyFBX[i]->jetStreamCounted = true;
+		}
 		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true ||
 				 baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
 			if (distance < 80.0f && distance > 8.0f && baseAreaEnemyFBX[i]->chargeAttackCheck == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 			{
+				if (baseAreaEnemyFBX[i]->agrooNumber == 0)
+				{
+					agroodEnemies++;
+					baseAreaEnemyFBX[i]->agrooNumber = agroodEnemies;
+				}
+
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK)
+					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK)
 				{
 					/*int random = rand() % 10;
 
@@ -353,7 +367,7 @@ void BaseArea::Update()
 			else if (distance < 8.0f)
 			{
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK)
+					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK)
 				{
 					/*int random = rand() % 10;
 
@@ -376,7 +390,7 @@ void BaseArea::Update()
 			else
 			{
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK)
+					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK)
 				{
 					if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::AGGRO)
 					{
@@ -397,6 +411,24 @@ void BaseArea::Update()
 		}
 	}
 #pragma endregion
+
+	if (debugJetStream > 2)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::DEAD || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::FLEE || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::COOLDOWN)
+			{
+				continue;
+			}
+
+			if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->debugJetAttacked == false)
+			{
+				baseAreaEnemyFBX[i]->debugJetAttacked = true;
+				baseAreaEnemyFBX[i]->jetStreamAttackStage = 0;
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::JETSTREAMATTACK);
+			}
+		}
+	}
 
 #pragma region playerHPDamage
 	for (int i = 0; i < 4; i++)
@@ -436,7 +468,8 @@ void BaseArea::Update()
 			knockback = true;
 		}
 
-		if (intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 && baseAreaEnemyFBX[i]->ableToDamage)
+		if (intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f, 12.0f, 12.0f) && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 && baseAreaEnemyFBX[i]->ableToDamage
+			|| intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f, 12.0f, 12.0f) && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 2 && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = 1.0f;
@@ -558,6 +591,7 @@ void BaseArea::Update()
 						{
 							baseAreaEnemyAliveBOOL[i] = false;
 							enemyDefeated++;
+							agroodEnemies--;
 							baseAreaEnemyFBX[i]->dead = true;
 							baseAreaEnemyFBX[i]->modelChange = true;
 							baseAreaEnemyRespawnTimerFLOAT[i] = 600;
@@ -692,6 +726,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->set = false;
 			baseAreaEnemyFBX[i]->timer = 238.0f;
 			baseAreaEnemyFBX[i]->helpCall = false;
+			baseAreaEnemyFBX[i]->agrooNumber = 0;
 			baseAreaEnemyFBX[i]->Reset();
 			baseAreaEnemyAliveBOOL[i] = true;
 		}

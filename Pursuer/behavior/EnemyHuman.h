@@ -59,7 +59,8 @@ public:
 		LANDINGATTACK = 10,
 		CHARGEATTACK = 11,
 		TWOENEMYSURROUND = 12,
-		BACKATTACK = 13
+		BACKATTACK = 13,
+		JETSTREAMATTACK = 14
 	};
 
 	status enumStatus = STAND;
@@ -185,10 +186,15 @@ protected:
 
 	float degrees = 0.0f;
 	float x = 0.0f;
+	float x2 = 0.0f;
 	float y = 0.0f;
 	float z = 0.0f;
 	float hypotenuse = 0.0f;
+	float hypotenuse2 = 0.0f;
 	float radians = 0.0f;
+
+	int xQuadrant = 0;
+	int yQuadrant = 0;
 
 	float endAnimationDEBUG = 0.0f;
 
@@ -213,7 +219,11 @@ public:
 	int particleAttackStage = 0;
 	int landingAttackStage = 0;
 	int chargeAttackStage = 0;
+	int jetStreamAttackStage = 0;
+	int agrooNumber = 0;
 	bool landed = false;
 	bool landingParticles = false;
 	bool chargeAttackCheck = false;
+	bool debugJetAttacked = false;
+	bool jetStreamCounted = false;
 };
