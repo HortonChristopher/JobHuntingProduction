@@ -169,87 +169,87 @@ void BaseArea::Update()
 	skydomeOBJ->SetPosition(objectPosition);
 
 #pragma region LockOn
-	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	{
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-		{
-			float calculatedDegrees;
-			if (48.0f >= camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z > 0.0f
-				&& 48.0f > camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x >= 0.0f)
-			{
-				calculatedDegrees = (camera->GetEye().x - playerFBX->GetPosition().x) * 1.875f;
-			}
-			else if (-48.0f < camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z <= 0.0f
-				&& 48.0f >= camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x > 0.0f)
-			{
-				calculatedDegrees = -(camera->GetEye().z - playerFBX->GetPosition().z) * 1.875f + 90.0f;
-			}
-			else if (-48.0f <= camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z < 0.0f
-				&& 0.0f >= camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x > -48.0f)
-			{
-				calculatedDegrees = -(camera->GetEye().x - playerFBX->GetPosition().x) * 1.875f + 180.0f;
-			}
-			else if (0.0f <= camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z < 48.0f
-				&& 0.0f > camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x >= -48.0f)
-			{
-				calculatedDegrees = (camera->GetEye().z - playerFBX->GetPosition().z) * 1.875f + 270.0f;
+	//if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	//{
+	//	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	//	{
+	//		float calculatedDegrees;
+	//		if (48.0f >= camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z > 0.0f
+	//			&& 48.0f > camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x >= 0.0f)
+	//		{
+	//			calculatedDegrees = (camera->GetEye().x - playerFBX->GetPosition().x) * 1.875f;
+	//		}
+	//		else if (-48.0f < camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z <= 0.0f
+	//			&& 48.0f >= camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x > 0.0f)
+	//		{
+	//			calculatedDegrees = -(camera->GetEye().z - playerFBX->GetPosition().z) * 1.875f + 90.0f;
+	//		}
+	//		else if (-48.0f <= camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z < 0.0f
+	//			&& 0.0f >= camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x > -48.0f)
+	//		{
+	//			calculatedDegrees = -(camera->GetEye().x - playerFBX->GetPosition().x) * 1.875f + 180.0f;
+	//		}
+	//		else if (0.0f <= camera->GetEye().z - playerFBX->GetPosition().z && camera->GetEye().z - playerFBX->GetPosition().z < 48.0f
+	//			&& 0.0f > camera->GetEye().x - playerFBX->GetPosition().x && camera->GetEye().x - playerFBX->GetPosition().x >= -48.0f)
+	//		{
+	//			calculatedDegrees = (camera->GetEye().z - playerFBX->GetPosition().z) * 1.875f + 270.0f;
 
-			}
-			degreeTransfer = calculatedDegrees;
-		}
-		float min = FLT_MAX;
-		int closestEnemy = 0;
-		for (int i = 0; i < 4; i++)
-		{
-			if (!baseAreaEnemyFBX[i]->dead)
-			{
-				float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
-				float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
-				if (abs(sqrt(x * x + y * y)) < min)
-				{
-					min = abs(sqrt(x * x + y * y));
-					closestEnemy = i;
-				}
-			}
-		}
-		if (min <= 96.0f)
-		{
-			float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-			float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
-			float radians = atan2(y2, x2);
-			float degrees = XMConvertToDegrees(radians);
-			playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
-			objectRotation = playerFBX->GetRotation();
-			lockOnActive = true;
-			//camera->SetTarget(playerFBX->GetPosition());
-			//camera->SetDistance(48.0f);
-			camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-			if (min > 0.0f)
-			{
-				camera->SetDistance(min + 48.0f);
-			}
-			else
-			{
-				camera->SetDistance(48.0f);
-			}
-			camera->Update();
-		}
-		else
-		{
-			lockOnActive = false;
-			degreeTransfer = 0.0f;
-			camera->SetTarget(playerFBX->GetPosition());
-			camera->SetDistance(48.0f);
-			camera->Update();
-		}
-	}
-	else
-	{
-		camera->SetTarget(playerFBX->GetPosition());
-		camera->SetDistance(48.0f);
-		camera->Update();
-		lockOnActive = false;
-	}
+	//		}
+	//		degreeTransfer = calculatedDegrees;
+	//	}
+	//	float min = FLT_MAX;
+	//	int closestEnemy = 0;
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		if (!baseAreaEnemyFBX[i]->dead)
+	//		{
+	//			float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+	//			float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+	//			if (abs(sqrt(x * x + y * y)) < min)
+	//			{
+	//				min = abs(sqrt(x * x + y * y));
+	//				closestEnemy = i;
+	//			}
+	//		}
+	//	}
+	//	if (min <= 96.0f)
+	//	{
+	//		float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+	//		float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+	//		float radians = atan2(y2, x2);
+	//		float degrees = XMConvertToDegrees(radians);
+	//		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+	//		objectRotation = playerFBX->GetRotation();
+	//		lockOnActive = true;
+	//		//camera->SetTarget(playerFBX->GetPosition());
+	//		//camera->SetDistance(48.0f);
+	//		camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+	//		if (min > 0.0f)
+	//		{
+	//			camera->SetDistance(min + 48.0f);
+	//		}
+	//		else
+	//		{
+	//			camera->SetDistance(48.0f);
+	//		}
+	//		camera->Update();
+	//	}
+	//	else
+	//	{
+	//		lockOnActive = false;
+	//		degreeTransfer = 0.0f;
+	//		camera->SetTarget(playerFBX->GetPosition());
+	//		camera->SetDistance(48.0f);
+	//		camera->Update();
+	//	}
+	//}
+	//else
+	//{
+	//	camera->SetTarget(playerFBX->GetPosition());
+	//	camera->SetDistance(48.0f);
+	//	camera->Update();
+	//	lockOnActive = false;
+	//}
 #pragma endregion
 
 #pragma region DebugAttackRange
@@ -368,22 +368,24 @@ void BaseArea::Update()
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
 					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK)
 				{
-					/*int random = rand() % 10;
+					int random = rand() % 10;
 
-					if (random < 5)
+					if (random < 4)
 					{
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 					}
-					else
+					else if (random < 7)
 					{
 						baseAreaEnemyFBX[i]->particleAttackStage = 0;
 						baseAreaEnemyFBX[i]->modelChange = true;
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
-					}*/
-
-					baseAreaEnemyFBX[i]->landingAttackStage = 0;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
+					}
+					else
+					{
+						baseAreaEnemyFBX[i]->landingAttackStage = 0;
+						baseAreaEnemyFBX[i]->modelChange = true;
+						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
+					}
 				}
 			}
 			else
@@ -934,6 +936,14 @@ void BaseArea::Update()
 		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 150.0f, 30.0f });
 	}
 
+	for (int i = 0; i < 4; i++)
+	{
+		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
+		{
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 10.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 10.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+		}
+	}
 #pragma region updates
 	playerFBX->Update();
 	playerPositionOBJ->Update();
@@ -974,8 +984,7 @@ void BaseArea::Update()
 	//char msgbuf[256];
 	//char msgbuf2[256];
 	//char msgbuf3[256];
-
-	//sprintf_s(msgbuf, 256, "X: %d\n", baseAreaEnemyFBX[i]->enumStatus);
+	//sprintf_s(msgbuf, 256, "Y: %f\n", playerFBX->GetPosition().y);
 	//sprintf_s(msgbuf2, 256, "DT: %f\n", degreeTransfer);
 	//sprintf_s(msgbuf3, 256, "Z: %f\n", camera->GetEye().z);
 	//OutputDebugStringA(msgbuf);

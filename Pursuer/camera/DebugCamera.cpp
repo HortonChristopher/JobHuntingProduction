@@ -39,34 +39,34 @@ void DebugCamera::Update()
 		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
-	else if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
-	{
-		//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-		{
-			if (objectRotation.y >= degreeTransfer)
-			{
-				angleY += (XMConvertToRadians(objectRotation.y - degreeTransfer));
-			}
-			else
-			{
-				angleY -= (XMConvertToRadians(degreeTransfer - objectRotation.y));
-			}
-			degreeTransfer = 0.0f;
-			//rotation = 0.0f;
+	//else if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
+	//{
+	//	//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	//	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	//	{
+	//		if (objectRotation.y >= degreeTransfer)
+	//		{
+	//			angleY += (XMConvertToRadians(objectRotation.y - degreeTransfer));
+	//		}
+	//		else
+	//		{
+	//			angleY -= (XMConvertToRadians(degreeTransfer - objectRotation.y));
+	//		}
+	//		degreeTransfer = 0.0f;
+	//		//rotation = 0.0f;
 
-			dirty = true;
+	//		dirty = true;
 
-			prevRotation = objectRotation.y;
-		}
-		else
+	//		prevRotation = objectRotation.y;
+	//	}
+	/*	else
 		{
 			angleY -= XMConvertToRadians(objectRotation.y - prevRotation);
 			rotation += angleY;
 
 			dirty = true;
-		}
-	}
+		}*/
+	//}
 	// Rotate the camera if the right mouse button is pressed
 	else if (cutscene)
 	{
