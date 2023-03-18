@@ -482,6 +482,13 @@ void EnemyHuman::Update()
 		}
 		break;
 	case TWOENEMYSURROUND:
+		if (animationNo != 2)
+		{
+			timer = 0.0f;
+			animationSet = false;
+			animationNo = 2;
+			modelChange = false;
+		}
 		break;
 	case BACKATTACK:
 		break;
