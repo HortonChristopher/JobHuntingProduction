@@ -489,6 +489,13 @@ void EnemyHuman::Update()
 			animationNo = 2;
 			modelChange = false;
 		}
+
+		x = (objectPosition.x - position.x);
+		z = (objectPosition.z - position.z);
+		hypotenuse = sqrt((x * x) + (z * z));
+		radians = atan2(z, x);
+		degrees = XMConvertToDegrees(radians);
+		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		break;
 	case BACKATTACK:
 		break;
