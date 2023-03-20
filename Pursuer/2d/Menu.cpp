@@ -24,3 +24,38 @@ void Menu::Draw()
 {
 
 }
+
+void Menu::BaseMenu()
+{
+
+}
+
+void Menu::Setting()
+{
+
+}
+
+void Menu::SensitiveSetting()
+{
+
+}
+
+void Menu::OperateSetting()
+{
+
+}
+
+void Menu::ScreenSettingProcess()
+{
+
+}
+
+void Menu::EndCheckProcess()
+{
+
+}
+
+void Menu::Migrate()
+{
+
+}

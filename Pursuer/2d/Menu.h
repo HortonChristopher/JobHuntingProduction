@@ -24,6 +24,7 @@ private:
 	void OperateSetting();
 	void ScreenSettingProcess();
 	void EndCheckProcess();
+	void Migrate();
 
 	enum MenuState
 	{
