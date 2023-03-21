@@ -54,7 +54,46 @@ void Menu::ScreenSettingProcess()
 
 void Menu::EndCheckProcess()
 {
+	if (Input::TriggerPadLStickLeft() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_LEFT)
+		|| Input::TriggerPadLStickRight() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_RIGHT)
+		|| Input::TriggerKey(DIK_A) || Input::TriggerKey(DIK_D))
+	{
+		if (Input::TriggerPadLStickRight() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_RIGHT) || Input::TriggerKey(DIK_D))
+		{
+			if (select < 1)
+				select++;
+		}
+		if (Input::TriggerPadLStickLeft() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_LEFT) || Input::TriggerKey(DIK_A))
+		{
+			if (select > 0)
+				select--;
+		}
+		SetTexParam();
+	}
 
+	if (Input::TriggerControllerButton(XINPUT_GAMEPAD_B) || Input::TriggerKey(DIK_SPACE))
+	{
+		switch (select)
+		{
+		case 0:
+			returnTitle = true;
+			startClose = true;
+			break;
+		case 1:
+			migrate = true;
+			nextMenuState = Base;
+			break;
+		default:
+			return;
+		}
+		SetTexParam();
+	}
+	if (Input::TriggerPadButton(XINPUT_GAMEPAD_A) || Input::TriggerKey(DIK_Z))
+	{
+		migrate = true;
+		nextMenuState = Base;
+		SetTexParam();
+	}
 }
 
 void Menu::SetTexParam()
@@ -179,13 +218,16 @@ void Menu::Migrate()
 	else
 	{
 		migrate = false;
+		migrated = false;
 		migrateCounter = 0.0f;
 		return;
 	}
-	if (migrateCounter >= 30.0f)
+	if (migrateCounter >= 30.0f && !migrated)
 	{
 		menuState = nextMenuState;
 		select = 0;
+		migrated = true;
+		SetTexParam();
 	}
 	migrateCounter += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 }

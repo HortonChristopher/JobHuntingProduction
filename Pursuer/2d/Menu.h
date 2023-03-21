@@ -7,6 +7,7 @@
 #include "Vector.h"
 #include "DeltaTime.h"
 #include "Easing.h"
+#include "Input.h"
 
 using namespace std;
 
@@ -97,4 +98,5 @@ private:
 	float texAlpha;
 	float migrateCounter;
 	bool migrate;
+	bool migrated;
 };

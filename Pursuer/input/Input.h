@@ -101,7 +101,7 @@ public: // メンバ関数
 #pragma region Controller
 	// GamePad/Controller
 	bool PushControllerButton(int button);
-	bool TriggerControllerButton(int button);
+	static bool TriggerControllerButton(int button);
 	bool UpControllerButton(int button);
 
 	// Triggers
@@ -164,8 +164,8 @@ private: // メンバ変数
 	int controller_LStickY = 0;
 	int controller_RStickX = 0;
 	int controller_RStickY = 0;
-	XINPUT_STATE controllerState = {};
-	XINPUT_STATE prevControllerState = {};
+	static XINPUT_STATE controllerState = {};
+	static XINPUT_STATE prevControllerState = {};
 	XINPUT_VIBRATION controllerVibration = {};
 	int time = 0;
 	int screenW = 0;
