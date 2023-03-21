@@ -5,6 +5,8 @@
 
 #include "Sprite.h"
 #include "Vector.h"
+#include "DeltaTime.h"
+#include "Easing.h"
 
 using namespace std;
 
@@ -90,4 +92,8 @@ private:
 	bool close = false;
 
 	bool returnTitle = false;
+
+	float texAlpha;
+	float migrateCounter;
+	bool migrate;
 };
