@@ -130,14 +130,16 @@ private:
 		// Base area enemy respawn timer
 	std::array<float, 10> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f} };
 		// Base area enemy spawn positions
-	std::array<XMFLOAT3, 10> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 16.0f, 200.0f}, // Pair 1
-															{0.0f, 16.0f, 210.0f}, // Pair 1
-															{200.0f, 16.0f, 0.0f}, // Pair 2
-															{210.0f, 16.0f, 0.0f}, // Pair 2
-															{0.0f, 16.0f, -200.0f}, // Pair 3
-															{0.0f, 16.0f, -210.0f}, // Pair 3
-															{-200.0f, 16.0f, 0.0f}}, // Pair 4
-															{-210.0f, 16.0f, 0.0f}}; // Pair 4
+	std::array<XMFLOAT3, 10> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 20.0f, 200.0f}, // Pair 1
+															{0.0f, 20.0f, 210.0f}, // Pair 1
+															{200.0f, 20.0f, 0.0f}, // Pair 2
+															{210.0f, 20.0f, 0.0f}, // Pair 2
+															{0.0f, 20.0f, -200.0f}, // Pair 3
+															{0.0f, 20.0f, -210.0f}, // Pair 3
+															{-200.0f, 20.0f, 0.0f}, // Pair 4
+															{-210.0f, 20.0f, 0.0f}, // Pair 4
+															{0.0f, 20.0f, 0.0f}, // Pair 5
+															{10.0f, 20.0f, 0.0f}} }; // Pair 5
 
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
@@ -175,6 +177,8 @@ private:
 
 	// Used due to heavy loading
 	float startTimer = 0.0f;
+
+	bool firstRun = true;
 public:
 	bool initialization = true;
 	bool initializeFinished = false;

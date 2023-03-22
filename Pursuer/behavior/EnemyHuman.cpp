@@ -79,14 +79,33 @@ void EnemyHuman::Update()
 	switch (enumStatus)
 	{
 	case STAND:
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (timer > 239.0f)
 		{
-			newPosition.x = rand() % 401 - 150 + homePosition.x;
-			newPosition.z = rand() % 401 - 150 + homePosition.y;
+			if (patrolStatus == FRONT)
+			{
+				newPosition.x = rand() % 401 - 150 + homePosition.x;
+				newPosition.z = rand() % 401 - 150 + homePosition.y;
+				frontPatrolPosition.x = newPosition.x;
+				frontPatrolPosition.z = newPosition.z;
+			}
+			else
+			{
+				newPosition.x = frontPatrolPosition.x - 10.0f;
+				newPosition.z = frontPatrolPosition.z;
+			}
 			timer = 0.0f;
 			enumStatus = WANDER;
 		}
+
+		if (!FirstRun)
+		{
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		else
+		{
+			FirstRun = false;
+		}
+
 		break;
 	case WANDER:
 		if (!set)
@@ -461,8 +480,8 @@ void EnemyHuman::Update()
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
-			position.x += x * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			if (timer > 45.0f)
 			{
@@ -647,8 +666,8 @@ void EnemyHuman::Update()
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 2:
-			position.x += x * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			if (timer > 45.0f)
 			{
@@ -864,15 +883,15 @@ void EnemyHuman::Update()
 	constBuffSkin->Unmap(0, nullptr);
 
 	//Debug Start
-	/*char msgbuf[256];
-	char msgbuf2[256];
-	char msgbuf3[256];
-	sprintf_s(msgbuf, 256, "X: %f \n", landingAttackPosition.x);
-	sprintf_s(msgbuf2, 256, "Y: %f\n", landingAttackPosition.y);
-	sprintf_s(msgbuf3, 256, "Z: %f\n", landingAttackPosition.z);
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);*/
+	//char msgbuf[256];
+	//char msgbuf2[256];
+	//char msgbuf3[256];
+	//sprintf_s(msgbuf, 256, "X: %f \n", timer);
+	//sprintf_s(msgbuf2, 256, "Y: %f\n", landingAttackPosition.y);
+	//sprintf_s(msgbuf3, 256, "Z: %f\n", landingAttackPosition.z);
+	//OutputDebugStringA(msgbuf);
+	//OutputDebugStringA(msgbuf2);
+	//OutputDebugStringA(msgbuf3);
 	//Debug End
 }
 

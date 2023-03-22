@@ -104,6 +104,18 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	th2.join();
 	th3.join();
 
+	for (int i = 0; i < 10; i++)
+	{
+		if (i % 2 == 0 || i == 0)
+		{
+			baseAreaEnemyFBX[i]->SetPatrolStatus(EnemyHuman::FRONT);
+		}
+		else
+		{
+			baseAreaEnemyFBX[i]->SetPatrolStatus(EnemyHuman::BACK);
+		}
+	}
+
 	initializeFinished = true;
 }
 
@@ -132,7 +144,7 @@ void BaseArea::Update()
 #pragma region openingCutscene
 	if (!gameStart && initializeFinished == true)
 	{
-		if (startTimer >= 60.0f)
+		if (startTimer >= 220.0f)
 		{
 			fadeSpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
@@ -151,7 +163,7 @@ void BaseArea::Update()
 		}
 	}
 
-	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > 60.0f)
+	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > 220.0f)
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
@@ -271,6 +283,42 @@ void BaseArea::Update()
 		enemyVisionRangeOBJ[i]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
 	}
 #pragma endregion
+
+	if (firstRun)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
+			{
+				baseAreaEnemyFBX[i]->SetTimer(119.0f);
+			}
+		}
+
+		firstRun = false;
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND)
+		{
+			if (i % 2 == 0 || i == 0)
+			{
+				if (baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::AGGRO || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::CHARGEATTACK || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::JETSTREAMATTACK || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::LANDINGATTACK
+					|| baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::PARTICLEATTACK || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::COOLDOWN || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::ATTACK)
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				}
+			}
+			else
+			{
+				if (baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::AGGRO || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::CHARGEATTACK || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::JETSTREAMATTACK || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::LANDINGATTACK
+					|| baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::PARTICLEATTACK || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::COOLDOWN || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::ATTACK)
+				{
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				}
+			}
+		}
+	}
 
 #pragma region EnemyAggro
 	for (int i = 0; i < 10; i++)
@@ -946,8 +994,8 @@ void BaseArea::Update()
 	{
 		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
 		{
-			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 10.0f, baseAreaEnemyFBX[i]->GetPosition().z });
-			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 10.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 16.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 16.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
 	}
 #pragma region updates
@@ -984,6 +1032,14 @@ void BaseArea::Update()
 	tutorialGroundOBJ->Update();
 	collisionManager->CheckAllCollisions();
 #pragma endregion
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (i % 2 == 1)
+		{
+			baseAreaEnemyFBX[i]->SetPatrolPosition(baseAreaEnemyFBX[i - 1]->frontPatrolPosition);
+		}
+	}
 	
 #pragma region debugTestStrings
 	//Debug Start
@@ -1027,7 +1083,7 @@ void BaseArea::Draw()
 	// 3D Object Drawing
 	playerFBX->Draw(cmdList);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		baseAreaEnemyFBX[i]->Draw(cmdList);
 	}

@@ -65,6 +65,15 @@ public:
 
 	status enumStatus = STAND;
 
+	enum patrol
+	{
+		FRONT = 1,
+		BACK = 2,
+		DEFAULT = 3
+	};
+
+	patrol patrolStatus = DEFAULT;
+
 public:
 	/// <summary>
 	/// Initialization
@@ -98,7 +107,10 @@ public:
 	void SetAttack(bool attack) { this->attack = attack; }
 	void SetAggro(bool aggro) { this->aggro = aggro; }
 	void SetAggroSwitch(bool aggroswitch) { this->aggroSwitch = aggroswitch; }
+	void SetPatrolPosition(XMFLOAT3 position) { this->frontPatrolPosition = position; }
 	void SetEnumStatus(status enumStatus) { this->enumStatus = enumStatus; }
+	void SetPatrolStatus(patrol patrolStatus) { this->patrolStatus = patrolStatus; }
+	void SetTimer(float Btimer) { this->timer = Btimer; }
 
 	void Reset();
 
@@ -158,7 +170,7 @@ protected:
 	bool attack = false;
 	bool attackAnimation = false;
 
-	bool FirstRun = false;
+	bool FirstRun = true;
 
 	FBX3DModel* modelEnemy = nullptr; // Combined Animation Model
 
@@ -202,6 +214,7 @@ protected:
 public:
 	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 landingAttackPosition = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 frontPatrolPosition = { 0.0f, 0.0f, 0.0f };
 	float HP = 5.0f; // Default 10.0f
 	bool dead = false;
 	bool aggroSet = false;
@@ -212,7 +225,7 @@ public:
 	bool set = false;
 	bool particleAttackActive = false;
 	float attackTimer = 0.0f;
-	float timer = 238.0f;
+	float timer = 179.0f;
 	bool fleeSet = false;
 	bool helpCall = false;
 	int closestEnemy = 0;
