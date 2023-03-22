@@ -228,6 +228,7 @@ public:
 	float timer = 179.0f;
 	bool fleeSet = false;
 	bool helpCall = false;
+	bool isBeingCalledToHelp = false;
 	int closestEnemy = 0;
 	int particleAttackStage = 0;
 	int landingAttackStage = 0;

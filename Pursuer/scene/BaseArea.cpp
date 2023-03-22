@@ -15,6 +15,7 @@ extern bool lockOnActive = false;
 
 extern int agroodEnemies = 0;
 extern int debugJetStream = 0;
+extern int participatingJetStream = 0;
 
 BaseArea::BaseArea()
 {
@@ -329,6 +330,20 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
 			if (!baseAreaEnemyFBX[i]->fleeSet)
 			{
+				if (oddEven == 1)
+				{
+					if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT)
+					{
+						continue;
+					}
+				}
+				else
+				{
+					if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
+					{
+						continue;
+					}
+				}
 				baseAreaEnemyFBX[i]->SetAggroSwitch(true);
 				float min = FLT_MAX;
 				baseAreaEnemyFBX[i]->closestEnemy = 10;
@@ -336,13 +351,13 @@ void BaseArea::Update()
 				{
 					if (!baseAreaEnemyFBX[j]->dead && j != i && !baseAreaEnemyFBX[j]->helpCall)
 					{
-						if (j == i)
+						if (j == i || baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT && j == (i + 1) || baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK && j == (i - 1))
 						{
 							continue;
 						}
 						float x = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 						float y = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
-						if (abs(sqrt(x * x + y * y)) < min)
+						if (abs(sqrt(x * x + y * y)) < min && baseAreaEnemyFBX[j]->isBeingCalledToHelp == false)
 						{
 							min = abs(sqrt(x * x + y * y));
 							baseAreaEnemyFBX[i]->closestEnemy = j;
@@ -357,6 +372,7 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->helpCall = true;
 				}
 				baseAreaEnemyFBX[i]->fleeSet = true;
+				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
 			}
 			float x2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 			float y2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
@@ -374,6 +390,7 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->aggroSet = false;
 				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->SetEnumStatus(EnemyHuman::AGGRO);
+				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = false;
 				baseAreaEnemyFBX[i]->helpCall = true;
 				baseAreaEnemyFBX[i]->fleeSet = false;
 			}
@@ -1039,6 +1056,15 @@ void BaseArea::Update()
 		{
 			baseAreaEnemyFBX[i]->SetPatrolPosition(baseAreaEnemyFBX[i - 1]->frontPatrolPosition);
 		}
+	}
+
+	if (oddEven == 1)
+	{
+		oddEven = 0;
+	}
+	else
+	{
+		oddEven = 1;
 	}
 	
 #pragma region debugTestStrings

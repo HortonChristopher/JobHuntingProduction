@@ -178,6 +178,8 @@ private:
 	// Used due to heavy loading
 	float startTimer = 0.0f;
 
+	int oddEven = 1;
+
 	bool firstRun = true;
 public:
 	bool initialization = true;
