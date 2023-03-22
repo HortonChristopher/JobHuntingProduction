@@ -372,7 +372,19 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->helpCall = true;
 				}
 				baseAreaEnemyFBX[i]->fleeSet = true;
-				baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
+				if (baseAreaEnemyFBX[i]->closestEnemy != 10)
+				{
+					if (baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->patrolStatus == EnemyHuman::FRONT)
+					{
+						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
+						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy + 1]->isBeingCalledToHelp = true;
+					}
+					else
+					{
+						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
+						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy - 1]->isBeingCalledToHelp = true;
+					}
+				}
 			}
 			float x2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 			float y2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;

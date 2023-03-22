@@ -695,6 +695,19 @@ void EnemyHuman::Update()
 	if (animationNo != 9 && animationNo != 10)
 	{
 		SetScale({ 0.15f, 0.15f, 0.15f });
+		if (rotation.x != 0.0f)
+		{
+			rotation.x = 0.0f;
+		}
+	}
+
+	if (animationNo == 9 || animationNo == 10)
+	{
+		SetScale({ 0.15f * 0.01f, 0.15f * 0.01f, 0.15f * 0.01f });
+		if (rotation.x != 90.0f)
+		{
+			rotation.x = 90.0f;
+		}
 	}
 
 	if (!animationSet)
