@@ -220,10 +220,12 @@ public:
 	int landingAttackStage = 0;
 	int chargeAttackStage = 0;
 	int jetStreamAttackStage = 0;
+	int twoEnemySurroundStage = 0;
 	int agrooNumber = 0;
 	bool landed = false;
 	bool landingParticles = false;
 	bool chargeAttackCheck = false;
 	bool debugJetAttacked = false;
 	bool jetStreamCounted = false;
+	bool isPartnerDead = false;
 };

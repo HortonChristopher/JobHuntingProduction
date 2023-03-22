@@ -95,12 +95,12 @@ private:
 	Model* extendedGroundMODEL = nullptr;
 
 	// Attack range visual objects (Debug Use Only)
-	std::array<Object3d*, 5> attackRangeOBJ = { {} }; // 0 = Player; 1 = Enemy1; 2 = Enemy2; 3 = Enemy3; 4 = Enemy4
-	std::array<Object3d*, 4> landingPositionOBJ = { {} }; // Unlike above, no player object needed (players don't have flying attacks)
+	std::array<Object3d*, 11> attackRangeOBJ = { {} }; // 0 = Player; 1 = Enemy1; 2 = Enemy2; 3 = Enemy3; 4 = Enemy4
+	std::array<Object3d*, 10> landingPositionOBJ = { {} }; // Unlike above, no player object needed (players don't have flying attacks)
 	Model* attackRangeMODEL = nullptr;
 
 	// Vision range visual objects (Debug Use Only)
-	std::array<Object3d*, 4> enemyVisionRangeOBJ = { {} }; // 0 = Enemy1; 1 = Enemy2; 2 = Enemy3; 3 = Enemy4
+	std::array<Object3d*, 10> enemyVisionRangeOBJ = { {} }; // 0 = Enemy1; 1 = Enemy2; 2 = Enemy3; 3 = Enemy4
 	Model* visionRangeMODEL = nullptr;
 
 	// Mission sprite for base area
@@ -123,26 +123,30 @@ private:
 	Model* positionMODEL = nullptr; // Used for both player and enemies
 
 	// Base area enemy aspects
-	std::array<EnemyHuman*, 4> baseAreaEnemyFBX = { {} };
-	std::array<PlayerPositionObject*, 4> baseAreaEnemyPositionOBJ = { {} };
+	std::array<EnemyHuman*, 10> baseAreaEnemyFBX = { {} };
+	std::array<PlayerPositionObject*, 10> baseAreaEnemyPositionOBJ = { {} };
 		// Base area enemy alive bool
-	std::array<bool, 4> baseAreaEnemyAliveBOOL = { {true, true, true, true} };
+	std::array<bool, 10> baseAreaEnemyAliveBOOL = { {true, true, true, true, true, true, true, true, true, true} };
 		// Base area enemy respawn timer
-	std::array<float, 4> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f} };
+	std::array<float, 10> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f} };
 		// Base area enemy spawn positions
-	std::array<XMFLOAT3, 4> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 20.0f, 200.0f}, // Enemy 1
-															{200.0f, 20.0f, 0.0f}, // Enemy 2
-															{0.0f, 20.0f, -200.0f}, // Enemy 3
-															{-200.0f, 20.0f, 0.0f}} }; // Enemy 4
+	std::array<XMFLOAT3, 10> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 16.0f, 200.0f}, // Pair 1
+															{0.0f, 16.0f, 210.0f}, // Pair 1
+															{200.0f, 16.0f, 0.0f}, // Pair 2
+															{210.0f, 16.0f, 0.0f}, // Pair 2
+															{0.0f, 16.0f, -200.0f}, // Pair 3
+															{0.0f, 16.0f, -210.0f}, // Pair 3
+															{-200.0f, 16.0f, 0.0f}}, // Pair 4
+															{-210.0f, 16.0f, 0.0f}}; // Pair 4
 
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
-	std::array<Sprite*, 4> baseAreaMinimapEnemySPRITE = { {} };
+	std::array<Sprite*, 10> baseAreaMinimapEnemySPRITE = { {} };
 
 	// Base Area enemy HP bar
-	std::array<Sprite*, 4> baseAreaEnemyHPBarSPRITE = { {} };
-	std::array<Sprite*, 4> baseAreaEnemyHPBarFrameSPRITE = { {} };
+	std::array<Sprite*, 10> baseAreaEnemyHPBarSPRITE = { {} };
+	std::array<Sprite*, 10> baseAreaEnemyHPBarFrameSPRITE = { {} };
 
 	// Damage Overlay
 	Sprite* baseAreaDamageOverlaySPRITE = nullptr;

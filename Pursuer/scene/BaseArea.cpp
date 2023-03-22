@@ -39,19 +39,19 @@ BaseArea::~BaseArea()
 	//safe_delete(attackRangeMODEL);
 	//safe_delete(visionRangeMODEL);
 	safe_delete(skydomeOBJ);
-	for (int i = 0; i < 5; i++) { safe_delete(attackRangeOBJ[i]); }
-	for (int i = 0; i < 4; i++) { safe_delete(enemyVisionRangeOBJ[i]); }
+	for (int i = 0; i < 11; i++) { safe_delete(attackRangeOBJ[i]); }
+	for (int i = 0; i < 10; i++) { safe_delete(enemyVisionRangeOBJ[i]); }
 	safe_delete(playerPositionOBJ);
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyPositionOBJ[i]); }
+	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyPositionOBJ[i]); }
 	safe_delete(groundOBJ);
 	safe_delete(extendedGroundOBJ);
 	safe_delete(playerFBX);
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyFBX[i]); }
+	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyFBX[i]); }
 	safe_delete(baseAreaMinimapSPRITE);
 	safe_delete(baseAreaMinimapPlayerSPRITE);
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBarSPRITE[i]); }
-	for (int i = 0; i < 4; i++) { safe_delete(baseAreaEnemyHPBarFrameSPRITE[i]); }
+	for (int i = 0; i < 10; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
+	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyHPBarSPRITE[i]); }
+	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyHPBarFrameSPRITE[i]); }
 	safe_delete(baseAreaDamageOverlaySPRITE);
 }
 
@@ -199,7 +199,7 @@ void BaseArea::Update()
 	//	}
 	//	float min = FLT_MAX;
 	//	int closestEnemy = 0;
-	//	for (int i = 0; i < 4; i++)
+	//	for (int i = 0; i < 10; i++)
 	//	{
 	//		if (!baseAreaEnemyFBX[i]->dead)
 	//		{
@@ -256,7 +256,7 @@ void BaseArea::Update()
 	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
 	attackRangeOBJ[0]->SetRotation(objectRotation);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		attackRangeOBJ[i + 1]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 15)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 15)) });
 		attackRangeOBJ[i + 1]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
@@ -265,7 +265,7 @@ void BaseArea::Update()
 #pragma endregion
 	
 #pragma region VisionRange
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		enemyVisionRangeOBJ[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 40)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 40))});
 		enemyVisionRangeOBJ[i]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
@@ -273,9 +273,10 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region EnemyAggro
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		if (baseAreaEnemyFBX[i]->HP <= 2.0f && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
+		if (baseAreaEnemyFBX[i]->HP <= 2.0f && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD
+			|| baseAreaEnemyFBX[i]->isPartnerDead && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 		{
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
 			if (!baseAreaEnemyFBX[i]->fleeSet)
@@ -283,10 +284,14 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->SetAggroSwitch(true);
 				float min = FLT_MAX;
 				baseAreaEnemyFBX[i]->closestEnemy = 10;
-				for (int j = 0; j < 4; j++)
+				for (int j = 0; j < 10; j++)
 				{
 					if (!baseAreaEnemyFBX[j]->dead && j != i && !baseAreaEnemyFBX[j]->helpCall)
 					{
+						if (j == i)
+						{
+							continue;
+						}
 						float x = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 						float y = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
 						if (abs(sqrt(x * x + y * y)) < min)
@@ -413,9 +418,9 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 10; j++)
 		{
 			if (i = j)
 			{
@@ -435,7 +440,7 @@ void BaseArea::Update()
 
 	if (debugJetStream > 2)
 	{
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::DEAD || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::FLEE || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::COOLDOWN)
 			{
@@ -452,7 +457,7 @@ void BaseArea::Update()
 	}
 
 #pragma region playerHPDamage
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackDamagePossible && baseAreaEnemyFBX[i]->ableToDamage)
 		{
@@ -553,7 +558,7 @@ void BaseArea::Update()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (playerFBX->damageAdvantage)
 		{
@@ -633,7 +638,7 @@ void BaseArea::Update()
 		{
 			if (playerFBX->enumStatus == Player::ATTACK && playerFBX->ableToDamage)
 			{
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 10; i++)
 				{
 					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 25.0f, 25.0f) && baseAreaEnemyAliveBOOL[i] == true)
 					{
@@ -674,7 +679,7 @@ void BaseArea::Update()
 			}
 		}
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			if (enemyKnockback)
 			{
@@ -744,7 +749,7 @@ void BaseArea::Update()
 #pragma region aggroEveryEnemyWhenOneKillAwayFromWinning
 	if (enemyDefeated > 3)
 	{
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 			{
@@ -761,7 +766,7 @@ void BaseArea::Update()
 	if (enemyDefeated > 4)
 	{
 		enemyDefeated = 5;
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
 		}
@@ -778,7 +783,8 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region enemyRespawn
-	for (int i = 0; i < 4; i++)
+	// Testing 10 enemies with no respawn
+	/*for (int i = 0; i < 10; i++)
 	{
 		if (baseAreaEnemyRespawnTimerFLOAT[i] > 0.0f)
 		{
@@ -803,7 +809,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->Reset();
 			baseAreaEnemyAliveBOOL[i] = true;
 		}
-	}
+	}*/
 #pragma endregion
 
 #pragma region areaBoundaryLimits
@@ -861,7 +867,7 @@ void BaseArea::Update()
 	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
 		{
@@ -892,7 +898,7 @@ void BaseArea::Update()
 
 #pragma region minimapUpdates
 	baseAreaMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.3f + 165.0f, playerFBX->GetPosition().z * 0.3f + 545.0f});
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		baseAreaMinimapEnemySPRITE[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x * 0.3f + 165.0f, baseAreaEnemyFBX[i]->GetPosition().z * 0.3f + 545.0f });
 	}
@@ -915,28 +921,28 @@ void BaseArea::Update()
 	std::array<Vector2, 4> enemyHPPosition;
 	std::array<Vector2, 4> enemyHPPositionFrame;
 
-	for (int i = 0; i < 4; i++)
-	{
-		/*camera->Update();
-		baseAreaEnemyHPBarSPRITE[i]->SetPosition(enemyHPPosition[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
-			camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-			-1400.0f + playerFBX->GetPosition().x, -20.0f));
-		baseAreaEnemyHPBarSPRITE[i]->SetPosition({ baseAreaEnemyHPBarSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarSPRITE[i]->GetPosition().y });
-		baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 10.0f, 10.0f });
-		XMFLOAT2 testPosition = baseAreaEnemyHPBarSPRITE[i]->GetPosition();
-		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition(enemyHPPositionFrame[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
-			camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-			-1400.0f + playerFBX->GetPosition().x, -20.0f));
-		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().y });
-		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 50.0f, 10.0f });*/
-		// Use until above code is fixed
-		baseAreaEnemyHPBarSPRITE[i]->SetPosition({1100.0f, 225.0f + (70.0f * i)});
-		baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 30.0f, 30.0f });
-		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ 1100.0f, 225.0f + (70.0f * i) });
-		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 150.0f, 30.0f });
-	}
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	/*camera->Update();
+	//	baseAreaEnemyHPBarSPRITE[i]->SetPosition(enemyHPPosition[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
+	//		camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+	//		-1400.0f + playerFBX->GetPosition().x, -20.0f));
+	//	baseAreaEnemyHPBarSPRITE[i]->SetPosition({ baseAreaEnemyHPBarSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarSPRITE[i]->GetPosition().y });
+	//	baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 10.0f, 10.0f });
+	//	XMFLOAT2 testPosition = baseAreaEnemyHPBarSPRITE[i]->GetPosition();
+	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition(enemyHPPositionFrame[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
+	//		camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
+	//		-1400.0f + playerFBX->GetPosition().x, -20.0f));
+	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().y });
+	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 50.0f, 10.0f });*/
+	//	// Use until above code is fixed
+	//	baseAreaEnemyHPBarSPRITE[i]->SetPosition({1100.0f, 225.0f + (70.0f * i)});
+	//	baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 30.0f, 30.0f });
+	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ 1100.0f, 225.0f + (70.0f * i) });
+	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 150.0f, 30.0f });
+	//}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
 		{
@@ -948,7 +954,7 @@ void BaseArea::Update()
 	playerFBX->Update();
 	playerPositionOBJ->Update();
 	attackRangeOBJ[0]->Update();
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		baseAreaEnemyFBX[i]->Update();
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
@@ -1027,7 +1033,7 @@ void BaseArea::Draw()
 	}
 
 	// Debug only
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		//attackRangeOBJ[i + 1]->Draw();
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
@@ -1073,15 +1079,15 @@ void BaseArea::Draw()
 	{
 		healControllerSPRITE->Draw();
 	}
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
 		if (Distance(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition()) < 160.0f)
 		{
 			baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
 			baseAreaEnemyHPBarSPRITE[i]->Draw();
 		}
-	}
-	for (int i = 0; i < 4; i++)
+	}*/
+	for (int i = 0; i < 10; i++)
 	{
 		if (!baseAreaEnemyFBX[i]->dead)
 		{
@@ -1244,11 +1250,11 @@ void BaseArea::thread1()
 	baseAreaMissionSPRITE = Sprite::Create(5, { 1150.0f, 100.0f });
 	baseAreaMinimapSPRITE = Sprite::Create(6, { 50.0f , 430.0f });
 	baseAreaMinimapPlayerSPRITE = Sprite::Create(7, { 0.0f, 0.0f });
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		baseAreaMinimapEnemySPRITE[i] = Sprite::Create(8, { 0.0f, 0.0f });
-		baseAreaEnemyHPBarSPRITE[i] = Sprite::Create(11, { 0.0f, 0.0f });
-		baseAreaEnemyHPBarFrameSPRITE[i] = Sprite::Create(12, { 0.0f, 0.0f });
+		/*baseAreaEnemyHPBarSPRITE[i] = Sprite::Create(11, { 0.0f, 0.0f });
+		baseAreaEnemyHPBarFrameSPRITE[i] = Sprite::Create(12, { 0.0f, 0.0f });*/
 	}
 	fadeSPRITE = Sprite::Create(10, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 	baseAreaDamageOverlaySPRITE = Sprite::Create(13, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
@@ -1266,18 +1272,18 @@ void BaseArea::thread2()
 {
 	// 3D Object creation
 	skydomeOBJ = Object3d::Create();
-	for (int i = 0; i < 5; i++) { attackRangeOBJ[i] = Object3d::Create(); }
-	for (int i = 0; i < 4; i++) { landingPositionOBJ[i] = Object3d::Create(); }
-	for (int i = 0; i < 4; i++) { enemyVisionRangeOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < 11; i++) { attackRangeOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < 10; i++) { landingPositionOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < 10; i++) { enemyVisionRangeOBJ[i] = Object3d::Create(); }
 	playerPositionOBJ = PlayerPositionObject::Create();
-	for (int i = 0; i < 4; i++) { baseAreaEnemyPositionOBJ[i] = PlayerPositionObject::Create(); }
+	for (int i = 0; i < 10; i++) { baseAreaEnemyPositionOBJ[i] = PlayerPositionObject::Create(); }
 
 	// Player initialization
 	playerFBX = new Player;
 	playerFBX->Initialize();
 
 	// Enemy initialization
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		baseAreaEnemyFBX[i] = new EnemyHuman;
 		baseAreaEnemyFBX[i]->Initialize();
@@ -1294,7 +1300,7 @@ void BaseArea::thread2()
 	camera->SetDistance(48.0f);
 
 	// Attack range initial values
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 11; i++)
 	{
 		if (i == 0)
 		{
@@ -1311,7 +1317,7 @@ void BaseArea::thread2()
 	//Loading::addLoadingPercent(10.0f);
 
 	// Vision range initial values
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		enemyVisionRangeOBJ[i]->SetScale({ 90, 1, 90 });
 	}
@@ -1321,7 +1327,7 @@ void BaseArea::thread2()
 
 	// Position Object initial positions
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 20.0f, playerFBX->GetPosition().z });
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 	}
@@ -1346,11 +1352,11 @@ void BaseArea::thread3()
 
 	// Setting 3D model
 	skydomeOBJ->SetModel(skydomeMODEL);
-	for (int i = 0; i < 5; i++) { attackRangeOBJ[i]->SetModel(attackRangeMODEL); }
-	for (int i = 0; i < 5; i++) { landingPositionOBJ[i]->SetModel(attackRangeMODEL); landingPositionOBJ[i]->SetScale({ 24.0f, 1.0f, 24.0f }); }
-	for (int i = 0; i < 4; i++) { enemyVisionRangeOBJ[i]->SetModel(visionRangeMODEL); }
+	for (int i = 0; i < 11; i++) { attackRangeOBJ[i]->SetModel(attackRangeMODEL); }
+	for (int i = 0; i < 10; i++) { landingPositionOBJ[i]->SetModel(attackRangeMODEL); landingPositionOBJ[i]->SetScale({ 24.0f, 1.0f, 24.0f }); }
+	for (int i = 0; i < 10; i++) { enemyVisionRangeOBJ[i]->SetModel(visionRangeMODEL); }
 	playerPositionOBJ->SetModel(positionMODEL);
-	for (int i = 0; i < 4; i++) { baseAreaEnemyPositionOBJ[i]->SetModel(positionMODEL); }
+	for (int i = 0; i < 10; i++) { baseAreaEnemyPositionOBJ[i]->SetModel(positionMODEL); }
 
 	// Touchable object creation
 	groundOBJ = TouchableObject::Create(groundMODEL);

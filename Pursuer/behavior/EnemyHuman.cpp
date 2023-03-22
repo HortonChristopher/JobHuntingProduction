@@ -461,8 +461,8 @@ void EnemyHuman::Update()
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
-			position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			if (timer > 45.0f)
 			{
@@ -490,12 +490,19 @@ void EnemyHuman::Update()
 			modelChange = false;
 		}
 
-		x = (objectPosition.x - position.x);
-		z = (objectPosition.z - position.z);
-		hypotenuse = sqrt((x * x) + (z * z));
-		radians = atan2(z, x);
-		degrees = XMConvertToDegrees(radians);
-		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+		switch (twoEnemySurroundStage)
+		{
+		case 0:
+			break;
+		case 1:
+			x = (objectPosition.x - position.x);
+			z = (objectPosition.z - position.z);
+			hypotenuse = sqrt((x * x) + (z * z));
+			radians = atan2(z, x);
+			degrees = XMConvertToDegrees(radians);
+			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			break;
+		}
 		break;
 	case BACKATTACK:
 		break;
@@ -640,8 +647,8 @@ void EnemyHuman::Update()
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 2:
-			position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			if (timer > 45.0f)
 			{
