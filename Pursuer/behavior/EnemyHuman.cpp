@@ -512,6 +512,14 @@ void EnemyHuman::Update()
 		switch (twoEnemySurroundStage)
 		{
 		case 0:
+			XMFLOAT3 meetingPoint;
+			meetingPoint.x = objectPosition.x + cos(objectRotation.y) * 120.0f;
+			meetingPoint.z = objectPosition.z + sin(objectRotation.y) * 120.0f;
+			x = (objectPosition.x - position.x);
+			z = (objectPosition.z - position.z);
+
+			position.x += x * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
 			x = (objectPosition.x - position.x);
