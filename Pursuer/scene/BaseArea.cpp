@@ -1062,6 +1062,21 @@ void BaseArea::Update()
 	collisionManager->CheckAllCollisions();
 #pragma endregion
 
+#pragma region dontStackOnTop
+	for (int i = 0; i < 10; i++)
+	{
+		if (intersect(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 5.0f, 5.0f))
+		{
+
+		}
+
+		for (int j = 0; j < 10; j++)
+		{
+
+		}
+	}
+#pragma endregion
+
 	for (int i = 0; i < 10; i++)
 	{
 		if (i % 2 == 1)
