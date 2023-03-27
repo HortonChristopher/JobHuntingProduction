@@ -53,6 +53,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);
 
+	menu = new Menu;
+	menu->Initialize(dxCommon, input);
+
 	if (!Sprite::LoadTexture(115, "BlackScreen.png")) { assert(0); return; } // Black Screen
 	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteAlpha });
 }
@@ -152,10 +155,6 @@ void GameScene::Update()
 
 		if (pause)
 		{
-			if (menu == nullptr)
-			{
-				menu->Initialize(dxCommon, input);
-			}
 			menu->Update();
 		}
 		break;
@@ -195,10 +194,6 @@ void GameScene::Update()
 
 		if (pause)
 		{
-			if (menu == nullptr)
-			{
-				menu->Initialize(dxCommon, input);
-			}
 			menu->Update();
 		}
 		break;
@@ -276,9 +271,17 @@ void GameScene::Draw()
 		break;
 	case 2:
 		tutorialArea->Draw();
+		if (pause)
+		{
+			menu->Draw();
+		}
 		break;
 	case 3:
 		baseArea->Draw();
+		if (pause)
+		{
+			menu->Draw();
+		}
 		break;
 	case 4:
 		gameOverCutscene->Draw();
@@ -295,7 +298,7 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	switch (page)
+	/*switch (page)
 	{
 	case 0:
 		break;
@@ -317,7 +320,7 @@ void GameScene::Draw()
 		break;
 	case 5:
 		break;
-	}
+	}*/
 	
 	// スプライト描画後処理
 	Sprite::PostDraw();

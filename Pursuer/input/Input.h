@@ -101,7 +101,7 @@ public: // メンバ関数
 #pragma region Controller
 	// GamePad/Controller
 	bool PushControllerButton(int button);
-	static bool TriggerControllerButton(int button);
+	bool TriggerControllerButton(int button);
 	bool UpControllerButton(int button);
 
 	// Triggers
