@@ -6,9 +6,6 @@ using namespace Microsoft::WRL;
 
 #define STICKMAX 32767
 
-XINPUT_STATE controllerState = {};
-XINPUT_STATE prevControllerState = {};
-
 Input * Input::GetInstance()
 {
 	static Input instance;
