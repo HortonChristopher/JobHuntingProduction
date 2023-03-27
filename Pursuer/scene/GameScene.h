@@ -14,6 +14,7 @@
 #include "GameOverCutscene.h"
 #include "GameClearCutscene.h"
 #include "Loading.h"
+#include "Menu.h"
 
 #include <atomic>
 #include <iostream>
@@ -99,6 +100,8 @@ private: // メンバ変数
 	bool createPipelineFinish = false;
 	bool loadResourceFinish = false;
 
+	Menu* menu = nullptr;
+	bool pause = false;
 
 	int tutorialOrBase = 0; // 0 = tutorial, 1 = base
 public:

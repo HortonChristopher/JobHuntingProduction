@@ -53,6 +53,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	titleScreen = new TitleScreen;
 	titleScreen->Initialize(dxCommon, input, audio);
 
+	menu = new Menu;
+	menu->Initialize(dxCommon, input);
+
 	if (!Sprite::LoadTexture(115, "BlackScreen.png")) { assert(0); return; } // Black Screen
 	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteAlpha });
 }
@@ -130,7 +133,10 @@ void GameScene::Update()
 	case 2:
 		if (tutorialArea != nullptr)
 		{
-			tutorialArea->Update();
+			if (!pause)
+			{
+				tutorialArea->Update();
+			}
 		}
 
 		if (loadingProgress > 0.0f)
@@ -146,11 +152,19 @@ void GameScene::Update()
 			tutorialArea->deletion = false;
 			break;
 		}
+
+		if (pause)
+		{
+			menu->Update();
+		}
 		break;
 	case 3:
 		if (baseArea != nullptr)
 		{
-			baseArea->Update();
+			if (!pause)
+			{
+				baseArea->Update();
+			}
 		}
 
 		if (loadingProgress > 0.0f)
@@ -176,6 +190,11 @@ void GameScene::Update()
 			baseArea->deletion = false;
 			baseArea = nullptr;
 			break;
+		}
+
+		if (pause)
+		{
+			menu->Update();
 		}
 		break;
 	case 4:
@@ -215,6 +234,19 @@ void GameScene::Update()
 		}
 		break;
 	}
+
+	if (input->TriggerKey(DIK_ESCAPE) || input->TriggerControllerButton(XINPUT_GAMEPAD_START))
+	{
+		if (pause)
+		{
+			pause = false;
+		}
+		else
+		{
+			pause = true;
+		}
+		return;
+	}
 }
 
 void GameScene::Draw()
@@ -239,9 +271,17 @@ void GameScene::Draw()
 		break;
 	case 2:
 		tutorialArea->Draw();
+		if (pause)
+		{
+			menu->Draw();
+		}
 		break;
 	case 3:
 		baseArea->Draw();
+		if (pause)
+		{
+			menu->Draw();
+		}
 		break;
 	case 4:
 		gameOverCutscene->Draw();
@@ -258,9 +298,28 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	/*if (page == 1)
+	/*switch (page)
 	{
-		fadeSPRITE->Draw();
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		if (pause)
+		{
+			menu->Draw();
+		}
+		break;
+	case 3:
+		if (pause)
+		{
+			menu->Draw();
+		}
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
 	}*/
 	
 	// スプライト描画後処理
