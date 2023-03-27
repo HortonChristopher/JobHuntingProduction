@@ -57,6 +57,7 @@ public:
 	void Draw();
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
+	bool FBXCollisionDetection(XMFLOAT3 FBX1, XMFLOAT3 FBX2, float FBX1R, float FBX2R);
 
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);

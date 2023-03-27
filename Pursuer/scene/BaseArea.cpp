@@ -415,7 +415,7 @@ void BaseArea::Update()
 		else if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), 3.0f, 80.0f, 80.0f) && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 		{
 			float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
-			if (distance < 80.0f && distance > 8.0f && baseAreaEnemyFBX[i]->chargeAttackCheck == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
+			if (distance < 80.0f && distance > 12.0f && baseAreaEnemyFBX[i]->chargeAttackCheck == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO && !enemyKnockback && baseAreaEnemyAliveBOOL[i] == true)
 			{
 				if (baseAreaEnemyFBX[i]->agrooNumber == 0)
 				{
@@ -445,7 +445,7 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
 				}
 			}
-			else if (distance < 8.0f)
+			else if (distance <= 12.0f)
 			{
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
 					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK)
@@ -536,7 +536,7 @@ void BaseArea::Update()
 #pragma region playerHPDamage
 	for (int i = 0; i < 10; i++)
 	{
-		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 15.0f, 15.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackDamagePossible && baseAreaEnemyFBX[i]->ableToDamage)
+		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), 3.0f, 18.0f, 18.0f) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackDamagePossible && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = 1.0f;
@@ -941,7 +941,7 @@ void BaseArea::Update()
 
 #pragma region FBXObjectPositionLineup
 	// Makes sure the position object and fbx object XYZ values match each other
-	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
+	/*playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
 
 	for (int i = 0; i < 10; i++)
@@ -960,7 +960,7 @@ void BaseArea::Update()
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemyFBX[i]->landingAttackPosition);
 		}
-	}
+	}*/
 #pragma endregion
 
 #pragma region HPSTUpdates
@@ -1065,14 +1065,52 @@ void BaseArea::Update()
 #pragma region dontStackOnTop
 	for (int i = 0; i < 10; i++)
 	{
-		if (intersect(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f, 5.0f, 5.0f))
+		if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
 		{
+			if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 4.0f, 4.0f))
+			{
+				float x = (playerFBX->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x);
+				float z = (playerFBX->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z);
 
+				baseAreaEnemyFBX[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x - (9.0f - x)), (baseAreaEnemyFBX[i]->GetPosition().y + 0.5f), (baseAreaEnemyFBX[i]->GetPosition().z - (9.0f - z)) });
+			}
+
+			for (int j = 0; j < 10; j++)
+			{
+				if (i == j)
+				{
+					continue;
+				}
+
+				if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[j]->GetPosition(), 4.0f, 4.0f))
+				{
+					float x = (baseAreaEnemyFBX[i]->GetPosition().x - baseAreaEnemyFBX[j]->GetPosition().x);
+					float z = (baseAreaEnemyFBX[i]->GetPosition().z - baseAreaEnemyFBX[j]->GetPosition().z);
+
+					baseAreaEnemyFBX[j]->SetPosition({ (baseAreaEnemyFBX[j]->GetPosition().x - (9.0f - x)), (baseAreaEnemyFBX[j]->GetPosition().y + 0.5f), (baseAreaEnemyFBX[j]->GetPosition().z - (9.0f - z)) });
+				}
+			}
 		}
+	}
 
-		for (int j = 0; j < 10; j++)
+	playerFBX->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
+	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, playerPositionOBJ->GetPosition().y, playerFBX->GetPosition().z });
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
 		{
-
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
+		}
+		else if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
+		{
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
+		}
+		else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		{
+			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemyFBX[i]->landingAttackPosition);
 		}
 	}
 #pragma endregion
@@ -1233,6 +1271,19 @@ int BaseArea::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rec
 	float cornerDistance_sq = ((circleDistance.x - rectW / 2.0f) * (circleDistance.x - rectW / 2.0f)) + ((circleDistance.y - rectH / 2.0f) * (circleDistance.y - rectH / 2.0f));
 
 	return (cornerDistance_sq <= (circleR * circleR));
+}
+
+bool BaseArea::FBXCollisionDetection(XMFLOAT3 FBX1, XMFLOAT3 FBX2, float FBX1R, float FBX2R)
+{
+	float distX = FBX1.x - FBX2.x;
+	float distZ = FBX1.z - FBX2.z;
+	float distance = sqrtf((distX * distX) + (distZ * distZ));
+
+	if (distance <= FBX1R + FBX2R)
+	{
+		return true;
+	}
+	return false;
 }
 
 void BaseArea::ParticleCreation(float x, float y, float z, int life, float offset, float start_scale)
