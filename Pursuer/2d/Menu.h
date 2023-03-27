@@ -96,10 +96,10 @@ private:
 	Vector2 screenSettingScale;
 	bool close = false;
 
-	bool returnTitle = false;
-
 	float texAlpha;
 	float migrateCounter;
 	bool migrate;
 	bool migrated;
+public:
+	bool returnTitle = false;
 };

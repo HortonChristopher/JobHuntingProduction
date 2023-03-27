@@ -46,6 +46,7 @@ TutorialArea::~TutorialArea()
 	safe_delete(tutorialMinimapSPRITE);
 	safe_delete(tutorialMinimapPlayerSPRITE);
 	safe_delete(tutorialMinimapEnemySPRITE);
+	audio->StopWave("MainArea.wav");
 }
 
 void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)

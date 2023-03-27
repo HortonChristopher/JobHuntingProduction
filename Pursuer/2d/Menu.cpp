@@ -79,20 +79,21 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	startClose = false;
 	closeCounter = 0;
 	menuState = Base;
-	dotPos = { 480 - 228 * 1.5f,300 - 20 * 1.5f };
-	selectFramePos = {};
+	dotPos = { 380.0f, 436.0f };
+	selectFramePos = { 370.0f, 207.0f };
 	operateChangeFlag = false;
 	returnTitle = false;
 	texAlpha = 1;
 	migrateCounter = 0;
 	migrate = false;
 
-	menuUI = Sprite::Create(401, { 480.0f, 270.0f });
-	setting = Sprite::Create(402, { 480.0f, 104.0f });
-	end = Sprite::Create(403, { 480.0f, 436.0f });
-	sensitivitySetting = Sprite::Create(404, { 480.0f, 104.0f });
-	operateSetting = Sprite::Create(405, { 480.0f, 270.0f });
-	screenSetting = Sprite::Create(406, { 480.0f, 436.0f });
+	menuUI = Sprite::Create(401, { 240.0f, 110.0f });
+	menuUI->SetSize({ 800.0f, 500.0f });
+	setting = Sprite::Create(402, { 380.0f, 217.0f });
+	end = Sprite::Create(403, { 380.0f, 436.0f });
+	sensitivitySetting = Sprite::Create(404, { 380.0f, 217.0f });
+	operateSetting = Sprite::Create(405, { 380.0f, 326.5f });
+	screenSetting = Sprite::Create(406, { 380.0f, 436.0f });
 	upsideDown = Sprite::Create(407, { 295.0f, 200.0f });
 	check = Sprite::Create(408, { 403.0f, 196.0f });
 	flipLeftRight = Sprite::Create(409, { 655.0f, 200.0f });
@@ -101,13 +102,14 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	changeRun = Sprite::Create(413, { 620.0f, 400.0f });
 	check2 = Sprite::Create(408, { 720.0f, 390.0f });
 	selectFrame = Sprite::Create(414, selectFramePos);
+	selectFrame->SetSize({ 148.0f, 87.0f });
 	dot = Sprite::Create(415, dotPos);
-	sensitiveSettingBar = Sprite::Create(416, { 480.0f, 300.0f });
-	screenSetting = Sprite::Create(417, { 480.0f, 105.0f });
-	viewCollision = Sprite::Create(418, { 480.0f, 240.0f });
-	endCheck = Sprite::Create(420, { 480.0f, 150.0f });
-	yes = Sprite::Create(421, { 320.0f, 380.0f });
-	no = Sprite::Create(422, { 640.0f, 380.0f });
+	dot->SetSize({ 27.0f, 27.0f });
+	sensitiveSettingBar = Sprite::Create(416, { 380.0f, 436.0f });
+	viewCollision = Sprite::Create(418, { 380.0f, 436.0f });
+	endCheck = Sprite::Create(420, { 300.0f, 180.0f });
+	yes = Sprite::Create(421, { 380.0f, 380.0f });
+	no = Sprite::Create(422, { 710.0f, 380.0f });
 }
 
 bool Menu::Update()
@@ -197,19 +199,28 @@ void Menu::Draw()
 	{
 	case Base:
 		setting->Draw();
+		setting->SetPosition({ 380.0f, 217.0f });
 		setting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		end->Draw();
+		end->SetPosition({ 380.0f, 436.0f });
 		end->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();
+		selectFrame->SetPosition(selectFramePos);
+		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		break;
 	case SettingSelect:
 		sensitivitySetting->Draw();
+		sensitivitySetting->SetPosition({ 380.0f, 217.0f });
 		sensitivitySetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		operateSetting->Draw();
+		operateSetting->SetPosition({ 380.0f, 326.5f });
 		operateSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		screenSetting->Draw();
+		screenSetting->SetPosition({ 380.0f, 436.0f });
 		screenSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		screenSetting->SetPosition({ 480.0f, 436.0f });
-		screenSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();
+		selectFrame->SetPosition(selectFramePos);
+		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		break;
 
 	case PadOperateSetting:
@@ -256,6 +267,7 @@ void Menu::Draw()
 		sensitivitySetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		dot->Draw();
 		dot->SetPosition(dotPos);
+		dot->SetSize({ 27.0f, 27.0f });
 		dot->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		sensitiveSettingBar->Draw();
 		sensitiveSettingBar->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
@@ -263,30 +275,34 @@ void Menu::Draw()
 
 	case ScreenSetting:
 		screenSetting->Draw();
-		screenSetting->SetPosition({ 480.0f, 105.0f });
+		screenSetting->SetPosition({ 380.0f, 217.0f });
 		screenSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		viewCollision->Draw();
+		viewCollision->SetPosition({ 380.0f, 436.0f });
 		viewCollision->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 
 		//ONの時のみチェックマークを描画
 		if (SettingParameters::viewCollision)
 		{
 			check->Draw();
-			check->SetPosition({ 730.0f, 240.0f });
+			check->SetPosition({ 845.0f, 436.0f });
 			check->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		}
-
-		selectFrame->Draw();
-		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		break;
 
 	case EndCheck:
 		endCheck->Draw();
+		endCheck->SetPosition({ 300.0f, 180.0f });
 		endCheck->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		yes->Draw();
+		yes->SetPosition({ 380.0f, 380.0f });
 		yes->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		no->Draw();
+		no->SetPosition({ 710.0f, 380.0f });
 		no->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();
+		selectFrame->SetPosition(selectFramePos);
+		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		break;
 
 	default:
@@ -304,7 +320,7 @@ void Menu::BaseMenu()
 	{
 		if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TriggerKey(DIK_S))
 		{
-			if (select < 2)
+			if (select < 1)
 				select++;
 		}
 		if (input->TriggerLStickUp() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_UP) || input->TriggerKey(DIK_W))
@@ -315,7 +331,7 @@ void Menu::BaseMenu()
 		SetTexParam();
 	}
 
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
@@ -323,8 +339,6 @@ void Menu::BaseMenu()
 			nextMenuState = SettingSelect;
 			break;
 		case 1:
-			break;
-		case 2:
 			nextMenuState = EndCheck;
 			break;
 		default:
@@ -332,11 +346,6 @@ void Menu::BaseMenu()
 		}
 		migrate = true;
 		SetTexParam();
-	}
-
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
-	{
-		startClose = true;
 	}
 }
 
@@ -358,7 +367,7 @@ void Menu::Setting()
 		}
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
@@ -377,7 +386,8 @@ void Menu::Setting()
 		migrate = true;
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
+
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_X))
 	{
 		migrate = true;
 		nextMenuState = Base;
@@ -404,7 +414,8 @@ void Menu::SensitiveSetting()
 		}
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
+
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_X))
 	{
 		nextMenuState = SettingSelect;
 		migrate = true;
@@ -542,22 +553,6 @@ void Menu::OperateSetting()
 
 void Menu::ScreenSettingProcess()
 {
-	if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN)
-		|| input->TriggerLStickUp() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_UP)
-		|| input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S))
-	{
-		if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TriggerKey(DIK_S))
-		{
-			if (select < 1)
-				select++;
-		}
-		if (input->TriggerLStickUp() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_UP) || input->TriggerKey(DIK_W))
-		{
-			if (select > 0)
-				select--;
-		}
-		SetTexParam();
-	}
 	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
@@ -565,14 +560,12 @@ void Menu::ScreenSettingProcess()
 		case 0:
 			SettingParameters::viewCollision = SettingParameters::viewCollision == true ? false : true;
 			break;
-		case 1:
-			break;
 		default:
 			return;
 		}
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_X))
 	{
 		migrate = true;
 		nextMenuState = SettingSelect;
@@ -616,7 +609,8 @@ void Menu::EndCheckProcess()
 		}
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
+
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_X))
 	{
 		migrate = true;
 		nextMenuState = Base;
@@ -635,16 +629,17 @@ void Menu::SetTexParam()
 			restartScale = { 1,1 };
 			endScale = { 1,1 };
 			settingScale = { 1.5f,1.5f };
+			selectFramePos = { 370.0f, 207.0f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 148.0f, 87.0f });
 			break;
 		case 1:
 			restartScale = { 1.5f,1.5f };
 			endScale = { 1,1 };
 			settingScale = { 1,1 };
-			break;
-		case 2:
-			restartScale = { 1,1 };
-			endScale = { 1.5f,1.5f };
-			settingScale = { 1,1 };
+			selectFramePos = { 370.0f, 426.0f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 458.0f, 87.0f });
 			break;
 		default:
 			break;
@@ -657,16 +652,25 @@ void Menu::SetTexParam()
 			sensitiveSettingScale = { 1.5f,1.5f };
 			operateSettingScale = { 1,1 };
 			screenSettingScale = { 1,1 };
+			selectFramePos = { 370.0f, 207.0f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 272.0f, 87.0f });
 			break;
 		case 1:
 			operateSettingScale = { 1.5f,1.5f };
 			sensitiveSettingScale = { 1,1 };
 			screenSettingScale = { 1,1 };
+			selectFramePos = { 370.0f, 316.5f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 272.0f, 87.0f });
 			break;
 		case 2:
 			operateSettingScale = { 1,1 };
 			sensitiveSettingScale = { 1,1 };
 			screenSettingScale = { 1.5f,1.5f };
+			selectFramePos = { 370.0f, 426.0f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 278.0f, 87.0f });
 			break;
 		default:
 			break;
@@ -698,29 +702,24 @@ void Menu::SetTexParam()
 		}
 		break;
 	case PadSensitiveSetting:
-		dotPos = { (480 - 228 * 1.5f) + 49 * 1.5f * (SettingParameters::padSensitivity - 1),300 - 20 * 1.5f };
+		dotPos = { 380.0f + 49.0f * (SettingParameters::padSensitivity - 1), 446.0f };
 		break;
 	case ScreenSetting:
-		switch (select)
-		{
-		case 0:
-			selectFramePos = { 718,240 };
-			break;
-		case 1:
-			selectFramePos = { 718,390 };
-			break;
-		default:
-			break;
-		}
 		break;
 	case EndCheck:
 		switch (select)
 		{
 		case 0:
+			selectFramePos = { 370.0f, 370.0f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 148.0f, 87.0f });
 			yesScale = { 1.5f,1.5f };
 			noScale = { 1,1 };
 			break;
 		case 1:
+			selectFramePos = { 700.0f, 370.0f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 210.0f, 87.0f });
 			noScale = { 1.5f,1.5f };
 			yesScale = { 1,1 };
 			break;

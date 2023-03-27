@@ -66,6 +66,8 @@ void GameScene::Update()
 	{
 	case 0:
 		gameOverCutscene = nullptr;
+		menu = nullptr;
+		pause = false;
 		titleScreen->Update();
 		loadingProgress = 0.1f;
 
@@ -119,6 +121,9 @@ void GameScene::Update()
 			showLoading = false;
 		}
 
+		menu = new Menu;
+		menu->Initialize(dxCommon, input);
+
 		if (tutorialArea != nullptr)
 		{
 			page = 2;
@@ -156,6 +161,17 @@ void GameScene::Update()
 		if (pause)
 		{
 			menu->Update();
+
+			if (menu->returnTitle)
+			{
+				tutorialArea->~TutorialArea();
+				titleScreen = new TitleScreen;
+				titleScreen->Initialize(dxCommon, input, audio);
+				tutorialOrBase = 1;
+				tutorialArea->deletion = false;
+				menu->returnTitle = false;
+				page = 0;
+			}
 		}
 		break;
 	case 3:
@@ -195,6 +211,17 @@ void GameScene::Update()
 		if (pause)
 		{
 			menu->Update();
+
+			if (menu->returnTitle)
+			{
+				baseArea->~BaseArea();
+				titleScreen = new TitleScreen;
+				titleScreen->Initialize(dxCommon, input, audio);
+				baseArea->deletion = false;
+				baseArea = nullptr;
+				menu->returnTitle = false;
+				page = 0;
+			}
 		}
 		break;
 	case 4:

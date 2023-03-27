@@ -54,6 +54,7 @@ BaseArea::~BaseArea()
 	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyHPBarSPRITE[i]); }
 	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyHPBarFrameSPRITE[i]); }
 	safe_delete(baseAreaDamageOverlaySPRITE);
+	audio->StopWave("MainArea.wav");
 }
 
 void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
