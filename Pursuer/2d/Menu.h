@@ -8,6 +8,8 @@
 #include "DeltaTime.h"
 #include "Easing.h"
 #include "Input.h"
+#include "SettingParameters.h"
+#include "DirectXCommon.h"
 
 using namespace std;
 
@@ -16,7 +18,7 @@ class Menu
 public:
 	Menu();
 	~Menu();
-	void Initialize();
+	void Initialize(DirectXCommon* dxCommon, Input* input);
 	bool Update();
 	void Draw();
 
@@ -45,6 +47,9 @@ private:
 	int openCounter = 0;
 	int closeCounter = 0;
 	bool startClose = false;
+
+	DirectXCommon* dxCommon = nullptr;
+	Input* input = nullptr;
 
 	std::unique_ptr<Sprite> menuUI;
 	std::unique_ptr<Sprite> backTex;

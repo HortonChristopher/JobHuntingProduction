@@ -320,6 +320,9 @@
     <ClInclude Include="2d\Menu.h">
       <Filter>Header Files\2D</Filter>
     </ClInclude>
+    <ClInclude Include="tools\SettingParameters.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">

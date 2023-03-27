@@ -47,11 +47,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(ProjectDir)\lib\fbx_sdk\lib;$(ProjectDir)\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)tools\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)tools\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\fbx_sdk\lib;$(ProjectDir)\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -201,6 +201,7 @@
     <ClInclude Include="scene\Loading.h" />
     <ClInclude Include="scene\TitleScreen.h" />
     <ClInclude Include="scene\TutorialArea.h" />
+    <ClInclude Include="tools\SettingParameters.h" />
     <ClInclude Include="tools\ShadowMap.h" />
   </ItemGroup>
   <ItemGroup>

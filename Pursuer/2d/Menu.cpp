@@ -12,9 +12,15 @@ Menu::~Menu()
 
 }
 
-void Menu::Initialize()
+void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 {
+	// Checking for nullptr
+	assert(dxCommon);
+	assert(input);
 
+	// Assigning variables to this
+	this->dxCommon = dxCommon;
+	this->input = input;
 }
 
 bool Menu::Update()
@@ -54,16 +60,16 @@ void Menu::ScreenSettingProcess()
 
 void Menu::EndCheckProcess()
 {
-	if (Input::TriggerPadLStickLeft() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_LEFT)
-		|| Input::TriggerPadLStickRight() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_RIGHT)
-		|| Input::TriggerKey(DIK_A) || Input::TriggerKey(DIK_D))
+	if (input->TriggerLStickLeft() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_LEFT)
+		|| input->TriggerLStickRight() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_RIGHT)
+		|| input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D))
 	{
-		if (Input::TriggerPadLStickRight() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_RIGHT) || Input::TriggerKey(DIK_D))
+		if (input->TriggerLStickRight() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_RIGHT) || input->TriggerKey(DIK_D))
 		{
 			if (select < 1)
 				select++;
 		}
-		if (Input::TriggerPadLStickLeft() || Input::TriggerPadButton(XINPUT_GAMEPAD_DPAD_LEFT) || Input::TriggerKey(DIK_A))
+		if (input->TriggerLStickLeft() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_LEFT) || input->TriggerKey(DIK_A))
 		{
 			if (select > 0)
 				select--;
@@ -71,7 +77,7 @@ void Menu::EndCheckProcess()
 		SetTexParam();
 	}
 
-	if (Input::TriggerControllerButton(XINPUT_GAMEPAD_B) || Input::TriggerKey(DIK_SPACE))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
@@ -88,7 +94,7 @@ void Menu::EndCheckProcess()
 		}
 		SetTexParam();
 	}
-	if (Input::TriggerPadButton(XINPUT_GAMEPAD_A) || Input::TriggerKey(DIK_Z))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
 	{
 		migrate = true;
 		nextMenuState = Base;
@@ -170,7 +176,7 @@ void Menu::SetTexParam()
 		}
 		break;
 	case PadSensitiveSetting:
-		dotPos = { (480 - 228 * 1.5f) + 49 * 1.5f * (SettingParam::padSensitive - 1),300 - 20 * 1.5f };
+		dotPos = { (480 - 228 * 1.5f) + 49 * 1.5f * (SettingParameters::padSensitivity - 1),300 - 20 * 1.5f };
 		break;
 	case ScreenSetting:
 		switch (select)
