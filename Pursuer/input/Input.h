@@ -164,8 +164,8 @@ private: // メンバ変数
 	int controller_LStickY = 0;
 	int controller_RStickX = 0;
 	int controller_RStickY = 0;
-	static XINPUT_STATE controllerState = {};
-	static XINPUT_STATE prevControllerState = {};
+	static XINPUT_STATE controllerState;
+	static XINPUT_STATE prevControllerState;
 	XINPUT_VIBRATION controllerVibration = {};
 	int time = 0;
 	int screenW = 0;
