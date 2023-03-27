@@ -32,35 +32,35 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	this->dxCommon = dxCommon;
 	this->input = input;
 
-	if (!Sprite::LoadTexture(701, "menuUI.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(702, "setting.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(703, "end.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(704, "sensitiveSetting.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(705, "operateSetting.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(706, "ScreenSetting.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(707, "upsideDown.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(708, "check.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(709, "flipLeftRight.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(710, "a.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(711, "cameraReset.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(712, "action.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(713, "changeRun.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(714, "selectFrame.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(715, "dot.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(716, "sensitiveSettingBar.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(717, "ScreenSetting.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(718, "viewCollision.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(719, "sensitiveSettingBar.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(720, "endCheck.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(721, "yes.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(722, "no.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(723, "b.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(724, "x.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(725, "y.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(726, "LT.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(727, "RT.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(728, "LB.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(729, "RB.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(401, "menuUI.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(402, "setting.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(403, "end.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(404, "sensitiveSetting.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(405, "operateSetting.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(406, "ScreenSetting.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(407, "upsideDown.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(408, "check.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(409, "flipLeftRight.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(410, "a.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(411, "cameraReset.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(412, "action.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(413, "changeRun.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(414, "selectFrame.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(415, "dot.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(416, "sensitiveSettingBar.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(417, "ScreenSetting.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(418, "viewCollision.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(419, "sensitiveSettingBar.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(420, "endCheck.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(421, "yes.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(422, "no.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(423, "b.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(424, "x.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(425, "y.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(426, "LT.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(427, "RT.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(428, "LB.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(429, "RB.png")) { assert(0); return; }
 
 	easingScale = 0;
 	openCounter = 0;
@@ -87,27 +87,27 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	migrateCounter = 0;
 	migrate = false;
 
-	menuUI = Sprite::Create(701, { 480.0f, 270.0f });
-	setting = Sprite::Create(702, { 480.0f, 104.0f });
-	end = Sprite::Create(703, { 480.0f, 436.0f });
-	sensitivitySetting = Sprite::Create(704, { 480.0f, 104.0f });
-	operateSetting = Sprite::Create(705, { 480.0f, 270.0f });
-	screenSetting = Sprite::Create(706, { 480.0f, 436.0f });
-	upsideDown = Sprite::Create(707, { 295.0f, 200.0f });
-	check = Sprite::Create(708, { 403.0f, 196.0f });
-	flipLeftRight = Sprite::Create(709, { 655.0f, 200.0f });
-	cameraReset = Sprite::Create(711, { 620.0f, 300.0f });
-	action = Sprite::Create(712, { 240.0f, 400.0f });
-	changeRun = Sprite::Create(713, { 620.0f, 400.0f });
-	check2 = Sprite::Create(708, { 720.0f, 390.0f });
-	selectFrame = Sprite::Create(714, selectFramePos);
-	dot = Sprite::Create(715, dotPos);
-	sensitiveSettingBar = Sprite::Create(716, { 480.0f, 300.0f });
-	screenSetting = Sprite::Create(717, { 480.0f, 105.0f });
-	viewCollision = Sprite::Create(718, { 480.0f, 240.0f });
-	endCheck = Sprite::Create(720, { 480.0f, 150.0f });
-	yes = Sprite::Create(721, { 320.0f, 380.0f });
-	no = Sprite::Create(722, { 640.0f, 380.0f });
+	menuUI = Sprite::Create(401, { 480.0f, 270.0f });
+	setting = Sprite::Create(402, { 480.0f, 104.0f });
+	end = Sprite::Create(403, { 480.0f, 436.0f });
+	sensitivitySetting = Sprite::Create(404, { 480.0f, 104.0f });
+	operateSetting = Sprite::Create(405, { 480.0f, 270.0f });
+	screenSetting = Sprite::Create(406, { 480.0f, 436.0f });
+	upsideDown = Sprite::Create(407, { 295.0f, 200.0f });
+	check = Sprite::Create(408, { 403.0f, 196.0f });
+	flipLeftRight = Sprite::Create(409, { 655.0f, 200.0f });
+	cameraReset = Sprite::Create(411, { 620.0f, 300.0f });
+	action = Sprite::Create(412, { 240.0f, 400.0f });
+	changeRun = Sprite::Create(413, { 620.0f, 400.0f });
+	check2 = Sprite::Create(408, { 720.0f, 390.0f });
+	selectFrame = Sprite::Create(414, selectFramePos);
+	dot = Sprite::Create(415, dotPos);
+	sensitiveSettingBar = Sprite::Create(416, { 480.0f, 300.0f });
+	screenSetting = Sprite::Create(417, { 480.0f, 105.0f });
+	viewCollision = Sprite::Create(418, { 480.0f, 240.0f });
+	endCheck = Sprite::Create(420, { 480.0f, 150.0f });
+	yes = Sprite::Create(421, { 320.0f, 380.0f });
+	no = Sprite::Create(422, { 640.0f, 380.0f });
 }
 
 bool Menu::Update()
