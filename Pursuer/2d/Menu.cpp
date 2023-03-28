@@ -39,7 +39,7 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	if (!Sprite::LoadTexture(405, "operateSetting.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(406, "ScreenSetting.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(407, "upsideDown.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(408, "check.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(408, "check.png")) { assert(0); return; }j
 	if (!Sprite::LoadTexture(409, "flipLeftRight.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(410, "a.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(411, "cameraReset.png")) { assert(0); return; }

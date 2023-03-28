@@ -1024,8 +1024,8 @@ void BaseArea::Update()
 	{
 		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
 		{
-			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 16.0f, baseAreaEnemyFBX[i]->GetPosition().z });
-			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 16.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 21.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 21.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
 	}
 #pragma region updates
@@ -1184,10 +1184,10 @@ void BaseArea::Draw()
 	for (int i = 0; i < 10; i++)
 	{
 		//attackRangeOBJ[i + 1]->Draw();
-		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		/*if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
 		{
 			landingPositionOBJ[i]->Draw();
-		}
+		}*/
 		//enemyVisionRangeOBJ[i]->Draw();
 	}
 	// End Debug
