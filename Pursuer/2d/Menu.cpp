@@ -247,7 +247,7 @@ void Menu::Draw()
 		//ONの時のみチェックマークを描画
 		if (SettingParameters::reverseX == -1)
 		{
-			check2->SetPosition({ 480.0f, 323.5f }); // normally { 773.0f, 320.5f }
+			check2->SetPosition({ 480.0f, 308.5f }); // normally { 773.0f, 320.5f }
 			check2->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 			check2->Draw();
 		}
