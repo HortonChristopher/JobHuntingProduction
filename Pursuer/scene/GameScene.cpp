@@ -54,7 +54,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	titleScreen->Initialize(dxCommon, input, audio);
 
 	menu = new Menu;
-	menu->Initialize(dxCommon, input);
+	//menu->Initialize(dxCommon, input);
 
 	if (!Sprite::LoadTexture(115, "BlackScreen.png")) { assert(0); return; } // Black Screen
 	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteAlpha });
@@ -266,6 +266,7 @@ void GameScene::Update()
 	{
 		if (pause)
 		{
+			menu->Initialize(dxCommon, input);
 			pause = false;
 		}
 		else
