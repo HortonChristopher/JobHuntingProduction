@@ -27,6 +27,8 @@ private:
 	void Setting();
 	void SensitiveSetting();
 	void OperateSetting();
+	void ControllerButton();
+	void KeyboardKey();
 	void ScreenSettingProcess();
 	void EndCheckProcess();
 	void SetTexParam();
@@ -38,6 +40,8 @@ private:
 		SettingSelect,
 		PadSensitiveSetting,
 		PadOperateSetting,
+		ControllerButtonSetting,
+		KeyboardKeySetting,
 		ScreenSetting,
 		EndCheck,
 	};
@@ -77,6 +81,8 @@ private:
 	Sprite* selectFrame;
 	Sprite* viewCollision;
 	Sprite* screenSetting;
+	Sprite* controllerOperation;
+	Sprite* keyboardOperation;
 
 	bool operateChangeFlag = false;
 

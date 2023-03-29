@@ -61,6 +61,8 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	if (!Sprite::LoadTexture(427, "RT.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(428, "LB.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(429, "RB.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(430, "controllerOperation.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(431, "keyboardOperation.png")) { assert(0); return; }
 
 	easingScale = 0;
 	openCounter = 0;
@@ -430,67 +432,6 @@ void Menu::SensitiveSetting()
 
 void Menu::OperateSetting()
 {
-	if (operateChangeFlag)
-	{
-		//何かしらのPADのボタンが押されたら代入される
-		int button = input->CheckControllerButton();
-
-		//押されたボタンが割り当て可能範囲内のボタンだったら
-		if (button == XINPUT_GAMEPAD_LEFT_THUMB ||
-			button == XINPUT_GAMEPAD_RIGHT_THUMB ||
-			button == XINPUT_GAMEPAD_LEFT_SHOULDER ||
-			button == XINPUT_GAMEPAD_RIGHT_SHOULDER ||
-			button == XINPUT_GAMEPAD_A ||
-			button == XINPUT_GAMEPAD_B ||
-			button == XINPUT_GAMEPAD_X ||
-			button == XINPUT_GAMEPAD_Y)
-		{
-			//変更対象によって場合分け＋ボタンの変更＋変更後のボタンが既に他の操作に割り当て済みの場合ボタンを入れ替える
-			/*switch (select)
-			{
-			case 2:
-				if (SettingParameters::resetButton == button) SettingParameters::resetButton = SettingParameters::jumpButton;
-
-				else if (SettingParameters::airSlideButton == button) SettingParameters::airSlideButton = SettingParameters::jumpButton;
-
-				else if (SettingParameters::runButton == button) SettingParameters::runButton = SettingParameters::jumpButton;
-
-				SettingParameters::jumpButton = button;
-				break;
-			case 3:
-				if (SettingParameters::jumpButton == button) SettingParameters::jumpButton = SettingParameters::resetButton;
-
-				else if (SettingParameters::airSlideButton == button) SettingParameters::airSlideButton = SettingParameters::resetButton;
-
-				else if (SettingParameters::runButton == button) SettingParameters::runButton = SettingParameters::resetButton;
-
-				SettingParameters::resetButton = button;
-				break;
-			case 4:
-				if (SettingParameters::jumpButton == button) SettingParameters::jumpButton = SettingParameters::airSlideButton;
-
-				else if (SettingParameters::resetButton == button) SettingParameters::resetButton = SettingParameters::airSlideButton;
-
-				else if (SettingParameters::runButton == button) SettingParameters::runButton = SettingParameters::airSlideButton;
-
-				SettingParameters::airSlideButton = button;
-				break;
-			case 5:
-				if (SettingParameters::jumpButton == button) SettingParameters::jumpButton = SettingParameters::runButton;
-
-				else if (SettingParameters::resetButton == button) SettingParameters::resetButton = SettingParameters::runButton;
-
-				else if (SettingParameters::airSlideButton == button) SettingParameters::airSlideButton = SettingParameters::runButton;
-
-				SettingParameters::runButton = button;
-				break;
-			default:
-				return;
-			}
-			operateChangeFlag = false;*/
-		}
-		return;
-	}
 	if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN)
 		|| input->TriggerLStickUp() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_UP) ||
 		input->TriggerLStickLeft() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_LEFT)
@@ -557,9 +498,79 @@ void Menu::OperateSetting()
 	}
 }
 
+void Menu::ControllerButton()
+{
+	if (operateChangeFlag)
+	{
+		//何かしらのPADのボタンが押されたら代入される
+		int button = input->CheckControllerButton();
+
+		//押されたボタンが割り当て可能範囲内のボタンだったら
+		if (button == XINPUT_GAMEPAD_LEFT_THUMB ||
+			button == XINPUT_GAMEPAD_RIGHT_THUMB ||
+			button == XINPUT_GAMEPAD_LEFT_SHOULDER ||
+			button == XINPUT_GAMEPAD_RIGHT_SHOULDER ||
+			button == XINPUT_GAMEPAD_A ||
+			button == XINPUT_GAMEPAD_B ||
+			button == XINPUT_GAMEPAD_X ||
+			button == XINPUT_GAMEPAD_Y)
+		{
+			//変更対象によって場合分け＋ボタンの変更＋変更後のボタンが既に他の操作に割り当て済みの場合ボタンを入れ替える
+			/*switch (select)
+			{
+			case 2:
+				if (SettingParameters::resetButton == button) SettingParameters::resetButton = SettingParameters::jumpButton;
+
+				else if (SettingParameters::airSlideButton == button) SettingParameters::airSlideButton = SettingParameters::jumpButton;
+
+				else if (SettingParameters::runButton == button) SettingParameters::runButton = SettingParameters::jumpButton;
+
+				SettingParameters::jumpButton = button;
+				break;
+			case 3:
+				if (SettingParameters::jumpButton == button) SettingParameters::jumpButton = SettingParameters::resetButton;
+
+				else if (SettingParameters::airSlideButton == button) SettingParameters::airSlideButton = SettingParameters::resetButton;
+
+				else if (SettingParameters::runButton == button) SettingParameters::runButton = SettingParameters::resetButton;
+
+				SettingParameters::resetButton = button;
+				break;
+			case 4:
+				if (SettingParameters::jumpButton == button) SettingParameters::jumpButton = SettingParameters::airSlideButton;
+
+				else if (SettingParameters::resetButton == button) SettingParameters::resetButton = SettingParameters::airSlideButton;
+
+				else if (SettingParameters::runButton == button) SettingParameters::runButton = SettingParameters::airSlideButton;
+
+				SettingParameters::airSlideButton = button;
+				break;
+			case 5:
+				if (SettingParameters::jumpButton == button) SettingParameters::jumpButton = SettingParameters::runButton;
+
+				else if (SettingParameters::resetButton == button) SettingParameters::resetButton = SettingParameters::runButton;
+
+				else if (SettingParameters::airSlideButton == button) SettingParameters::airSlideButton = SettingParameters::runButton;
+
+				SettingParameters::runButton = button;
+				break;
+			default:
+				return;
+			}
+			operateChangeFlag = false;*/
+		}
+		return;
+	}
+}
+
+void Menu::KeyboardKey()
+{
+
+}
+
 void Menu::ScreenSettingProcess()
 {
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
@@ -571,6 +582,7 @@ void Menu::ScreenSettingProcess()
 		}
 		SetTexParam();
 	}
+
 	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_X))
 	{
 		migrate = true;
@@ -598,7 +610,7 @@ void Menu::EndCheckProcess()
 		SetTexParam();
 	}
 
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
