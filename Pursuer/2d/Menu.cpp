@@ -39,7 +39,7 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	if (!Sprite::LoadTexture(405, "operateSetting.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(406, "ScreenSetting.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(407, "upsideDown.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(408, "check.png")) { assert(0); return; }j
+	if (!Sprite::LoadTexture(408, "check.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(409, "flipLeftRight.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(410, "a.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(411, "cameraReset.png")) { assert(0); return; }
@@ -97,10 +97,10 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	upsideDown = Sprite::Create(407, { 295.0f, 200.0f });
 	check = Sprite::Create(408, { 403.0f, 196.0f });
 	flipLeftRight = Sprite::Create(409, { 655.0f, 200.0f });
+	check2 = Sprite::Create(408, { 720.0f, 390.0f });
 	cameraReset = Sprite::Create(411, { 620.0f, 300.0f });
 	action = Sprite::Create(412, { 240.0f, 400.0f });
 	changeRun = Sprite::Create(413, { 620.0f, 400.0f });
-	check2 = Sprite::Create(408, { 720.0f, 390.0f });
 	selectFrame = Sprite::Create(414, selectFramePos);
 	selectFrame->SetSize({ 148.0f, 87.0f });
 	dot = Sprite::Create(415, dotPos);
@@ -198,111 +198,115 @@ void Menu::Draw()
 	switch (menuState)
 	{
 	case Base:
-		setting->Draw();
 		setting->SetPosition({ 380.0f, 217.0f });
 		setting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		end->Draw();
+		setting->Draw();
 		end->SetPosition({ 380.0f, 436.0f });
 		end->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		selectFrame->Draw();
+		end->Draw();
 		selectFrame->SetPosition(selectFramePos);
 		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();
 		break;
+
 	case SettingSelect:
-		sensitivitySetting->Draw();
 		sensitivitySetting->SetPosition({ 380.0f, 217.0f });
 		sensitivitySetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		operateSetting->Draw();
+		sensitivitySetting->Draw();
 		operateSetting->SetPosition({ 380.0f, 326.5f });
 		operateSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		screenSetting->Draw();
-		screenSetting->SetPosition({ 380.0f, 436.0f });
+		operateSetting->Draw();
+		/*screenSetting->SetPosition({ 380.0f, 436.0f });
 		screenSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		selectFrame->Draw();
+		screenSetting->Draw();*/
 		selectFrame->SetPosition(selectFramePos);
 		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();
 		break;
 
 	case PadOperateSetting:
-		operateSetting->Draw();
+		operateSetting->SetPosition({ 380.0f, 217.0f });
 		operateSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		operateSetting->Draw();
 
-		upsideDown->Draw();
-		upsideDown->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		//ONの時のみチェックマークを描画
-		if (SettingParameters::reverseY == -1)
-		{
-			check->Draw();
-			check->SetPosition({ 403.0f, 196.0f });
-			check->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		}
+		//upsideDown->SetPosition({ 280.0f, 326.5f });
+		//upsideDown->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		//upsideDown->Draw();
+		////ONの時のみチェックマークを描画
+		//if (SettingParameters::reverseY == -1)
+		//{
+		//	check->SetPosition({ 480.0f, 323.5f });
+		//	check->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		//	check->Draw();
+		//}
 
-		flipLeftRight->Draw();
+		flipLeftRight->SetPosition({ 280.0f, 326.5f }); // normally { 580.0f, 326.5f }
 		flipLeftRight->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		flipLeftRight->Draw();
 
 		//ONの時のみチェックマークを描画
 		if (SettingParameters::reverseX == -1)
 		{
-			check2->Draw();
-			check2->SetPosition({ 763.0f, 196.0f });
+			check2->SetPosition({ 480.0f, 323.5f }); // normally { 773.0f, 320.5f }
 			check2->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+			check2->Draw();
 		}
 
-		cameraReset->Draw();
-		cameraReset->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		//cameraReset->Draw();
+		//cameraReset->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		//cameraResetOperate->DrawSprite(operateTexNames[SettingParam::resetButton], { 830,300 }, 0, { 1,1 }, { 1,1,1,texAlpha });
-		action->Draw();
-		action->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		//action->Draw();
+		//action->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		//actionOperate->DrawSprite(operateTexNames[SettingParam::airSlideButton], { 400,400 }, 0, { 1,1 }, { 1,1,1,texAlpha });
-		changeRun->Draw();
-		changeRun->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		//changeRun->Draw();
+		//changeRun->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
 		//changeRunOperate->DrawSprite(operateTexNames[SettingParam::runButton], { 830,400 }, 0, { 1,1 }, { 1,1,1,texAlpha });
-		selectFrame->Draw();
-		selectFrame->SetPosition(selectFramePos);
+		/*selectFrame->SetPosition(selectFramePos);
 		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();*/
 		break;
 
 	case PadSensitiveSetting:
-		sensitivitySetting->Draw();
 		sensitivitySetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		dot->Draw();
+		sensitivitySetting->Draw();
 		dot->SetPosition(dotPos);
 		dot->SetSize({ 27.0f, 27.0f });
 		dot->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		sensitiveSettingBar->Draw();
+		dot->Draw();
 		sensitiveSettingBar->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		sensitiveSettingBar->Draw();
 		break;
 
 	case ScreenSetting:
-		screenSetting->Draw();
 		screenSetting->SetPosition({ 380.0f, 217.0f });
 		screenSetting->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		viewCollision->Draw();
+		screenSetting->Draw();
 		viewCollision->SetPosition({ 380.0f, 436.0f });
 		viewCollision->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		viewCollision->Draw();
 
 		//ONの時のみチェックマークを描画
 		if (SettingParameters::viewCollision)
 		{
-			check->Draw();
 			check->SetPosition({ 845.0f, 436.0f });
 			check->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+			check->Draw();
 		}
 		break;
 
 	case EndCheck:
-		endCheck->Draw();
 		endCheck->SetPosition({ 300.0f, 180.0f });
 		endCheck->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		yes->Draw();
+		endCheck->Draw();
 		yes->SetPosition({ 380.0f, 380.0f });
 		yes->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		no->Draw();
+		yes->Draw();
 		no->SetPosition({ 710.0f, 380.0f });
 		no->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
-		selectFrame->Draw();
+		no->Draw();
 		selectFrame->SetPosition(selectFramePos);
 		selectFrame->SetColor({ 1.0f, 1.0f, 1.0f, texAlpha });
+		selectFrame->Draw();
 		break;
 
 	default:
@@ -357,7 +361,7 @@ void Menu::Setting()
 	{
 		if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TriggerKey(DIK_S))
 		{
-			if (select < 2)
+			if (select < 1) // Normally is 2
 				select++;
 		}
 		if (input->TriggerLStickUp() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_UP) || input->TriggerKey(DIK_W))
@@ -367,6 +371,7 @@ void Menu::Setting()
 		}
 		SetTexParam();
 	}
+
 	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
@@ -492,17 +497,17 @@ void Menu::OperateSetting()
 		|| input->TriggerLStickRight() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_RIGHT)
 		|| input->TriggerKey(DIK_A) || input->TriggerKey(DIK_D) || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S))
 	{
-		if (input->TriggerLStickRight() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_RIGHT) || input->TriggerKey(DIK_D))
-		{
-			if (select < 5)
-				select++;
-		}
-		if (input->TriggerLStickLeft() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_LEFT) || input->TriggerKey(DIK_A))
-		{
-			if (select > 0)
-				select--;
-		}
-		if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TriggerKey(DIK_S))
+		//if (input->TriggerLStickRight() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_RIGHT) || input->TriggerKey(DIK_D))
+		//{
+		//	if (select < 5) // Default 5
+		//		select++;
+		//}
+		//if (input->TriggerLStickLeft() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_LEFT) || input->TriggerKey(DIK_A))
+		//{
+		//	if (select > 0)
+		//		select--;
+		//}
+		/*if (input->TriggerLStickDown() || input->TriggerControllerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TriggerKey(DIK_S))
 		{
 			if (select < 5)
 			{
@@ -519,10 +524,10 @@ void Menu::OperateSetting()
 				if (select < 0)
 					select = 0;
 			}
-		}
+		}*/
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_SPACE))
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
@@ -543,7 +548,8 @@ void Menu::OperateSetting()
 		}
 		SetTexParam();
 	}
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_Z))
+
+	if (input->TriggerControllerButton(XINPUT_GAMEPAD_B) || input->TriggerKey(DIK_X))
 	{
 		nextMenuState = SettingSelect;
 		migrate = true;
@@ -680,10 +686,14 @@ void Menu::SetTexParam()
 		switch (select)
 		{
 		case 0:
-			selectFramePos = { 403,200 };
+			selectFramePos = { 270.0f, 316.5f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 285.0f, 73.0f });
 			break;
 		case 1:
-			selectFramePos = { 763,200 };
+			selectFramePos = { 570.0f, 316.5f };
+			selectFrame->SetPosition(selectFramePos);
+			selectFrame->SetSize({ 285.0f, 73.0f });
 			break;
 		case 2:
 			selectFramePos = { 400,300 };
@@ -752,7 +762,14 @@ void Menu::Migrate()
 	if (migrateCounter >= 30.0f && !migrated)
 	{
 		menuState = nextMenuState;
-		select = 0;
+		if (menuState == PadOperateSetting)
+		{
+			select = 1;
+		}
+		else
+		{
+			select = 0;
+		}
 		migrated = true;
 		SetTexParam();
 	}

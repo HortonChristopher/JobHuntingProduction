@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "DeltaTime.h"
+#include "SettingParameters.h"
 
 /// <summary>
 /// デバッグ用カメラ

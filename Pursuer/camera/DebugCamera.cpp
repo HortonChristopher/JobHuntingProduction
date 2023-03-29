@@ -104,14 +104,14 @@ void DebugCamera::Update()
 
 		if (input->PushMouseRight())
 		{
-			dy = mouseMove.lX * scaleY;
+			dy = mouseMove.lX * scaleY * SettingParameters::GetReverseX();
 			//dx = mouseMove.lY * scaleX;
 		}
-		if (input->PushRStickLeft() || input->PushRStickRight())
+		else if (input->PushRStickLeft() || input->PushRStickRight())
 		{
-			dy = stickMove.x * -scaleY * 10.0f;
+			dy = (stickMove.x * -scaleY * 10.0f) * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
 		}
-		if (input->PushRStickUp() || input->PushRStickDown())
+		else if (input->PushRStickUp() || input->PushRStickDown())
 		{
 			//dx = stickMove.y * -scaleX * 10.0f;
 		}
