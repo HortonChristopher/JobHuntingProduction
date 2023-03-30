@@ -392,7 +392,7 @@ void BaseArea::Update()
 			float hypotenuse = sqrt((x2 * x2) + (y2 * y2));
 			float radians = atan2(y2, x2);
 			float degrees = XMConvertToDegrees(radians);
-			baseAreaEnemyFBX[i]->SetRotation({ baseAreaEnemyFBX[i]->GetRotation().x, -degrees + 90.0f, baseAreaEnemyFBX[i]->GetRotation().z});
+			baseAreaEnemyFBX[i]->SetRotation({ baseAreaEnemyFBX[i]->GetRotation().x, -degrees + 90.0f, baseAreaEnemyFBX[i]->GetRotation().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse),
 											   baseAreaEnemyFBX[i]->GetPosition().y,
 											   baseAreaEnemyFBX[i]->GetPosition().z + 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y2 / hypotenuse) });
@@ -492,6 +492,12 @@ void BaseArea::Update()
 		if (baseAreaEnemyFBX[i]->landingParticles)
 		{
 			ParticleCreation(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 30.0f);
+		}
+
+		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 
+			|| baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 2)
+		{
+			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 30, 4.0f, 10.0f);
 		}
 	}
 #pragma endregion
