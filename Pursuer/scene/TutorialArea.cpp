@@ -26,8 +26,8 @@ TutorialArea::~TutorialArea()
 	safe_delete(skydomeOBJ);
 	safe_delete(skydomeMODEL);
 	safe_delete(tutorialTextFrameSPRITE);
-	for (int i = 0; i < 16; i++) { safe_delete(tutorialTextSPRITE[i]); }
-	for (int i = 0; i < 2; i++) { safe_delete(tutorialMissionSPRITE[i]); }
+	for (int i = 0; i < 26; i++) { safe_delete(tutorialTextSPRITE[i]); }
+	for (int i = 0; i < 4; i++) { safe_delete(tutorialMissionSPRITE[i]); }
 	safe_delete(playerFBX);
 	safe_delete(playerPositionOBJ);
 	safe_delete(enemyFBX);
