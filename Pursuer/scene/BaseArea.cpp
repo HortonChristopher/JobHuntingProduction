@@ -978,8 +978,8 @@ void BaseArea::Update()
 	debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
 #pragma endregion
 
-	std::array<Vector2, 4> enemyHPPosition;
-	std::array<Vector2, 4> enemyHPPositionFrame;
+	//std::array<Vector2, 4> enemyHPPosition;
+	//std::array<Vector2, 4> enemyHPPositionFrame;
 
 	//for (int i = 0; i < numberOfEnemiesTotal; i++)
 	//{
@@ -1065,7 +1065,8 @@ void BaseArea::Update()
 					continue;
 				}
 
-				if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[j]->GetPosition(), 4.0f, 4.0f))
+				if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[j]->GetPosition(), 4.0f, 4.0f)
+					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
 				{
 					float x = (baseAreaEnemyFBX[i]->GetPosition().x - baseAreaEnemyFBX[j]->GetPosition().x);
 					float z = (baseAreaEnemyFBX[i]->GetPosition().z - baseAreaEnemyFBX[j]->GetPosition().z);
