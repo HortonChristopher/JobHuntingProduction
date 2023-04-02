@@ -26,7 +26,7 @@ TutorialArea::~TutorialArea()
 	safe_delete(skydomeOBJ);
 	safe_delete(skydomeMODEL);
 	safe_delete(tutorialTextFrameSPRITE);
-	for (int i = 0; i < 26; i++) { safe_delete(tutorialTextSPRITE[i]); }
+	for (int i = 0; i < numberOfTutorialTextSprites; i++) { safe_delete(tutorialTextSPRITE[i]); }
 	for (int i = 0; i < 4; i++) { safe_delete(tutorialMissionSPRITE[i]); }
 	safe_delete(playerFBX);
 	safe_delete(playerPositionOBJ);
@@ -161,7 +161,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	loadingProgress += 10.0f;
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
-	for (int i = 0; i < 26; i++)
+	for (int i = 0; i < numberOfTutorialTextSprites; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
 	}
