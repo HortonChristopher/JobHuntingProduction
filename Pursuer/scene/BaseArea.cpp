@@ -724,7 +724,8 @@ void BaseArea::Update()
 			{
 				for (int i = 0; i < numberOfEnemiesTotal; i++)
 				{
-					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange) && baseAreaEnemyAliveBOOL[i] == true)
+					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange) && baseAreaEnemyAliveBOOL[i] == true
+						&& (abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) <= 4.0f))
 					{
 						baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
 						if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
