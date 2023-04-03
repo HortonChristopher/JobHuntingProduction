@@ -817,7 +817,7 @@ void TutorialArea::Update()
 		tutorialMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.24f + 165.0f, playerFBX->GetPosition().z * 0.24f + 545.0f });
 		tutorialMinimapEnemySPRITE->SetPosition({ enemyFBX->GetPosition().x * 0.24f + 165.0f, enemyFBX->GetPosition().z * 0.24f + 545.0f });
 
-		if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && playerFBX->stamina > 0.0f)
+		if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && playerFBX->stamina > 0.0f)
 		{
 			ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, 10, -1.0f, 1.0f);
 		}

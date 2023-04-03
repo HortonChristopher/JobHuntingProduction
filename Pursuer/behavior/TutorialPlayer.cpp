@@ -366,7 +366,7 @@ void TutorialPlayer::Update()
 				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
 				{
-					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f && tutorialPart > 1 || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f && tutorialPart > 1)
+					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f && tutorialPart > 1 || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f && tutorialPart > 1)
 					{
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -407,7 +407,7 @@ void TutorialPlayer::Update()
 				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 				{
-					if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+					/*if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 					{
 						if (input->PushKey(DIK_A) || input->PushLStickLeft())
 						{
@@ -429,7 +429,8 @@ void TutorialPlayer::Update()
 					else
 					{
 						enumStatus = RUN;
-					}
+					}*/
+					enumStatus = RUN;
 				}
 			}
 		}

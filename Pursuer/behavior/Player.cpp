@@ -411,7 +411,7 @@ void Player::Update()
 				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 				{
-					if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
+					/*if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
 					{
 						if (input->PushKey(DIK_A) || input->PushLStickLeft())
 						{
@@ -433,7 +433,8 @@ void Player::Update()
 					else
 					{
 						enumStatus = RUN;
-					}
+					}*/
+					enumStatus = RUN;
 				}
 			}
 		}
