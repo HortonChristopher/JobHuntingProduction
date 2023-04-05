@@ -21,6 +21,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 	bool Update();
 	void Draw();
+	const int GetMenuState() { return menuState; }
 
 private:
 	void BaseMenu();

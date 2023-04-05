@@ -258,7 +258,8 @@ void GameScene::Update()
 		break;
 	}
 
-	if (input->TriggerKey(DIK_ESCAPE) || input->TriggerControllerButton(XINPUT_GAMEPAD_START))
+	if (input->TriggerKey(DIK_ESCAPE) || input->TriggerControllerButton(XINPUT_GAMEPAD_START)
+		|| input->TriggerKey(DIK_X) && menu->GetMenuState() == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_START) && menu->GetMenuState() == 0)
 	{
 		if (pause)
 		{
