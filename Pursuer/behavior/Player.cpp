@@ -376,12 +376,14 @@ void Player::Update()
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						enumStatus = RUN;
 					}
 					else
 					{
 						position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						enumStatus = WALK;
 					}
 				}
 
@@ -434,7 +436,6 @@ void Player::Update()
 					{
 						enumStatus = RUN;
 					}*/
-					enumStatus = RUN;
 				}
 			}
 		}
