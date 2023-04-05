@@ -375,7 +375,7 @@ void Player::Update()
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						stamina -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 					}
 					else
 					{
@@ -449,7 +449,7 @@ void Player::Update()
 		{
 			if (stamina < 100.0f)
 			{
-				stamina += 10.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				stamina += 25.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 		}
 	}

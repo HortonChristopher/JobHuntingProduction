@@ -107,16 +107,22 @@ void GameScene::Update()
 		if (tutorialOrBase == 0)
 		{
 			std::thread th1(&GameScene::thread1, this);
-			std::thread th3(&GameScene::thread3, this);
-			th3.join();
+			while (loadingScreen->percentage < 100.0f)
+			{
+				loadingScreen->addLoadingPercent(40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+				loadingScreen->Update();
+			}
 			th1.join();
 			showLoading = false;
 		}
 		else if (tutorialOrBase == 1)
 		{
 			std::thread th2(&GameScene::thread2, this);
-			std::thread th3(&GameScene::thread3, this);
-			th3.join();
+			while (loadingScreen->percentage < 100.0f)
+			{
+				loadingScreen->addLoadingPercent(40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+				loadingScreen->Update();
+			}
 			th2.join();
 			showLoading = false;
 		}
@@ -142,11 +148,6 @@ void GameScene::Update()
 			{
 				tutorialArea->Update();
 			}
-		}
-
-		if (loadingProgress > 0.0f)
-		{
-			loadingProgress = 0.0f;
 		}
 
 		if (tutorialArea->deletion)
@@ -181,11 +182,6 @@ void GameScene::Update()
 			{
 				baseArea->Update();
 			}
-		}
-
-		if (loadingProgress > 0.0f)
-		{
-			loadingProgress = 0.0f;
 		}
 
 		if (baseArea->deletion)
@@ -285,14 +281,7 @@ void GameScene::Draw()
 	switch (page)
 	{
 	case 0:
-		if (showLoading)
-		{
-			loadingScreen->Draw();
-		}
-		else
-		{
-			titleScreen->Draw();
-		}
+		titleScreen->Draw();
 		break;
 	case 1:
 		loadingScreen->Draw();
@@ -321,7 +310,7 @@ void GameScene::Draw()
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-	Sprite::PreDraw(cmdList);
+	//Sprite::PreDraw(cmdList);
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
@@ -351,7 +340,7 @@ void GameScene::Draw()
 	}*/
 	
 	// スプライト描画後処理
-	Sprite::PostDraw();
+	//Sprite::PostDraw();
 #pragma endregion
 }
 
@@ -377,11 +366,7 @@ void GameScene::thread2()
 
 void GameScene::thread3()
 {
-	while (loadingProgress < 100.0f)
-	{
-		loadingScreen->addLoadingPercent(loadingProgress);
-		loadingScreen->Update(loadingPercent);
-	}
+	
 }
 
 void GameScene::addLoadingPercent(float percent)

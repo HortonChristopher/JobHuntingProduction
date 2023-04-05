@@ -112,6 +112,11 @@ private:
 
 	// Mission sprite for base area
 	Sprite* baseAreaMissionSPRITE = nullptr;
+	bool startMissionSpriteMovement = false;
+	float movementStartZPosition = 550.0f;
+	bool xSet = false;
+	bool ySet = false;
+	bool sizeSet = false;
 
 	// HP and Stamina Bar Sprites
 	Sprite* HPBarSPRITE = nullptr;
@@ -123,6 +128,11 @@ private:
 	Sprite* healKeyboardSPRITE = nullptr;
 	Sprite* loadingBarSPRITE = nullptr;
 	Sprite* loadingBarFrameSPRITE = nullptr;
+	float staminaSpriteAlpha = 1.0f;
+	float staminaSpriteInteger = 0.8f;
+	float blinkingStaminaAlpha = 1.0f;
+	float blinkingStaminaSpriteInteger = 2.4f;
+	bool staminaBlinkingEffect = false;
 
 	// Player aspects
 	Player* playerFBX = nullptr;

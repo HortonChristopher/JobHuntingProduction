@@ -185,9 +185,9 @@ public:
 	bool isPlayerDead = false;
 	bool baseAreaOpeningCutscene = true;
 	float stamina = 100.0f;
-	float hp = 10.0f; // Base of 10.0f
+	float hp = 25.0f; // Base of 25.0f
 	int attackCombo = 0; // Which attack the animation stops at
-	int healRemaining = 2;
+	int healRemaining = 4;
 	bool healed = false;
 	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} }};
 	bool ableToDamage = false;
