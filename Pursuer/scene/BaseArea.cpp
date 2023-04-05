@@ -7,7 +7,7 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 extern float loadingProgress;
-extern std::atomic<float> loadingPercent;
+extern std::atomic<int> loadingPercent;
 
 extern int keyOrMouse;
 extern float degreeTransfer = 0.0f;
@@ -96,15 +96,22 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	Player::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	std::thread th1(&BaseArea::thread1, this); // 2D Initialization
+	th1.detach();
 	std::thread th2(&BaseArea::thread2, this); // 3D Initialization (other than touchable objects)
+	th2.detach();
 	std::thread th3(&BaseArea::thread3, this); // Model and Touchable Object Initialization
-	th1.join();
-	th2.join();
-	th3.join();
+	th3.detach();
+	//th1.join();
+	//th2.join();
+	//th3.join();
+
+	while (loadingPercent.load() < 10)
+	{
+
+	}
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
@@ -1491,8 +1498,7 @@ void BaseArea::thread1()
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextTexNumber);
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	// Sprite texture loading
 	if (!Sprite::LoadTexture(1, "HPBar.png")) { assert(0); return; } // HP bar texture
@@ -1511,8 +1517,7 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(15, "HealK.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(16, "HealC.png")) { assert(0); return; } // Heal Graphic
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	// Sprite generation
 	HPBarSPRITE = Sprite::Create(1, { 25.0f, 25.0f });
@@ -1536,8 +1541,7 @@ void BaseArea::thread1()
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 }
 
 void BaseArea::thread2()
@@ -1563,8 +1567,7 @@ void BaseArea::thread2()
 		baseAreaEnemyFBX[i]->SetHomePosition({ baseAreaEnemySpawnXMFLOAT3[i].x, baseAreaEnemySpawnXMFLOAT3[i].z });
 	}
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	// Camera initial values
 	camera->SetTarget(playerFBX->GetPosition());
@@ -1585,8 +1588,7 @@ void BaseArea::thread2()
 		attackRangeOBJ[i]->SetScale({ 15, 1, 15 });
 	}
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	// Vision range initial values
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
@@ -1604,8 +1606,7 @@ void BaseArea::thread2()
 		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 	}
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 }
 
 void BaseArea::thread3()
@@ -1619,8 +1620,7 @@ void BaseArea::thread3()
 	attackRangeMODEL = Model::CreateFromOBJ("yuka");
 	visionRangeMODEL = Model::CreateFromOBJ("yuka");
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	// Setting 3D model
 	skydomeOBJ->SetModel(skydomeMODEL);
@@ -1635,8 +1635,7 @@ void BaseArea::thread3()
 	tutorialGroundOBJ = TouchableObject::Create(tutorialGroundMODEL);
 	extendedGroundOBJ = TouchableObject::Create(extendedGroundMODEL);
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 
 	// Ground scale
 	groundOBJ->SetScale({ 2,0.5f,2 });
@@ -1650,8 +1649,7 @@ void BaseArea::thread3()
 
 	srand((unsigned int)time(NULL));
 
-	loadingProgress += 10.0f;
-	//Loading::addLoadingPercent(10.0f);
+	loadingPercent++;
 }
 
 void BaseArea::thread4()

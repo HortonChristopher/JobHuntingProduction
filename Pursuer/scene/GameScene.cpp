@@ -13,8 +13,9 @@ extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
-extern float loadingProgress = 0.0f;
-extern std::atomic<float> loadingPercent{0.0f};
+extern float loadingProgress;
+extern std::atomic<int> loadingPercent(0);
+extern std::atomic<bool> loadingFinished(false);
 extern bool change = false;
 
 extern int keyOrMouse = 0; // 0 = keyboard, 1 = mouse
@@ -69,7 +70,8 @@ void GameScene::Update()
 		menu = nullptr;
 		pause = false;
 		titleScreen->Update();
-		loadingProgress = 0.1f;
+		loadingPercent.store(0);
+		loadingFinished.store(false);
 
 		if (titleScreen->gameStart)
 		{
@@ -118,12 +120,11 @@ void GameScene::Update()
 		else if (tutorialOrBase == 1)
 		{
 			std::thread th2(&GameScene::thread2, this);
-			while (loadingScreen->percentage < 100.0f)
+			th2.detach();
+			while (loadingFinished.load() == false)
 			{
-				loadingScreen->addLoadingPercent(40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
 				loadingScreen->Update();
 			}
-			th2.join();
 			showLoading = false;
 		}
 
@@ -367,7 +368,7 @@ void GameScene::thread2()
 
 void GameScene::thread3()
 {
-	
+	loadingScreen->Update();
 }
 
 void GameScene::addLoadingPercent(float percent)

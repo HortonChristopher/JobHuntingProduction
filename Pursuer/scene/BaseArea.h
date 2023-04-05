@@ -113,7 +113,7 @@ private:
 	// Mission sprite for base area
 	Sprite* baseAreaMissionSPRITE = nullptr;
 	bool startMissionSpriteMovement = false;
-	float movementStartZPosition = 550.0f;
+	float movementStartZPosition = 600.0f;
 	bool xSet = false;
 	bool ySet = false;
 	bool sizeSet = false;
