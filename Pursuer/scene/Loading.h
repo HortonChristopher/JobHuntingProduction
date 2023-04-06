@@ -55,11 +55,12 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio);
 
-	void Update(float percent);
+	void Update();
 
 	void Draw();
 
 	void addLoadingPercent(float percent);
+	void subtractLoadingPercent(float percent);
 private:
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -69,5 +70,6 @@ private:
 	Sprite* loadingScreenSprite = nullptr;
 	Sprite* loadingScreenSpriteBar = nullptr;
 
-	float percentage = 0.0f;
+public:
+	float percentage = 0.1f;
 };

@@ -1,7 +1,10 @@
 #include "Loading.h"
 
-extern float loadingProgress;
-extern std::atomic<float> loadingPercent;
+extern std::atomic<int> loadingPercent;
+extern std::atomic<int> percent(0);
+extern std::atomic<bool> loadingFinished;
+extern float loadingProgress = 0.1f;
+extern DeltaTime* deltaTime;
 
 Loading::Loading()
 {
@@ -35,25 +38,25 @@ void Loading::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	if (!Sprite::LoadTexture(300, "LoadingScreen.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(299, "LoadingScreenBar.png")) { assert(0); return; }
 
-	loadingPercent = 0.0f;
+	loadingPercent.store(0);
 
 	loadingScreenSprite = Sprite::Create(300, { 0.0f, 0.0f });
 	loadingScreenSpriteBar = Sprite::Create(299, { 299.0f, 364.0f });
-	loadingScreenSpriteBar->SetSize({ /*percentage * 6.82f*/682.0f, 54.0f});
+	loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 6.82f, 54.0f});
 }
 
-void Loading::Update(float percent)
+void Loading::Update()
 {
-	if (loadingProgress < 0.1f)
+	//percentage = loadingProgress;
+	//percentage += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	if (loadingPercent.load() >= 10)
 	{
-		loadingProgress = 0.1f;
-	}
-	if (loadingProgress > 100.0f)
-	{
-		loadingProgress = 100.0f;
+		loadingPercent.store(10);
+		loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 68.2f, 54.0f });
+		loadingFinished.store(true);
 	}
 
-	loadingScreenSpriteBar->SetSize({ percentage * 6.82f, 54.0f });
+	loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 68.2f, 54.0f });
 
 	//Debug Start
 	/*char msgbuf[256];
@@ -111,8 +114,12 @@ void Loading::Draw()
 
 void Loading::addLoadingPercent(float percent)
 {
-	/*auto current = loadingPercent.load();
-	while (!loadingPercent.compare_exchange_weak(current, current + percent))
-		;*/
-	percentage = percent;
+	percentage += percent;
+	//Update();
+}
+
+void Loading::subtractLoadingPercent(float percent)
+{
+	percentage -= percent;
+	//Update();
 }
