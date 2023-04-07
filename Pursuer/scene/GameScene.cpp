@@ -109,7 +109,7 @@ void GameScene::Update()
 		if (tutorialOrBase == 0)
 		{
 			std::thread th1(&GameScene::thread1, this);
-			while (loadingScreen->percentage < 100.0f)
+			while (loadingFinished.load() != true)
 			{
 				loadingScreen->addLoadingPercent(40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
 				loadingScreen->Update();

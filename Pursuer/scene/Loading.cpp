@@ -87,14 +87,14 @@ void Loading::Draw()
 #pragma endregion
 
 #pragma region 3DDrawing
-	//Object3d::PreDraw(cmdList);
+	Object3d::PreDraw(cmdList);
 
-	//// 3D Object Drawing
+	// 3D Object Drawing
 
-	//// Particle drawing
+	// Particle drawing
 	//particleMan->Draw(cmdList);
 
-	//Object3d::PostDraw();
+	Object3d::PostDraw();
 #pragma endregion
 
 #pragma region foregroundSpriteDrawing

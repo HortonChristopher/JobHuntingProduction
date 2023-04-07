@@ -446,7 +446,7 @@ void Player::Update()
 			enumStatus = DODGE;
 		}
 
-		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 		{
 			if (stamina < 100.0f)
 			{
