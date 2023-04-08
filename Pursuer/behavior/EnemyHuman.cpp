@@ -526,8 +526,20 @@ void EnemyHuman::Update()
 
 			position.x += x * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			position.z += z * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+			if (timer >= 120.0f)
+			{
+				timer = 0.0f;
+				midpoint.x = (objectPosition.x + position.x) / 2.0f;
+				midpoint.y = (objectPosition.z + position.z) / 2.0f;
+				twoEnemySurroundStage = 1;
+				break;
+			}
+
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count();
 			break;
 		case 1:
+			XMFLOAT2 nextPosition;
 			x = (objectPosition.x - position.x);
 			z = (objectPosition.z - position.z);
 			hypotenuse = sqrt((x * x) + (z * z));
