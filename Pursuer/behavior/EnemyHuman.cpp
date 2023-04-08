@@ -532,20 +532,25 @@ void EnemyHuman::Update()
 				timer = 0.0f;
 				midpoint.x = (objectPosition.x + position.x) / 2.0f;
 				midpoint.y = (objectPosition.z + position.z) / 2.0f;
+				nextDegree = objectRotation.y;
 				twoEnemySurroundStage = 1;
 				break;
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count();
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count());
 			break;
 		case 1:
 			XMFLOAT2 nextPosition;
-			x = (objectPosition.x - position.x);
-			z = (objectPosition.z - position.z);
+			nextPosition.x = sinf(nextDegree) * 60.0f;
+			nextPosition.y = cosf(nextDegree) * 60.0f;
+			x = (nextPosition.x - position.x);
+			z = (nextPosition.y - position.z);
 			hypotenuse = sqrt((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (x / hypotenuse);
+			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (z / hypotenuse);
 			break;
 		}
 		break;
