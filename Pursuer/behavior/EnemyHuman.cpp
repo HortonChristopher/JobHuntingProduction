@@ -512,17 +512,20 @@ void EnemyHuman::Update()
 		switch (twoEnemySurroundStage)
 		{
 		case 0:
-			XMFLOAT3 meetingPoint;
-			meetingPoint.x = objectPosition.x + cos(objectRotation.y) * 120.0f;
-			meetingPoint.z = objectPosition.z + sin(objectRotation.y) * 120.0f;
-			x = (objectPosition.x - position.x);
-			z = (objectPosition.z - position.z);
-			hypotenuse = ((x * x) + (z * z));
-			radians = atan2(z, x);
-			degrees = XMConvertToDegrees(radians);
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-			x = (objectPosition.x - position.x) / 120.0f;
-			z = (objectPosition.z - position.z) / 120.0f;
+			if (timer == 0.0f)
+			{
+				XMFLOAT3 meetingPoint;
+				meetingPoint.x = objectPosition.x + cos(objectRotation.y) * 120.0f;
+				meetingPoint.z = objectPosition.z + sin(objectRotation.y) * 120.0f;
+				x = (objectPosition.x - position.x);
+				z = (objectPosition.z - position.z);
+				hypotenuse = ((x * x) + (z * z));
+				radians = atan2(z, x);
+				degrees = XMConvertToDegrees(radians);
+				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				x = (objectPosition.x - position.x) / 120.0f;
+				z = (objectPosition.z - position.z) / 120.0f;
+			}
 
 			position.x += x * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			position.z += z * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -532,7 +535,8 @@ void EnemyHuman::Update()
 				timer = 0.0f;
 				midpoint.x = (objectPosition.x + position.x) / 2.0f;
 				midpoint.y = (objectPosition.z + position.z) / 2.0f;
-				nextDegree = objectRotation.y;
+				initialDegree = nextDegree = objectRotation.y;
+				surroundSpeed = 40.0f;
 				twoEnemySurroundStage = 1;
 				break;
 			}
@@ -551,6 +555,24 @@ void EnemyHuman::Update()
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 			position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (x / hypotenuse);
 			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (z / hypotenuse);
+
+			if (surroundSpeed < 80.0f)
+			{
+				surroundSpeed += 20.0f * (deltaTime->deltaTimeCalculated.count());
+			}
+			else
+			{
+				surroundSpeed = 80.0f;
+			}
+
+			if (nextDegree < initialDegree + 180.0f)
+			{
+				nextDegree += 60.0f * (deltaTime->deltaTimeCalculated.count());
+			}
+			else
+			{
+				nextDegree = initialDegree + 180.0f;
+			}
 			break;
 		}
 		break;
