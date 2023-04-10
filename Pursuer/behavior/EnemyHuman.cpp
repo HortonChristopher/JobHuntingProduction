@@ -556,13 +556,16 @@ void EnemyHuman::Update()
 			position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (x / hypotenuse);
 			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (z / hypotenuse);
 
-			if (surroundSpeed < 80.0f)
+			if (nextDegree > initialDegree + 90.0f)
 			{
-				surroundSpeed += 20.0f * (deltaTime->deltaTimeCalculated.count());
-			}
-			else
-			{
-				surroundSpeed = 80.0f;
+				if (surroundSpeed < 80.0f)
+				{
+					surroundSpeed += 20.0f * (deltaTime->deltaTimeCalculated.count());
+				}
+				else
+				{
+					surroundSpeed = 80.0f;
+				}
 			}
 
 			if (nextDegree < initialDegree + 180.0f)
