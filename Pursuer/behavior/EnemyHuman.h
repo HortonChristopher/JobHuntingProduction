@@ -211,6 +211,8 @@ protected:
 	float endAnimationDEBUG = 0.0f;
 
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 meetingPoint = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT2 nextPosition = { 0.0f, 0.0f };
 	XMFLOAT2 midpoint = { 0.0f, 0.0f };
 	float nextDegree = 0.0f;
 	float initialDegree = 0.0f;

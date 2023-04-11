@@ -514,49 +514,51 @@ void EnemyHuman::Update()
 		case 0:
 			if (timer == 0.0f)
 			{
-				XMFLOAT3 meetingPoint;
-				meetingPoint.x = objectPosition.x + cos(objectRotation.y) * 120.0f;
-				meetingPoint.z = objectPosition.z + sin(objectRotation.y) * 120.0f;
-				x = (objectPosition.x - position.x);
-				z = (objectPosition.z - position.z);
+				meetingPoint = { 0.0f, 0.0f, 0.0f };
+				meetingPoint.x = objectPosition.x + cos(objectRotation.y - 180.0f) * 120.0f;
+				meetingPoint.z = objectPosition.z + sin(objectRotation.y - 180.0f) * 120.0f;
+				x = (meetingPoint.x - position.x);
+				z = (meetingPoint.z - position.z);
 				hypotenuse = ((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-				x = (objectPosition.x - position.x) / 120.0f;
-				z = (objectPosition.z - position.z) / 120.0f;
+				x = (meetingPoint.x - position.x) / 120.0f;
+				z = (meetingPoint.z - position.z) / 120.0f;
 			}
 
-			position.x += x * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += x * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.z += z * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			SetPosition(position);
 
 			if (timer >= 120.0f)
 			{
 				timer = 0.0f;
+				nextPosition = { 0.0f, 0.0f };
 				midpoint.x = (objectPosition.x + position.x) / 2.0f;
 				midpoint.y = (objectPosition.z + position.z) / 2.0f;
-				initialDegree = nextDegree = objectRotation.y;
+				initialDegree = nextDegree = rotation.y;
 				surroundSpeed = 40.0f;
 				twoEnemySurroundStage = 1;
 				break;
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count());
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
-			XMFLOAT2 nextPosition;
-			nextPosition.x = sinf(nextDegree) * 60.0f;
-			nextPosition.y = cosf(nextDegree) * 60.0f;
+			nextPosition.x = midpoint.x + cosf(nextDegree) * (midpoint.x * 2.0f);
+			nextPosition.y = midpoint.y + sinf(nextDegree) * (midpoint.y * 2.0f);
 			x = (nextPosition.x - position.x);
 			z = (nextPosition.y - position.z);
 			hypotenuse = sqrt((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-			position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (x / hypotenuse);
-			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count()) / (z / hypotenuse);
+			position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			SetPosition(position);
 
-			if (nextDegree > initialDegree + 90.0f)
+			if (nextDegree > (initialDegree + 90.0f))
 			{
 				if (surroundSpeed < 80.0f)
 				{
@@ -568,13 +570,16 @@ void EnemyHuman::Update()
 				}
 			}
 
-			if (nextDegree < initialDegree + 180.0f)
+			if (nextDegree < (initialDegree + 180.0f))
 			{
-				nextDegree += 60.0f * (deltaTime->deltaTimeCalculated.count());
+				nextDegree += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 			else
 			{
 				nextDegree = initialDegree + 180.0f;
+				timer = 0.0f;
+				modelChange = true;
+				enumStatus = COOLDOWN;
 			}
 			break;
 		}
