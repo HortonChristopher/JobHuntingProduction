@@ -463,60 +463,73 @@ void BaseArea::Update()
 				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
 					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
 				{
-					/*int random = rand() % 10;
+					int random = rand() % 10;
 
-					if (random < 4)
+					if (random < 1)
 					{
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 					}
-					else if (random < 7)
+					else if (random < 2)
 					{
 						baseAreaEnemyFBX[i]->particleAttackStage = 0;
 						baseAreaEnemyFBX[i]->modelChange = true;
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
 					}
-					else
+					else if (random < 3)
 					{
 						baseAreaEnemyFBX[i]->landingAttackStage = 0;
 						baseAreaEnemyFBX[i]->modelChange = true;
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
-					}*/
-
-					baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
-					baseAreaEnemyFBX[i]->timer = 0.0f;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
-
-					if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT)
-					{
-						if (baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::CHARGEATTACK
-							&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::JETSTREAMATTACK
-							&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::ATTACK
-							&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::LANDINGATTACK
-							&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::PARTICLEATTACK
-							&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::DAMAGED
-							&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
-						{
-							baseAreaEnemyFBX[i + 1]->twoEnemySurroundStage = 0;
-							baseAreaEnemyFBX[i + 1]->timer = 0.0f;
-							baseAreaEnemyFBX[i + 1]->modelChange = true;
-							baseAreaEnemyFBX[i + 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
-						}
 					}
 					else
 					{
-						if (baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::CHARGEATTACK
-							&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::JETSTREAMATTACK
-							&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::ATTACK
-							&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::LANDINGATTACK
-							&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::PARTICLEATTACK
-							&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::DAMAGED
-							&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+						if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT)
 						{
-							baseAreaEnemyFBX[i - 1]->twoEnemySurroundStage = 0;
-							baseAreaEnemyFBX[i - 1]->timer = 0.0f;
-							baseAreaEnemyFBX[i - 1]->modelChange = true;
-							baseAreaEnemyFBX[i - 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+							if (baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::CHARGEATTACK
+								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::JETSTREAMATTACK
+								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::ATTACK
+								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::LANDINGATTACK
+								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::PARTICLEATTACK
+								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::DAMAGED
+								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+							{
+								baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
+								baseAreaEnemyFBX[i]->timer = 0.0f;
+								baseAreaEnemyFBX[i]->modelChange = true;
+								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+								baseAreaEnemyFBX[i + 1]->twoEnemySurroundStage = 0;
+								baseAreaEnemyFBX[i + 1]->timer = 0.0f;
+								baseAreaEnemyFBX[i + 1]->modelChange = true;
+								baseAreaEnemyFBX[i + 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+							}
+							else
+							{
+								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+							}
+						}
+						else
+						{
+							if (baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::CHARGEATTACK
+								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::JETSTREAMATTACK
+								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::ATTACK
+								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::LANDINGATTACK
+								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::PARTICLEATTACK
+								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::DAMAGED
+								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+							{
+								baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
+								baseAreaEnemyFBX[i]->timer = 0.0f;
+								baseAreaEnemyFBX[i]->modelChange = true;
+								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+								baseAreaEnemyFBX[i - 1]->twoEnemySurroundStage = 0;
+								baseAreaEnemyFBX[i - 1]->timer = 0.0f;
+								baseAreaEnemyFBX[i - 1]->modelChange = true;
+								baseAreaEnemyFBX[i - 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+							}
+							else
+							{
+								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+							}
 						}
 					}
 				}
