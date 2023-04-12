@@ -81,6 +81,7 @@ private: // 定数
 
 public:// 静的メンバ関数
 	static ParticleManager* GetInstance();
+	static const int maxTextures = 1024;
 
 public: // メンバ関数	
 	/// <summary>

@@ -259,19 +259,22 @@ void GameScene::Update()
 		break;
 	}
 
-	if (input->TriggerKey(DIK_ESCAPE) || input->TriggerControllerButton(XINPUT_GAMEPAD_START)
-		|| input->TriggerKey(DIK_X) && menu->GetMenuState() == 0 || input->TriggerControllerButton(XINPUT_GAMEPAD_START) && menu->GetMenuState() == 0)
+	if (page == 2 || page == 3)
 	{
-		if (pause)
+		if (input->TriggerKey(DIK_ESCAPE) || input->TriggerControllerButton(XINPUT_GAMEPAD_START)
+			|| input->TriggerKey(DIK_X) && menu->GetMenuState() == 0 && menu != nullptr || input->TriggerControllerButton(XINPUT_GAMEPAD_START) && menu->GetMenuState() == 0 && menu != nullptr)
 		{
-			menu->Initialize(dxCommon, input);
-			pause = false;
+			if (pause)
+			{
+				menu->Initialize(dxCommon, input);
+				pause = false;
+			}
+			else
+			{
+				pause = true;
+			}
+			return;
 		}
-		else
-		{
-			pause = true;
-		}
-		return;
 	}
 }
 

@@ -392,7 +392,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/Sprite/effect1.png", WIC_FLAGS_NONE,
+		L"Resources/Sprite/effect2.png", WIC_FLAGS_NONE, // effect1 is default
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		assert(0);
