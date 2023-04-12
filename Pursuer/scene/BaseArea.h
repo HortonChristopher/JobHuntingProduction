@@ -196,9 +196,12 @@ private:
 	float chargeAttackRange = 12.0f;
 	float chargeAttackDamage = 4.0f;
 	float chargeAttackKnockbackDistance = 120.0f;
+	float twoEnemySurroundRange = 18.0f;
+	float twoEnemySurroundDamage = 4.0f;
+	float twoEnemySurroundKnockbackDistance = 120.0f;
 	float knockbackInterval = 60.0f;
 	float knockbackMaxTime = 30.0f;
-
+	
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;

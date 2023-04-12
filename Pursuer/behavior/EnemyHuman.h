@@ -209,15 +209,16 @@ protected:
 	int yQuadrant = 0;
 
 	float endAnimationDEBUG = 0.0f;
-
+public:
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 meetingPoint = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT2 nextPosition = { 0.0f, 0.0f };
 	XMFLOAT2 midpoint = { 0.0f, 0.0f };
+	XMFLOAT2 circleRadius = { 0.0f, 0.0f };
+	float circleRadiusDecider = 0.0f;
 	float nextDegree = 0.0f;
 	float initialDegree = 0.0f;
-	float surroundSpeed = 40.0f;
-public:
+	float surroundSpeed = 60.0f;
 	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 landingAttackPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 frontPatrolPosition = { 0.0f, 0.0f, 0.0f };
