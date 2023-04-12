@@ -231,7 +231,7 @@ private:
 	bool attacking = false;
 	float attackTime = 0.0f;
 	int enemyDefeated = 0;
-	int clearCondition = 5;
+	int clearCondition = 6;
 	float yRotationOffset = 90.0f;
 
 	// Fade in-out sprite

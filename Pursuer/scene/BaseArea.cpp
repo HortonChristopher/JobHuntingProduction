@@ -613,7 +613,9 @@ void BaseArea::Update()
 				continue;
 			}
 
-			if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->debugJetAttacked == false)
+			if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK
+				&& baseAreaEnemyFBX[i]->debugJetAttacked == false
+				&& enemyDefeated <= (clearCondition - 2))
 			{
 				baseAreaEnemyFBX[i]->debugJetAttacked = true;
 				baseAreaEnemyFBX[i]->jetStreamAttackStage = 0;
@@ -1188,7 +1190,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region missionTracker
-	missionTracker << enemyDefeated << " / 5"
+	missionTracker << enemyDefeated << " / 6"
 		<< std::fixed << std::setprecision(0)
 		<< std::setw(2) << std::setfill('0');
 	if (!playerFBX->baseAreaOpeningCutscene && xSet && ySet && sizeSet)
