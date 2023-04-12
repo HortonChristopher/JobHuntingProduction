@@ -27,6 +27,7 @@ BaseArea::~BaseArea()
 	safe_delete(camera);
 	collisionManager = nullptr;
 	particleMan = nullptr;
+	particleManExplosion = nullptr;
 	debugText = nullptr;
 	safe_delete(HPBarSPRITE);
 	safe_delete(HPBarFrameSPRITE);
@@ -78,8 +79,8 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	collisionManager = CollisionManager::GetInstance();
 
 	// Particle Manager initialization/generation
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
+	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera, L"Resources/Sprite/effect1.png");
+	particleManExplosion = ParticleManager::Create(dxCommon->GetDevice(), camera, L"Resources/Sprite/effect2.png");
 
 	// Light Group Creation
 	lightGroup = LightGroup::Create();
@@ -132,6 +133,7 @@ void BaseArea::Update()
 {
 	lightGroup->Update();
 	particleMan->Update();
+	particleManExplosion->Update();
 	
 	// Debug Text string
 	std::ostringstream missionTracker;
@@ -554,7 +556,7 @@ void BaseArea::Update()
 
 		if (baseAreaEnemyFBX[i]->landingParticles)
 		{
-			ParticleCreation(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 30.0f);
+			ParticleCreationExplosion(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 30.0f);
 		}
 
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 
@@ -570,7 +572,7 @@ void BaseArea::Update()
 			{
 				if (baseAreaEnemyFBX[i]->nextDegree > (baseAreaEnemyFBX[i]->initialDegree + XMConvertToRadians(90.0f)))
 				{
-					ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 30, 4.0f, 30.0f);
+					ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 30, 4.0f, 30.0f);
 				}
 			}
 			else
@@ -1410,6 +1412,7 @@ void BaseArea::Draw()
 
 	// Particle drawing
 	particleMan->Draw(cmdList);
+	particleManExplosion->Draw(cmdList);
 
 	Object3d::PostDraw();
 #pragma endregion
@@ -1562,6 +1565,25 @@ void BaseArea::ParticleCreationEdge(float x, float y, float z, int life, float o
 
 		// ’Ç‰Á
 		particleMan->Add(life, pos, vel, acc, start_scale, 0.0f);
+	}
+}
+
+void BaseArea::ParticleCreationExplosion(float x, float y, float z, int life, float offset, float start_scale)
+{
+	for (int i = 0; i < 10; i++) {
+		XMFLOAT3 pos{};
+		pos.x = x;
+		pos.y = y + offset;
+		pos.z = z;
+
+		XMFLOAT3 vel{};
+		vel.x = vel.y = vel.z = 0.0f;
+
+		XMFLOAT3 acc{};
+		acc.y = 0.0f;
+
+		// ’Ç‰Á
+		particleManExplosion->Add(life, pos, vel, acc, start_scale, 0.0f);
 	}
 }
 

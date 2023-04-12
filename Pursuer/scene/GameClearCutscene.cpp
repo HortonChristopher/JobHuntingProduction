@@ -48,8 +48,7 @@ void GameClearCutscene::Initialize(DirectXCommon* dxCommon, Input* input, Audio*
 	collisionManager = CollisionManager::GetInstance();
 
 	// Particle Manager initialization/generation
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
+	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera, L"Resources/Sprite/effect1.png");
 
 	// Light Group Creation
 	lightGroup = LightGroup::Create();

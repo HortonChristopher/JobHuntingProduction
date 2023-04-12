@@ -80,7 +80,7 @@ private: // 定数
 	static const int vertexCount = 65536;		// 頂点数
 
 public:// 静的メンバ関数
-	static ParticleManager* GetInstance();
+	static ParticleManager* Create(ID3D12Device* device, Camera* camera, const wchar_t* filename);
 	static const int maxTextures = 1024;
 
 public: // メンバ関数	
@@ -88,7 +88,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <returns></returns>
-	void Initialize(ID3D12Device* device);
+	void Initialize(const wchar_t* filename);
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -132,7 +132,7 @@ public: // メンバ関数
 	/// テクスチャ読み込み
 	/// </summary>
 	/// <returns>成否</returns>
-	void LoadTexture();
+	void LoadTexture(const wchar_t* filename);
 
 	/// <summary>
 	/// モデル作成
@@ -167,7 +167,7 @@ private: // メンバ変数
 	// カメラ
 	Camera* camera = nullptr;
 private:
-	ParticleManager() = default;
+	ParticleManager(ID3D12Device* device, Camera* camera);
 	ParticleManager(const ParticleManager&) = delete;
 	~ParticleManager() = default;
 	ParticleManager& operator=(const ParticleManager&) = delete;
