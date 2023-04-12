@@ -219,6 +219,9 @@ public:
 	float nextDegree = 0.0f;
 	float initialDegree = 0.0f;
 	float surroundSpeed = 60.0f;
+	float nextDegreeAngle = 0.0f;
+	float distanceFloat = 0.0f;
+	float origDistanceFloat = 0.0f;
 	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 landingAttackPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 frontPatrolPosition = { 0.0f, 0.0f, 0.0f };

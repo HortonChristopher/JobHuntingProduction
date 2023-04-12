@@ -545,6 +545,9 @@ void EnemyHuman::Update()
 				circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
 				circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
 				initialDegree = nextDegree = radians;
+				distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
+				origDistanceFloat = distanceFloat;
+				nextDegreeAngle = 100.0f;
 				surroundSpeed = 120.0f;
 				twoEnemySurroundStage = 1;
 				break;
@@ -555,42 +558,44 @@ void EnemyHuman::Update()
 		case 1:
 			if (patrolStatus == FRONT)
 			{
-				if (nextDegree < (initialDegree + XMConvertToRadians(240.0f)))
+				if (nextDegree < (initialDegree + XMConvertToRadians(270.0f)))
 				{
 					midpoint.x = (objectPosition.x + position.x) / 2.0f;
 					midpoint.y = (objectPosition.z + position.z) / 2.0f;
 					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
 					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
-					if (circleRadius.x > circleRadius.y)
+					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
+					/*if (circleRadius.x > circleRadius.y)
 					{
 						circleRadiusDecider = circleRadius.x;
 					}
 					else
 					{
 						circleRadiusDecider = circleRadius.y;
-					}
+					}*/
 				}
 			}
 			else
 			{
-				if (nextDegree > (initialDegree - XMConvertToRadians(240.0f)))
+				if (nextDegree > (initialDegree - XMConvertToRadians(270.0f)))
 				{
 					midpoint.x = (objectPosition.x + position.x) / 2.0f;
 					midpoint.y = (objectPosition.z + position.z) / 2.0f;
 					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
 					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
-					if (circleRadius.x > circleRadius.y)
+					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
+					/*if (circleRadius.x > circleRadius.y)
 					{
 						circleRadiusDecider = circleRadius.x;
 					}
 					else
 					{
 						circleRadiusDecider = circleRadius.y;
-					}
+					}*/
 				}
 			}
-			nextPosition.x = midpoint.x + cosf(nextDegree) * (circleRadiusDecider);
-			nextPosition.y = midpoint.y + sinf(nextDegree) * (circleRadiusDecider);
+			nextPosition.x = midpoint.x + cosf(nextDegree) * (distanceFloat);
+			nextPosition.y = midpoint.y + sinf(nextDegree) * (distanceFloat);
 			x = (nextPosition.x - position.x);
 			z = (nextPosition.y - position.z);
 			hypotenuse = sqrtf((x * x) + (z * z));
