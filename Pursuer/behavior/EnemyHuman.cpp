@@ -560,19 +560,19 @@ void EnemyHuman::Update()
 
 			if (nextDegree > (initialDegree + 90.0f))
 			{
-				if (surroundSpeed < 80.0f)
+				if (surroundSpeed < 100.0f)
 				{
 					surroundSpeed += 20.0f * (deltaTime->deltaTimeCalculated.count());
 				}
 				else
 				{
-					surroundSpeed = 80.0f;
+					surroundSpeed = 100.0f;
 				}
 			}
 
 			if (nextDegree < (initialDegree + 180.0f))
 			{
-				nextDegree += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				nextDegree += 1.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 			else
 			{
