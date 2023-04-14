@@ -34,13 +34,20 @@ const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
 	return result;
 }
 
-ParticleManager * ParticleManager::GetInstance()
+ParticleManager* ParticleManager::Create(ID3D12Device* device, Camera* camera, const wchar_t* filename)
 {
-	static ParticleManager instance;
-	return &instance;
+	ParticleManager* partMan = new ParticleManager(device, camera);
+	if (partMan == nullptr) {
+		return nullptr;
+	}
+
+	// 初期化
+	partMan->Initialize(filename);
+
+	return partMan;
 }
 
-void ParticleManager::Initialize(ID3D12Device* device)
+void ParticleManager::Initialize(const wchar_t* filename)
 {
 	// nullptrチェック
 	assert(device);
@@ -56,7 +63,7 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	InitializeGraphicsPipeline();
 
 	// テクスチャ読み込み
-	LoadTexture();
+	LoadTexture(filename);
 
 	// モデル生成
 	CreateModel();
@@ -383,7 +390,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	}
 }
 
-void ParticleManager::LoadTexture()
+void ParticleManager::LoadTexture(const wchar_t* filename)
 {
 	HRESULT result = S_FALSE;
 
@@ -392,7 +399,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/Sprite/effect1.png", WIC_FLAGS_NONE,
+		filename, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		assert(0);
@@ -472,4 +479,10 @@ void ParticleManager::CreateModel()
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
 	vbView.SizeInBytes = sizeof(VertexPos)*vertexCount;
 	vbView.StrideInBytes = sizeof(VertexPos);
+}
+
+ParticleManager::ParticleManager(ID3D12Device* device, Camera* camera)
+{
+	this->device = device;
+	this->camera = camera;
 }

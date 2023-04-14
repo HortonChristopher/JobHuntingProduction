@@ -517,18 +517,23 @@ void EnemyHuman::Update()
 				meetingPoint = { 0.0f, 0.0f, 0.0f };
 				meetingPoint.x = objectPosition.x + cos(objectRotation.y - 180.0f) * 120.0f;
 				meetingPoint.z = objectPosition.z + sin(objectRotation.y - 180.0f) * 120.0f;
-				x = (meetingPoint.x - position.x);
-				z = (meetingPoint.z - position.z);
-				hypotenuse = ((x * x) + (z * z));
+				x = (0.0f - position.x);
+				if (patrolStatus == FRONT)
+				{
+					z = (10.0f - position.z);
+				}
+				else
+				{
+					z = (-10.0f - position.z);
+				}
+				hypotenuse = sqrtf((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-				x = (meetingPoint.x - position.x) / 120.0f;
-				z = (meetingPoint.z - position.z) / 120.0f;
 			}
 
-			position.x += x * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z += 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
 			SetPosition(position);
 
 			if (timer >= 120.0f)
@@ -537,8 +542,13 @@ void EnemyHuman::Update()
 				nextPosition = { 0.0f, 0.0f };
 				midpoint.x = (objectPosition.x + position.x) / 2.0f;
 				midpoint.y = (objectPosition.z + position.z) / 2.0f;
-				initialDegree = nextDegree = rotation.y;
-				surroundSpeed = 40.0f;
+				circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
+				circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
+				initialDegree = nextDegree = radians;
+				distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
+				origDistanceFloat = distanceFloat;
+				nextDegreeAngle = 100.0f;
+				surroundSpeed = 120.0f;
 				twoEnemySurroundStage = 1;
 				break;
 			}
@@ -546,11 +556,49 @@ void EnemyHuman::Update()
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
-			nextPosition.x = midpoint.x + cosf(nextDegree) * (midpoint.x * 2.0f);
-			nextPosition.y = midpoint.y + sinf(nextDegree) * (midpoint.y * 2.0f);
+			if (patrolStatus == FRONT)
+			{
+				if (nextDegree < (initialDegree + XMConvertToRadians(270.0f)))
+				{
+					midpoint.x = (objectPosition.x + position.x) / 2.0f;
+					midpoint.y = (objectPosition.z + position.z) / 2.0f;
+					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
+					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
+					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
+					/*if (circleRadius.x > circleRadius.y)
+					{
+						circleRadiusDecider = circleRadius.x;
+					}
+					else
+					{
+						circleRadiusDecider = circleRadius.y;
+					}*/
+				}
+			}
+			else
+			{
+				if (nextDegree > (initialDegree - XMConvertToRadians(270.0f)))
+				{
+					midpoint.x = (objectPosition.x + position.x) / 2.0f;
+					midpoint.y = (objectPosition.z + position.z) / 2.0f;
+					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
+					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
+					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
+					/*if (circleRadius.x > circleRadius.y)
+					{
+						circleRadiusDecider = circleRadius.x;
+					}
+					else
+					{
+						circleRadiusDecider = circleRadius.y;
+					}*/
+				}
+			}
+			nextPosition.x = midpoint.x + cosf(nextDegree) * (distanceFloat);
+			nextPosition.y = midpoint.y + sinf(nextDegree) * (distanceFloat);
 			x = (nextPosition.x - position.x);
 			z = (nextPosition.y - position.z);
-			hypotenuse = sqrt((x * x) + (z * z));
+			hypotenuse = sqrtf((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
@@ -558,29 +606,61 @@ void EnemyHuman::Update()
 			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
 			SetPosition(position);
 
-			if (nextDegree > (initialDegree + 90.0f))
+			if (patrolStatus == FRONT)
 			{
-				if (surroundSpeed < 100.0f)
+				if (nextDegree > (initialDegree + XMConvertToRadians(90.0f)))
 				{
-					surroundSpeed += 20.0f * (deltaTime->deltaTimeCalculated.count());
+					if (surroundSpeed < 180.0f)
+					{
+						surroundSpeed += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					}
+					else
+					{
+						surroundSpeed = 180.0f;
+					}
+				}
+
+				if (nextDegree < (initialDegree + XMConvertToRadians(290.0f)))
+				{
+					nextDegree += XMConvertToRadians(100.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
 				}
 				else
 				{
-					surroundSpeed = 100.0f;
+					nextDegree = initialDegree + XMConvertToRadians(290.0f);
+					timer = 0.0f;
+					modelChange = true;
+					enumStatus = COOLDOWN;
+					break;
 				}
-			}
-
-			if (nextDegree < (initialDegree + 180.0f))
-			{
-				nextDegree += 1.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 			else
 			{
-				nextDegree = initialDegree + 180.0f;
-				timer = 0.0f;
-				modelChange = true;
-				enumStatus = COOLDOWN;
+				if (nextDegree < (initialDegree - XMConvertToRadians(90.0f)))
+				{
+					if (surroundSpeed < 180.0f)
+					{
+						surroundSpeed += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					}
+					else
+					{
+						surroundSpeed = 180.0f;
+					}
+				}
+
+				if (nextDegree > (initialDegree - XMConvertToRadians(290.0f)))
+				{
+					nextDegree -= XMConvertToRadians(100.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+				}
+				else
+				{
+					nextDegree = initialDegree - XMConvertToRadians(290.0f);
+					timer = 0.0f;
+					modelChange = true;
+					enumStatus = COOLDOWN;
+					break;
+				}
 			}
+			
 			break;
 		}
 		break;

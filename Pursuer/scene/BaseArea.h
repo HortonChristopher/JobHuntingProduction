@@ -62,6 +62,7 @@ public:
 	void ParticleCreation(float x, float y, float z, int life, float offset, float start_scale);
 	void ParticleCreationHeal(float x, float y, float z, int life, float offset, float start_scale);
 	void ParticleCreationEdge(float x, float y, float z, int life, float offset, float start_scale);
+	void ParticleCreationExplosion(float x, float y, float z, int life, float offset, float start_scale);
 	float Distance(XMFLOAT3 player, XMFLOAT3 center);
 
 	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
@@ -79,6 +80,7 @@ private:
 	DebugCamera* camera = nullptr;
 	Sprite* spriteBG = nullptr;
 	ParticleManager* particleMan = nullptr;
+	ParticleManager* particleManExplosion = nullptr;
 	CollisionManager* collisionManager = nullptr;
 	LightGroup* lightGroup = nullptr;
 
@@ -196,9 +198,12 @@ private:
 	float chargeAttackRange = 12.0f;
 	float chargeAttackDamage = 4.0f;
 	float chargeAttackKnockbackDistance = 120.0f;
+	float twoEnemySurroundRange = 24.0f;
+	float twoEnemySurroundDamage = 4.0f;
+	float twoEnemySurroundKnockbackDistance = 120.0f;
 	float knockbackInterval = 60.0f;
 	float knockbackMaxTime = 30.0f;
-
+	
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
@@ -228,7 +233,7 @@ private:
 	bool attacking = false;
 	float attackTime = 0.0f;
 	int enemyDefeated = 0;
-	int clearCondition = 5;
+	int clearCondition = 6;
 	float yRotationOffset = 90.0f;
 
 	// Fade in-out sprite

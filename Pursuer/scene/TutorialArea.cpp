@@ -79,8 +79,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	loadingProgress += 10.0f;
 
 	// Particle Manager initialization/generation
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
+	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera, L"Resources/Sprite/effect1.png");
 
 	// Light Group Creation
 	lightGroup = LightGroup::Create();

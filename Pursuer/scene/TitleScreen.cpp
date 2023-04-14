@@ -36,7 +36,7 @@ void TitleScreen::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 
 	// Particle Manager initialization/generation
-	particleMan = ParticleManager::GetInstance();
+	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera, L"Resources/Sprite/effect1.png");
 	particleMan->SetCamera(camera);
 
 	// Light Group Creation
