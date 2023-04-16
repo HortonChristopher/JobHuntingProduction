@@ -88,6 +88,7 @@ void Menu::Initialize(DirectXCommon* dxCommon, Input* input)
 	texAlpha = 1;
 	migrateCounter = 0;
 	migrate = false;
+	migrated = false;
 
 	menuUI = Sprite::Create(401, { 240.0f, 110.0f });
 	menuUI->SetSize({ 800.0f, 500.0f });
@@ -374,7 +375,7 @@ void Menu::Setting()
 		SetTexParam();
 	}
 
-	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
+ 	if (input->TriggerControllerButton(XINPUT_GAMEPAD_A) || input->TriggerKey(DIK_SPACE))
 	{
 		switch (select)
 		{
