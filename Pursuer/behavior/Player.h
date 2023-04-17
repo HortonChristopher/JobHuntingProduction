@@ -64,6 +64,15 @@ public:
 
 	status enumStatus = STAND;
 
+	enum FrameSpeed
+	{
+		NORMAL = 1,
+		HALF = 2,
+		DOUBLE = 3
+	};
+
+	FrameSpeed frameSpeed = NORMAL;
+
 public:
 	/// <summary>
 	/// Initialization
