@@ -74,6 +74,17 @@ public:
 
 	patrol patrolStatus = DEFAULT;
 
+	enum FrameSpeed
+	{
+		NORMAL = 1,
+		HALF = 2,
+		DOUBLE = 3,
+		ONEPOINTFIVE = 4,
+		POINTSEVENFIVE = 5
+	};
+
+	FrameSpeed frameSpeed = NORMAL;
+
 public:
 	/// <summary>
 	/// Initialization
