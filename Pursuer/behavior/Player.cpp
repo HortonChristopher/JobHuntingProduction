@@ -149,6 +149,15 @@ void Player::Update()
 			animationSet = false;
 		}
 
+		if (timer < 48.0f || timer > 68.0f && timer < 84.0f || timer > 104.0f && timer < 146.0f || timer > 166.0f)
+		{
+			frameSpeed = ONEPOINTFIVE;
+		}
+		else
+		{
+			frameSpeed = NORMAL;
+		}
+
 		switch (attackCombo)
 		{
 		case 0:
@@ -158,6 +167,7 @@ void Player::Update()
 			{
 				timer = 0.0f;
 				attackCombo = 0;
+				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
@@ -166,6 +176,7 @@ void Player::Update()
 			{
 				timer = 0.0f;
 				attackCombo = 0;
+				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
@@ -174,12 +185,34 @@ void Player::Update()
 			{
 				timer = 0.0f;
 				attackCombo = 0;
+				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
 		}
-		
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+		switch(frameSpeed)
+		{
+		case NORMAL:
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case HALF:
+			timer += 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case DOUBLE:
+			timer += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case ONEPOINTFIVE:
+			timer += 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case POINTSEVENFIVE:
+			timer += 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		default:
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		}
+		//timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case DAMAGED:
 		if (animationNo != 8)
@@ -615,10 +648,16 @@ void Player::Update()
 		case NORMAL:
 			break;
 		case HALF:
-			sec /= 2.0f;
+			sec *= 0.5f;
 			break;
 		case DOUBLE:
 			sec *= 2.0f;
+			break;
+		case ONEPOINTFIVE:
+			sec *= 1.5f;
+			break;
+		case POINTSEVENFIVE:
+			sec *= 0.75f;
 			break;
 		default:
 			break;

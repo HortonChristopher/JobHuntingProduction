@@ -68,7 +68,9 @@ public:
 	{
 		NORMAL = 1,
 		HALF = 2,
-		DOUBLE = 3
+		DOUBLE = 3,
+		ONEPOINTFIVE = 4,
+		POINTSEVENFIVE = 5
 	};
 
 	FrameSpeed frameSpeed = NORMAL;
