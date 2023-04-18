@@ -212,6 +212,15 @@ void EnemyHuman::Update()
 			attackAnimation = true;
 		}
 
+		if (attackTimer < 47.0f || attackTimer > 69.0f)
+		{
+			frameSpeed = POINTSEVENFIVE;
+		}
+		else
+		{
+			frameSpeed = NORMAL;
+		}
+
 		if (attackTimer > 53.3f && attackTimer < 63.2f)
 		{
 			attackDamagePossible = true;
@@ -229,7 +238,29 @@ void EnemyHuman::Update()
 			timer = 0.0f;
 			enumStatus = COOLDOWN;
 		}
-		attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+		switch (frameSpeed)
+		{
+		case NORMAL:
+			attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case HALF:
+			attackTimer += 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case DOUBLE:
+			attackTimer += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case ONEPOINTFIVE:
+			attackTimer += 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case POINTSEVENFIVE:
+			attackTimer += 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		default:
+			attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		}
+		//attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case COOLDOWN:
 		if (modelChange)

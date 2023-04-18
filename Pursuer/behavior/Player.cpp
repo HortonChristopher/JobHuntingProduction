@@ -191,7 +191,7 @@ void Player::Update()
 			break;
 		}
 
-		switch(frameSpeed)
+		switch (frameSpeed)
 		{
 		case NORMAL:
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -212,7 +212,6 @@ void Player::Update()
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		}
-		//timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case DAMAGED:
 		if (animationNo != 8)
