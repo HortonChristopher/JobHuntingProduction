@@ -606,7 +606,7 @@ void BaseArea::Update()
 		}
 	}
 
-	if (debugJetStream > 2)
+	if (debugJetStream > 2 && enemyDefeated <= clearCondition - 2)
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{

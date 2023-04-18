@@ -345,6 +345,14 @@ void EnemyHuman::Update()
 				animationNo = 7;
 				modelChange = false;
 			}
+			if (currentTime - startTime < (endTime - startTime) / 2 && !particleAttackActive)
+			{
+				frameSpeed = POINTSEVENFIVE;
+			}
+			else
+			{
+				frameSpeed = NORMAL;
+			}
 			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f && !particleAttackActive)
 			{
 				particleAttackActive = true;
@@ -482,6 +490,7 @@ void EnemyHuman::Update()
 				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
 				SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
 				chargeAttackCheck = true;
+				frameSpeed = POINTSEVENFIVE;
 			}
 
 			landingAttackPosition = objectPosition;
@@ -502,17 +511,18 @@ void EnemyHuman::Update()
 				hypotenuse = sqrt((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
-				x = (landingAttackPosition.x - position.x) / 60.0f;
-				z = (landingAttackPosition.z - position.z) / 60.0f;
+				//x = (landingAttackPosition.x - position.x) / 60.0f;
+				//z = (landingAttackPosition.z - position.z) / 60.0f;
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				frameSpeed = NORMAL;
 				chargeAttackStage = 1;
 			}
 
 			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
 		case 1:
-			position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+			position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
 
 			if (timer > 45.0f)
 			{

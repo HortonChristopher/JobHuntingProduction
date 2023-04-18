@@ -324,9 +324,23 @@ void Player::Update()
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != DODGE && enumStatus != HEAL)
 			{
-				movementAllowed = true;
+				if (enumStatus == ATTACK)
+				{
+					if (timer < 48.0f || timer > 68.0f && timer < 84.0f || timer > 104.0f && timer < 146.0f || timer > 166.0f)
+					{
+						movementAllowed = true;
+					}
+					else
+					{
+						movementAllowed = false;
+					}
+				}
+				else
+				{
+					movementAllowed = true;
+				}
 			}
 			else
 			{
@@ -408,14 +422,20 @@ void Player::Update()
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						enumStatus = RUN;
+						if (enumStatus != ATTACK)
+						{
+							enumStatus = RUN;
+						}
 					}
 					else
 					{
 						position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						enumStatus = WALK;
+						if (enumStatus != ATTACK)
+						{
+							enumStatus = WALK;
+						}
 					}
 				}
 
