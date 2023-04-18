@@ -610,6 +610,19 @@ void Player::Update()
 		// Advance one frame/second
 		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 		double sec = frameTime.GetSecondDouble();
+		switch (frameSpeed)
+		{
+		case NORMAL:
+			break;
+		case HALF:
+			sec /= 2.0f;
+			break;
+		case DOUBLE:
+			sec *= 2.0f;
+			break;
+		default:
+			break;
+		}
 		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		frameTime.SetSecondDouble(sec);
 		currentTime += frameTime;
