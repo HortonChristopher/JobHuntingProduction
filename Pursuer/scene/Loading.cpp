@@ -36,13 +36,13 @@ void Loading::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	debugText->Initialize(debugTextTexNumber);
 
 	if (!Sprite::LoadTexture(300, "LoadingScreen.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(299, "LoadingScreenBar.png")) { assert(0); return; }
+	//if (!Sprite::LoadTexture(299, "LoadingScreenBar.png")) { assert(0); return; }
 
 	loadingPercent.store(0);
 
 	loadingScreenSprite = Sprite::Create(300, { 0.0f, 0.0f });
-	loadingScreenSpriteBar = Sprite::Create(299, { 299.0f, 364.0f });
-	loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 6.82f, 54.0f});
+	//loadingScreenSpriteBar = Sprite::Create(299, { 299.0f, 364.0f });
+	//loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 6.82f, 54.0f});
 }
 
 void Loading::Update()
@@ -52,11 +52,11 @@ void Loading::Update()
 	if (loadingPercent.load() >= 10)
 	{
 		loadingPercent.store(10);
-		loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 68.2f, 54.0f });
+		//loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 68.2f, 54.0f });
 		loadingFinished.store(true);
 	}
 
-	loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 68.2f, 54.0f });
+	//loadingScreenSpriteBar->SetSize({ (float)loadingPercent.load() * 68.2f, 54.0f });
 
 	//Debug Start
 	/*char msgbuf[256];
@@ -102,7 +102,7 @@ void Loading::Draw()
 
 	// Foreground sprite drawing
 	loadingScreenSprite->Draw();
-	loadingScreenSpriteBar->Draw();
+	//loadingScreenSpriteBar->Draw();
 
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
