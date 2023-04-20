@@ -463,10 +463,10 @@ void Player::Update()
 				direction = dir;
 
 				SetPosition(position);
-				if (!input->PushKey(DIK_SPACE))
-				{
-					//SetRotation(rotation);
-				}
+				//if (!input->PushKey(DIK_SPACE))
+				//{
+				//	//SetRotation(rotation);
+				//}
 
 				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())

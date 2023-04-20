@@ -159,7 +159,6 @@ private:
 
 protected:
 	Input* input = nullptr;
-	//DeltaTime* deltaTime = nullptr;
 
 	// Local scale
 	XMFLOAT3 scale = { 0.15f, 0.15f, 0.15f };

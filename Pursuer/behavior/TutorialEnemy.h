@@ -59,6 +59,17 @@ public:
 
 	status enumStatus = STAND;
 
+	enum FrameSpeed
+	{
+		NORMAL = 1,
+		HALF = 2,
+		DOUBLE = 3,
+		ONEPOINTFIVE = 4,
+		POINTSEVENFIVE = 5
+	};
+
+	FrameSpeed frameSpeed = NORMAL;
+
 public:
 	/// <summary>
 	/// Initialization
@@ -93,6 +104,9 @@ public:
 	void SetAggro(bool aggro) { this->aggro = aggro; }
 	void SetAggroSwitch(bool aggroswitch) { this->aggroSwitch = aggroswitch; }
 	void SetEnumStatus(status enumStatus) { this->enumStatus = enumStatus; }
+	void SetTimer(float Btimer) { this->timer = Btimer; }
+
+	void Reset();
 
 	const XMFLOAT3& GetPosition() { return position; }
 	const XMFLOAT3& GetRotation() { return rotation; }
@@ -128,7 +142,6 @@ private:
 
 protected:
 	Input* input = nullptr;
-	//DeltaTime* deltaTime = nullptr;
 
 	// Local scale
 	XMFLOAT3 scale = { 0.15f, 0.15f, 0.15f };
@@ -152,14 +165,6 @@ protected:
 
 	bool FirstRun = false;
 
-	//FBX3DModel* modelStanding = nullptr; // 180 frames
-	//FBX3DModel* modelWalking = nullptr; // 30 frames
-	//FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	//FBX3DModel* modelAttacking = nullptr; // 30(?) frames
-	//FBX3DModel* modelDamaged = nullptr; // 54 frames
-	//FBX3DModel* modelDeath = nullptr; // 91 frames
-	//FBX3DModel* modelJumpBack = nullptr; // 63 frames
-	//FBX3DModel* modelParticleAttack = nullptr; // 81 frames
 	FBX3DModel* modelTutorialEnemy = nullptr;
 
 	// 1 frame time
@@ -189,21 +194,55 @@ protected:
 	float y = 0.0f;
 	float z = 0.0f;
 	float hypotenuse = 0.0f;
+	float hypotenuse2 = 0.0f;
 	float radians = 0.0f;
 
-	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
+	int xQuadrant = 0;
+	int yQuadrant = 0;
+
+	float endAnimationDEBUG = 0.0f;
 public:
+	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 meetingPoint = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT2 nextPosition = { 0.0f, 0.0f };
+	XMFLOAT2 midpoint = { 0.0f, 0.0f };
+	XMFLOAT2 circleRadius = { 0.0f, 0.0f };
+	float circleRadiusDecider = 0.0f;
+	float nextDegree = 0.0f;
+	float initialDegree = 0.0f;
+	float surroundSpeed = 60.0f;
+	float nextDegreeAngle = 0.0f;
+	float distanceFloat = 0.0f;
+	float origDistanceFloat = 0.0f;
 	XMFLOAT3 particleAttackPosition = { 0.0f, 0.0f, 0.0f };
-	float HP = 5.0f;
+	XMFLOAT3 landingAttackPosition = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 frontPatrolPosition = { 0.0f, 0.0f, 0.0f };
+	float HP = 5.0f; // Default 10.0f
 	bool dead = false;
+	bool aggroSet = false;
 	bool modelChange = false;
 	bool wander = false;
+	bool attackDamagePossible = false;
 	bool ableToDamage = true;
 	bool set = false;
 	bool particleAttackActive = false;
 	float attackTimer = 0.0f;
-	float timer = 238.0f;
-	bool tutorial = true;
+	float timer = 179.0f;
+	bool fleeSet = false;
+	bool helpCall = false;
+	bool isBeingCalledToHelp = false;
+	int closestEnemy = 0;
 	int particleAttackStage = 0;
-	bool aggroSet = false;
+	int landingAttackStage = 0;
+	int chargeAttackStage = 0;
+	int jetStreamAttackStage = 0;
+	int twoEnemySurroundStage = 0;
+	int agrooNumber = 0;
+	bool landed = false;
+	bool landingParticles = false;
+	bool chargeAttackCheck = false;
+	bool debugJetAttacked = false;
+	bool jetStreamCounted = false;
+	bool isPartnerDead = false;
+	bool tutorial = true;
 };

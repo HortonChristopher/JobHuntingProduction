@@ -184,27 +184,68 @@ void TutorialEnemy::Update()
 				set = false;
 				timer = 0.0f;
 				aggroSwitch = false;
-				//enumStatus = STAND;
+				enumStatus = STAND;
 			}
 		}
 		break;
 	case ATTACK:
 		if (!attackAnimation)
 		{
+			attackTimer = 0.0f;
 			animationSet = false;
 			animationNo = 3;
 			attackAnimation = true;
 		}
-		attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (attackTimer > 135.0f)
+
+		if (attackTimer < 47.0f || attackTimer > 69.0f)
+		{
+			frameSpeed = POINTSEVENFIVE;
+		}
+		else
+		{
+			frameSpeed = NORMAL;
+		}
+
+		if (attackTimer > 53.3f && attackTimer < 63.2f)
+		{
+			attackDamagePossible = true;
+		}
+		else
+		{
+			attackDamagePossible = false;
+		}
+
+		if (currentTime >= endTime && attackTimer > 0.0f)
 		{
 			attackTimer = 0.0f;
-			//attack = false;
 			modelChange = true;
 			attackAnimation = false;
 			timer = 0.0f;
 			enumStatus = COOLDOWN;
 		}
+
+		switch (frameSpeed)
+		{
+		case NORMAL:
+			attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case HALF:
+			attackTimer += 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case DOUBLE:
+			attackTimer += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case ONEPOINTFIVE:
+			attackTimer += 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case POINTSEVENFIVE:
+			attackTimer += 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		default:
+			attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		}
+		//attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case COOLDOWN:
 		if (modelChange)
@@ -292,6 +333,14 @@ void TutorialEnemy::Update()
 				animationSet = false;
 				animationNo = 7;
 				modelChange = false;
+			}
+			if (currentTime - startTime < (endTime - startTime) / 2 && !particleAttackActive)
+			{
+				frameSpeed = POINTSEVENFIVE;
+			}
+			else
+			{
+				frameSpeed = NORMAL;
 			}
 			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f && !particleAttackActive)
 			{
@@ -466,6 +515,25 @@ void TutorialEnemy::Update()
 		// Advance one frame
 		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 		double sec = frameTime.GetSecondDouble();
+		switch (frameSpeed)
+		{
+		case NORMAL:
+			break;
+		case HALF:
+			sec *= 0.5f;
+			break;
+		case DOUBLE:
+			sec *= 2.0f;
+			break;
+		case ONEPOINTFIVE:
+			sec *= 1.5f;
+			break;
+		case POINTSEVENFIVE:
+			sec *= 0.75f;
+			break;
+		default:
+			break;
+		}
 		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		frameTime.SetSecondDouble(sec);
 		currentTime += frameTime;
