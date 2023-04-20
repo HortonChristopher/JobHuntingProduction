@@ -12,6 +12,8 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include <string>
+#include <array>
+#include <vector>
 
 class TutorialPlayer
 {
@@ -61,6 +63,17 @@ public:
 	};
 
 	status enumStatus = WALK;
+
+	enum FrameSpeed
+	{
+		NORMAL = 1,
+		HALF = 2,
+		DOUBLE = 3,
+		ONEPOINTFIVE = 4,
+		POINTSEVENFIVE = 5
+	};
+
+	FrameSpeed frameSpeed = NORMAL;
 
 public:
 	/// <summary>
@@ -142,17 +155,17 @@ protected:
 	Vector3 direction = { 0, 0, 1 };
 	Vector3 moveDirection = {};
 
-	FBX3DModel* modelStanding = nullptr; // 180 frames
-	FBX3DModel* modelWalking = nullptr; // 30 frames
-	FBX3DModel* modelRunning = nullptr; // 20(?) frames
-	FBX3DModel* modelStrafeL = nullptr; // 20 frames
-	FBX3DModel* modelStrafeR = nullptr; // 20 frames
-	FBX3DModel* modelStrafeB = nullptr; // 24 frames
-	FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 endTime / 2; 3rd: 76-80 Float: 253 
-	FBX3DModel* modelDamaged = nullptr; // 54 frames
-	FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
-	FBX3DModel* modelDeath = nullptr; // 91 frames
-	FBX3DModel* modelHeal = nullptr; // 81 frames float 160.0f
+	//FBX3DModel* modelStanding = nullptr; // 180 frames
+	//FBX3DModel* modelWalking = nullptr; // 30 frames
+	//FBX3DModel* modelRunning = nullptr; // 20(?) frames
+	//FBX3DModel* modelStrafeL = nullptr; // 20 frames
+	//FBX3DModel* modelStrafeR = nullptr; // 20 frames
+	//FBX3DModel* modelStrafeB = nullptr; // 24 frames
+	//FBX3DModel* modelComboAttack = nullptr; // 126 total frames; 1st: 27-31 (endTime / 3); 2nd: 45-49 endTime / 2; 3rd: 76-80 Float: 253 
+	//FBX3DModel* modelDamaged = nullptr; // 54 frames
+	//FBX3DModel* modelDodgeRoll = nullptr; // 37 frames
+	//FBX3DModel* modelDeath = nullptr; // 91 frames
+	//FBX3DModel* modelHeal = nullptr; // 81 frames float 160.0f
 	FBX3DModel* modelTutorialPlayer = nullptr;
 
 	// If animations can be combined into one FBX file, this becomes redundant and should be deleted
@@ -184,7 +197,9 @@ protected:
 	float speed = 60.0f; // Currently using delta time; 1.0f using frame speed
 	float sprintSpeed = 90.0f; // 1.5f using frame speed
 	float rollSpeed = 45.0f; // 0.75 using frame speed
+	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
+	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };
@@ -193,13 +208,16 @@ public:
 	bool ableToDamage = true;
 	bool isPlayerDead = false;
 	float stamina = 100.0f;
-	float hp = 10.0f; // Base of 10.0f
+	float hp = 25.0f; // Base of 10.0f
 	int attackCombo = 0; // Which attack the animation stops at
-	int healRemaining = 2;
+	int healRemaining = 4;
 	bool healed = false;
 	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} } };
 	bool movementAllowed = false;
 	int tutorialPart = 0;
 	float timer = 0.0f;
 	bool dodgedAttack = false;
+	float staminaWarningSpriteAlpha = 0.0f;
+	bool lowStaminaWarningActivation = false;
+	float lowStaminaWarningTimer = 0.0f;
 };

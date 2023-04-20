@@ -217,12 +217,14 @@ void Player::Update()
 		if (animationNo != 8)
 		{
 			timer = 0.0f;
+			frameSpeed = ONEPOINTFIVE;
 			animationNo = 8;
 			animationSet = false;
 		}
 		if (currentTime > endTime && timer > 0.0f)
 		{
 			timer = 0.0f;
+			frameSpeed = NORMAL;
 			enumStatus = STAND;
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -394,11 +396,11 @@ void Player::Update()
 				direction.Normalize();
 
 				float cosA;
-				if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 				{
 					direction = { 0, 0, 1 };
 					rotation = { 0, 0, 0 };
-				}
+				}*/
 				cosA = direction.Dot(moveDirection);
 
 				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))

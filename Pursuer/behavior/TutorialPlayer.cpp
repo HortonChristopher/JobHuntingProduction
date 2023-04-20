@@ -147,6 +147,15 @@ void TutorialPlayer::Update()
 			animationSet = false;
 		}
 
+		if (timer < 48.0f || timer > 68.0f && timer < 84.0f || timer > 104.0f && timer < 146.0f || timer > 166.0f)
+		{
+			frameSpeed = ONEPOINTFIVE;
+		}
+		else
+		{
+			frameSpeed = NORMAL;
+		}
+
 		switch (attackCombo)
 		{
 		case 0:
@@ -156,6 +165,7 @@ void TutorialPlayer::Update()
 			{
 				timer = 0.0f;
 				attackCombo = 0;
+				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
@@ -164,6 +174,7 @@ void TutorialPlayer::Update()
 			{
 				timer = 0.0f;
 				attackCombo = 0;
+				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
@@ -172,23 +183,46 @@ void TutorialPlayer::Update()
 			{
 				timer = 0.0f;
 				attackCombo = 0;
+				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
 		}
 
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		switch (frameSpeed)
+		{
+		case NORMAL:
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case HALF:
+			timer += 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case DOUBLE:
+			timer += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case ONEPOINTFIVE:
+			timer += 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		case POINTSEVENFIVE:
+			timer += 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		default:
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
+		}
 		break;
 	case DAMAGED:
 		if (animationNo != 8)
 		{
 			timer = 0.0f;
+			frameSpeed = ONEPOINTFIVE;
 			animationNo = 8;
 			animationSet = false;
 		}
 		if (currentTime > endTime && timer > 0.0f)
 		{
 			timer = 0.0f;
+			frameSpeed = NORMAL;
 			enumStatus = STAND;
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -242,6 +276,7 @@ void TutorialPlayer::Update()
 		}
 		if (currentTime > endTime && timer > 0.0f)
 		{
+			debugTimer = timer;
 			timer = 0.0f;
 			healed = false;
 			enumStatus = STAND;
@@ -269,7 +304,13 @@ void TutorialPlayer::Update()
 				attackCombo++;
 				stamina -= 25.0f;
 				break;
+			case 3:
+				break;
 			}
+		}
+		else if (input->TriggerMouseLeft() && stamina < 25.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina < 25.0f)
+		{
+			lowStaminaWarningActivation = true;
 		}
 	}
 
@@ -293,9 +334,23 @@ void TutorialPlayer::Update()
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != DODGE && enumStatus != HEAL)
 			{
-				movementAllowed = true;
+				if (enumStatus == ATTACK)
+				{
+					if (timer < 48.0f || timer > 68.0f && timer < 84.0f || timer > 104.0f && timer < 146.0f || timer > 166.0f)
+					{
+						movementAllowed = true;
+					}
+					else
+					{
+						movementAllowed = false;
+					}
+				}
+				else
+				{
+					movementAllowed = true;
+				}
 			}
 			else
 			{
@@ -347,10 +402,10 @@ void TutorialPlayer::Update()
 				float cosA;
 				cosA = direction.Dot(moveDirection);
 
-				if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 				{
 					cosA = 1.0f;
-				}
+				}*/
 				if (cosA > 1.0f)
 				{
 					cosA = 1.0f;
@@ -366,18 +421,26 @@ void TutorialPlayer::Update()
 				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
 				{
-					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f && tutorialPart > 1 || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f && tutorialPart > 1)
+					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f)
 					{
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						stamina -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						if (enumStatus != ATTACK)
+						{
+							enumStatus = RUN;
+						}
 					}
 					else
 					{
 						position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						if (enumStatus != ATTACK)
+						{
+							enumStatus = WALK;
+						}
 					}
 				}
 
@@ -399,10 +462,10 @@ void TutorialPlayer::Update()
 				direction = dir;
 
 				SetPosition(position);
-				if (!input->PushKey(DIK_SPACE))
-				{
-					SetRotation(rotation);
-				}
+				//if (!input->PushKey(DIK_SPACE))
+				//{
+				//	//SetRotation(rotation);
+				//}
 
 				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
@@ -430,17 +493,39 @@ void TutorialPlayer::Update()
 					{
 						enumStatus = RUN;
 					}*/
-					enumStatus = RUN;
+					//enumStatus = RUN;
 				}
 			}
 		}
+	}
+
+	if (lowStaminaWarningActivation)
+	{
+		staminaWarningSpriteAlpha = 1.0f;
+		lowStaminaWarningActivation = false;
+	}
+	else if (!lowStaminaWarningActivation && staminaWarningSpriteAlpha > 0.0f)
+	{
+		if (lowStaminaWarningTimer >= 15.0f)
+		{
+			staminaWarningSpriteAlpha -= 1.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		else
+		{
+			lowStaminaWarningTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+	}
+	else
+	{
+		staminaWarningSpriteAlpha = 0.0f;
+		lowStaminaWarningTimer = 0.0f;
 	}
 
 	if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		if (stamina < 100.0f)
 		{
-			stamina += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			stamina += 25.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 	}
 
@@ -450,6 +535,10 @@ void TutorialPlayer::Update()
 		{
 			stamina -= 40.0f;
 			enumStatus = DODGE;
+		}
+		else if (input->TriggerKey(DIK_LCONTROL) && !dodge && stamina < 40.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina < 40.0f)
+		{
+			lowStaminaWarningActivation = true;
 		}
 	}
 
@@ -605,12 +694,35 @@ void TutorialPlayer::Update()
 		// Advance one frame/second
 		frameTime.SetTime(0, 0, 1, 0, 0, FbxTime::EMode::eFrames60);
 		double sec = frameTime.GetSecondDouble();
+		switch (frameSpeed)
+		{
+		case NORMAL:
+			break;
+		case HALF:
+			sec *= 0.5f;
+			break;
+		case DOUBLE:
+			sec *= 2.0f;
+			break;
+		case ONEPOINTFIVE:
+			sec *= 1.5f;
+			break;
+		case POINTSEVENFIVE:
+			sec *= 0.75f;
+			break;
+		default:
+			break;
+		}
 		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		frameTime.SetSecondDouble(sec);
 		currentTime += frameTime;
 
 		// Return to the previous position after playing to the end
-		if (currentTime > endTime && repeatAnimation == true)
+		if (currentTime > endTime && enumStatus == DEAD)
+		{
+			currentTime = endTime + 1;
+		}
+		else if (currentTime > endTime && repeatAnimation == true)
 		{
 			currentTime = startTime;
 		}

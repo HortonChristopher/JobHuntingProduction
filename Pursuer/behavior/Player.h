@@ -201,7 +201,7 @@ public:
 	int healRemaining = 4;
 	bool healed = false;
 	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} }};
-	bool ableToDamage = false;
+	bool ableToDamage = true;
 	float timer = 0.0f;
 	bool damageAdvantage = false;
 	float staminaWarningSpriteAlpha = 0.0f;
