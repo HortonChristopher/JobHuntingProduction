@@ -199,7 +199,6 @@ protected:
 	float rollSpeed = 45.0f; // 0.75 using frame speed
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
-	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
 public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };

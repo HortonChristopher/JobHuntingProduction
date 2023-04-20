@@ -121,7 +121,13 @@ private:
 	Sprite* healKeyboardSPRITE = nullptr;
 	Sprite* healTutorialMaskSPRITE = nullptr;
 	Sprite* fadeSPRITE = nullptr;
+	Sprite* staminaWarningSPRITE = nullptr;
 	float fadeSpriteAlpha = 0.0f;
+	float staminaSpriteAlpha = 1.0f;
+	float staminaSpriteInteger = 0.8f;
+	float blinkingStaminaAlpha = 1.0f;
+	float blinkingStaminaSpriteInteger = 2.4f;
+	bool staminaBlinkingEffect = false;
 
 	// Damage Overlay
 	Sprite* tutorialAreaDamageOverlaySPRITE = nullptr;

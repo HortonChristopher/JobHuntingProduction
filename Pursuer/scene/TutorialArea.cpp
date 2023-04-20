@@ -7,7 +7,7 @@ extern XMFLOAT3 objectRotation;
 
 extern DeltaTime* deltaTime;
 extern float loadingProgress;
-extern std::atomic<float> loadingPercent;
+extern std::atomic<int> loadingPercent;
 
 extern int keyOrMouse;
 
@@ -76,7 +76,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	// Collision Manager initialization
 	collisionManager = CollisionManager::GetInstance();
 
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	// Particle Manager initialization/generation
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera, L"Resources/Sprite/effect1.png");
@@ -96,7 +96,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	TutorialPlayer::SetCamera(camera);
 	PlayerPositionObject::SetCamera(camera);
 
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	// Sprite Generation
 	if (!Sprite::LoadTexture(1, "TutorialTextFrame.png")) { assert(0); return; }
@@ -127,7 +127,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(26, "Tutorial4_5.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(27, "Tutorial4_6.png")) { assert(0); return; }
 
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	if (!Sprite::LoadTexture(28, "DamageOverlay.png")) { assert(0); return; } // Damage Overlay
 
@@ -147,7 +147,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(92, "TutorialMission3.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(91, "TutorialMission4.png")) { assert(0); return; }
 
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	if (!Sprite::LoadTexture(85, "LoadingBar.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(86, "LoadingBarFrame.png")) { assert(0); return; }
@@ -156,8 +156,9 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(88, "HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
 	if (!Sprite::LoadTexture(89, "STBar.png")) { assert(0); return; } // ST bar texture
 	if (!Sprite::LoadTexture(90, "STBarFrame.png")) { assert(0); return; } // ST bar frame texture
+	if (!Sprite::LoadTexture(91, "LowStaminaWarning.png")) { assert(0); return; } // Low Stamina Warning Graphic
 
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
 	for (int i = 0; i < numberOfTutorialTextSprites; i++)
@@ -169,7 +170,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
 		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
 	}
-	loadingProgress += 10.0f;
+	loadingPercent++;
 	missionBarSPRITE = Sprite::Create(85, { 1150.0f, 150.0f });
 	missionBarFrameSPRITE = Sprite::Create(86, { 1150.0f, 150.0f });
 	missionBarSPRITE->SetSize({ 100.0f, 30.0f });
@@ -189,7 +190,10 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	healControllerSPRITE = Sprite::Create(31, { 1102.0f, 542.0f });
 	healTutorialMaskSPRITE = Sprite::Create(32, { 0.0f, 0.0f });
 	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, {1.0f, 1.0f, 1.0f, fadeSpriteAlpha});
-	loadingProgress += 10.0f;
+	staminaWarningSPRITE = Sprite::Create(91, { 720.0f, 190.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
+	staminaWarningSPRITE->SetSize({ 75.0f, 42.0f });
+
+	loadingPercent++;
 
 	// 3D Object Create
 	skydomeOBJ = Object3d::Create();
@@ -216,7 +220,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	skydomeOBJ->SetScale({ 5,5,5 });
 	playerAttackRangeOBJ->SetModel(positionMODEL);
 	enemyAttackRangeOBJ->SetModel(positionMODEL);
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	// Player initialization
 	playerFBX = new TutorialPlayer;
@@ -231,7 +235,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	enemyPositionOBJ = PlayerPositionObject::Create();
 	playerPositionOBJ->SetModel(positionMODEL);
 	enemyFBX->SetPosition({ 0.0f, 0.0f, 0.0f });
-	loadingProgress += 10.0f;
+	loadingPercent++;
 
 	// Ground Aspects
 	groundOBJ->SetPosition({ 0, 0, 0 });
@@ -247,7 +251,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	camera->SetDistance(48.0f);
 
 	srand((unsigned int)time(NULL));
-	loadingProgress += 10.0f;
+	loadingPercent++;
 }
 
 void TutorialArea::Update()
@@ -810,8 +814,54 @@ void TutorialArea::Update()
 
 	if (tutorialStatus > 2)
 	{
-		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 20.0f });
-		STBarSPRITE->SetSize({ playerFBX->stamina * 2.0f, 20.0f });
+		HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 40.0f });
+		HPBarFrameSPRITE->SetSize({ 25.0f * 20.0f, 40.0f });
+		STBarSPRITE->SetSize({ playerFBX->stamina / 2.0f, 20.0f });
+		STBarFrameSPRITE->SetSize({ 50.0f, 20.0f });
+		STBarSPRITE->SetPosition({ 720.0f, 180.0f });
+		STBarFrameSPRITE->SetPosition({ 720.0f, 180.0f });
+		STBarSPRITE->SetRotation(270.0f);
+		STBarFrameSPRITE->SetRotation(270.0f);
+		if (playerFBX->stamina < 100.0f && playerFBX->stamina >= 40.0f)
+		{
+			staminaSpriteAlpha = 1.0f;
+			blinkingStaminaAlpha = 1.0f;
+		}
+		else if (playerFBX->stamina >= 100.0f)
+		{
+			staminaSpriteAlpha -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		else
+		{
+			if (!staminaBlinkingEffect)
+			{
+				blinkingStaminaAlpha -= blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (blinkingStaminaAlpha <= 0.0f)
+				{
+					blinkingStaminaAlpha = 0.0f;
+					staminaBlinkingEffect = true;
+				}
+			}
+			else
+			{
+				blinkingStaminaAlpha += blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (blinkingStaminaAlpha >= 1.0f)
+				{
+					blinkingStaminaAlpha = 1.0f;
+					staminaBlinkingEffect = false;
+				}
+			}
+		}
+
+		STBarSPRITE->SetColor({ 1.0f, blinkingStaminaAlpha, blinkingStaminaAlpha, staminaSpriteAlpha });
+		STBarFrameSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, staminaSpriteAlpha });
+
+		if (staminaSpriteAlpha <= 0.0f)
+		{
+			staminaSpriteAlpha = 0.0f;
+		}
+
+		staminaWarningSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, playerFBX->staminaWarningSpriteAlpha });
 
 		tutorialMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.24f + 165.0f, playerFBX->GetPosition().z * 0.24f + 545.0f });
 		tutorialMinimapEnemySPRITE->SetPosition({ enemyFBX->GetPosition().x * 0.24f + 165.0f, enemyFBX->GetPosition().z * 0.24f + 545.0f });
@@ -955,12 +1005,12 @@ void TutorialArea::Draw()
 			switch (tutorialPage)
 			{
 			case 0:
-				staminaTutorialMaskSPRITE->Draw();
+				//staminaTutorialMaskSPRITE->Draw();
 				tutorialTextFrameSPRITE->Draw();
 				tutorialTextSPRITE[6]->Draw();
 				break;
 			case 1:
-				staminaTutorialMaskSPRITE->Draw();
+				//staminaTutorialMaskSPRITE->Draw();
 				tutorialTextFrameSPRITE->Draw();
 				tutorialTextSPRITE[7]->Draw();
 				break;
@@ -1016,7 +1066,7 @@ void TutorialArea::Draw()
 			switch (tutorialPage)
 			{
 			case 0:
-				staminaTutorialMaskSPRITE->Draw();
+				//staminaTutorialMaskSPRITE->Draw();
 				tutorialTextFrameSPRITE->Draw();
 				tutorialTextSPRITE[17]->Draw();
 				break;
@@ -1123,6 +1173,7 @@ void TutorialArea::Draw()
 			fadeSPRITE->Draw();
 		}
 	}
+	staminaWarningSPRITE->Draw();
 
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
