@@ -204,4 +204,7 @@ public:
 	bool ableToDamage = false;
 	float timer = 0.0f;
 	bool damageAdvantage = false;
+	float staminaWarningSpriteAlpha = 0.0f;
+	bool lowStaminaWarningActivation = false;
+	float lowStaminaWarningTimer = 0.0f;
 };

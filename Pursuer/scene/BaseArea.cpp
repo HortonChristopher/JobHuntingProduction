@@ -1177,6 +1177,8 @@ void BaseArea::Update()
 		staminaSpriteAlpha = 0.0f;
 	}
 
+	staminaWarningSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, playerFBX->staminaWarningSpriteAlpha });
+
 	if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && playerFBX->stamina > 0.0f)
 	{
 		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, 10, -1.0f, 1.0f);
@@ -1455,6 +1457,7 @@ void BaseArea::Draw()
 			baseAreaMinimapEnemySPRITE[i]->Draw();
 		}
 	}
+	staminaWarningSPRITE->Draw();
 	baseAreaMissionSPRITE->Draw();
 
 	// Debug text drawing
@@ -1631,6 +1634,7 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(14, "Heal.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(15, "HealK.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(16, "HealC.png")) { assert(0); return; } // Heal Graphic
+	if (!Sprite::LoadTexture(17, "LowStaminaWarning.png")) { assert(0); return; } // Low Stamina Warning Graphic
 
 	loadingPercent++;
 
@@ -1653,8 +1657,10 @@ void BaseArea::thread1()
 	healSPRITE = Sprite::Create(14, { 1102.0f, 542.0f });
 	healKeyboardSPRITE = Sprite::Create(15, { 1102.0f, 542.0f });
 	healControllerSPRITE = Sprite::Create(16, { 1102.0f, 542.0f });
+	staminaWarningSPRITE = Sprite::Create(17, { 720.0f, 190.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
+	staminaWarningSPRITE->SetSize({ 75.0f, 42.0f });
 
 	loadingPercent++;
 }

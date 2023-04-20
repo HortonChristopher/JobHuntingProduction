@@ -130,6 +130,7 @@ private:
 	Sprite* healKeyboardSPRITE = nullptr;
 	Sprite* loadingBarSPRITE = nullptr;
 	Sprite* loadingBarFrameSPRITE = nullptr;
+	Sprite* staminaWarningSPRITE = nullptr;
 	float staminaSpriteAlpha = 1.0f;
 	float staminaSpriteInteger = 0.8f;
 	float blinkingStaminaAlpha = 1.0f;

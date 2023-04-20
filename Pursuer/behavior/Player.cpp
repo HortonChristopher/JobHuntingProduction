@@ -497,6 +497,32 @@ void Player::Update()
 			stamina -= 40.0f;
 			enumStatus = DODGE;
 		}
+		else if (input->TriggerKey(DIK_LCONTROL) && !dodge && stamina < 40.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina < 40.0f)
+		{
+			lowStaminaWarningActivation = true;
+		}
+
+		if (lowStaminaWarningActivation)
+		{
+			staminaWarningSpriteAlpha = 1.0f;
+			lowStaminaWarningActivation = false;
+		}
+		else if (!lowStaminaWarningActivation && staminaWarningSpriteAlpha > 0.0f)
+		{
+			if (lowStaminaWarningTimer >= 15.0f)
+			{
+				staminaWarningSpriteAlpha -= 1.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				lowStaminaWarningTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+		}
+		else
+		{
+			staminaWarningSpriteAlpha = 0.0f;
+			lowStaminaWarningTimer = 0.0f;
+		}
 
 		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 		{
