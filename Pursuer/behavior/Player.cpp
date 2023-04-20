@@ -308,6 +308,10 @@ void Player::Update()
 				break;
 			}
 		}
+		else if (input->TriggerMouseLeft() && stamina < 25.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina < 25.0f)
+		{
+			lowStaminaWarningActivation = true;
+		}
 
 		if (input->TriggerKey(DIK_H) && healRemaining > 0 && enumStatus != HEAL||
 			input->TriggerControllerButton(XINPUT_GAMEPAD_Y) && healRemaining > 0 && enumStatus != HEAL)
