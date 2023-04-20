@@ -145,7 +145,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(94, "TutorialMission1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(93, "TutorialMission2.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(92, "TutorialMission3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(91, "TutorialMission4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(40, "TutorialMission4.png")) { assert(0); return; }
 
 	loadingPercent++;
 
@@ -190,7 +190,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	healControllerSPRITE = Sprite::Create(31, { 1102.0f, 542.0f });
 	healTutorialMaskSPRITE = Sprite::Create(32, { 0.0f, 0.0f });
 	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, {1.0f, 1.0f, 1.0f, fadeSpriteAlpha});
-	staminaWarningSPRITE = Sprite::Create(91, { 720.0f, 190.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
+	staminaWarningSPRITE = Sprite::Create(40, { 720.0f, 190.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
 	staminaWarningSPRITE->SetSize({ 75.0f, 42.0f });
 
 	loadingPercent++;
