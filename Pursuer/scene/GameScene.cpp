@@ -109,12 +109,11 @@ void GameScene::Update()
 		if (tutorialOrBase == 0)
 		{
 			std::thread th1(&GameScene::thread1, this);
-			while (loadingFinished.load() != true)
+			th1.detach();
+			while (loadingFinished.load() == false)
 			{
-				loadingScreen->addLoadingPercent(40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
 				loadingScreen->Update();
 			}
-			th1.join();
 			showLoading = false;
 		}
 		else if (tutorialOrBase == 1)
@@ -155,6 +154,8 @@ void GameScene::Update()
 		{
 			tutorialArea->~TutorialArea();
 			page = 1;
+			loadingPercent.store(0);
+			loadingFinished.store(false);
 			tutorialOrBase = 1;
 			tutorialArea->deletion = false;
 			break;

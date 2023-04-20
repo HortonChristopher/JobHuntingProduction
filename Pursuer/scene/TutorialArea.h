@@ -100,7 +100,8 @@ private:
 	Object3d* enemyAttackRangeOBJ = nullptr;
 
 	// Sprite Generation
-	Sprite* tutorialTextFrameSPRITE = nullptr;
+	Sprite* tutorialTextFrameSPRITEc = nullptr;
+	Sprite* tutorialTextFrameSPRITEk = nullptr;
 	std::array<Sprite*, 26> tutorialTextSPRITE = { {} };
 	int numberOfTutorialTextSprites = 26;
 	std::array<Sprite*, 4> tutorialMissionSPRITE = { {} };

@@ -25,7 +25,8 @@ TutorialArea::~TutorialArea()
 	safe_delete(groundMODEL);
 	safe_delete(skydomeOBJ);
 	safe_delete(skydomeMODEL);
-	safe_delete(tutorialTextFrameSPRITE);
+	safe_delete(tutorialTextFrameSPRITEc);
+	safe_delete(tutorialTextFrameSPRITEk);
 	for (int i = 0; i < numberOfTutorialTextSprites; i++) { safe_delete(tutorialTextSPRITE[i]); }
 	for (int i = 0; i < 4; i++) { safe_delete(tutorialMissionSPRITE[i]); }
 	safe_delete(playerFBX);
@@ -99,7 +100,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	loadingPercent++;
 
 	// Sprite Generation
-	if (!Sprite::LoadTexture(1, "TutorialTextFrame.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(1, "TutorialTextFrameC.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(2, "Tutorial1_1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(3, "Tutorial1_2.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(4, "Tutorial1_3.png")) { assert(0); return; }
@@ -126,6 +127,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(24, "Tutorial4_4.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(26, "Tutorial4_5.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(27, "Tutorial4_6.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(41, "TutorialTextFrameK.png")) { assert(0); return; }
 
 	loadingPercent++;
 
@@ -145,7 +147,7 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(94, "TutorialMission1.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(93, "TutorialMission2.png")) { assert(0); return; }
 	if (!Sprite::LoadTexture(92, "TutorialMission3.png")) { assert(0); return; }
-	if (!Sprite::LoadTexture(40, "TutorialMission4.png")) { assert(0); return; }
+	if (!Sprite::LoadTexture(91, "TutorialMission4.png")) { assert(0); return; }
 
 	loadingPercent++;
 
@@ -156,11 +158,12 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	if (!Sprite::LoadTexture(88, "HPBarFrame.png")) { assert(0); return; } // HP bar frame texture
 	if (!Sprite::LoadTexture(89, "STBar.png")) { assert(0); return; } // ST bar texture
 	if (!Sprite::LoadTexture(90, "STBarFrame.png")) { assert(0); return; } // ST bar frame texture
-	if (!Sprite::LoadTexture(91, "LowStaminaWarning.png")) { assert(0); return; } // Low Stamina Warning Graphic
+	if (!Sprite::LoadTexture(40, "LowStaminaWarning.png")) { assert(0); return; } // Low Stamina Warning Graphic
 
 	loadingPercent++;
 
-	tutorialTextFrameSPRITE = Sprite::Create(1, { 390.0f, 300.0f });
+	tutorialTextFrameSPRITEk = Sprite::Create(1, { 390.0f, 300.0f });
+	tutorialTextFrameSPRITEc = Sprite::Create(41, { 390.0f, 300.0f });
 	for (int i = 0; i < numberOfTutorialTextSprites; i++)
 	{
 		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
@@ -650,6 +653,8 @@ void TutorialArea::Update()
 			if (tutorialPage == 2)
 			{
 				progress = 100.0f;
+				playerFBX->staminaWarningSpriteAlpha = 0.0f;
+				playerFBX->stamina = 100.0f;
 				tutorialPage = 3;
 				playerFBX->tutorialPart = 0;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
@@ -696,6 +701,20 @@ void TutorialArea::Update()
 					skydomeOBJ->SetPosition(playerFBX->GetPosition());
 					doorOpenCutscene = false;
 				}
+			}
+		}
+
+		// Damage overlay display
+		if (damageOverlayDisplay)
+		{
+			if (playerFBX->enumStatus != TutorialPlayer::DEAD)
+			{
+				damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			tutorialAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			if (damageOverlaySpriteALPHA <= 0.0f)
+			{
+				damageOverlayDisplay = false;
 			}
 		}
 
@@ -976,7 +995,14 @@ void TutorialArea::Draw()
 		case INTROCUTSCENE:
 			break;
 		case MOVEMENTTUTORIAL:
-			tutorialTextFrameSPRITE->Draw();
+			if (keyOrMouse == 0)
+			{
+				tutorialTextFrameSPRITEc->Draw();
+			}
+			else if (keyOrMouse == 1)
+			{
+				tutorialTextFrameSPRITEk->Draw();
+			}
 			switch (tutorialPage)
 			{
 			case 0:
@@ -1006,16 +1032,37 @@ void TutorialArea::Draw()
 			{
 			case 0:
 				//staminaTutorialMaskSPRITE->Draw();
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[6]->Draw();
 				break;
 			case 1:
 				//staminaTutorialMaskSPRITE->Draw();
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[7]->Draw();
 				break;
 			case 2:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[8]->Draw();
 				if (keyOrMouse == 0)
 				{
@@ -1027,7 +1074,14 @@ void TutorialArea::Draw()
 				}
 				break;
 			case 3:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[11]->Draw();
 				break;
 			}
@@ -1037,11 +1091,25 @@ void TutorialArea::Draw()
 			{
 			case 0:
 				minimapTutorialMaskSPRITE->Draw();
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[12]->Draw();
 				break;
 			case 1:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[13]->Draw();
 				if (keyOrMouse == 0)
 				{
@@ -1053,11 +1121,25 @@ void TutorialArea::Draw()
 				}
 				break;
 			case 2:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[16]->Draw();
 				break;
 			case 3:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[23]->Draw();
 				break;
 			}
@@ -1067,15 +1149,36 @@ void TutorialArea::Draw()
 			{
 			case 0:
 				//staminaTutorialMaskSPRITE->Draw();
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[17]->Draw();
 				break;
 			case 1:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[18]->Draw();
 				break;
 			case 2:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[19]->Draw();
 				if (keyOrMouse == 0)
 				{
@@ -1087,16 +1190,37 @@ void TutorialArea::Draw()
 				}
 				break;
 			case 3:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[22]->Draw();
 				break;
 			case 4:
 				healTutorialMaskSPRITE->Draw();
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[24]->Draw();
 				break;
 			case 5:
-				tutorialTextFrameSPRITE->Draw();
+				if (keyOrMouse == 0)
+				{
+					tutorialTextFrameSPRITEc->Draw();
+				}
+				else if (keyOrMouse == 1)
+				{
+					tutorialTextFrameSPRITEk->Draw();
+				}
 				tutorialTextSPRITE[25]->Draw();
 				break;
 			}
