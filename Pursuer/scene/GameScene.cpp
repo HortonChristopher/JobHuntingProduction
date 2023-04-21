@@ -263,7 +263,8 @@ void GameScene::Update()
 	if (page == 2 || page == 3)
 	{
 		if (input->TriggerKey(DIK_ESCAPE) || input->TriggerControllerButton(XINPUT_GAMEPAD_START)
-			|| input->TriggerKey(DIK_X) && menu->GetMenuState() == 0 && menu != nullptr || input->TriggerControllerButton(XINPUT_GAMEPAD_START) && menu->GetMenuState() == 0 && menu != nullptr)
+			|| input->TriggerKey(DIK_X) && menu->GetMenuState() == 0 && menu != nullptr || input->TriggerControllerButton(XINPUT_GAMEPAD_START) && menu->GetMenuState() == 0 && menu != nullptr
+			|| input->TriggerControllerButton(XINPUT_GAMEPAD_B) && menu->GetMenuState() == 0 && menu != nullptr && pause)
 		{
 			if (pause)
 			{
