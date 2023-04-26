@@ -48,7 +48,7 @@ struct Vector3 : public DirectX::XMFLOAT3
 	Vector3(const float& num);
 	Vector3(const float& x, const float& y, const float& z);
 
-	Vector3& operator* (Vector3 vector);
+	//Vector3& operator* (Vector3 vector);
 	Vector3& operator/ (Vector3 vector);
 
 	Vector3& operator+= (Vector3 vector);

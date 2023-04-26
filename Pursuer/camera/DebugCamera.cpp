@@ -97,83 +97,149 @@ void DebugCamera::Update()
 	{
 
 	}
-	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
+	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight() || input->PushRStickDown() || input->PushRStickUp())
 	{
-		float dy;
-		//float dx;
+		//float dy;
+		////float dx;
 
+		//if (input->PushMouseRight())
+		//{
+		//	dy = mouseMove.lX * scaleY * SettingParameters::GetReverseX();
+		//	//dx = mouseMove.lY * scaleX;
+		//}
+		//else if (input->PushRStickLeft() || input->PushRStickRight())
+		//{
+		//	dy = (stickMove.x * -scaleY * 10.0f) * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
+		//}
+		//else if (input->PushRStickUp() || input->PushRStickDown())
+		//{
+		//	//dx = stickMove.y * -scaleX * 10.0f;
+		//}
+
+		////angleX = dx * XM_PI;
+		//angleY = dy * XM_PI;
+		//rotation += angleY;
+		////prevMouseMove = mouseMove.lX * scaleY;
+
+		// ゲームパッドの右スティックでのカメラ操作
+		if (input->PushRStickLeft() || input->PushRStickUp() || input->PushRStickRight() || input->PushRStickDown())
+		{
+
+			auto vec = input->GetRStickDirection();
+
+			phi += XM_PI / 180.0f * -vec.x * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
+			theta += XM_PI / 180.0f * -vec.y * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseY();
+			if (theta > 40 * XM_PI / 180.0f)
+				theta = 40 * XM_PI / 180.0f;
+			else if (theta < -40 * XM_PI / 180.0f)
+				theta = -40 * XM_PI / 180.0f;
+
+			if (phi > 360 * XM_PI / 180.0f)
+				phi -= 360 * XM_PI / 180.0f;
+			else if (phi < 0)
+				phi += 360 * XM_PI / 180.0f;
+
+			if (theta < 0)
+			{
+				distance = 48 * (1 + theta * 1.1f);
+			}
+			dirty = true;
+		}
+
+		// マウスの左ボタンが押されていたらカメラを回転させる
 		if (input->PushMouseRight())
 		{
-			dy = mouseMove.lX * scaleY * SettingParameters::GetReverseX();
-			//dx = mouseMove.lY * scaleX;
-		}
-		else if (input->PushRStickLeft() || input->PushRStickRight())
-		{
-			dy = (stickMove.x * -scaleY * 10.0f) * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
-		}
-		else if (input->PushRStickUp() || input->PushRStickDown())
-		{
-			//dx = stickMove.y * -scaleX * 10.0f;
+
+			phi += XM_PI / 180.0f * mouseMove.lX / 7;
+			theta += XM_PI / 180.0f * mouseMove.lY / 7;
+			if (theta > 40 * XM_PI / 180.0f)
+				theta = 40 * XM_PI / 180.0f;
+			else if (theta < -40 * XM_PI / 180.0f)
+				theta = -40 * XM_PI / 180.0f;
+
+			if (phi > 360 * XM_PI / 180.0f)
+				phi -= 360 * XM_PI / 180.0f;
+			else if (phi < 0)
+				phi += 360 * XM_PI / 180.0f;
+
+			if (theta < 0)
+			{
+				distance = 48 * (1 + theta * 1.1f);
+			}
+			dirty = true;
 		}
 
-		//angleX = dx * XM_PI;
-		angleY = dy * XM_PI;
-		rotation += angleY;
-		//prevMouseMove = mouseMove.lX * scaleY;
+		// ホイール入力で距離を変更
+		if (mouseMove.lZ != 0) {
+			distance -= mouseMove.lZ / 100.0f;
+			distance = max(distance, 1.0f);
+			dirty = true;
+		}
+
+		// Translate the camera if the middle mouse button is pressed
+		/*if (input->PushMouseMiddle())
+		{
+			float dx = mouseMove.lX / 100.0f;
+			float dy = mouseMove.lY / 100.0f;
+
+			XMVECTOR move = {-dx, +dy, 0, 0};
+			move = XMVector3Transform(move, matRot);
+
+			MoveVector(move);
+			dirty = true;
+		}*/
+
+		// Change the distance with wheel input
+		/*if (mouseMove.lZ != 0 && !title) {
+			distance -= mouseMove.lZ / 100.0f;
+			distance = max(distance, 1.0f);
+			dirty = true;
+		}*/
 
 		dirty = true;
 	}
 
 	prevRotation = objectRotation.y;
 
-	// Translate the camera if the middle mouse button is pressed
-	/*if (input->PushMouseMiddle())
-	{
-		float dx = mouseMove.lX / 100.0f;
-		float dy = mouseMove.lY / 100.0f;
-
-		XMVECTOR move = {-dx, +dy, 0, 0};
-		move = XMVector3Transform(move, matRot);
-
-		MoveVector(move);
-		dirty = true;
-	}*/
-
-	// Change the distance with wheel input
-	/*if (mouseMove.lZ != 0 && !title) {
-		distance -= mouseMove.lZ / 100.0f;
-		distance = max(distance, 1.0f);
-		dirty = true;
-	}*/
-
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
-		XMMATRIX matRotNew = XMMatrixIdentity();
-		if (cutscene)
+		if (title || cutscene || wCutscene || cutsceneActive)
 		{
-			matRotNew *= XMMatrixRotationX(-angleX);
+			XMMATRIX matRotNew = XMMatrixIdentity();
+			if (cutscene)
+			{
+				matRotNew *= XMMatrixRotationX(-angleX);
+			}
+			else
+			{
+				matRotNew *= XMMatrixRotationY(-angleY);
+			}
+			// 累積の回転行列を合成
+			// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
+			// クォータニオンを使用する方が望ましい
+			matRot = matRotNew * matRot;
+
+			// 注視点から視点へのベクトルと、上方向ベクトル
+			XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
+			XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+
+			// ベクトルを回転
+			vTargetEye = XMVector3Transform(vTargetEye, matRot);
+			vUp = XMVector3Transform(vUp, matRot);
+
+			// 注視点からずらした位置に視点座標を決定
+			const XMFLOAT3& target = GetTarget();
+			SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 20.0f, target.z + vTargetEye.m128_f32[2] });
+			SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });
 		}
 		else
 		{
-			matRotNew *= XMMatrixRotationY(-angleY);
+			float nowTheta = theta;
+			if (theta < 0)
+				nowTheta = 0;
+			eye = Vector3(cos(phi) * cos(nowTheta), sin(nowTheta), sin(phi) * cos(nowTheta)) * distance + target;
+			viewDirty = true;
 		}
-		// 累積の回転行列を合成
-		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
-		// クォータニオンを使用する方が望ましい
-		matRot = matRotNew * matRot;
-
-		// 注視点から視点へのベクトルと、上方向ベクトル
-		XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
-		XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
-
-		// ベクトルを回転
-		vTargetEye = XMVector3Transform(vTargetEye, matRot);
-		vUp = XMVector3Transform(vUp, matRot);
-
-		// 注視点からずらした位置に視点座標を決定
-		const XMFLOAT3& target = GetTarget();
-		SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 20.0f, target.z + vTargetEye.m128_f32[2] });
-		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });
 	}
 
 	Camera::Update();

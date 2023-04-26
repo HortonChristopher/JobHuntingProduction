@@ -143,11 +143,11 @@ void BaseArea::Update()
 	{
 		if (!lockOnActive && !playerFBX->dodge)
 		{
-			camera->SetTarget(playerPositionOBJ->GetPosition());
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		}
 		else if (playerFBX->dodge)
 		{
-			camera->SetTarget(playerFBX->dodgePosition);
+			camera->SetTarget({ playerFBX->dodgePosition.x, playerFBX->dodgePosition.y + 15.0f, playerFBX->dodgePosition.z });
 		}
 		camera->Update();
 	}
@@ -248,7 +248,7 @@ void BaseArea::Update()
 	//		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
 	//		objectRotation = playerFBX->GetRotation();
 	//		lockOnActive = true;
-	//		//camera->SetTarget(playerFBX->GetPosition());
+	//		//camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 	//		//camera->SetDistance(48.0f);
 	//		camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
 	//		if (min > 0.0f)
@@ -265,14 +265,14 @@ void BaseArea::Update()
 	//	{
 	//		lockOnActive = false;
 	//		degreeTransfer = 0.0f;
-	//		camera->SetTarget(playerFBX->GetPosition());
+	//		camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 	//		camera->SetDistance(48.0f);
 	//		camera->Update();
 	//	}
 	//}
 	//else
 	//{
-	//	camera->SetTarget(playerFBX->GetPosition());
+	//	camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 	//	camera->SetDistance(48.0f);
 	//	camera->Update();
 	//	lockOnActive = false;
@@ -794,7 +794,7 @@ void BaseArea::Update()
 
 	if (screenShake)
 	{
-		camera->SetTarget(ScreenShake(playerFBX->GetPosition()));
+		camera->SetTarget(ScreenShake({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z }));
 		camera->Update();
 		shakeTimer += shakeTimerInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (shakeTimer >= maxShakeTimer)
@@ -1009,23 +1009,23 @@ void BaseArea::Update()
 		if (playerFBX->GetPosition().x > mapBorder)
 		{
 			playerFBX->SetPosition({ mapBorder, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
-			camera->SetTarget(playerFBX->GetPosition());
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		}
 		else if (playerFBX->GetPosition().x < -mapBorder)
 		{
 			playerFBX->SetPosition({ -mapBorder, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
-			camera->SetTarget(playerFBX->GetPosition());
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		}
 
 		if (playerFBX->GetPosition().z > mapBorder)
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, mapBorder });
-			camera->SetTarget(playerFBX->GetPosition());
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		}
 		else if (playerFBX->GetPosition().z < -mapBorder)
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -mapBorder });
-			camera->SetTarget(playerFBX->GetPosition());
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		}
 
 		for (float i = 0.0f; i < mapBorderParticles; i++)
@@ -1691,7 +1691,7 @@ void BaseArea::thread2()
 	loadingPercent++;
 
 	// Camera initial values
-	camera->SetTarget(playerFBX->GetPosition());
+	camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 	camera->SetUp({ 0, 1, 0 });
 	camera->SetDistance(48.0f);
 

@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "DeltaTime.h"
 #include "SettingParameters.h"
+#include "Vector.h"
 
 /// <summary>
 /// デバッグ用カメラ
@@ -39,6 +40,8 @@ private:
 	float prevRotation = 0.0f;
 
 	float rotation = 0.0f;
+	float phi = 0.0f;
+	float theta = 0.0f;
 
 	//LONG prevMouseMove = 0.0;
 	// 回転行列

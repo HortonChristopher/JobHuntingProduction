@@ -211,13 +211,13 @@ Vector3::Vector3(const float& x, const float& y, const float& z)
 	this->z = z;
 }
 
-Vector3& Vector3::operator*(Vector3 vector)
-{
-	x = x * vector.x;
-	y = y * vector.y;
-	z = z * vector.z;
-	return *this;
-}
+//Vector3& Vector3::operator*(Vector3 vector)
+//{
+//	x = x * vector.x;
+//	y = y * vector.y;
+//	z = z * vector.z;
+//	return *this;
+//}
 
 Vector3& Vector3::operator/(Vector3 vector)
 {
