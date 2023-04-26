@@ -406,15 +406,15 @@ void TutorialArea::Update()
 		{
 			if (playerFBX->enumStatus == TutorialPlayer::ATTACK)
 			{
-				if (playerFBX->timer >= 54.2f && playerFBX->timer <= 62.2f ||
-					playerFBX->timer >= 90.35f && playerFBX->timer <= 98.3f ||
-					playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+				if (playerFBX->timer >= playerFirstAttackStartTimer && playerFBX->timer <= playerFirstAttackEndTimer ||
+					playerFBX->timer >= playerSecondAttackStartTimer && playerFBX->timer <= playerSecondAttackEndTimer ||
+					playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 				{
 					if (playerFBX->enumStatus == TutorialPlayer::ATTACK && playerFBX->ableToDamage)
 					{
 						if (intersect(playerAttackRangeOBJ->GetPosition(), enemyFBX->GetPosition(), 3.0f, 25.0f, 25.0f))
 						{
-							if (playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+							if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 							{
 								enemyKnockbackTime = 0.0f;
 								enemyKnockback = true;
@@ -425,7 +425,7 @@ void TutorialArea::Update()
 							enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
 							progress += 15.0f;
 
-							if (playerFBX->timer >= 152.6f && playerFBX->timer <= 160.64f)
+							if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 							{
 								ParticleCreation(enemyFBX->GetPosition().x, enemyFBX->GetPosition().y, enemyFBX->GetPosition().z, 90, 5.0f, 20.0f);
 							}
@@ -455,8 +455,8 @@ void TutorialArea::Update()
 					}
 				}
 
-				if (playerFBX->timer > 62.2f && playerFBX->timer < 90.35f ||
-					playerFBX->timer > 98.3f && playerFBX->timer < 152.6f)
+				if (playerFBX->timer > playerFirstAttackEndTimer && playerFBX->timer < playerSecondAttackStartTimer ||
+					playerFBX->timer > playerSecondAttackEndTimer && playerFBX->timer < playerThirdAttackStartTimer)
 				{
 					playerFBX->ableToDamage = true;
 				}

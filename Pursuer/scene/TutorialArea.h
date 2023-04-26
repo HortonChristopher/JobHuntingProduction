@@ -130,6 +130,19 @@ private:
 	float blinkingStaminaSpriteInteger = 2.4f;
 	bool staminaBlinkingEffect = false;
 
+	// Player Attack aspects
+	float playerAttackRange = 25.0f;
+	float playerAttackDamage = 1.0f;
+	float playerFirstAttackStartTimer = 54.2f;
+	float playerFirstAttackEndTimer = 62.2f;
+	float playerSecondAttackStartTimer = 90.35f;
+	float playerSecondAttackEndTimer = 98.3f;
+	float playerThirdAttackStartTimer = 152.6f;
+	float playerThirdAttackEndTimer = 160.64f;
+	float playerAttackKnockbackDistance = 180.0f;
+	float playerAttackKnockbackInterval = 60.0f;
+	float playerAttackKnockbackMaxtime = 30.0f;
+
 	// Damage Overlay
 	Sprite* tutorialAreaDamageOverlaySPRITE = nullptr;
 	float damageOverlaySpriteALPHA = 1.0f;
