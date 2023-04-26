@@ -99,32 +99,9 @@ void DebugCamera::Update()
 	}
 	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight() || input->PushRStickDown() || input->PushRStickUp())
 	{
-		//float dy;
-		////float dx;
-
-		//if (input->PushMouseRight())
-		//{
-		//	dy = mouseMove.lX * scaleY * SettingParameters::GetReverseX();
-		//	//dx = mouseMove.lY * scaleX;
-		//}
-		//else if (input->PushRStickLeft() || input->PushRStickRight())
-		//{
-		//	dy = (stickMove.x * -scaleY * 10.0f) * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
-		//}
-		//else if (input->PushRStickUp() || input->PushRStickDown())
-		//{
-		//	//dx = stickMove.y * -scaleX * 10.0f;
-		//}
-
-		////angleX = dx * XM_PI;
-		//angleY = dy * XM_PI;
-		//rotation += angleY;
-		////prevMouseMove = mouseMove.lX * scaleY;
-
-		// ゲームパッドの右スティックでのカメラ操作
+		// Camera control with the controller's right stick
 		if (input->PushRStickLeft() || input->PushRStickUp() || input->PushRStickRight() || input->PushRStickDown())
 		{
-
 			auto vec = input->GetRStickDirection();
 
 			phi += XM_PI / 180.0f * -vec.x * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
@@ -146,10 +123,9 @@ void DebugCamera::Update()
 			dirty = true;
 		}
 
-		// マウスの左ボタンが押されていたらカメラを回転させる
+		// Rotate the camera if the right mouse button is pressed
 		if (input->PushMouseRight())
 		{
-
 			phi += XM_PI / 180.0f * mouseMove.lX / 7;
 			theta += XM_PI / 180.0f * mouseMove.lY / 7;
 			if (theta > 40 * XM_PI / 180.0f)
@@ -169,32 +145,12 @@ void DebugCamera::Update()
 			dirty = true;
 		}
 
-		// ホイール入力で距離を変更
+		//  Change the distance with wheel input
 		if (mouseMove.lZ != 0) {
 			distance -= mouseMove.lZ / 100.0f;
 			distance = max(distance, 1.0f);
 			dirty = true;
 		}
-
-		// Translate the camera if the middle mouse button is pressed
-		/*if (input->PushMouseMiddle())
-		{
-			float dx = mouseMove.lX / 100.0f;
-			float dy = mouseMove.lY / 100.0f;
-
-			XMVECTOR move = {-dx, +dy, 0, 0};
-			move = XMVector3Transform(move, matRot);
-
-			MoveVector(move);
-			dirty = true;
-		}*/
-
-		// Change the distance with wheel input
-		/*if (mouseMove.lZ != 0 && !title) {
-			distance -= mouseMove.lZ / 100.0f;
-			distance = max(distance, 1.0f);
-			dirty = true;
-		}*/
 
 		dirty = true;
 	}
