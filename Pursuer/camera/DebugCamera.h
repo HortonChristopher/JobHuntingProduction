@@ -40,8 +40,8 @@ private:
 	float prevRotation = 0.0f;
 
 	float rotation = 0.0f;
-	float phi = 0.0f;
-	float theta = 0.0f;
+	float phi = 270.0f * 3.141592654f / 180.0f;
+	float theta = 20.0f * 3.141592654f / 180.0f;
 
 	//LONG prevMouseMove = 0.0;
 	// 回転行列
