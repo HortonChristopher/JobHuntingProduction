@@ -22,6 +22,7 @@ extern XMFLOAT3 objectPosition = { 0.0f, -10.0f, 0.0f };
 extern XMFLOAT3 objectRotation = { 0.0f, 0.0f, 0.0f };
 extern DeltaTime* deltaTime;
 extern bool lockOnActive;
+extern XMFLOAT3 playerMovement;
 
 void Player::Initialize()
 {
@@ -427,6 +428,9 @@ void Player::Update()
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						playerMovement = { moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
+										   moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
+										   moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
 						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						if (enumStatus != ATTACK)
 						{
@@ -438,6 +442,9 @@ void Player::Update()
 						position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						playerMovement = { moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
+										   moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
+										   moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
 						if (enumStatus != ATTACK)
 						{
 							enumStatus = WALK;

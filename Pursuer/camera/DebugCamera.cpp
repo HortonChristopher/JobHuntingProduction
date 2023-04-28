@@ -7,6 +7,7 @@ using namespace DirectX;
 
 extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
+extern XMFLOAT3 playerMovement = { 0.0f, 0.0f, 0.0f };
 
 extern DeltaTime* deltaTime;
 
@@ -32,46 +33,63 @@ void DebugCamera::Update()
 
 	// Get mouse input
 	Input::MouseMove mouseMove = input->GetMouseMove();
-	Input::float2 stickMove = input->GetRStickDirection();
+	//Input::float2 stickMove = input->GetRStickDirection();
 
 	if (title)
 	{
 		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
 	}
-	//else if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
-	//{
-	//	//angleY -= (XMConvertToRadians(objectRotation.y) - XMConvertToRadians(prevRotation)) * 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-	//	if (input->TriggerKey(DIK_SPACE) || input->TriggerControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	//	{
-	//		if (objectRotation.y >= degreeTransfer)
-	//		{
-	//			angleY += (XMConvertToRadians(objectRotation.y - degreeTransfer));
-	//		}
-	//		else
-	//		{
-	//			angleY -= (XMConvertToRadians(degreeTransfer - objectRotation.y));
-	//		}
-	//		degreeTransfer = 0.0f;
-	//		//rotation = 0.0f;
-
-	//		dirty = true;
-
-	//		prevRotation = objectRotation.y;
-	//	}
-	/*	else
-		{
-			angleY -= XMConvertToRadians(objectRotation.y - prevRotation);
-			rotation += angleY;
-
-			dirty = true;
-		}*/
-	//}
 	// Rotate the camera if the right mouse button is pressed
 	else if (cutscene)
 	{
 		angleX += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dirty = true;
+	}
+	else if (lockOn)
+	{
+		// Calculate the view matrix
+  		XMMATRIX view = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+
+		// Extract the cameraPos position from the view matrix
+		XMFLOAT3 cameraPos;
+		XMStoreFloat3(&cameraPos, XMVectorNegate(XMVector3TransformCoord(XMLoadFloat3(&target), XMMatrixInverse(nullptr, view))));
+
+		// Calculate the direction vector from the camera's position to the boss position
+		XMFLOAT3 directionVector = XMFLOAT3(lockOnEnemyPos.x - playerPos.x, lockOnEnemyPos.y - playerPos.y, lockOnEnemyPos.z - playerPos.z);
+
+		// Normalize the direction vector
+		XMVECTOR directionVectorNormalized = XMVector3Normalize(XMLoadFloat3(&directionVector));
+
+		// Calculate the camera's new position based on the direction vector and camera speed
+		XMFLOAT3 newPosition = XMFLOAT3(playerPos.x - XMVectorGetX(directionVectorNormalized) * 48.0f, playerPos.y - XMVectorGetY(directionVectorNormalized) * 48.0f + 30.0f, playerPos.z - XMVectorGetZ(directionVectorNormalized) * 48.0f);
+
+		// Calculate the target position based on the player and boss positions
+		XMFLOAT3 newTarget = XMFLOAT3((playerPos.x + lockOnEnemyPos.x) * 0.5f, (playerPos.y + lockOnEnemyPos.y) * 0.5f, (playerPos.z + lockOnEnemyPos.z) * 0.5f);
+
+		// Convert cameraPos to cameraEye
+		XMVECTOR posV = XMLoadFloat3(&newPosition);
+		XMVECTOR targetV = XMLoadFloat3(&target);
+		XMVECTOR upV = XMLoadFloat3(&up);
+
+		// Calculate the view matrix
+		view = XMMatrixLookAtLH(posV, targetV, upV);
+
+		// Extract the cameraEye position from the view matrix
+		XMVECTOR cameraEyeVec = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		cameraEyeVec = XMVector4Transform(cameraEyeVec, XMMatrixInverse(nullptr, view));
+
+		// Convert cameraEyeVec back to a XMFLOAT3
+		XMFLOAT3 cameraEye;
+		XMStoreFloat3(&cameraEye, cameraEyeVec);
+
+		// Update the camera's position, target, and up vectors
+		eye = cameraEye;
+		target = lockOnEnemyPos;
+		up = up;
+
+		dirty = true;
+		viewDirty = true;
 	}
 	else if (wCutscene)
 	{
@@ -155,7 +173,7 @@ void DebugCamera::Update()
 		dirty = true;
 	}
 
-	prevRotation = objectRotation.y;
+	//prevRotation = objectRotation.y;
 
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
@@ -187,6 +205,10 @@ void DebugCamera::Update()
 			const XMFLOAT3& target = GetTarget();
 			SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 20.0f, target.z + vTargetEye.m128_f32[2] });
 			SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });
+		}
+		else if (lockOn)
+		{
+			viewDirty = true;
 		}
 		else
 		{

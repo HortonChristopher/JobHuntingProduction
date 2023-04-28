@@ -254,6 +254,10 @@ private:
 	float startTimerLimit = 220.0f;
 	float startTimerIntegral = 20.0f;
 
+	//Lock on aspects
+	int closestEnemy = 20;
+	bool lockOnSet = false;
+
 	int oddEven = 1;
 
 	bool firstRun = true;

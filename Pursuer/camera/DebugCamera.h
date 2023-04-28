@@ -5,6 +5,8 @@
 #include "SettingParameters.h"
 #include "Vector.h"
 
+#include <DirectXMath.h>
+
 /// <summary>
 /// デバッグ用カメラ
 /// </summary>
@@ -26,6 +28,14 @@ public:
 
 	void SetDistance(float distance) {
 		this->distance = distance; viewDirty = true;
+	}
+
+	void SetPhi(float phi) {
+		this->phi = phi;
+	}
+
+	void SetTheta(float theta) {
+		this->theta = theta;
 	}
 
 private:
@@ -52,4 +62,8 @@ public:
 	bool wCutscene = false;
 	int wCutscenePart = 0;
 	bool cutsceneActive = false;
+	XMFLOAT3 lockOnEnemyPos = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 playerPos = { 0.0f, 0.0f, 0.0f };
+	float playerRadius = 0.0f;
+	bool lockOn = false;
 };
