@@ -423,7 +423,7 @@ void Player::Update()
 				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
 				{
-					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
+					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f /*|| input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f */ )
 					{
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -432,7 +432,7 @@ void Player::Update()
 										   moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
 										   moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
 						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						if (enumStatus != ATTACK)
+						if (enumStatus != ATTACK && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
 						{
 							enumStatus = RUN;
 						}
@@ -445,7 +445,7 @@ void Player::Update()
 						playerMovement = { moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
 										   moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
 										   moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
-						if (enumStatus != ATTACK)
+						if (enumStatus != ATTACK && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
 						{
 							enumStatus = WALK;
 						}
@@ -475,10 +475,9 @@ void Player::Update()
 				//	//SetRotation(rotation);
 				//}
 
-				if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
-					input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
+				if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && lockOnActive)
 				{
-					/*if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && lockOnActive)
+					if (enumStatus != ATTACK)
 					{
 						if (input->PushKey(DIK_A) || input->PushLStickLeft())
 						{
@@ -494,13 +493,16 @@ void Player::Update()
 						}
 						else
 						{
-							enumStatus = RUN;
+							if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f)
+							{
+								enumStatus = RUN;
+							}
+							else
+							{
+								enumStatus = WALK;
+							}
 						}
 					}
-					else
-					{
-						enumStatus = RUN;
-					}*/
 				}
 			}
 		}

@@ -11,7 +11,7 @@ extern std::atomic<int> loadingPercent;
 
 extern int keyOrMouse;
 extern float degreeTransfer = 0.0f;
-extern bool lockOnActive = false;
+extern bool lockOnActive;
 
 extern int agroodEnemies = 0;
 extern int debugJetStream = 0;
@@ -132,11 +132,11 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 void BaseArea::Update()
 {
 	// Debugging only
-	for (int i = 0; i < 10; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
 		baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::STAND);
 		baseAreaEnemyFBX[i]->timer = 0.0f;
-	}
+	}*/
 
 	lightGroup->Update();
 	particleMan->Update();
@@ -1197,6 +1197,7 @@ void BaseArea::Update()
 		float degrees = XMConvertToDegrees(radians);
 		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
 		objectRotation = playerFBX->GetRotation();
+		lockOnActive = true;
 		camera->playerPos = playerFBX->GetPosition();
 		//camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
 		camera->lockOnEnemyPos = baseAreaEnemyFBX[closestEnemy]->GetPosition();
@@ -1206,6 +1207,7 @@ void BaseArea::Update()
 	else
 	{
 		camera->lockOn = false;
+		lockOnActive = false;
 		camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		camera->SetDistance(48.0f);
 		camera->Update();

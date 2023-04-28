@@ -12,7 +12,8 @@ extern XMFLOAT3 playerMovement = { 0.0f, 0.0f, 0.0f };
 extern DeltaTime* deltaTime;
 
 extern float degreeTransfer;
-extern bool lockOnActive;
+extern bool lockOnActive = false;
+
 
 DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 	: Camera(window_width, window_height)
