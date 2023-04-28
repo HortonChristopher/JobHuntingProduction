@@ -1061,11 +1061,13 @@ void BaseArea::Update()
 	{
 		STBarSPRITE->SetPosition({ 720.0f, 480.0f });
 		STBarFrameSPRITE->SetPosition({ 720.0f, 480.0f });
+		staminaWarningSPRITE->SetPosition({ 720.0f, 490.0f });
 	}
 	else
 	{
 		STBarSPRITE->SetPosition({ 720.0f, 380.0f });
 		STBarFrameSPRITE->SetPosition({ 720.0f, 380.0f });
+		staminaWarningSPRITE->SetPosition({ 720.0f, 390.0f });
 	}
 	STBarSPRITE->SetRotation(270.0f);
 	STBarFrameSPRITE->SetRotation(270.0f);
@@ -1637,7 +1639,7 @@ void BaseArea::thread1()
 	healSPRITE = Sprite::Create(14, { 1102.0f, 542.0f });
 	healKeyboardSPRITE = Sprite::Create(15, { 1102.0f, 542.0f });
 	healControllerSPRITE = Sprite::Create(16, { 1102.0f, 542.0f });
-	staminaWarningSPRITE = Sprite::Create(17, { 720.0f, 190.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
+	staminaWarningSPRITE = Sprite::Create(17, { 720.0f, 390.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 	staminaWarningSPRITE->SetSize({ 75.0f, 42.0f });
