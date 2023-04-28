@@ -1057,8 +1057,16 @@ void BaseArea::Update()
 	HPBarFrameSPRITE->SetSize({ 25.0f * 20.0f, 40.0f });
 	STBarSPRITE->SetSize({ playerFBX->stamina / 2.0f, 20.0f });
 	STBarFrameSPRITE->SetSize({ 50.0f, 20.0f });
-	STBarSPRITE->SetPosition({ 720.0f, 180.0f });
-	STBarFrameSPRITE->SetPosition({ 720.0f, 180.0f });
+	if (camera->lockOn)
+	{
+		STBarSPRITE->SetPosition({ 720.0f, 480.0f });
+		STBarFrameSPRITE->SetPosition({ 720.0f, 480.0f });
+	}
+	else
+	{
+		STBarSPRITE->SetPosition({ 720.0f, 380.0f });
+		STBarFrameSPRITE->SetPosition({ 720.0f, 380.0f });
+	}
 	STBarSPRITE->SetRotation(270.0f);
 	STBarFrameSPRITE->SetRotation(270.0f);
 	if (playerFBX->stamina < 100.0f && playerFBX->stamina >= 40.0f)
