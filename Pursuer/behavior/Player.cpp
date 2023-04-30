@@ -477,7 +477,7 @@ void Player::Update()
 
 				if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && lockOnActive)
 				{
-					if (enumStatus != ATTACK)
+					if (enumStatus != ATTACK && enumStatus != DODGE)
 					{
 						if (input->PushKey(DIK_A) || input->PushLStickLeft())
 						{
