@@ -38,6 +38,21 @@ public:
 		this->theta = theta;
 	}
 
+	void AddPhi(const float angle)
+	{
+		phi += angle;
+		if (phi > 360 * XM_PI / 180.0f)
+			phi -= 360 * XM_PI / 180.0f;
+		else if (phi < 0)
+			phi += 360 * XM_PI / 180.0f;
+		viewDirty = true;
+	}
+
+	const float GetPhi()
+	{
+		return phi;
+	}
+
 private:
 	// 入力クラスのポインタ
 	Input* input;
