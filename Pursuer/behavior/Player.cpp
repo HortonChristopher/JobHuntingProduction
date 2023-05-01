@@ -423,7 +423,7 @@ void Player::Update()
 				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
 				{
-					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f /*|| input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f */ )
+					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f /*|| input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f */)
 					{
 						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -503,6 +503,28 @@ void Player::Update()
 							}
 						}
 					}
+				}
+				else if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+				{
+					// Computes the inverse of the camera view matrix
+					XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetMatView());
+					// Calculate camera rotation angle
+					const Vector3 cameraDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
+					float cosA = Vector3(0, 0, 1).Dot(cameraDirectionZ);
+					if (cosA > 1.0f)
+						cosA = 1.0f;
+					else if (cosA < -1.0f)
+						cosA = -1.0f;
+					radY = acos(cosA);
+					const Vector3 CrossVec = Vector3(0, 0, 1).Cross(cameraDirectionZ);
+					if (CrossVec.y < 0)
+						radY *= -1;
+					// Assigns the camera's current degree of rotation
+					resetPhi = camera->GetPhi();
+
+					// Camera Rotation
+					const float phi = Easing::EaseInOutQuart(resetPhi, resetPhi + radY, 60, resetMoveCounter);
+					camera->SetPhi(phi);
 				}
 			}
 		}
