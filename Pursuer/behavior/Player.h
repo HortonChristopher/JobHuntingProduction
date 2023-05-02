@@ -207,4 +207,7 @@ public:
 	float staminaWarningSpriteAlpha = 0.0f;
 	bool lowStaminaWarningActivation = false;
 	float lowStaminaWarningTimer = 0.0f;
+	bool cameraResetActive = false;
+	float radY = 0.0f;
+	float cameraMoveCounter = 0.0f;
 };

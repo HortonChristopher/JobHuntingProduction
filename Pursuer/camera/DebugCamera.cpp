@@ -14,7 +14,6 @@ extern DeltaTime* deltaTime;
 extern float degreeTransfer;
 extern bool lockOnActive = false;
 
-
 DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
 	: Camera(window_width, window_height)
 {
@@ -123,17 +122,17 @@ void DebugCamera::Update()
 		{
 			auto vec = input->GetRStickDirection();
 
-			phi += XM_PI / 180.0f * -vec.x * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
-			theta += XM_PI / 180.0f * -vec.y * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseY();
-			if (theta > 40 * XM_PI / 180.0f)
-				theta = 40 * XM_PI / 180.0f;
-			else if (theta < -40 * XM_PI / 180.0f)
-				theta = -40 * XM_PI / 180.0f;
+			phi += 3.141592654f / 180.0f * -vec.x * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseX();
+			theta += 3.141592654f / 180.0f * -vec.y * ((float)SettingParameters::GetPadSensitivity() / 3.0f) * SettingParameters::GetReverseY();
+			if (theta > 40 * 3.141592654f / 180.0f)
+				theta = 40 * 3.141592654f / 180.0f;
+			else if (theta < -40 * 3.141592654f / 180.0f)
+				theta = -40 * 3.141592654f / 180.0f;
 
-			if (phi > 360 * XM_PI / 180.0f)
-				phi -= 360 * XM_PI / 180.0f;
+			if (phi > 360 * 3.141592654f / 180.0f)
+				phi -= 360 * 3.141592654f / 180.0f;
 			else if (phi < 0)
-				phi += 360 * XM_PI / 180.0f;
+				phi += 360 * 3.141592654f / 180.0f;
 
 			if (theta < 0)
 			{
@@ -145,17 +144,17 @@ void DebugCamera::Update()
 		// Rotate the camera if the right mouse button is pressed
 		if (input->PushMouseRight())
 		{
-			phi += XM_PI / 180.0f * mouseMove.lX / 7;
-			theta += XM_PI / 180.0f * mouseMove.lY / 7;
-			if (theta > 40 * XM_PI / 180.0f)
-				theta = 40 * XM_PI / 180.0f;
-			else if (theta < -40 * XM_PI / 180.0f)
-				theta = -40 * XM_PI / 180.0f;
+			phi += 3.141592654f / 180.0f * mouseMove.lX / 7;
+			theta += 3.141592654f / 180.0f * mouseMove.lY / 7;
+			if (theta > 40 * 3.141592654f / 180.0f)
+				theta = 40 * 3.141592654f / 180.0f;
+			else if (theta < -40 * 3.141592654f / 180.0f)
+				theta = -40 * 3.141592654f / 180.0f;
 
-			if (phi > 360 * XM_PI / 180.0f)
-				phi -= 360 * XM_PI / 180.0f;
+			if (phi > 360 * 3.141592654f / 180.0f)
+				phi -= 360 * 3.141592654f / 180.0f;
 			else if (phi < 0)
-				phi += 360 * XM_PI / 180.0f;
+				phi += 360 * 3.141592654f / 180.0f;
 
 			if (theta < 0)
 			{

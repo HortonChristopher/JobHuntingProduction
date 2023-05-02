@@ -515,16 +515,13 @@ void Player::Update()
 						cosA = 1.0f;
 					else if (cosA < -1.0f)
 						cosA = -1.0f;
-					float radY = acos(cosA);
+					radY = acos(cosA);
 					const Vector3 CrossVec = Vector3(0, 0, 1).Cross(cameraDirectionZ);
 					if (CrossVec.y < 0)
 						radY *= -1;
-					// Assigns the camera's current degree of rotation
-					float resetPhi = camera->GetPhi();
+					cameraMoveCounter = 0.0f;
 
-					// Camera Rotation
-					const float phi = Easing::EaseInOutQuart(resetPhi, resetPhi + radY, 60, resetMoveCounter);
-					camera->SetPhi(phi);
+					cameraResetActive = true;
 				}
 			}
 		}

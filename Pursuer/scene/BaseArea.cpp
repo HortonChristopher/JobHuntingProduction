@@ -1176,6 +1176,41 @@ void BaseArea::Update()
 		}
 	}
 
+#pragma region updates
+	playerFBX->Update();
+	playerPositionOBJ->Update();
+	attackRangeOBJ[0]->Update();
+	for (int i = 0; i < numberOfEnemiesTotal; i++)
+	{
+		baseAreaEnemyFBX[i]->Update();
+		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		{
+			landingPositionOBJ[i]->Update();
+		}
+		// Disable gravity during sky attack
+		if (baseAreaEnemyFBX[i]->landed)
+		{
+			baseAreaEnemyPositionOBJ[i]->notLandingAttack = true;
+		}
+		else
+		{
+			baseAreaEnemyPositionOBJ[i]->notLandingAttack = false;
+		}
+		baseAreaEnemyPositionOBJ[i]->Update();
+		if (baseAreaEnemyAliveBOOL[i])
+		{
+			enemyVisionRangeOBJ[i]->Update();
+			attackRangeOBJ[i + 1]->Update();
+		}
+	}
+	skydomeOBJ->Update();
+	extendedGroundOBJ->SetPosition({ playerFBX->GetPosition().x, -11, playerFBX->GetPosition().z });
+	extendedGroundOBJ->Update();
+	groundOBJ->Update();
+	tutorialGroundOBJ->Update();
+	collisionManager->CheckAllCollisions();
+#pragma endregion
+
 #pragma region LockOn
 	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
@@ -1217,46 +1252,30 @@ void BaseArea::Update()
 	else
 	{
 		camera->lockOn = false;
+		// Assigns the camera's current degree of rotation
+		camera->resetPhi = camera->GetPhi();
 		lockOnActive = false;
 		camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
 		camera->SetDistance(48.0f);
 		camera->Update();
 	}
-#pragma endregion
 
-#pragma region updates
-	playerFBX->Update();
-	playerPositionOBJ->Update();
-	attackRangeOBJ[0]->Update();
-	for (int i = 0; i < numberOfEnemiesTotal; i++)
+	if (playerFBX->cameraResetActive)
 	{
-		baseAreaEnemyFBX[i]->Update();
-		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		// Camera Rotation
+		const float phi = Easing::EaseInOutQuartic(camera->resetPhi, camera->resetPhi + playerFBX->radY, 60.0f, playerFBX->cameraMoveCounter);
+		camera->SetPhi(phi);
+
+		if (playerFBX->cameraMoveCounter >= 60.0f)
 		{
-			landingPositionOBJ[i]->Update();
-		}
-		// Disable gravity during sky attack
-		if (baseAreaEnemyFBX[i]->landed)
-		{
-			baseAreaEnemyPositionOBJ[i]->notLandingAttack = true;
+			playerFBX->cameraResetActive = false;
 		}
 		else
 		{
-			baseAreaEnemyPositionOBJ[i]->notLandingAttack = false;
+			playerFBX->cameraMoveCounter += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
-		baseAreaEnemyPositionOBJ[i]->Update();
-		if (baseAreaEnemyAliveBOOL[i])
-		{
-			enemyVisionRangeOBJ[i]->Update();
-			attackRangeOBJ[i + 1]->Update();
-		}
+		camera->Update();
 	}
-	skydomeOBJ->Update();
-	extendedGroundOBJ->SetPosition({ playerFBX->GetPosition().x, -11, playerFBX->GetPosition().z });
-	extendedGroundOBJ->Update();
-	groundOBJ->Update();
-	tutorialGroundOBJ->Update();
-	collisionManager->CheckAllCollisions();
 #pragma endregion
 
 #pragma region dontStackOnTop

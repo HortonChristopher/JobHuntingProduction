@@ -31,7 +31,7 @@ public:
 	}
 
 	void SetPhi(float phi) {
-		this->phi = phi;
+		this->phi = phi + 270.0f * 3.141592654f / 180.0f;
 	}
 
 	void SetTheta(float theta) {
@@ -41,10 +41,10 @@ public:
 	void AddPhi(const float angle)
 	{
 		phi += angle;
-		if (phi > 360 * XM_PI / 180.0f)
-			phi -= 360 * XM_PI / 180.0f;
+		if (phi > 360 * 3.141592654f / 180.0f)
+			phi -= 360 * 3.141592654f / 180.0f;
 		else if (phi < 0)
-			phi += 360 * XM_PI / 180.0f;
+			phi += 360 * 3.141592654f / 180.0f;
 		viewDirty = true;
 	}
 
@@ -81,4 +81,5 @@ public:
 	XMFLOAT3 playerPos = { 0.0f, 0.0f, 0.0f };
 	float playerRadius = 0.0f;
 	bool lockOn = false;
+	float resetPhi = 0.0f;
 };
