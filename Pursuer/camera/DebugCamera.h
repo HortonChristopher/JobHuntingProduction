@@ -31,7 +31,7 @@ public:
 	}
 
 	void SetPhi(float phi) {
-		this->phi = phi + 270.0f * 3.141592654f / 180.0f;
+		this->phi = phi;
 	}
 
 	void SetTheta(float theta) {
@@ -81,5 +81,6 @@ public:
 	XMFLOAT3 playerPos = { 0.0f, 0.0f, 0.0f };
 	float playerRadius = 0.0f;
 	bool lockOn = false;
+	bool resetting = false;
 	float resetPhi = 0.0f;
 };

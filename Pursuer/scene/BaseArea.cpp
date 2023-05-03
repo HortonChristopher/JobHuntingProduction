@@ -1176,6 +1176,64 @@ void BaseArea::Update()
 		}
 	}
 
+#pragma region LockOn
+	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
+		if (!camera->lockOn)
+		{
+			float min = FLT_MAX;
+			closestEnemy = 20;
+			for (int i = 0; i < 10; i++)
+			{
+				if (!baseAreaEnemyFBX[i]->dead)
+				{
+					float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+					float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+					if (abs(sqrt(x * x + y * y)) < min)
+					{
+						min = abs(sqrt(x * x + y * y));
+						closestEnemy = i;
+					}
+				}
+			}
+			camera->lockOn = true;
+		}
+		float x = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+		float z = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+		camera->playerRadius = abs(sqrt(x * x + z * z));
+		//float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
+		//float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
+		float radians = atan2(z, x);
+		float degrees = XMConvertToDegrees(radians);
+		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
+		camera->resetPhi = degrees += 180.0f;
+		objectRotation = playerFBX->GetRotation();
+		lockOnActive = true;
+		camera->playerPos = playerFBX->GetPosition();
+		//camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
+		camera->lockOnEnemyPos = baseAreaEnemyFBX[closestEnemy]->GetPosition();
+		//camera->lockOn = true;
+		camera->Update();
+	}
+	else
+	{
+		camera->lockOn = false;
+		if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		{
+			// Assigns the camera's current degree of rotation
+			camera->resetPhi *= 3.141592654f / 180.0f;
+			camera->SetPhi(camera->resetPhi);
+
+			playerFBX->cameraResetActive = false;
+			camera->resetting = true;
+		}
+		lockOnActive = false;
+		camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+		camera->SetDistance(48.0f);
+		camera->Update();
+	}
+#pragma endregion
+
 #pragma region updates
 	playerFBX->Update();
 	playerPositionOBJ->Update();
@@ -1209,73 +1267,6 @@ void BaseArea::Update()
 	groundOBJ->Update();
 	tutorialGroundOBJ->Update();
 	collisionManager->CheckAllCollisions();
-#pragma endregion
-
-#pragma region LockOn
-	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	{
-		if (!camera->lockOn)
-		{
-			float min = FLT_MAX;
-			closestEnemy = 20;
-			for (int i = 0; i < 10; i++)
-			{
-				if (!baseAreaEnemyFBX[i]->dead)
-				{
-					float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
-					float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
-					if (abs(sqrt(x * x + y * y)) < min)
-					{
-						min = abs(sqrt(x * x + y * y));
-						closestEnemy = i;
-					}
-				}
-			}
-			camera->lockOn = true;
-		}
-		float x = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-		float z = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
-		camera->playerRadius = abs(sqrt(x * x + z * z));
-		//float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-		//float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
-		float radians = atan2(z, x);
-		float degrees = XMConvertToDegrees(radians);
-		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
-		objectRotation = playerFBX->GetRotation();
-		lockOnActive = true;
-		camera->playerPos = playerFBX->GetPosition();
-		//camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
-		camera->lockOnEnemyPos = baseAreaEnemyFBX[closestEnemy]->GetPosition();
-		//camera->lockOn = true;
-		camera->Update();
-	}
-	else
-	{
-		camera->lockOn = false;
-		// Assigns the camera's current degree of rotation
-		camera->resetPhi = camera->GetPhi();
-		lockOnActive = false;
-		camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
-		camera->SetDistance(48.0f);
-		camera->Update();
-	}
-
-	if (playerFBX->cameraResetActive)
-	{
-		// Camera Rotation
-		const float phi = Easing::EaseInOutQuartic(camera->resetPhi, camera->resetPhi + playerFBX->radY, 60.0f, playerFBX->cameraMoveCounter);
-		camera->SetPhi(phi);
-
-		if (playerFBX->cameraMoveCounter >= 60.0f)
-		{
-			playerFBX->cameraResetActive = false;
-		}
-		else
-		{
-			playerFBX->cameraMoveCounter += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		}
-		camera->Update();
-	}
 #pragma endregion
 
 #pragma region dontStackOnTop

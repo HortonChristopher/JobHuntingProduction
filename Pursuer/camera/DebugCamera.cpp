@@ -115,8 +115,13 @@ void DebugCamera::Update()
 	{
 
 	}
-	else if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight() || input->PushRStickDown() || input->PushRStickUp())
+	else if (resetting || input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight() || input->PushRStickDown() || input->PushRStickUp())
 	{
+		if (resetting)
+		{
+			resetting = false;
+		}
+
 		// Camera control with the controller's right stick
 		if (input->PushRStickLeft() || input->PushRStickUp() || input->PushRStickRight() || input->PushRStickDown())
 		{
@@ -206,8 +211,15 @@ void DebugCamera::Update()
 			SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 20.0f, target.z + vTargetEye.m128_f32[2] });
 			SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });
 		}
-		else if (lockOn)
+		else if (lockOn || resetting)
 		{
+			if (resetting)
+			{
+				float nowTheta = theta;
+				if (theta < 0)
+					nowTheta = 0;
+				eye = Vector3(cos(phi) * cos(nowTheta), sin(nowTheta), sin(phi) * cos(nowTheta)) * distance + target;
+			}
 			viewDirty = true;
 		}
 		else

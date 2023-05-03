@@ -400,7 +400,6 @@ void Player::Update()
 				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 				{
 					direction = { 0, 0, 1 };
-					rotation = { 0, 0, 0 };
 				}*/
 				cosA = direction.Dot(moveDirection);
 
@@ -470,10 +469,6 @@ void Player::Update()
 				direction = dir;
 
 				SetPosition(position);
-				//if (!input->PushKey(DIK_SPACE))
-				//{
-				//	//SetRotation(rotation);
-				//}
 
 				if (input->PushKey(DIK_SPACE) && lockOnActive || input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && lockOnActive)
 				{
@@ -504,26 +499,41 @@ void Player::Update()
 						}
 					}
 				}
-				else if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
-				{
-					// Computes the inverse of the camera view matrix
-					XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
-					// Calculate camera rotation angle
-					const Vector3 cameraDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
-					float cosA = Vector3(0, 0, 1).Dot(cameraDirectionZ);
-					if (cosA > 1.0f)
-						cosA = 1.0f;
-					else if (cosA < -1.0f)
-						cosA = -1.0f;
-					radY = acos(cosA);
-					const Vector3 CrossVec = Vector3(0, 0, 1).Cross(cameraDirectionZ);
-					if (CrossVec.y < 0)
-						radY *= -1;
-					cameraMoveCounter = 0.0f;
-
-					cameraResetActive = true;
-				}
 			}
+		}
+
+		if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+		{
+			// Computes the inverse of the camera view matrix
+			XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
+			// Calculate camera rotation angle
+			const Vector3 cameraDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
+			//const Vector3 cameraDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
+			//Debug Start
+			char msgbuf[256];
+			char msgbuf2[256];
+			char msgbuf3[256];
+
+			sprintf_s(msgbuf, 256, "directionX: %f\n", cameraDirectionZ.x);
+			sprintf_s(msgbuf2, 256, "directionY: %f\n", cameraDirectionZ.y);
+			sprintf_s(msgbuf3, 256, "directionZ: %f\n", cameraDirectionZ.z);
+
+			OutputDebugStringA(msgbuf);
+			OutputDebugStringA(msgbuf2);
+			OutputDebugStringA(msgbuf3);
+			//Debug End
+			float cosA = Vector3(direction).Dot(cameraDirectionZ);
+			if (cosA > 1.0f)
+				cosA = 1.0f;
+			else if (cosA < -1.0f)
+				cosA = -1.0f;
+			radY = acos(cosA);
+			const Vector3 CrossVec = Vector3(direction).Cross(cameraDirectionZ);
+			if (CrossVec.y < 0)
+				radY *= -1;
+			cameraMoveCounter = 0.0f;
+
+			cameraResetActive = true;
 		}
 
 		if (input->TriggerKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
