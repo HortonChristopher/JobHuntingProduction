@@ -360,8 +360,7 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->agrooNumber = agroodEnemies;
 				}
 
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO)
 				{
 					/*int random = rand() % 10;
 
@@ -385,22 +384,21 @@ void BaseArea::Update()
 			}
 			else if (distance <= minChargeDistance)
 			{
-				if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::PARTICLEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::ATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::COOLDOWN
-					&& baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO)
 				{
 					int random = rand() % 10;
 
-					if (random < 1)
+					if (random < 2)
 					{
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 					}
-					else if (random < 2)
+					else if (random < 4)
 					{
 						baseAreaEnemyFBX[i]->particleAttackStage = 0;
 						baseAreaEnemyFBX[i]->modelChange = true;
 						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
 					}
-					else if (random < 3)
+					else if (random < 6)
 					{
 						baseAreaEnemyFBX[i]->landingAttackStage = 0;
 						baseAreaEnemyFBX[i]->modelChange = true;
@@ -410,13 +408,7 @@ void BaseArea::Update()
 					{
 						if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT)
 						{
-							if (baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::CHARGEATTACK
-								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::JETSTREAMATTACK
-								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::ATTACK
-								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::LANDINGATTACK
-								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::PARTICLEATTACK
-								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::DAMAGED
-								&& baseAreaEnemyFBX[i + 1]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+							if (baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::AGGRO)
 							{
 								baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
 								baseAreaEnemyFBX[i]->timer = 0.0f;
@@ -432,15 +424,9 @@ void BaseArea::Update()
 								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 							}
 						}
-						else
+						else if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
 						{
-							if (baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::CHARGEATTACK
-								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::JETSTREAMATTACK
-								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::ATTACK
-								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::LANDINGATTACK
-								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::PARTICLEATTACK
-								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::DAMAGED
-								&& baseAreaEnemyFBX[i - 1]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+							if (baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::AGGRO)
 							{
 								baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
 								baseAreaEnemyFBX[i]->timer = 0.0f;
@@ -455,6 +441,10 @@ void BaseArea::Update()
 							{
 								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 							}
+						}
+						else
+						{
+							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 						}
 					}
 				}
@@ -1127,7 +1117,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region missionTracker
-	missionTracker << enemyDefeated << " / 6"
+	missionTracker << enemyDefeated << " / 5"
 		<< std::fixed << std::setprecision(0)
 		<< std::setw(2) << std::setfill('0');
 	if (!playerFBX->baseAreaOpeningCutscene && xSet && ySet && sizeSet)
@@ -1290,7 +1280,7 @@ void BaseArea::Update()
 				}
 
 				if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[j]->GetPosition(), 4.0f, 4.0f)
-					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
+					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 				{
 					float x = (baseAreaEnemyFBX[i]->GetPosition().x - 2.0f - baseAreaEnemyFBX[j]->GetPosition().x);
 					float z = (baseAreaEnemyFBX[i]->GetPosition().z - 2.0f - baseAreaEnemyFBX[j]->GetPosition().z);

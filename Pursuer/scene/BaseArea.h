@@ -165,7 +165,7 @@ private:
 															{10.0f, 20.0f, 0.0f}} }; // Pair 5
 	float enemyAggroVisionRange = 80.0f;
 	float maxChargeDistance = 80.0f;
-	float minChargeDistance = 12.0f;
+	float minChargeDistance = 15.0f;
 	float damageAdvantageShortLongRangeBorder = 40.0f;
 
 	// Player Attack aspects
@@ -234,7 +234,7 @@ private:
 	bool attacking = false;
 	float attackTime = 0.0f;
 	int enemyDefeated = 0;
-	int clearCondition = 6;
+	int clearCondition = 5;
 	float yRotationOffset = 90.0f;
 
 	// Fade in-out sprite
