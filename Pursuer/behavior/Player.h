@@ -190,6 +190,8 @@ protected:
 	float dodgeCameraTime = 0.0f;
 	bool movementAllowed = false;
 	XMFLOAT3 dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
+	float cosA = 1.0f;
+	float rotY = 0.0f;
 public:
 	XMFLOAT3 dodgePosition = { 0.0f, 10.0f, 0.0f };
 	bool dodge = false;

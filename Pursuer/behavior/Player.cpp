@@ -288,6 +288,11 @@ void Player::Update()
 		break;
 	}
 
+	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
+	const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
+	const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
+	const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
+
 	if (!baseAreaOpeningCutscene)
 	{
 		if (input->TriggerMouseLeft() && stamina >= 25.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina >= 25.0f)
@@ -322,11 +327,6 @@ void Player::Update()
 			enumStatus = HEAL;
 			healRemaining--;
 		}
-
-		XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
-		const Vector3 camDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
-		const Vector3 camDirectionY = Vector3(camMatWorld.r[1].m128_f32[0], 0, camMatWorld.r[1].m128_f32[2]).Normalize();
-		const Vector3 camDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
 
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
@@ -396,17 +396,8 @@ void Player::Update()
 				moveDirection.Normalize();
 				direction.Normalize();
 
-				float cosA;
-				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-				{
-					direction = { 0, 0, 1 };
-				}*/
 				cosA = direction.Dot(moveDirection);
 
-				/*if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-				{
-					cosA = 1.0f;
-				}*/
 				if (cosA > 1.0f)
 				{
 					cosA = 1.0f;
@@ -416,7 +407,7 @@ void Player::Update()
 					cosA = -1.0f;
 				}
 
-				float rotY = (float)acos(cosA) * 180 / 3.14159365f;
+				rotY = (float)acos(cosA) * 180 / 3.14159365f;
 				const Vector3 CrossVec = direction.Cross(moveDirection);
 
 				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
@@ -500,40 +491,28 @@ void Player::Update()
 					}
 				}
 			}
-		}
 
-		if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
-		{
-			// Computes the inverse of the camera view matrix
-			XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
-			// Calculate camera rotation angle
-			const Vector3 cameraDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
-			//const Vector3 cameraDirectionX = Vector3(camMatWorld.r[0].m128_f32[0], 0, camMatWorld.r[0].m128_f32[2]).Normalize();
-			//Debug Start
-			char msgbuf[256];
-			char msgbuf2[256];
-			char msgbuf3[256];
+			if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+			{
+				// Computes the inverse of the camera view matrix
+				XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
+				// Calculate camera rotation angle
+				//const Vector3 cameraDirectionZ = Vector3(camMatWorld.r[2].m128_f32[0], 0, camMatWorld.r[2].m128_f32[2]).Normalize();
 
-			sprintf_s(msgbuf, 256, "directionX: %f\n", cameraDirectionZ.x);
-			sprintf_s(msgbuf2, 256, "directionY: %f\n", cameraDirectionZ.y);
-			sprintf_s(msgbuf3, 256, "directionZ: %f\n", cameraDirectionZ.z);
+				cosA = Vector3(0, 0, 1).Dot(camDirectionZ);
+				if (cosA > 1.0f)
+					cosA = 1.0f;
+				else if (cosA < -1.0f)
+					cosA = -1.0f;
+				radY = acos(cosA);
+				const Vector3 CrossVec = Vector3(0, 0, 1).Cross(camDirectionZ);
+				if (CrossVec.y < 0)
+					radY *= -1;
 
-			OutputDebugStringA(msgbuf);
-			OutputDebugStringA(msgbuf2);
-			OutputDebugStringA(msgbuf3);
-			//Debug End
-			float cosA = Vector3(direction).Dot(cameraDirectionZ);
-			if (cosA > 1.0f)
-				cosA = 1.0f;
-			else if (cosA < -1.0f)
-				cosA = -1.0f;
-			radY = acos(cosA);
-			const Vector3 CrossVec = Vector3(direction).Cross(cameraDirectionZ);
-			if (CrossVec.y < 0)
-				radY *= -1;
-			cameraMoveCounter = 0.0f;
+				cameraMoveCounter = 0.0f;
 
-			cameraResetActive = true;
+				cameraResetActive = true;
+			}
 		}
 
 		if (input->TriggerKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
@@ -765,20 +744,6 @@ void Player::Update()
 			currentTime = startTime;
 		}
 	}
-
-	//Debug Start
-	/*char msgbuf[256];
-	char msgbuf2[256];
-	char msgbuf3[256];
-
-	sprintf_s(msgbuf, 256, "Float Animation Time: %d\n", currentTime);
-	sprintf_s(msgbuf2, 256, "Y: %d\n", startTime);
-	sprintf_s(msgbuf3, 256, "Z: %d\n", endTime);
-
-	OutputDebugStringA(msgbuf);
-	OutputDebugStringA(msgbuf2);
-	OutputDebugStringA(msgbuf3);*/
-	//Debug End
 }
 
 void Player::CreateGraphicsPipeline()
