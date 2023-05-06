@@ -114,6 +114,10 @@ public:
 	/// </summary>
 	void PlayAnimation();
 
+	bool CheckCollisionWithEnemy(XMFLOAT3 enemyPos, float collisionRadius);
+
+	void MoveTowards(float& current, float target, float speed, float elapsedTime);
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

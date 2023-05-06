@@ -959,3 +959,28 @@ void Player::PlayAnimation()
 	// Make request during playback
 	isPlay = true;
 }
+
+bool Player::CheckCollisionWithEnemy(XMFLOAT3 enemyPos, float collisionRadius)
+{
+	float dx = enemyPos.x - position.x;
+	float dy = enemyPos.y - position.y;
+	float dz = enemyPos.z - position.z;
+
+	float distance = sqrtf(pow(dx, 2) + pow(dy, 2) + pow(dz, 2));
+
+	return distance <= 15.0f + collisionRadius; // replace 15.0f with playerCollisionRadius
+}
+
+void Player::MoveTowards(float& current, float target, float speed, float elapsedTime)
+{
+	float delta = target - current;
+	float step = speed * elapsedTime;
+	if (step > abs(delta))
+	{
+		current = target;
+	}
+	else
+	{
+		current += step * (delta < 0 ? -1 : 1); // Need to adjust this to delta time
+	}
+}
