@@ -966,7 +966,7 @@ bool Player::CheckCollisionWithEnemy(XMFLOAT3 enemyPos, float collisionRadius)
 	float dy = enemyPos.y - position.y;
 	float dz = enemyPos.z - position.z;
 
-	float distance = sqrtf(pow(dx, 2) + pow(dy, 2) + pow(dz, 2));
+	float distance = sqrtf(powf(dx, 2) + powf(dy, 2) + powf(dz, 2));
 
 	return distance <= 15.0f + collisionRadius; // replace 15.0f with playerCollisionRadius
 }
