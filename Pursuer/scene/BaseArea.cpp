@@ -1133,6 +1133,7 @@ void BaseArea::Update()
 	debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
 #pragma endregion
 
+#pragma region enemyHPBar
 	//std::array<Vector2, 4> enemyHPPosition;
 	//std::array<Vector2, 4> enemyHPPositionFrame;
 
@@ -1156,7 +1157,9 @@ void BaseArea::Update()
 	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ 1100.0f, 225.0f + (70.0f * i) });
 	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 150.0f, 30.0f });
 	//}
+#pragma endregion
 
+#pragma region InCaseEnemyFallsThroughWorld
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
@@ -1165,6 +1168,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
 	}
+#pragma endregion
 
 #pragma region LockOn
 	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
