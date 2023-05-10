@@ -148,11 +148,11 @@ private:
 	int closestEnemyDefaultNumber = 10; // This number should always be equal to numberOfEnemiesTotal
 	std::array<EnemyHuman*, 10> baseAreaEnemyFBX = { {} };
 	std::array<PlayerPositionObject*, 10> baseAreaEnemyPositionOBJ = { {} };
-		// Base area enemy alive bool
+	// Base area enemy alive bool
 	std::array<bool, 10> baseAreaEnemyAliveBOOL = { {true, true, true, true, true, true, true, true, true, true} };
-		// Base area enemy respawn timer
+	// Base area enemy respawn timer
 	std::array<float, 10> baseAreaEnemyRespawnTimerFLOAT = { {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f} };
-		// Base area enemy spawn positions
+	// Base area enemy spawn positions
 	std::array<XMFLOAT3, 10> baseAreaEnemySpawnXMFLOAT3 = { {{0.0f, 20.0f, 200.0f}, // Pair 1
 															{0.0f, 20.0f, 210.0f}, // Pair 1
 															{200.0f, 20.0f, 0.0f}, // Pair 2
@@ -204,7 +204,7 @@ private:
 	float twoEnemySurroundKnockbackDistance = 120.0f;
 	float knockbackInterval = 60.0f;
 	float knockbackMaxTime = 30.0f;
-	
+
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
@@ -213,6 +213,7 @@ private:
 	// Base Area enemy HP bar
 	std::array<Sprite*, 10> baseAreaEnemyHPBarSPRITE = { {} };
 	std::array<Sprite*, 10> baseAreaEnemyHPBarFrameSPRITE = { {} };
+	std::array<bool, 10> isInFront = { {} };
 
 	// Fleeing aspects
 	float fleeHP = 2.0f;

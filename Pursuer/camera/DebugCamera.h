@@ -53,6 +53,11 @@ public:
 		return phi;
 	}
 
+	const float GetTheta()
+	{
+		return theta;
+	}
+
 private:
 	// 入力クラスのポインタ
 	Input* input;

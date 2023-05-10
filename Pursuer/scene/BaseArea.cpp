@@ -17,6 +17,8 @@ extern int agroodEnemies = 0;
 extern int debugJetStream = 0;
 extern int participatingJetStream = 0;
 
+extern HWND hwndE;
+
 BaseArea::BaseArea()
 {
 }
@@ -1134,6 +1136,100 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region enemyHPBar
+	std::array<float, 10> hpBarX;
+	std::array<float, 10> hpBarY;
+
+	for (int i = 0; i < numberOfEnemiesTotal; i++)
+	{
+		//RECT構造体へのポインタ
+		RECT rect;
+
+		//ウィンドウの外側のサイズを取得
+		GetClientRect(hwndE, &rect);
+
+		int width = rect.right - rect.left;
+		int height = rect.bottom - rect.top;
+
+		//// Compute the enemy's position relative to the camera
+		//XMFLOAT3 relEnemy(baseAreaEnemyFBX[i]->GetPosition().x - camera->GetEye().x,
+		//				  baseAreaEnemyFBX[i]->GetPosition().y - camera->GetEye().y,
+		//				  baseAreaEnemyFBX[i]->GetPosition().z - camera->GetEye().z);
+
+		//// Compute the distance between the camera and the enemy
+		//float dist = sqrtf(relEnemy.x * relEnemy.x + relEnemy.y * relEnemy.y + relEnemy.z * relEnemy.z);
+
+		//// Compute the angles between the camera's forward vector and the vector from the camera to the enemy
+		//float relEnemyPhi = acosf(relEnemy.z / dist);
+		//float relEnemyTheta = atan2f(relEnemy.y, relEnemy.x);
+
+		//// Adjust the angles based on the camera's orientation
+		//relEnemyTheta += camera->GetTheta();
+		//relEnemyPhi += camera->GetPhi();
+
+		//// Compute the position of the enemy in screen space
+		//float halfWidth = static_cast<float>(width) / 2.0f;
+		//float halfHeight = static_cast<float>(height) / 2.0f;
+		//float x = halfWidth * (1.0f + relEnemyPhi / XM_PI);
+		//float y = halfHeight * (1.0f - relEnemyTheta / XM_PI) + 100.0f;
+
+		//// Adjust for top-left origin
+		//x -= halfWidth;
+		//y -= halfHeight;
+
+		//// Compute the position of the enemy's HP bar on the screen
+		//hpBarX[i] = x;
+		//hpBarY[i] = y;
+
+		//// Check if the enemy is behind the camera and don't render the HP bar if it is
+		//XMFLOAT3 forward(camera->GetTarget().x - camera->GetEye().x, camera->GetTarget().y - camera->GetEye().y, camera->GetTarget().z - camera->GetEye().z);
+		//XMVECTOR forwardVector = XMLoadFloat3(&forward);
+		//XMVECTOR relEnemyVector = XMLoadFloat3(&relEnemy);
+		//float dot = XMVectorGetX(XMVector3Dot(forwardVector, relEnemyVector));
+
+		// Calculate the viewport
+		D3D12_VIEWPORT viewport;
+		viewport.TopLeftX = 0;
+		viewport.TopLeftY = 0;
+		viewport.Width = (float)width;
+		viewport.Height = (float)height;
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+
+		camera->UpdateAspectRatio((float)width, (float)height);
+		camera->UpdateViewMatrix();
+		camera->UpdateProjectionMatrix();
+
+		// Convert the world coordinates to a vector
+		XMVECTOR worldPosVec = XMLoadFloat3(&baseAreaEnemyFBX[i]->GetPosition());
+
+		// Multiply the resulting view space coordinates by the view projection matrix
+		XMVECTOR clipPos = XMVector4Transform(worldPosVec, camera->GetViewProjectionMatrix() * camera->GetBillboardMatrix());
+
+		// Convert from homogeneous clip space to normalized device coordinates (NDC)
+		XMVECTOR ndcPos = XMVectorDivide(clipPos, XMVectorSplatW(clipPos));
+
+		// Multiply the resulting NDC coordinates by the viewport matrix to map them to the screen space
+		float x = XMVectorGetX(ndcPos);
+		float y = XMVectorGetY(ndcPos);
+		float z = XMVectorGetZ(ndcPos);
+
+		hpBarX[i] = viewport.TopLeftX + (1.0f - x / camera->GetAspectRatio()) * viewport.Width / 2.0f;
+		hpBarY[i] = viewport.TopLeftY + (1.0f + y) * viewport.Height / 2.0f - 100.0f;
+		float screenZ = viewport.MinDepth + z * (viewport.MaxDepth - viewport.MinDepth);
+		
+		//if (dot < 0.0f) {
+		//	isInFront[i] = false;
+		//}
+		//else {
+		//	isInFront[i] = true;
+		//}*/
+
+		baseAreaEnemyHPBarSPRITE[i]->SetPosition({ hpBarX[i], hpBarY[i] });
+		baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 10.0f, 10.0f });
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ hpBarX[i], hpBarY[i] });
+		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 50.0f, 10.0f });
+	}
+
 	//std::array<Vector2, 4> enemyHPPosition;
 	//std::array<Vector2, 4> enemyHPPositionFrame;
 
@@ -1428,14 +1524,17 @@ void BaseArea::Draw()
 	{
 		healControllerSPRITE->Draw();
 	}
-	/*for (int i = 0; i < numberOfEnemiesTotal; i++)
+	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (Distance(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition()) < 160.0f)
+		if (Distance(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition()) < 300.0f)
 		{
-			baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
-			baseAreaEnemyHPBarSPRITE[i]->Draw();
+			if (isInFront[i] = true)
+			{
+				baseAreaEnemyHPBarFrameSPRITE[i]->Draw();
+				baseAreaEnemyHPBarSPRITE[i]->Draw();
+			}
 		}
-	}*/
+	}
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (!baseAreaEnemyFBX[i]->dead)
@@ -1635,8 +1734,9 @@ void BaseArea::thread1()
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		baseAreaMinimapEnemySPRITE[i] = Sprite::Create(8, { 0.0f, 0.0f });
-		/*baseAreaEnemyHPBarSPRITE[i] = Sprite::Create(11, { 0.0f, 0.0f });
-		baseAreaEnemyHPBarFrameSPRITE[i] = Sprite::Create(12, { 0.0f, 0.0f });*/
+		baseAreaEnemyHPBarSPRITE[i] = Sprite::Create(11, { 0.0f, 0.0f });
+		baseAreaEnemyHPBarFrameSPRITE[i] = Sprite::Create(12, { 0.0f, 0.0f });
+		isInFront[i] = false;
 	}
 	fadeSPRITE = Sprite::Create(10, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
 	baseAreaDamageOverlaySPRITE = Sprite::Create(13, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });

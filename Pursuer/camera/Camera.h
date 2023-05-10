@@ -137,6 +137,15 @@ public: // メンバ関数
 	void MoveVector(const XMFLOAT3& move);
 	void MoveVector(const XMVECTOR& move);
 
+	void UpdateAspectRatio(float width, float height)
+	{
+		this->aspectRatio = (float)width / (float)height;
+	}
+	inline const float GetAspectRatio()
+	{
+		return aspectRatio;
+	}
+
 protected: // メンバ変数
 	// ビュー行列
 	XMMATRIX matView = DirectX::XMMatrixIdentity();

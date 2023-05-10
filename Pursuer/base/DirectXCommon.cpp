@@ -11,6 +11,8 @@
 
 using namespace Microsoft::WRL;
 
+extern HWND hwndE = nullptr;
+
 DirectXCommon::~DirectXCommon()
 {
 	Finalize();
@@ -28,6 +30,7 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	assert(winApp);
 
 	this->winApp = winApp;
+	hwndE = this->winApp->GetHwnd();
 
 	// DXGIデバイス初期化
 	if (!InitializeDXGIDevice()) {
