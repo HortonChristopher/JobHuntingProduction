@@ -888,36 +888,6 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-#pragma region enemyRespawn
-	// Testing 10 enemies with no respawn
-	/*for (int i = 0; i < numberOfEnemiesTotal; i++)
-	{
-		if (baseAreaEnemyRespawnTimerFLOAT[i] > 0.0f)
-		{
-			baseAreaEnemyRespawnTimerFLOAT[i] -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		}
-		else
-		{
-			baseAreaEnemyRespawnTimerFLOAT[i] = 0.0f;
-		}
-
-		if (baseAreaEnemyRespawnTimerFLOAT[i] < 0.1f && !baseAreaEnemyAliveBOOL[i])
-		{
-			baseAreaEnemyFBX[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
-			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemySpawnXMFLOAT3[i]);
-			baseAreaEnemyFBX[i]->dead = false;
-			baseAreaEnemyFBX[i]->HP = 5.0f;
-			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::STAND);
-			baseAreaEnemyFBX[i]->set = false;
-			baseAreaEnemyFBX[i]->timer = 238.0f;
-			baseAreaEnemyFBX[i]->helpCall = false;
-			baseAreaEnemyFBX[i]->agrooNumber = 0;
-			baseAreaEnemyFBX[i]->Reset();
-			baseAreaEnemyAliveBOOL[i] = true;
-		}
-	}*/
-#pragma endregion
-
 #pragma region areaBoundaryLimits
 	if (!playerFBX->baseAreaOpeningCutscene)
 	{
@@ -1229,30 +1199,6 @@ void BaseArea::Update()
 		baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ hpBarX[i], hpBarY[i] });
 		baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 50.0f, 10.0f });
 	}
-
-	//std::array<Vector2, 4> enemyHPPosition;
-	//std::array<Vector2, 4> enemyHPPositionFrame;
-
-	//for (int i = 0; i < numberOfEnemiesTotal; i++)
-	//{
-	//	/*camera->Update();
-	//	baseAreaEnemyHPBarSPRITE[i]->SetPosition(enemyHPPosition[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
-	//		camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-	//		-1400.0f + playerFBX->GetPosition().x, -20.0f));
-	//	baseAreaEnemyHPBarSPRITE[i]->SetPosition({ baseAreaEnemyHPBarSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarSPRITE[i]->GetPosition().y });
-	//	baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 10.0f, 10.0f });
-	//	XMFLOAT2 testPosition = baseAreaEnemyHPBarSPRITE[i]->GetPosition();
-	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition(enemyHPPositionFrame[i].Convert(baseAreaEnemyFBX[i]->GetPosition(),
-	//		camera->GetViewProjectionMatrix(), camera->GetProjectionMatrix(), 1280, 720,
-	//		-1400.0f + playerFBX->GetPosition().x, -20.0f));
-	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().x * -1.0f, baseAreaEnemyHPBarFrameSPRITE[i]->GetPosition().y });
-	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 50.0f, 10.0f });*/
-	//	// Use until above code is fixed
-	//	baseAreaEnemyHPBarSPRITE[i]->SetPosition({1100.0f, 225.0f + (70.0f * i)});
-	//	baseAreaEnemyHPBarSPRITE[i]->SetSize({ baseAreaEnemyFBX[i]->HP * 30.0f, 30.0f });
-	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetPosition({ 1100.0f, 225.0f + (70.0f * i) });
-	//	baseAreaEnemyHPBarFrameSPRITE[i]->SetSize({ 150.0f, 30.0f });
-	//}
 #pragma endregion
 
 #pragma region InCaseEnemyFallsThroughWorld
