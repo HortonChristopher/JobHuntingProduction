@@ -171,6 +171,9 @@
     <ClCompile Include="tools\PipelineStatus.cpp">
       <Filter>Source Files\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="model\Textures.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="tools\PipelineStatus.h">
       <Filter>Header Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="model\Textures.h">
+      <Filter>Header Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
