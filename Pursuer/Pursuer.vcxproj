@@ -142,6 +142,7 @@
     <ClCompile Include="scene\Loading.cpp" />
     <ClCompile Include="scene\TitleScreen.cpp" />
     <ClCompile Include="scene\TutorialArea.cpp" />
+    <ClCompile Include="tools\PipelineStatus.cpp" />
     <ClCompile Include="tools\ShadowMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,7 @@
     <ClInclude Include="scene\Loading.h" />
     <ClInclude Include="scene\TitleScreen.h" />
     <ClInclude Include="scene\TutorialArea.h" />
+    <ClInclude Include="tools\PipelineStatus.h" />
     <ClInclude Include="tools\SettingParameters.h" />
     <ClInclude Include="tools\ShadowMap.h" />
   </ItemGroup>
@@ -259,6 +261,8 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowMapPS.hlsl" />
+    <FxCompile Include="Resources\shaders\ShadowMapVS.hlsl" />
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
@@ -277,6 +281,7 @@
     <None Include="Resources\shaders\OBJShaderHeader.hlsli" />
     <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\PostEffectTest.hlsli" />
+    <None Include="Resources\shaders\ShadowMap.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -34,6 +34,12 @@
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>Shader Files\Sprite</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowMapPS.hlsl">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowMapVS.hlsl">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -161,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="2d\Menu.cpp">
       <Filter>Source Files\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\PipelineStatus.cpp">
+      <Filter>Source Files\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +332,9 @@
     <ClInclude Include="tools\SettingParameters.h">
       <Filter>Header Files\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="tools\PipelineStatus.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -339,6 +351,9 @@
     </None>
     <None Include="Resources\shaders\Sprite.hlsli">
       <Filter>Shader Files\Sprite</Filter>
+    </None>
+    <None Include="Resources\shaders\ShadowMap.hlsli">
+      <Filter>Shader Files\ShadowMap</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -452,6 +467,9 @@
     </Filter>
     <Filter Include="Shader Files\Tools">
       <UniqueIdentifier>{4dcec18d-8302-408d-8937-36472268550f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\ShadowMap">
+      <UniqueIdentifier>{a8b22c07-ddbb-4cfc-ac35-05025438bd23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
