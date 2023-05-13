@@ -2,6 +2,7 @@
 #include <d3dcompiler.h>
 
 std::unordered_map<std::string, ComPtr<ID3D12RootSignature>> PipelineStatus::rootsignature = {};
+std::unordered_map<std::string, D3D_PRIMITIVE_TOPOLOGY> PipelineStatus::primitiveTopologies = {};
 std::unordered_map<std::string, std::unordered_map<BLENDING, ComPtr<ID3D12PipelineState>>> PipelineStatus::pipelinestate = {};
 
 void PipelineStatus::SetPipeline(const std::string& keyName, const BLENDING blendType)
