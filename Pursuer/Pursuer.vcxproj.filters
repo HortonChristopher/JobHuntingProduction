@@ -66,9 +66,6 @@
     <ClCompile Include="2d\Sprite.cpp">
       <Filter>Source Files\2D</Filter>
     </ClCompile>
-    <ClCompile Include="3d\LightGroup.cpp">
-      <Filter>Source Files\Light</Filter>
-    </ClCompile>
     <ClCompile Include="3d\ParticleManager.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
@@ -189,6 +186,12 @@
     <ClCompile Include="camera\LightCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="light\DirectionalLight.cpp">
+      <Filter>Source Files\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\LightGroup.cpp">
+      <Filter>Source Files\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -211,21 +214,6 @@
     </ClInclude>
     <ClInclude Include="2d\DebugText.h">
       <Filter>Header Files\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\DirectionalLight.h">
-      <Filter>Header Files\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\CircleShadow.h">
-      <Filter>Header Files\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\SpotLight.h">
-      <Filter>Header Files\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\PointLight.h">
-      <Filter>Header Files\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\LightGroup.h">
-      <Filter>Header Files\Light</Filter>
     </ClInclude>
     <ClInclude Include="3d\ParticleManager.h">
       <Filter>Header Files\Effect</Filter>
@@ -370,6 +358,21 @@
     </ClInclude>
     <ClInclude Include="camera\LightCamera.h">
       <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="light\DirectionalLight.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\CircleShadow.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\PointLight.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\SpotLight.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\LightGroup.h">
+      <Filter>Header Files\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

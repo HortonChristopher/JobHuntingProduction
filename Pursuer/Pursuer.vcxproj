@@ -47,11 +47,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(ProjectDir)\lib\fbx_sdk\lib;$(ProjectDir)\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)tools\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)tools\;$(ProjectDir)light\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)tools\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)3d\;$(ProjectDir)2d\;$(ProjectDir)camera\;$(ProjectDir)base\;$(ProjectDir)input\;$(ProjectDir)audio\;$(ProjectDir)scene\;$(ProjectDir)dynamics\;$(ProjectDir)gameObject\;$(ProjectDir)behavior\;$(ProjectDir)collision\;$(ProjectDir)math\;$(ProjectDir)tools\;$(ProjectDir)light\;$(ProjectDir)model\;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\fbx_sdk\lib;$(ProjectDir)\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -105,7 +105,6 @@
     <ClCompile Include="2d\PostEffect.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
     <ClCompile Include="3d\FBXManager.cpp" />
-    <ClCompile Include="3d\LightGroup.cpp" />
     <ClCompile Include="3d\FBX3DModel.cpp" />
     <ClCompile Include="3d\FBXGeneration.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
@@ -129,6 +128,8 @@
     <ClCompile Include="collision\SphereCollider.cpp" />
     <ClCompile Include="collision\TouchableObject.cpp" />
     <ClCompile Include="FbxLoader\FbxLoader.cpp" />
+    <ClCompile Include="light\DirectionalLight.cpp" />
+    <ClCompile Include="light\LightGroup.cpp" />
     <ClCompile Include="math\DeltaTime.cpp" />
     <ClCompile Include="math\Easing.cpp" />
     <ClCompile Include="math\Matrix.cpp" />
@@ -161,16 +162,11 @@
     <ClInclude Include="2d\Menu.h" />
     <ClInclude Include="2d\PostEffect.h" />
     <ClInclude Include="2d\Sprite.h" />
-    <ClInclude Include="3d\CircleShadow.h" />
-    <ClInclude Include="3d\DirectionalLight.h" />
     <ClInclude Include="3d\FBXManager.h" />
-    <ClInclude Include="3d\LightGroup.h" />
     <ClInclude Include="3d\FBX3DModel.h" />
     <ClInclude Include="3d\FBXGeneration.h" />
     <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="3d\ParticleManager.h" />
-    <ClInclude Include="3d\PointLight.h" />
-    <ClInclude Include="3d\SpotLight.h" />
     <ClInclude Include="audio\Audio.h" />
     <ClInclude Include="base\GameWindow.h" />
     <ClInclude Include="behavior\EnemyHuman.h" />
@@ -196,6 +192,11 @@
     <ClInclude Include="collision\TouchableObject.h" />
     <ClInclude Include="dynamics\CollisionInfo.h" />
     <ClInclude Include="FbxLoader\FbxLoader.h" />
+    <ClInclude Include="light\CircleShadow.h" />
+    <ClInclude Include="light\DirectionalLight.h" />
+    <ClInclude Include="light\LightGroup.h" />
+    <ClInclude Include="light\PointLight.h" />
+    <ClInclude Include="light\SpotLight.h" />
     <ClInclude Include="math\DeltaTime.h" />
     <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\Matrix.h" />
