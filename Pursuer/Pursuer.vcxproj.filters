@@ -177,6 +177,9 @@
     <ClCompile Include="base\GameWindow.cpp">
       <Filter>Source Files\Base Files</Filter>
     </ClCompile>
+    <ClCompile Include="3d\FBXManager.cpp">
+      <Filter>Source Files\FBX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -346,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="base\GameWindow.h">
       <Filter>Header Files\Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FBXManager.h">
+      <Filter>Header Files\FBX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
