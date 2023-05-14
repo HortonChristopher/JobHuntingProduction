@@ -130,11 +130,13 @@
     <ClCompile Include="FbxLoader\FbxLoader.cpp" />
     <ClCompile Include="math\DeltaTime.cpp" />
     <ClCompile Include="math\Easing.cpp" />
+    <ClCompile Include="math\Matrix.cpp" />
     <ClCompile Include="math\Vector.cpp" />
     <ClCompile Include="model\Material.cpp" />
     <ClCompile Include="model\Mesh.cpp" />
     <ClCompile Include="model\Model.cpp" />
     <ClCompile Include="model\Textures.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="scene\BaseArea.cpp" />
     <ClCompile Include="scene\GameClearCutscene.cpp" />
     <ClCompile Include="scene\GameOverCutscene.cpp" />
@@ -194,6 +196,8 @@
     <ClInclude Include="FbxLoader\FbxLoader.h" />
     <ClInclude Include="math\DeltaTime.h" />
     <ClInclude Include="math\Easing.h" />
+    <ClInclude Include="math\Matrix.h" />
+    <ClInclude Include="math\Quaternion.h" />
     <ClInclude Include="math\Vector.h" />
     <ClInclude Include="model\Material.h" />
     <ClInclude Include="model\Mesh.h" />
