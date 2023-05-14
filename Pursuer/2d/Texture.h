@@ -34,16 +34,18 @@ public:
 	inline static ComPtr <ID3D12Resource> GetTextureBuffers(std::string name) { return textureBuffers[name]; }
 	
 	// Get Meta Data
-	//static DirectX::TexMetadata& GetMetadata(std::string name) { return metaData[name]; }
+	// static DirectX::TexMetadata& GetMetadata(std::string name) { return metaData[name]; }
 
 	// Get Basic Descriptor Heap
-	inline static ComPtr<ID3D12DescriptorHeap> GetBasicDescriptorHeap() {
+	inline static ComPtr<ID3D12DescriptorHeap> GetBasicDescriptorHeap() 
+	{
 		if (basicDescriptorHeap == nullptr) assert(0);
 		return basicDescriptorHeap;
 	}
 
 	// Get GPU Descriptor Handle SRV
-	inline static CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandleSRV(const std::string& name){
+	inline static CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandleSRV(const std::string& name)
+	{
 		if (textureIndexes.find(name) == textureIndexes.end()) assert(0);
 		CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeap = CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescriptorHeap->GetGPUDescriptorHandleForHeapStart(), textureIndexes[name], DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
 		return descriptorHeap;

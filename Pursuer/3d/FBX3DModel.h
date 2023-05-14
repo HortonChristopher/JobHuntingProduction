@@ -1,6 +1,14 @@
 #pragma once
 
 #include "DeltaTime.h"
+#include "Model.h"
+#include "DirectXCommon.h"
+#include "Matrix.h"
+#include "FbxLoader/FbxLoader.h"
+#include "Object3d.h"
+#include "Texture.h"
+#include "Quaternion.h"
+
 #include <string>
 #include <vector>
 #include <array>
@@ -13,16 +21,19 @@
 #include <fbxsdk.h>
 #include <unordered_map>
 
+#include <d3dcompiler.h>
+#pragma comment(lib, "d3dcompiler.lib")
+
 struct Node
 {
 	// Name
 	std::string name;
 	// Local Scale
-	DirectX::XMVECTOR scaling = { 1,1,1,0 };
+	DirectX::XMVECTOR scaling = { 1, 1, 1, 0 };
 	// Local Rotation
-	DirectX::XMVECTOR rotation = { 0,0,0,0 };
+	DirectX::XMVECTOR rotation = { 0, 0, 0, 0 };
 	// Local Move/Translation
-	DirectX::XMVECTOR translation = { 0,0,0,1 };
+	DirectX::XMVECTOR translation = { 0, 0, 0, 1 };
 	// Local transformation matrix
 	DirectX::XMMATRIX transform;
 	// Global transformation matrix
@@ -31,7 +42,7 @@ struct Node
 	Node* parent = nullptr;
 };
 
-class FBX3DModel
+class FBX3DModel : public Model
 {
 private: // Alias
 	// Using Microsoft::WRL
@@ -48,29 +59,9 @@ private: // Alias
 	// Using std::
 	using string = std::string;
 	template <class T> using vector = std::vector<T>;
-
-
 public: // Constant
-	// Maximum number of bone instances
-	static const int MAX_BONE_INDICES = 4;
-
-	static const int MAX_BONES = 256;
-
-	struct ConstBufferDataSkin
-	{
-		std::array<XMMATRIX, MAX_BONES> bones;
-	};
-
-public: // Subclass
-	// Vertex data structure
-	struct VertexPosNormalUvSkin
-	{
-		DirectX::XMFLOAT3 pos;
-		DirectX::XMFLOAT3 normal;
-		DirectX::XMFLOAT3 uv;
-		UINT boneIndex[MAX_BONE_INDICES]; // Bone Number
-		float boneWeight[MAX_BONE_INDICES]; // Bone Weight
-	};
+	// Friend class
+	friend class FbxLoader;
 
 	// Bone structure
 	struct Bone
@@ -91,94 +82,128 @@ public: // Subclass
 		}
 	};
 
+	enum FrameSpeed
+	{
+		NORMAL = 1,
+		HALF = 2,
+		DOUBLE = 3,
+		ONEPOINTFIVE = 4,
+		POINTSEVENFIVE = 5
+	};
+
+	FrameSpeed frameSpeed = NORMAL;
+
+	// Maximum number of bone instances
+	/*static const int MAX_BONE_INDICES = 4;
+
+	static const int MAX_BONES = 256;
+
+	struct ConstBufferDataSkin
+	{
+		std::array<XMMATRIX, MAX_BONES> bones;
+	};*/
+private:
+	void CreateBuffers();
+
 	struct AnimationTime
 	{
 		FbxTime startTime;
 		FbxTime endTime;
 	};
 
-public:
-	// Friend Class
-	friend class FbxLoader;
-
-public:
-	// Destructor
+	std::unordered_map<std::string, AnimationTime > animations;
+	// Model name
+	string name;
+	// Node array
+	vector<Node> nodes;
+	// Ambient coefficient
+	XMFLOAT3 ambient = { 1,1,1 };
+	// Diffuse coefficient
+	XMFLOAT3 diffuse = { 1,1,1 };
+	// Scratch image
+	ScratchImage scratchImg = {};
+	// Vertex buffer
+	ComPtr<ID3D12Resource>vertBuff;
+	// Index buffer
+	ComPtr<ID3D12Resource> indexBuff;
+	// Vertex buffer view
+	D3D12_VERTEX_BUFFER_VIEW vbView = {};
+	// Index buffer view
+	D3D12_INDEX_BUFFER_VIEW ibView = {};
+	// Texture name
+	string texName;
+	// Bone Array
+	std::vector<Bone> bones;
+	// FBX scene
+	FbxScene* fbxScene = nullptr;
+public: // Member function
 	~FBX3DModel();
-
-	// Create Buffer
-	void CreateBuffers(ID3D12Device* device);
-
 	// Drawing
-	void Draw(ID3D12GraphicsCommandList* cmdList);
-
-	void GraphicsPipelineCreation(ID3D12Device* device, ComPtr<ID3D12RootSignature> rootsignature, ComPtr<ID3D12PipelineState> pipelinestate);
-
+	void Draw() override;
+	// Getter
+	std::vector <Bone>& GetBones() { return bones; }
+	// Maximum number of bone indices
+	static const int MAX_BONE_INDICES = 4;
+	// Obtaining the deformation matrix of the model
+	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
+	// Getter
+	FbxScene* GetFbxScene() { return fbxScene; }
+	// Maximum number of bones
+	static const int MAX_BONES = 32;
+	struct ConstBufferDataSkin
+	{
+		std::array<XMMATRIX, MAX_BONES> bones;
+	};
 	void AddAnimation(const std::string& animationName, const int startFrame, const int endFrame);
-
 	const AnimationTime& GetAnimation(const std::string& animationName);
 
+	/// <summary>
+	/// Start of animation
+	/// </summary>
 	void AnimationInit();
 
-	void PlayAnimationInit(const int startFrame, const int endFrame, const int FrameTime, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime, bool isPlay);
+	void SetAnimationFrame(const int startFrame, const int endFrame, const int frameTime = 1);
+	void SetAnimation(const std::string& animationName, const int frameTime = 1);
 
-	void SetAnimation(const std::string& animationName, const int FrameTime = 1);
+	bool PlayAnimation(bool endless = false);
 
-	bool PlayAnimation(bool endless, bool isPlay, FbxTime startTime, FbxTime endTime, FbxTime frameTime, FbxTime currentTime);
-
-	// Get model transformation matrix
-	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
-
-	// getter
-	FbxScene* GetFbxScene() { return fbxScene; }
-
-	// getter
-	std::vector<Bone>& GetBones() { return bones; }
-
-public:
-	std::unordered_map<std::string, AnimationTime> animations;
-
+	inline const FbxTime& GetCurrentAnimationTime() { return currentTime; }
 private:
-	ComPtr<ID3D12Resource> constBuffSkin; // 定数バッファ
+	ComPtr<ID3D12Resource> constBuffSkin; // Constant buffer
+	// Time per frame
+	FbxTime frameTime;
+	// Animation start time
+	FbxTime startTime;
+	// Animation end time
+	FbxTime endTime;
+	// Current time (animation)
+	FbxTime currentTime;
+	// Current animation name
+	std::string nowAnimationName;
+	std::string lerpAnimationName;
+	// Animation playing
+	bool isPlay = false;
+	float motionBlendTime = 7.0f;
+	float lerpTime = 0.0f;
 
-	FbxScene* fbxScene = nullptr;
-
-	// Model Name
-	std::string name;
-
-	// Node Array
-	std::vector<Node> nodes;
+	// EvaluateGlobalTransform function is slow, so two bone arrays for motion blending.
+	std::array<FbxAMatrix, MAX_BONES> blendStartBorn;
+	std::array<FbxAMatrix, MAX_BONES> blendEndBorn;
+public: // Subclass
+	// Vertex data structure
+	struct VertexPosNormalUvSkin
+	{
+		XMFLOAT3 pos; // Position
+		XMFLOAT3 normal; // Normal vector
+		XMFLOAT2 uv; // uv coordinates
+		std::array<UINT, MAX_BONE_INDICES> boneIndex; // Number
+		std::array<float, MAX_BONE_INDICES> boneWeight; // Weight
+	};
 
 	// Node with mesh
 	Node* meshNode = nullptr;
-
-	// Bone Vector
-	std::vector<Bone> bones;
-
 	// Vertex data array
-	std::vector<VertexPosNormalUvSkin> vertices;
-
+	vector<VertexPosNormalUvSkin> vertices;
 	// Vertex index array
-	std::vector<unsigned short> indices;
-
-	// Ambient coefficient
-	DirectX::XMFLOAT3 ambient = { 1,1,1 };
-	// Diffuse coefficient
-	DirectX::XMFLOAT3 diffuse = { 1,1,1 };
-	// Texture metadata
-	DirectX::TexMetadata metadata = {};
-	// Scratch image
-	DirectX::ScratchImage scratchImg = {};
-
-	// Vertex Buffer
-	ComPtr<ID3D12Resource> vertBuff;
-	// Index Buffer
-	ComPtr<ID3D12Resource> indexBuff;
-	// Texture Buffer
-	ComPtr<ID3D12Resource> texBuff;
-	// Vertex Buffer View
-	D3D12_VERTEX_BUFFER_VIEW vbView = {};
-	// Index Buffer View
-	D3D12_INDEX_BUFFER_VIEW ibView = {};
-	// SRV descriptor heap
-	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
+	vector<unsigned short>indices;
 };
