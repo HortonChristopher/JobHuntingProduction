@@ -1,144 +1,100 @@
 ﻿#pragma once
 
 #include <Windows.h>
+#include <array>
 #include <d3d12.h>
 #include <dxgi1_6.h>
+#include <vector>
+#include <DirectXMath.h>
 #include <wrl.h>
-#include <d3dx12.h>
-#include <cstdlib>
+#include "d3dx12.h"
 #include <imgui.h>
+#include <stdexcept>
+#include <cstdlib>
 #include <chrono>
+#include <imgui_impl_win32.h>
+#include <imgui_impl_dx12.h>
+#include <cassert>
+
+#pragma comment(lib, "d3d12.lib")
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "dxguid.lib")
 
 #include "WinApp.h"
+#include "GameWindow.h"
+#include "SafeDelete.h"
+
+using namespace Microsoft::WRL;
+class GameWindow;
 
 /// <summary>
 /// DirectX汎用
 /// </summary>
 class DirectXCommon
 {
-private: // エイリアス
-	// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
 public: // メンバ関数
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~DirectXCommon();
-
 	static DirectXCommon* GetInstance();
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize(WinApp* win);
+	void Initialize(GameWindow* window);
 
-	/// <summary>
-	/// 後始末
-	/// </summary>
-	void Finalize();
+	inline ID3D12Device* GetDevice() { return device.Get(); }
+	inline ID3D12GraphicsCommandList* GetCommandList() { return commandList.Get(); }
+	ID3D12CommandQueue* GetCmdQueue() { return cmdQueue.Get(); }
 
-	/// <summary>
-	/// 描画前処理
-	/// </summary>
+	ComPtr<ID3D12DescriptorHeap>& GetDsvHeap() { return dsvHeap; }
+	ComPtr<ID3D12DescriptorHeap>& GetRtvHeaps() { return  rtvHeaps; }
+	ComPtr<ID3D12Fence>& GetFence() { return fence[bbIndex]; }
+
+	std::vector <ComPtr<ID3D12Resource>>& GetBackBuffers() { return backBuffers; }
+
+	UINT64& GetCurrentFenceVal() { return fenceVal[bbIndex]; }
+	inline const UINT& GetBbIndex() { return bbIndex; }
+
+	void ImguiDraw();
 	void PreDraw();
-
-	/// <summary>
-	/// 描画後処理
-	/// </summary>
+	void DepthClear();
 	void PostDraw();
-
-	/// <summary>
-	/// レンダーターゲットのクリア
-	/// </summary>
-	void ClearRenderTarget();
-
-	/// <summary>
-	/// 深度バッファのクリア
-	/// </summary>
-	void ClearDepthBuffer();
-
-	/// <summary>
-	/// デバイスの取得
-	/// </summary>
-	/// <returns>デバイス</returns>
-	ID3D12Device* GetDevice() { return device.Get(); }
-
-	/// <summary>
-	/// 描画コマンドリストの取得
-	/// </summary>
-	/// <returns>描画コマンドリスト</returns>
-	ID3D12GraphicsCommandList* GetCommandList() { return commandList.Get(); }
-
-	ComPtr<ID3D12DescriptorHeap>& GetRTVHeap() { return rtvHeaps; }
-	ComPtr<ID3D12DescriptorHeap>& GetDSVHeap() { return dsvHeap; }
-	std::vector<ComPtr<ID3D12Resource>>& GetBackBuffers() { return backBuffers; }
+	void Finalize();
+	void ReRenderTarget();
 
 private: // メンバ変数
-	// ウィンドウズアプリケーション管理
-	WinApp* winApp;
+	DirectXCommon() = default;
+	DirectXCommon(const DirectXCommon&) = delete;
+	~DirectXCommon() = default;
 
-	// Direct3D関連
-	ComPtr<IDXGIFactory6> dxgiFactory;
-	ComPtr<ID3D12Device> device;
+	static const int frameCount = 3;
+
+	// Window Application Management
+	GameWindow* gameWindow;
+
+	// Direct 3D
 	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12CommandAllocator> commandAllocator;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<IDXGISwapChain4> swapchain;
-	std::vector<ComPtr<ID3D12Resource>> backBuffers;
-	ComPtr<ID3D12Resource> depthBuffer;
-	ComPtr<ID3D12DescriptorHeap> rtvHeaps;
-	ComPtr<ID3D12DescriptorHeap> dsvHeap;
-	ComPtr<ID3D12Fence> fence;
-	UINT64 fenceVal = 0;
+	ComPtr<ID3D12Device> device;
+	HRESULT CreateDXGI();
+	HRESULT CreateCommands();
+	HRESULT CreateSwapChain();
+	HRESULT CreateDesc();
+	HRESULT CreateFence();
+	HRESULT CreateDSV();
+	HRESULT ImguiInitialize();
+
+	std::vector <ComPtr<IDXGIAdapter>> adapters;
+	ComPtr <IDXGIFactory6> dxgiFactory;
+	ComPtr <IDXGISwapChain4> swapchain;
+	std::array <ComPtr<ID3D12CommandAllocator>, frameCount> cmdAllocator;
+	ComPtr <ID3D12CommandQueue> cmdQueue;
+	ComPtr <ID3D12DescriptorHeap> rtvHeaps;
+	ComPtr <ID3D12DescriptorHeap> dsvHeap;
+	ComPtr <ID3D12Resource> depthBuffer;
 
 	ComPtr<ID3D12DescriptorHeap> imguiHeap;
-	float deltaTime = 0.0f;
-	float frameRate = 0.0f;
-	float commandWaitTime = 0.0f;
-	std::chrono::steady_clock::time_point lastUpdate;
 
-private: // メンバ関数
-	/// <summary>
-	/// DXGIデバイス初期化
-	/// </summary>
-	/// <returns>成否</returns>
-	bool InitializeDXGIDevice();
+	std::vector <ComPtr<ID3D12Resource>> backBuffers;
+	std::array <ComPtr<ID3D12Fence>, frameCount> fence;
+	std::array <UINT64, frameCount> fenceVal;
 
-	/// <summary>
-	/// スワップチェーンの生成
-	/// </summary>
-	/// <returns>成否</returns>
-	bool CreateSwapChain();
-
-	/// <summary>
-	/// コマンド関連初期化
-	/// </summary>
-	/// <returns>成否</returns>
-	bool InitializeCommand();
-
-	/// <summary>
-	/// レンダーターゲット生成
-	/// </summary>
-	/// <returns>成否</returns>
-	bool CreateFinalRenderTargets();
-
-	/// <summary>
-	/// 深度バッファ生成
-	/// </summary>
-	/// <returns>成否</returns>
-	bool CreateDepthBuffer();
-
-	/// <summary>
-	/// フェンス生成
-	/// </summary>
-	/// <returns>成否</returns>
-	bool CreateFence();	
-
-	/// <summary>
-	/// imgui初期化
-	/// </summary>
-	/// <returns>成否</returns>
-	bool InitImgui();
+	UINT bbIndex;
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvH;
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvH;
 };
 
