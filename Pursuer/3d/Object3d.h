@@ -9,172 +9,142 @@
 
 #include "Model.h"
 #include "Camera.h"
-#include "CollisionInfo.h"
+#include "PipelineStatus.h"
+#include "LightCamera.h"
+#include "LightGroup.h"
+#include "Vector.h"
+#include "DirectXCommon.h"
+#include "FBX3DModel.h"
+#include "Texture.h"
 
-class BaseCollider;
+#pragma comment(lib, "d3dcompiler.lib")
 
-// 3Dオブジェクト 3D object
+using namespace Microsoft::WRL;
+using namespace DirectX;
+
+enum BILLBOARDTYPE
+{
+	NONE, // No billboard
+	NORMAL, // All directions
+	Y_AXIS, // Around Y axis
+};
+
+// 3D object
 class Object3d
 {
-private: // エイリアス alias
-	// Microsoft::WRL::を省略
+private: // Alias
+	// Using Microsoft::WRL::
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
+	// Using DirectX::
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-public: // サブクラス	 Subclass
+public: // Static member function
+	static Object3d* Create(Model* model, Vector3& pos, Vector3& scale, Vector3& rot, XMFLOAT4& color);
 
-	// パイプラインセット Pipeline set
-	struct PipelineSet
+	static void SetCamera(Camera* camera);
+
+	static void SetLightCamera(LightCamera* camera) { lightCamera = camera; }
+
+	static void SetLightGroup(LightGroup* lightGroup) { Object3d::lightGroup = lightGroup; }
+
+	static void SetDrawShadow(const bool flag) { drawShadow = flag; }
+
+	inline static bool GetDrawShadow() { return drawShadow; }
+
+	static LightGroup* GetLightGroup() { return Object3d::lightGroup; }
+
+	inline static Camera* GetCamera() { return Object3d::camera; }
+
+	inline static LightCamera* GetLightCamera() { return Object3d::lightCamera; }
+
+	static void SetBbIndex(const int arg_index)
 	{
-		// ルートシグネチャ Route signature
-		ComPtr<ID3D12RootSignature> rootsignature;
-		// パイプラインステートオブジェクト Pipeline state object
-		ComPtr<ID3D12PipelineState> pipelinestate;
-	};
-
-	// 定数バッファ用データ構造体B0 Data structure for constant buffer B0
-	struct ConstBufferDataB0
-	{
-		XMMATRIX mat;	// ３Ｄ変換行列 3D transformation matrix
-	};
-	
-private: // 定数 constant
-
-
-public: // 静的メンバ関数 Static member function
-	// 静的初期化 Static initialization
-	static void StaticInitialize( ID3D12Device *device, Camera *camera = nullptr);
-
-	// グラフィックパイプラインの生成 Generate graphic pipeline
-	static void CreateGraphicsPipeline();
-	
-	// カメラのセット Camera set
-	static void SetCamera( Camera *camera ) {
-		Object3d::camera = camera;
+		bbIndex = arg_index;
 	}
-	
-	// 描画前処理 Pre-drawing processing
-	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
-	
-	// 描画後処理 Post-drawing processing
-	static void PostDraw();
 
-	// 3Dオブジェクト生成 3D object generation
-	static Object3d* Create( Model *model = nullptr );
+	static void ClucLightViewProjection();
+private: // Static member variable
+	static Camera* camera;
 
+	static LightCamera* lightCamera;
 
-private: // 静的メンバ変数 Static member variables
-	// デバイス device
-	static ID3D12Device* device;
-	// コマンドリスト Command list
-	static ID3D12GraphicsCommandList* cmdList;
-	// テクスチャあり用パイプライン Pipeline for texture
-	static PipelineSet pipelineSet;
-	// カメラ camera
-	static Camera *camera;
+	// Drawing with a light class or no
+	static bool drawShadow;
 
-private:// 静的メンバ関数 Static member function
-	
-public: // メンバ関数 Member function
-	/// <summary>
-	/// コンストラクタ Constructor
-	/// </summary>
-	Object3d() = default;
+	static LightGroup* lightGroup;
 
-	/// <summary>
-	/// デストラクタ Destructor
-	/// </summary>
-	virtual ~Object3d();
+	static int bbIndex;
 
-	/// <summary>
-	/// 初期化 Initialize
-	/// </summary>
-	/// <returns></returns>
-	//bool Initialize();
-	virtual bool Initialize();
+	static XMMATRIX  lightViewProjection;
+public: // Structure
+	struct ConstBufferData
+	{
+		XMMATRIX viewprojection;
+		XMMATRIX world;
+		XMFLOAT3 cameraPos;
+		float pad;
+		XMFLOAT4 color;
+		XMMATRIX lightViewProjection;
 
-	// 毎フレーム処理 Every frame processing
-	//void Update();
-	virtual void Update();
+	};
 
-	// 描画 drawing
-	//void Draw();
-	virtual void Draw();
+	struct LightCameraCBData
+	{
+		XMMATRIX viewprojection;
+		XMMATRIX world;
+	};
 
-	/// <summary>
-	/// ワールド行列の取得 Get the world matrix
-	/// </summary>
-	/// <returns>ワールド行列</returns>
-	const XMMATRIX& GetMatWorld() { return matWorld; }
+	struct ConstLightCameraBuff
+	{
+		XMMATRIX viewProjection;
+		XMFLOAT3 cameraPos;
+	};
 
-	/// <summary>
-	/// コライダーのセット Collider Set
-	/// </summary>
-	/// <param name="collider">コライダー</param>
-	void SetCollider(BaseCollider* collider);
+	// Member function
+	Object3d(Vector3& pos, Vector3& scale, Vector3& rot, XMFLOAT4& color);
 
-	/// <summary>
-	/// 衝突時コールバック関数 Collision callback function
-	/// </summary>
-	/// <param name="info">衝突情報</param>
-	virtual void OnCollision(const CollisionInfo& info) {}
+	bool Initialize();
 
-	// 座標の取得 Get coordinates
-	const XMFLOAT3& GetPosition() { return position; }
+	void Update(BILLBOARDTYPE billboardType = NONE);
 
-	const XMFLOAT3& GetRotation() { return rotation; }
+	void Draw(const bool fbx = false, const bool shade = true, BLENDING type = ALPHA, const bool customPipeline = false, const int lightRootParameterIndex = 3);
 
-	// 座標の設定 Coordinate setting
-	void SetPosition(XMFLOAT3 position) { this->position = position; }
-
-	// 角度の設定 Angle setting
-	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
-
-	// スケールの設定 Scale setting
-	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
-
-	// モデルのセット Set of models
 	void SetModel(Model* model) { this->model = model; }
 
-	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
+	void WorldUpdate(const Vector3& rot, const BILLBOARDTYPE billboardType);
 
-	/// <summary>
-	/// モデルを取得 Get the model
-	/// </summary>
-	/// <returns>モデル</returns>
+	const XMMATRIX& GetMatWorld() { return matWorld; }
+
+	const XMMATRIX& GetRotateMatrix();
+
+	// Get Model
 	inline Model* GetModel() { return model; }
 
-	void UpdateWorldMatrix();
+	// Set parent object
+	void SetParent(Object3d* parent) { this->parent = parent; }
+private: // Member variable
+	std::array<ComPtr<ID3D12Resource>, 3> constBuff; // Constant buffer
+	std::array<ComPtr<ID3D12Resource>, 3> lCameraConstBuff; // Constant buffer
+	std::array<ComPtr<ID3D12Resource>, 3> constCameraBuff;
 
-//private: // メンバ変数 Member variables
-protected: // メンバ変数 Member variables
-
-	// クラス名（デバッグ用 Class name (for debugging)
-	const char* name = nullptr;
-
-	// コライダー Collider
-	BaseCollider* collider = nullptr;
-
-	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ Constant buffer
-	// 色 colour
-	XMFLOAT4 color = { 1,1,1,1 };
-	// ローカルスケール Local scale
-	XMFLOAT3 scale = { 1,1,1 };
-	// X,Y,Z軸回りのローカル回転角 Local rotation angle around the X, Y, Z axes
-	XMFLOAT3 rotation = { 0,0,0 };
-	// ローカル座標 Local coordinates
-	XMFLOAT3 position = { -5,0,0 };
-	// ローカルワールド変換行列 Local world transformation matrix
+	// Local-world transformation matrix
 	XMMATRIX matWorld;
-	// 親オブジェクト Parent object
-	Object3d* parent = nullptr;
-	// モデル model
+
+	// Rotation angle relative to world matrix
+	XMMATRIX appendRot = XMMatrixIdentity();
+
+	// Model
 	Model* model = nullptr;
-	// ビルボード Billboard
-	bool isBillboard = false;
+
+	// parent object
+	Object3d* parent = nullptr;
+
+	Vector3& position;
+	Vector3& scale;
+	Vector3& rotation;
+	XMFLOAT4& color;
 };
 
