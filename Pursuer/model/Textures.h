@@ -44,23 +44,35 @@ public:
 	/// <param name="color">Pointer to color array</param>
 	static void SendColor(const std::string& name, XMFLOAT4* color);
 
-	static void CreatePostEffect();
-
 	static void Initialize();
 
 	static const char& GetTexIndex(const std::string& name) { return texIndexes[name]; };
 
-	static ComPtr < ID3D12Resource> GetTexBuff(std::string name) { return texBuffs[name]; };
+	static ComPtr <ID3D12Resource> GetTexBuff(std::string name) { return texBuffs[name]; };
 
-	static TexMetadata& GetMetadate(std::string name) { return metaData[name]; };
+	static TexMetadata& GetMetadata(std::string name) { return metaData[name]; };
 
 	static ComPtr < ID3D12DescriptorHeap > GetBasicDescHeap() {
 		if (basicDescHeaps == nullptr)
+		{
 			assert(0);
+		}
+
 		return basicDescHeaps;
 	};
 
-	static CD3DX12_GPU_DESCRIPTOR_HANDLE GetGpuDescHandleSRV(const std::string& name);
+	inline static CD3DX12_GPU_DESCRIPTOR_HANDLE GetGpuDescHandleSRV(const std::string& name)
+	{
+		if (texIndexes.find(name) == texIndexes.end())
+		{
+			assert(0);
+		}
+
+		CD3DX12_GPU_DESCRIPTOR_HANDLE descHeap = CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescHeaps->GetGPUDescriptorHandleForHeapStart(),
+			texIndexes[name], DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+
+		return descHeap;
+	};
 private:
 	static std::unordered_map<std::string, TexMetadata> metaData;
 	static std::unordered_map<std::string, ComPtr <ID3D12Resource>> texBuffs;

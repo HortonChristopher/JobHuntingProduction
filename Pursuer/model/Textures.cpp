@@ -93,7 +93,7 @@ void Textures::CreateTexture(const std::string& name, const int& width, const in
 		1
 	);
 
-	ComPtr < ID3D12Resource> texbuff;
+	ComPtr <ID3D12Resource> texbuff;
 	result = dev->CreateCommittedResource( // GPU resource generation
 		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
 			D3D12_MEMORY_POOL_L0),
@@ -121,7 +121,6 @@ void Textures::CreateTexture(const std::string& name, const int& width, const in
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2D texture
 	srvDesc.Texture2D.MipLevels = 1;
-
 
 	dev->CreateShaderResourceView(texBuffs[name].Get(), // Buffer to associate with view
 		&srvDesc, // Texture setting information
@@ -185,12 +184,4 @@ void Textures::Initialize()
 	// Generation
 	result = DirectXCommon::GetInstance()->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&basicDescHeaps));
 	assert(SUCCEEDED(result));
-}
-
-CD3DX12_GPU_DESCRIPTOR_HANDLE Textures::GetGpuDescHandleSRV(const std::string& name)
-{
-	CD3DX12_GPU_DESCRIPTOR_HANDLE descHeap = CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescHeaps->GetGPUDescriptorHandleForHeapStart(),
-		texIndexes[name], DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
-
-	return descHeap;
 }
