@@ -7,7 +7,7 @@
 #include "Sprite.h"
 #include "Audio.h"
 #include "DeltaTime.h"
-#include "Texture.h"
+#include "Textures.h"
 #include "BaseArea.h"
 #include "TitleScreen.h"
 #include "TutorialArea.h"

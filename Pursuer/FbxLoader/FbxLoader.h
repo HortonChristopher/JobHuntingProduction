@@ -2,7 +2,7 @@
 
 #include "fbxsdk.h"
 #include "FBX3DModel.h"
-#include "Texture.h"
+#include "Textures.h"
 
 #include <d3d12.h>
 #include <d3dx12.h>

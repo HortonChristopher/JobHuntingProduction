@@ -218,7 +218,7 @@ void Object3d::Draw(const bool fbx, const bool shade, BLENDING type, const bool 
 		assert(SUCCEEDED(result));
 
 		constMap->viewprojection = matViewProjection;
-		constMap->lightViewProjection = lightCamera->GetMatViewProjection();
+		constMap->lightViewProjection = lightCamera->GetViewMatrixProjection();
 		constMap->cameraPos = cameraPos;
 		constMap->world = matWorld;
 		constMap->color = color;
@@ -238,7 +238,7 @@ void Object3d::Draw(const bool fbx, const bool shade, BLENDING type, const bool 
 	if (!fbx && !customPipeline && !drawShadow && shade)
 	{
 		cmdList->SetGraphicsRootConstantBufferView(4, constCameraBuff[bbIndex]->GetGPUVirtualAddress());
-		cmdList->SetGraphicsRootDescriptorTable(5, Texture::GetGPUDescriptorHandleSRV("shadowMap" + std::to_string(bbIndex))); // Heap head is constant buffer
+		cmdList->SetGraphicsRootDescriptorTable(5, Textures::GetGpuDescHandleSRV("shadowMap" + std::to_string(bbIndex))); // Heap head is constant buffer
 	}
 
 	if (drawShadow)

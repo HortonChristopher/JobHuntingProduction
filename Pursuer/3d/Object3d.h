@@ -15,7 +15,7 @@
 #include "Vector.h"
 #include "DirectXCommon.h"
 #include "FBX3DModel.h"
-#include "Texture.h"
+#include "Textures.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 

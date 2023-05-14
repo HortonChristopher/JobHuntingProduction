@@ -7,7 +7,7 @@
 
 #include "Vector.h"
 #include "PipelineStatus.h"
-#include "Texture.h"
+#include "Textures.h"
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "GameWindow.h"

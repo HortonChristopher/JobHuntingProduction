@@ -6,7 +6,7 @@
 #include "Matrix.h"
 #include "FbxLoader/FbxLoader.h"
 #include "Object3d.h"
-#include "Texture.h"
+#include "Textures.h"
 #include "Quaternion.h"
 
 #include <string>
