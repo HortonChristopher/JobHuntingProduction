@@ -6,6 +6,7 @@
 
 class GameWindow
 {
+public:
 	enum GAMEWINDOW_STATUS
 	{
 		WINDOW,

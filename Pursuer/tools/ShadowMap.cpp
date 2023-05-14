@@ -1,31 +1,25 @@
 #include "ShadowMap.h"
 
-//std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>> ShadowMap::rootsignature = {};
-//std::unordered_map<std::string, D3D_PRIMITIVE_TOPOLOGY > ShadowMap::primitiveTopologies = {};
-//std::unordered_map<std::string, std::unordered_map<BLENDTYPE, Microsoft::WRL::ComPtr<ID3D12PipelineState>>> ShadowMap::pipelinestate = {};
-
-Microsoft::WRL::ComPtr<ID3D12RootSignature> ShadowMap::rootsignature;
-Microsoft::WRL::ComPtr<ID3D12PipelineState> ShadowMap::pipelinestate;
-Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> ShadowMap::basicDescHeap;
-D3D_PRIMITIVE_TOPOLOGY ShadowMap::primitiveTopologies;
+GameWindow* ShadowMap::gameWindow = nullptr;
 
 ShadowMap::ShadowMap()
 {
 	HRESULT result;
-	dev = DirectXCommon::GetInstance()->GetDevice();
+
+	device = DirectXCommon::GetInstance()->GetDevice();
 	cmdList = DirectXCommon::GetInstance()->GetCommandList();
 
-	vertices[0].uv = { 0.0f,1.0f };
-	vertices[1].uv = { 0.0f,0.0f };
-	vertices[2].uv = { 1.0f,1.0f };
-	vertices[3].uv = { 1.0f,0.0f };
-	vertices[0].pos = { -1.0f,-1.0f,0.0f };
-	vertices[1].pos = { -1.0f,+1.0f,0.0f };
-	vertices[2].pos = { +1.0f,-1.0f,0.0f };
-	vertices[3].pos = { +1.0f,+1.0f,0.0f };
+	vertices[0].uv = { 0.0f, 1.0f };
+	vertices[1].uv = { 0.0f, 0.0f };
+	vertices[2].uv = { 1.0f, 1.0f };
+	vertices[3].uv = { 1.0f, 0.0f };
+	vertices[0].pos = { -1.0f, -1.0f, 0.0f };
+	vertices[1].pos = { -1.0f, +1.0f, 0.0f };
+	vertices[2].pos = { +1.0f, -1.0f, 0.0f };
+	vertices[3].pos = { +1.0f, +1.0f, 0.0f };
 
 	// Vertex Buffer Generation
-	result = dev->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices)),
@@ -48,7 +42,7 @@ ShadowMap::ShadowMap()
 	vbView.StrideInBytes = sizeof(vertices[0]);
 
 	// Create Constant Buffer
-	result = dev->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff),
@@ -75,11 +69,11 @@ void ShadowMap::Initialize()
 	resDesc.Width = resourceWidth;
 
 	// Same value as clear value when rendering
-	float clsClr[4] = { 0.0f,1.0f,1.0f,1.0f };
+	float clsClr[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
 	D3D12_CLEAR_VALUE clearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R32_FLOAT, clsClr);
 
 	// Resource Creation
-	result = dev->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&heapProp,
 		D3D12_HEAP_FLAG_NONE,
 		&resDesc,
@@ -91,9 +85,9 @@ void ShadowMap::Initialize()
 
 	// Create a heap for RTV
 	heapDesc.NumDescriptors = 1;
-	result = dev->CreateDescriptorHeap(
+	result = device->CreateDescriptorHeap(
 		&heapDesc,
-		IID_PPV_ARGS(peraRTVHeap.ReleaseAndGetAddressOf()));
+		IID_PPV_ARGS(rtvHeap.ReleaseAndGetAddressOf()));
 	if (result != S_OK)
 		assert(0);
 
@@ -102,12 +96,12 @@ void ShadowMap::Initialize()
 	rtvDesc.Format = DXGI_FORMAT_R32_FLOAT;
 
 	// Create Render Target View
-	dev->CreateRenderTargetView(
+	device->CreateRenderTargetView(
 		shadowResource.Get(),
 		&rtvDesc,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(
-			peraRTVHeap->GetCPUDescriptorHandleForHeapStart(), 0,
-			dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
+			rtvHeap->GetCPUDescriptorHandleForHeapStart(), 0,
+			device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
 
 	// Create heap for SRV
 	heapDesc.NumDescriptors = 1;
@@ -115,12 +109,11 @@ void ShadowMap::Initialize()
 	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
 
-	result = dev->CreateDescriptorHeap(
+	result = device->CreateDescriptorHeap(
 		&heapDesc,
-		IID_PPV_ARGS(peraSRVHeap.ReleaseAndGetAddressOf()));
+		IID_PPV_ARGS(srvHeap.ReleaseAndGetAddressOf()));
 	if (result != S_OK)
 		assert(0);
-
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
@@ -129,12 +122,12 @@ void ShadowMap::Initialize()
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
 	// Shader resource view creation
-	dev->CreateShaderResourceView(
+	device->CreateShaderResourceView(
 		shadowResource.Get(),
 		&srvDesc,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(
-			peraSRVHeap->GetCPUDescriptorHandleForHeapStart(), 0,
-			dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
+			srvHeap->GetCPUDescriptorHandleForHeapStart(), 0,
+			device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
 	);
 
 	// Resource Settings
@@ -147,7 +140,7 @@ void ShadowMap::Initialize()
 	);
 
 	// Resource Settings
-	result = dev->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), // Uploading not allowed
 		D3D12_HEAP_FLAG_NONE,
 		&depthResDesc,
@@ -160,29 +153,20 @@ void ShadowMap::Initialize()
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
 	dsvHeapDesc.NumDescriptors = 1; // One depth view
 	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV; // Depth Stencil View
-	result = dev->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
+	result = device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
 	assert(SUCCEEDED(result));
 
 	// Depth view creation
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT; // Depth Value Format
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	dev->CreateDepthStencilView(
+	device->CreateDepthStencilView(
 		depthBuffer.Get(),
 		&dsvDesc,
 		dsvHeap->GetCPUDescriptorHandleForHeapStart());
 
 	// Shader resource view creation
-	D3D12_SHADER_RESOURCE_VIEW_DESC shadowSrvDesc{}; // Configuration Structure
-	shadowSrvDesc.Format = shadowResource.Get()->GetDesc().Format; // RGBA Format
-	shadowSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	shadowSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2D Texture
-	shadowSrvDesc.Texture2D.MipLevels = 1;
-
-	dev->CreateShaderResourceView(shadowResource.Get(), // Buffer associated with the view
-		&shadowSrvDesc, // Texture setting information
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(basicDescHeap->GetCPUDescriptorHandleForHeapStart(),
-			texIndex, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	Texture::AddTexture("shadowMap", shadowResource.Get());
 }
 
 void ShadowMap::PreDraw()
@@ -194,15 +178,15 @@ void ShadowMap::PreDraw()
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapPointer;
 	rtvHeapPointer = CD3DX12_CPU_DESCRIPTOR_HANDLE(
-		peraRTVHeap->GetCPUDescriptorHandleForHeapStart(), 0,
-		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+		rtvHeap->GetCPUDescriptorHandleForHeapStart(), 0,
+		device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
 	);
 
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
 
-	viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, (float)1280.0f, (float)720.0f);
-	scissorRect = CD3DX12_RECT(0, 0, 1280, 720);
+	viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, (float)gameWindow->GetWindowWidth(), (float)gameWindow->GetWindowHeight());
+	scissorRect = CD3DX12_RECT(0, 0, gameWindow->GetWindowWidth(), gameWindow->GetWindowHeight());
 
 	auto dsvH = dsvHeap->GetCPUDescriptorHandleForHeapStart();
 	cmdList->OMSetRenderTargets(1, &rtvHeapPointer, true, &dsvH);
@@ -211,43 +195,42 @@ void ShadowMap::PreDraw()
 
 	// Clear full screen (RGBA format)
 	float clearColor[] = { 0.0f, 1.0f, 1.0f, 1.0f };
-	cmdList->ClearRenderTargetView(rtvHeapPointer, clearColor, 0, nullptr);
 
+	cmdList->ClearRenderTargetView(rtvHeapPointer, clearColor, 0, nullptr);
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 void ShadowMap::Draw()
 {
-	const DirectX::XMFLOAT4 color = { 1,1,1,1 };
+	const DirectX::XMFLOAT4 color = { 1, 1, 1, 1 };
 
 	HRESULT result;
 
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	if (result != S_OK)
+	{
 		assert(0);
+	}
 
 	constMap->mat = DirectX::XMMatrixIdentity();
 	constMap->color = color;
 	constBuff->Unmap(0, nullptr);
 
 	// Set Pipeline
-	auto cmdList = DirectXCommon::GetInstance()->GetCommandList();
-	cmdList->SetGraphicsRootSignature(rootsignature.Get());
-	cmdList->SetPipelineState(pipelinestate.Get());
-	//cmdList->IASetPrimitiveTopology(primitiveTopologies.Get());
+	PipelineStatus::SetPipeline("ShdaowMap");
 
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	// Array of descriptor heaps
-	ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { Texture::GetBasicDescriptorHeap().Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 
 	// Index buffer set command
-	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(GetBasicDescHeap().Get()->GetGPUDescriptorHandleForHeapStart(), texIndex,
-		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(Texture::GetBasicDescriptorHeap().Get()->GetGPUDescriptorHandleForHeapStart(), Texture::GetTextureIndex("shadowMap"),
+		device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
 	cmdList->DrawInstanced(4, 1, 0, 0);
 }
