@@ -1,9 +1,4 @@
 ﻿#include "DebugCamera.h"
-#include <cassert>
-#include <sstream>
-#include <iomanip>
-
-using namespace DirectX;
 
 extern XMFLOAT3 objectPosition;
 extern XMFLOAT3 objectRotation;
@@ -14,15 +9,11 @@ extern DeltaTime* deltaTime;
 extern float degreeTransfer;
 extern bool lockOnActive = false;
 
-DebugCamera::DebugCamera(int window_width, int window_height, Input* input)
-	: Camera(window_width, window_height)
+DebugCamera::DebugCamera()
 {
 	assert(input);
 
 	this->input = input;
-	// Adjust to scale relative to screen size
-	scaleX = 1.0f / (float)window_width;
-	scaleY = 1.0f / (float)window_height;
 }
 
 void DebugCamera::Update()
@@ -181,7 +172,7 @@ void DebugCamera::Update()
 	//prevRotation = objectRotation.y;
 
 	if (dirty || viewDirty) {
-		// 追加回転分の回転行列を生成
+		// Generate rotation matrices for additional rotations
 		if (title || cutscene || wCutscene || cutsceneActive)
 		{
 			XMMATRIX matRotNew = XMMatrixIdentity();
@@ -193,20 +184,20 @@ void DebugCamera::Update()
 			{
 				matRotNew *= XMMatrixRotationY(-angleY);
 			}
-			// 累積の回転行列を合成
-			// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
-			// クォータニオンを使用する方が望ましい
+			// Synthesize the rotation matrix of the accumulation
+			// *Because of the risk of scaling by error when the rotation matrix is accumulated.
+			// Quaternions are preferred.
 			matRot = matRotNew * matRot;
 
-			// 注視点から視点へのベクトルと、上方向ベクトル
+			// Vector from gazing point to viewpoint and upward vector
 			XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
 			XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
 
-			// ベクトルを回転
+			// Rotate Vector
 			vTargetEye = XMVector3Transform(vTargetEye, matRot);
 			vUp = XMVector3Transform(vUp, matRot);
 
-			// 注視点からずらした位置に視点座標を決定
+			// Determine viewpoint coordinates at a position displaced from the gazing point
 			const XMFLOAT3& target = GetTarget();
 			SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 20.0f, target.z + vTargetEye.m128_f32[2] });
 			SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });

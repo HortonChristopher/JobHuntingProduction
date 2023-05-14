@@ -1,164 +1,90 @@
 ﻿#pragma once
 
 #include <DirectXMath.h>
+#include <d3d12.h>
+
+#include "Vector.h"
+
+using namespace DirectX;
 
 /// <summary>
-/// カメラ基本機能
+/// Basic Camera Functions
 /// </summary>
 class Camera
 {
-protected: // エイリアス
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMVECTOR = DirectX::XMVECTOR;
-	using XMMATRIX = DirectX::XMMATRIX;
+public:
+	Camera();
 
-public: // メンバ関数
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	/// <param name="window_width">画面幅</param>
-	/// <param name="window_height">画面高さ</param>
-	Camera(int window_width, int window_height);
+	Camera(const XMFLOAT3& eye, const XMFLOAT3& target, const XMFLOAT3& up, float arg_near = 0.1f, float arg_far = 1000.0f);
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	virtual ~Camera() = default;
+	~Camera();
 
-	/// <summary>
-	/// 毎フレーム更新
-	/// </summary>
 	virtual void Update();
 
-	/// <summary>
-	/// ビュー行列を更新
-	/// </summary>
 	void UpdateViewMatrix();
 
-	/// <summary>
-	/// 射影行列を更新
-	/// </summary>
-	void UpdateProjectionMatrix();
+	inline const Vector3& GetEye() { return eye; }
+	inline const Vector3& GetTarget() { return target; }
+	inline const Vector3& GetUp() { return up; }
 
-	/// <summary>
-	/// ビュー行列の取得
-	/// </summary>
-	/// <returns>ビュー行列</returns>
-	inline const XMMATRIX& GetViewMatrix() {
-		return matView;
-	}
+	inline const XMMATRIX& GetViewMatrix() { return matView; }
+	inline const XMMATRIX& GetProjectionMatrix() { return matProjection; }
 
-	/// <summary>
-	/// 射影行列の取得
-	/// </summary>
-	/// <returns>射影行列</returns>
-	inline const XMMATRIX& GetProjectionMatrix() {
-		return matProjection;
-	}
-
-	/// <summary>
-	/// ビュー射影行列の取得
-	/// </summary>
-	/// <returns>ビュー射影行列</returns>
-	inline const XMMATRIX& GetViewProjectionMatrix() {
+	inline const XMMATRIX& GetViewMatrixProjection() 
+	{
+		matViewProjection = matView * matProjection;
 		return matViewProjection;
 	}
 
-	/// <summary>
-	/// ビルボード行列の取得
-	/// </summary>
-	/// <returns>ビルボード行列</returns>
-	inline const XMMATRIX& GetBillboardMatrix() {
-		return matBillboard;
+	inline const XMMATRIX& GetBillboardMatrix() { return matBillboard; }
+	inline const XMMATRIX& GetBillboardMatrixY() { return matBillboardY; }
+
+	inline const float GetNear() { return nearDist; }
+	inline const float GetFar() { return farDist; }
+	inline const float GetPhi() { return phi; }
+
+	inline const float GetTheta()
+	{
+		if (theta < 0)
+		{
+			return 0;
+		}
+		return theta;
 	}
 
-	/// <summary>
-	/// 視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	inline const XMFLOAT3& GetEye() {
-		return eye;
-	}
+	void SetViewMatrix(const XMFLOAT3& eye, const XMFLOAT3& target, const XMFLOAT3& up);
 
-	/// <summary>
-	/// 視点座標の設定
-	/// </summary>
-	/// <param name="eye">座標</param>
-	inline void SetEye(XMFLOAT3 eye) {
-		this->eye = eye; viewDirty = true;
-	}
+	void MoveVector(const XMVECTOR& moveEye = { }, const XMVECTOR& moveTarget = { }, const XMVECTOR& moveUp = { });
 
-	/// <summary>
-	/// 注視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	inline const XMFLOAT3& GetTarget() {
-		return target;
-	}
+	void SetEye(const XMFLOAT3& eye) { this->eye = eye; viewDirty = true; }
+	void SetTarget(const XMFLOAT3& target) { this->target = target; viewDirty = true; }
+	void SetUp(const XMFLOAT3& up) { this->up = up; viewDirty = true; }
+protected:
+	XMMATRIX matView; // View transformation matrix
 
-	/// <summary>
-	/// 注視点座標の設定
-	/// </summary>
-	/// <param name="target">座標</param>
-	inline void SetTarget(XMFLOAT3 target) {
-		this->target = target; viewDirty = true;
-	}
+	float angle = 0.0f;
+	float nearDist = 0.1f;
+	float farDist = 1000.0f;
+	float phi;
+	float theta;
 
-	/// <summary>
-	/// 上方向ベクトルの取得
-	/// </summary>
-	/// <returns>上方向ベクトル</returns>
-	inline const XMFLOAT3& GetUp() {
-		return up;
-	}
+	Vector3 eye;
+	Vector3 target;
+	Vector3 up;
 
-	/// <summary>
-	/// 上方向ベクトルの設定
-	/// </summary>
-	/// <param name="up">上方向ベクトル</param>
-	inline void SetUp(XMFLOAT3 up) {
-		this->up = up; viewDirty = true;
-	}
-
-	/// <summary>
-	/// ベクトルによる視点移動
-	/// </summary>
-	/// <param name="move">移動量</param>
-	void MoveEyeVector(const XMFLOAT3& move);
-	void MoveEyeVector(const XMVECTOR& move);
-
-	/// <summary>
-	/// ベクトルによる移動
-	/// </summary>
-	/// <param name="move">移動量</param>
-	void MoveVector(const XMFLOAT3& move);
-	void MoveVector(const XMVECTOR& move);
-
-protected: // メンバ変数
-	// ビュー行列
-	XMMATRIX matView = DirectX::XMMatrixIdentity();
-	// ビルボード行列
-	XMMATRIX matBillboard = DirectX::XMMatrixIdentity();
-	// Y軸回りビルボード行列
-	XMMATRIX matBillboardY = DirectX::XMMatrixIdentity();
-	// 射影行列
-	XMMATRIX matProjection = DirectX::XMMatrixIdentity();
-	// ビュー射影行列
-	XMMATRIX matViewProjection = DirectX::XMMatrixIdentity();
-	// ビュー行列ダーティフラグ
+	// View matrix dirty flag
 	bool viewDirty = false;
-	// 射影行列ダーティフラグ
-	bool projectionDirty = false;
-	// 視点座標
-	XMFLOAT3 eye = {0, 0, -20};
-	// 注視点座標
-	XMFLOAT3 target = {0, 0, 0};
-	// 上方向ベクトル
-	XMFLOAT3 up = {0, 1, 0};
-	// アスペクト比
-	float aspectRatio = 1.0f;
+
+	// Billboard matrix
+	XMMATRIX matBillboard = DirectX::XMMatrixIdentity();
+
+	// Billboard matrix around Y axis
+	XMMATRIX matBillboardY = DirectX::XMMatrixIdentity();
+
+	// Projection matrix
+	XMMATRIX matProjection = DirectX::XMMatrixIdentity();
+
+	// View projection matrix
+	XMMATRIX matViewProjection = DirectX::XMMatrixIdentity();
 };
 

@@ -1,40 +1,48 @@
 ﻿#pragma once
+
 #include "Camera.h"
 #include "Input.h"
 #include "DeltaTime.h"
 #include "SettingParameters.h"
 #include "Vector.h"
+#include "GameWindow.h"
 
 #include <DirectXMath.h>
+#include <cstdio>
+#include <cassert>
+#include <sstream>
+#include <iomanip>
+
+using namespace DirectX;
+
+class GameWindow;
 
 /// <summary>
-/// デバッグ用カメラ
+/// Camera for debugging
 /// </summary>
-class DebugCamera :
-	public Camera
+class DebugCamera : public Camera
 {
+private:
 	using XMMATRIX = DirectX::XMMATRIX;
+
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	/// <param name="window_width">画面幅</param>
-	/// <param name="window_height">画面高さ</param>
-	/// <param name="input">入力</param>
-	DebugCamera(int window_width, int window_height, Input* input);
+	DebugCamera();
 
-	// 更新
-	void Update() override;
+	// Update
+	void Update();
 
-	void SetDistance(float distance) {
+	void SetDistance(float distance) 
+	{
 		this->distance = distance; viewDirty = true;
 	}
 
-	void SetPhi(float phi) {
+	void SetPhi(float phi) 
+	{
 		this->phi = phi;
 	}
 
-	void SetTheta(float theta) {
+	void SetTheta(float theta) 
+	{
 		this->theta = theta;
 	}
 
@@ -42,9 +50,13 @@ public:
 	{
 		phi += angle;
 		if (phi > 360 * 3.141592654f / 180.0f)
+		{
 			phi -= 360 * 3.141592654f / 180.0f;
+		}
 		else if (phi < 0)
+		{
 			phi += 360 * 3.141592654f / 180.0f;
+		}
 		viewDirty = true;
 	}
 
@@ -54,11 +66,13 @@ public:
 	}
 
 private:
-	// 入力クラスのポインタ
+	// Pointer to input class
 	Input* input;
-	// カメラ注視点までの距離
+
+	// Distance to camera gazing point
 	float distance = 20;
-	// スケーリング
+
+	// Scaling
 	float scaleX = 1.0f;
 	float scaleY = 1.0f;
 
@@ -68,8 +82,7 @@ private:
 	float phi = 270.0f * 3.141592654f / 180.0f;
 	float theta = 20.0f * 3.141592654f / 180.0f;
 
-	//LONG prevMouseMove = 0.0;
-	// 回転行列
+	// Rotation matrix
 	XMMATRIX matRot = DirectX::XMMatrixIdentity();
 public:
 	bool title = false;
