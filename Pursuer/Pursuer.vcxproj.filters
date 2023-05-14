@@ -183,7 +183,7 @@
     <ClCompile Include="math\Matrix.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Quaternion.cpp">
+    <ClCompile Include="math\Quaternion.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
