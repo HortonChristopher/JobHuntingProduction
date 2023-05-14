@@ -2,10 +2,14 @@
 
 #include "fbxsdk.h"
 #include "FBX3DModel.h"
+#include "Texture.h"
 
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <string>
+#include <cassert>
+
+using namespace DirectX;
 
 class FbxLoader
 {
@@ -25,7 +29,7 @@ public:
 
 public:
 	/// <summary>
-	/// シングルトンインスタンスの取得
+	/// Obtaining a singleton instance
 	/// </summary>
 	/// <returns>インスタンス</returns>
 	static FbxLoader* GetInstance();
@@ -40,8 +44,7 @@ public:
 	/// <summary>
 	/// Initialization
 	/// </summary>
-	/// <param name="device">D3D12Device</param>
-	void Initialize(ID3D12Device* device);
+	void Initialize();
 
 	/// <summary>
 	/// Clean Up
@@ -55,6 +58,9 @@ public:
 	//void LoadModelFromFile(const string& modelName);
 	FBX3DModel* LoadModelFromFile(const std::string& modelName);
 
+	// Read Skinning Information
+	void ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh);
+private:
 	/// <summary>
 	/// Recursively analyze node configuration
 	/// </summary>
@@ -78,22 +84,19 @@ public:
 	// Material reading
 	void ParseMaterial(FBX3DModel* model, FbxNode* fbxNode);
 
-	// Read Skinning Information
-	void ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh);
-
 	// Texture reading
-	void LoadTexture(FBX3DModel* model, const string& fullpath);
+	void LoadTexture(const std::string& fullpath);
 
+	// Extract file names from file paths containing directories
 	std::string ExtractFileName(const std::string& path);
 
-private:
-	// privateなコンストラクタ（シングルトンパターン）
+	// Private constructor (Singleton pattern)
 	FbxLoader() = default;
-	// privateなデストラクタ（シングルトンパターン）
+	// Private destructor (Singleton pattern)
 	~FbxLoader() = default;
-	// コピーコンストラクタを禁止（シングルトンパターン）
+	// Prohibit copy constructor (Singleton pattern)
 	FbxLoader(const FbxLoader& obj) = delete;
-	// コピー代入演算子を禁止（シングルトンパターン）
+	// Prohibit copy assignment operator (Singleton pattern)
 	void operator=(const FbxLoader& obj) = delete;
 
 	// D3D12Device

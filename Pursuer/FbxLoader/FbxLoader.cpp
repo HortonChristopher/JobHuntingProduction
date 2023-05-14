@@ -1,9 +1,5 @@
 ﻿#include "FbxLoader.h"
 
-#include <cassert>
-
-using namespace DirectX;
-
 /// <summary>
 /// Static Member Variable Entity
 /// </summary>
@@ -31,13 +27,10 @@ void FbxLoader::ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& s
     }
 }
 
-void FbxLoader::Initialize(ID3D12Device* device)
+void FbxLoader::Initialize()
 {
     // Reinitialization check
     assert(fbxManager == nullptr);
-
-    // Assign member variables from pulling
-    this->device = device;
 
     // Fbx manager generation
     fbxManager = FbxManager::Create();
@@ -94,18 +87,21 @@ FBX3DModel* FbxLoader::LoadModelFromFile(const string& modelName)
     ParseNodeRecursive(model, fbxScene->GetRootNode());
 
     // FBX scene release
-    //fbxScene->Destroy();
+    // fbxScene->Destroy();
     model->fbxScene = fbxScene;
 
     // Create Buffer
-    model->CreateBuffers(device);
+    model->CreateBuffers();
+
+    // Initialize animation
+    model->AnimationInit();
 
     return model;
 }
 
 void FbxLoader::ParseNodeRecursive(FBX3DModel* model, FbxNode* fbxNode, Node* parent)
 {
-    // Add node ot model
+    // Add node to model
     model->nodes.emplace_back();
     Node& node = model->nodes.back();
 
@@ -294,6 +290,7 @@ void FbxLoader::ParseMeshFaces(FBX3DModel* model, FbxMesh* fbxMesh)
 void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
 {
     const int materialCount = fbxNode->GetMaterialCount();
+
     if (materialCount > 0)
     {
         // Get front line material
@@ -324,9 +321,11 @@ void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
 
             // Remove diffuse texture
             const FbxProperty diffuseProperty = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
+
             if (diffuseProperty.IsValid())
             {
                 const FbxFileTexture* texture = diffuseProperty.GetSrcObject<FbxFileTexture>();
+
                 if (texture)
                 {
                     const char* filepath = texture->GetFileName();
@@ -336,7 +335,8 @@ void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
                     string name = ExtractFileName(path_str);
 
                     // Read texture
-                    LoadTexture(model, materialDirectory + name);
+                    model->texName = name;
+                    LoadTexture(name);
                     textureLoaded = true;
                 }
             }
@@ -345,7 +345,8 @@ void FbxLoader::ParseMaterial(FBX3DModel* model, FbxNode* fbxNode)
         // If there is no texture, paste a white texture
         if (!textureLoaded)
         {
-            LoadTexture(model, materialDirectory + defaultTextureFileName);
+            model->texName = defaultTextureFileName;
+            LoadTexture(defaultTextureFileName);
         }
     }
 }
@@ -480,7 +481,7 @@ void FbxLoader::ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh)
                     weight += vertices[i].boneWeight[j];
                 }
 
-                // Adjusted to otal 1.0f (100%)
+                // Adjusted to total 1.0f (100%)
                 vertices[i].boneWeight[0] = 1.0f - weight;
                 break;
             }
@@ -488,24 +489,15 @@ void FbxLoader::ParseSkin(FBX3DModel* model, FbxMesh* fbxMesh)
     }
 }
 
-void FbxLoader::LoadTexture(FBX3DModel* model, const std::string& fullpath)
+void FbxLoader::LoadTexture(const std::string& fullpath)
 {
-    HRESULT result = S_FALSE;
-
-    // load WIC texture
-    TexMetadata& metadata = model->metadata;
-    ScratchImage& scratchImg = model->scratchImg;
-
-    // Convert to unicode string
-    wchar_t wfilepath[128];
-    MultiByteToWideChar(CP_ACP, 0, fullpath.c_str(), -1, wfilepath, _countof(wfilepath));
-    result = LoadFromWICFile(
-        wfilepath, WIC_FLAGS_NONE,
-        &metadata, scratchImg);
-    if (FAILED(result))
+    //  If the texture has already been loaded, exit immediately
+    if (Texture::GetTextureBuffers(fullpath) != nullptr)
     {
-        assert(0);
+        return;
     }
+
+    Texture::LoadTexture(fullpath, fullpath);
 }
 
 std::string FbxLoader::ExtractFileName(const std::string& path)
