@@ -31,16 +31,30 @@ enum SHADER
 	FBXShadowMap,
 	DrawShadowOBJ,
 	GPUPARTICLE,
+	Blur,
+	Ssao,
+	SsaoCombine,
+	SkyDome,
 };
 
 class PipelineStatus
 {
 public:
-	static void SetPipeline(const std::string& keyName, const BLENDING blendType = ALPHA);
+	inline static void SetPipeline(const std::string& keyName, const BLENDING blendType = ALPHA)
+	{
+		if (rootsignature[keyName].Get() == nullptr || pipelinestate[keyName][blendType].Get() == nullptr)
+			assert(0);
+		auto cmdList = DirectXCommon::GetInstance()->GetCommandList();
+
+		cmdList->SetGraphicsRootSignature(rootsignature[keyName].Get());
+		cmdList->SetPipelineState(pipelinestate[keyName][blendType].Get());
+		cmdList->IASetPrimitiveTopology(primitiveTopologies[keyName]);
+	}
 
 	static void SetComputePipeline(const std::string& keyName, const BLENDING blendType = ALPHA);
 
-	static void CreatePipeline(const std::string& keyName, const SHADER shader, const BLENDING blendType = ALPHA);
+	static void CreatePipeline(const std::string& keyName, const SHADER shaderType, const BLENDING blendType = ALPHA);
+
 private:
 	DirectXCommon* device;
 
@@ -48,7 +62,7 @@ private:
 	static std::unordered_map<std::string, ComPtr<ID3D12RootSignature>>rootsignature;
 	static std::unordered_map<std::string, std::unordered_map<BLENDING, ComPtr<ID3D12PipelineState>>> pipelinestate;
 
-	enum SHADER
+	enum SHADERTYPE
 	{
 		VS,
 		GS,
@@ -57,7 +71,7 @@ private:
 		PS,
 	};
 
-	static void CompileShader(const std::string& shaderName, ComPtr < ID3DBlob>& shaderBlob, ComPtr < ID3DBlob>& errorBlob, const SHADER shaderType);
+	static void CompileShader(const std::string& shaderName, ComPtr <ID3DBlob>& shaderBlob, ComPtr <ID3DBlob>& errorBlob, const SHADERTYPE shaderType);
 	static void SetVSLayout(const LPCSTR& semantics, std::vector<D3D12_INPUT_ELEMENT_DESC>& arg_layouts, const DXGI_FORMAT& format);
 	static void SetDescriptorConstantBuffer(std::vector<CD3DX12_ROOT_PARAMETER>& arg_rootparams, const int arg_constBuffNum, const int arg_descriptorNum, std::vector<CD3DX12_DESCRIPTOR_RANGE*>& arg_descRangeSRVs);
 };
