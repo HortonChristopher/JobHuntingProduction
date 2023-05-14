@@ -394,6 +394,9 @@
     <None Include="Resources\shaders\ShadowMap.hlsli">
       <Filter>Shader Files\ShadowMap</Filter>
     </None>
+    <None Include="Resources\shaders\LightStructure.hlsli">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
