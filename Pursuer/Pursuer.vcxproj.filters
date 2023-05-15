@@ -40,6 +40,12 @@
     <FxCompile Include="Resources\shaders\ShadowMapVS.hlsl">
       <Filter>Shader Files\ShadowMap</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\DrawShadowOBJPS.hlsl">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\DrawShadowOBJVS.hlsl">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -395,6 +401,9 @@
       <Filter>Shader Files\ShadowMap</Filter>
     </None>
     <None Include="Resources\shaders\LightStructure.hlsli">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </None>
+    <None Include="Resources\shaders\DrawShadowOBJ.hlsli">
       <Filter>Shader Files\ShadowMap</Filter>
     </None>
   </ItemGroup>
