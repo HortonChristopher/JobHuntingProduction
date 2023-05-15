@@ -65,6 +65,7 @@ protected:
 	float angle = 0.0f;
 	float nearDist = 0.1f;
 	float farDist = 1000.0f;
+
 	float phi;
 	float theta;
 

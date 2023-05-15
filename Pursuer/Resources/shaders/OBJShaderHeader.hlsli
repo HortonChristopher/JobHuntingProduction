@@ -1,4 +1,4 @@
-#include"LightStruct.hlsli"
+#include"LightStructure.hlsli"
 
 cbuffer cbuff0 : register(b0)
 {

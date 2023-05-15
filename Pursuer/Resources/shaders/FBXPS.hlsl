@@ -64,7 +64,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     for (int i = 0; i < POINTLIGHT_NUM; i++)
     {
         // Light Vector
-        float3 lightV = pointLights[i].lightpos - input.worldpos.xyz;
+        float3 lightV = pointLights[i].lightPos - input.worldpos.xyz;
 
         // Vector Length
         float d = length(lightV);
@@ -73,7 +73,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         lightV = normalize(lightV);
 
         // Distance attenuation coefficient
-        float atten = saturate(1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d + pointLights[i].lightatten.z * d * d));
+        float atten = saturate(1.0f / (pointLights[i].lightAtten.x + pointLights[i].lightAtten.y * d + pointLights[i].lightAtten.z * d * d));
 
         // Inner product of vectors toward the light
         float3 dotLightNormal = dot(lightV, input.normal);
@@ -89,14 +89,14 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         float3 specular = pow(saturate(dot(reflect, halfVec)), shininess) * m_specular;
 
         // All add up
-        shadeColor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor * pointLights[i].active;
+        shadeColor.rgb += atten * (diffuse + specular) * pointLights[i].lightColor * pointLights[i].active;
     }
 
     // Spotlight
     for (int i = 0; i < SPOTLIGHT_NUM; i++)
     {
         // Light Vector
-        float3 lightV = spotLights[i].lightpos - input.worldpos.xyz;
+        float3 lightV = spotLights[i].lightPos - input.worldpos.xyz;
 
         // Vector Length
         float d = length(lightV);
@@ -105,7 +105,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         lightV = normalize(lightV);
 
         // Distance attenuation coefficient
-        float atten = saturate(1.0f / (spotLights[i].lightatten.x + spotLights[i].lightatten.y * d + spotLights[i].lightatten.z * d * d));
+        float atten = saturate(1.0f / (spotLights[i].lightAtten.x + spotLights[i].lightAtten.y * d + spotLights[i].lightAtten.z * d * d));
 
         // Angular attenuation
         float cos = dot(lightV, spotLights[i].lightV);

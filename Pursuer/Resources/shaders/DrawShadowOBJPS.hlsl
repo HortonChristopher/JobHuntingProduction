@@ -24,7 +24,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
     texColor.xyz = lerp(shadowColor, texColor.xyz, shadow);
 
     // Color by shading
-    // Gloss 
+    // Gloss
     const float shininess = 4.0f;
 
     // Direction vector from vertex to viewpoint
@@ -67,7 +67,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         lightV = normalize(lightV);
 
         // Distance attenuation coefficient
-        float atten = 1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d + pointLights[i].lightatten.z * d * d);
+        float atten = 1.0f / (pointLights[i].lightAtten.x + pointLights[i].lightAtten.y * d + pointLights[i].lightAtten.z * d * d);
 
         // Inner product of vectors toward the light
         float3 dotLightNormal = dot(lightV, input.normal);
@@ -83,7 +83,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         float3 specular = pow(saturate(dot(reflect, halfVec)), shininess) * m_specular;
 
         // All add up
-        shadeColor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor * pointLights[i].active;
+        shadeColor.rgb += atten * (diffuse + specular) * pointLights[i].lightColor * pointLights[i].active;
     }
 
     // Spotlight
@@ -99,7 +99,7 @@ PSOutput PSmain(VSOutput input) : SV_TARGET
         lightV = normalize(lightV);
 
         // Distance attenuation coefficient
-        float atten = saturate(1.0f / (spotLights[i].lightatten.x + spotLights[i].lightatten.y * d + spotLights[i].lightatten.z * d * d));
+        float atten = saturate(1.0f / (spotLights[i].lightAtten.x + spotLights[i].lightAtten.y * d + spotLights[i].lightAtten.z * d * d));
 
         // Angular attenuation
         float cos = dot(lightV, spotLights[i].lightV);

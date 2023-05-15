@@ -3,14 +3,14 @@ static const int DIRLIGHT_NUM = 3;
 struct DirLight
 {
     float3 lightV; // Unit vector of direction to the light
-    float3 lightColor; // Light color (RGB)
+    float3 lightcolor; // Light color (RGB)
 };
 
 // Positional light source
 static const int POINTLIGHT_NUM = 9;
 struct PointLight
 {
-    float3 lightpos; // Light coordinate
+    float3 lightPos; // Light coordinate
     float3 lightColor; // Light Color
     float3 lightAtten; // Distance attenuation coefficient of lights
     uint active;
@@ -20,10 +20,10 @@ struct PointLight
 static const int SPOTLIGHT_NUM = 3;
 struct SpotLight
 {
-    float3 lightv; // Unit vector of direction to the light
-    float3 lightpos; // Light coordinate
+    float3 lightV; // Unit vector of direction to the light
+    float3 lightPos; // Light coordinate
     float3 lightcolor; // Light Color
-    float3 lightatten; // Distance attenuation coefficient of lights
+    float3 lightAtten; // Distance attenuation coefficient of lights
     float2 lightfactoranglecos; // Cosine of light attenuation angle
     uint active;
 };

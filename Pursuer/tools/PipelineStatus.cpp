@@ -103,7 +103,6 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	case FBXShadowMap:
 	{
 		CompileShader("ShadowMapFBXVS", vsBlob, errorBlob, VS);
-
 		CompileShader("ShadowMapPS", psBlob, errorBlob, PS);
 
 		gpipeline.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
@@ -124,6 +123,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	{
 		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
 		CompileShader("SpritePS", psBlob, errorBlob, PS);
+
 		gpipeline.BlendState.AlphaToCoverageEnable = true;
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);

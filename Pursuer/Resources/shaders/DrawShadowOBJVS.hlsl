@@ -9,7 +9,7 @@ VSOutput VSmain(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCO
     // Value to pass to the pixel shader
     VSOutput output;
 
-    output.svPos = mul(mul(viewproj, world), pos);
+    output.svPos = mul(mul(viewProj, world), pos);
     output.shadowPos = mul(mul(lightCameraVP, world), pos);
     output.worldPos = wPos;
     output.normal = wNormal.xyz;

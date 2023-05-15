@@ -41,14 +41,14 @@ float4 PSmain(VSOutput input) : SV_TARGET
     for (int i = 0; i < DIRLIGHT_NUM; i++)
     {
         // Inner product of the vector toward the light and the normal
-        float3 dotlightnormal = dot(dirLights[i].lightv, input.normal);
+        float3 dotlightnormal = dot(dirLights[i].lightV, input.normal);
 
         // Reflected light vector
-        float3 reflect = normalize(-dirLights[i].lightv + 2 * dotlightnormal * input.normal);
+        float3 reflect = normalize(-dirLights[i].lightV + 2 * dotlightnormal * input.normal);
 
         // Diffuse reflection light
         float3 diffuse = dotlightnormal * 0.80;
-        float3 halfVec = normalize(dirLights[i].lightv + eyedir);
+        float3 halfVec = normalize(dirLights[i].lightV + eyedir);
 
         // Specular reflection
         float3 specular = pow(saturate(dot(reflect, halfVec)), shininess) * 0.10;
@@ -61,7 +61,7 @@ float4 PSmain(VSOutput input) : SV_TARGET
     for (int i = 0; i < POINTLIGHT_NUM; i++)
     {
         // Light Vector
-        float3 lightv = pointLights[i].lightpos - input.worldpos.xyz;
+        float3 lightv = pointLights[i].lightPos - input.worldpos.xyz;
 
         // Vector Length
         float d = length(lightv);
@@ -70,7 +70,7 @@ float4 PSmain(VSOutput input) : SV_TARGET
         lightv = normalize(lightv);
 
         // Distance attenuation coefficient
-        float atten = 1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d + pointLights[i].lightatten.z * d * d);
+        float atten = 1.0f / (pointLights[i].lightAtten.x + pointLights[i].lightAtten.y * d + pointLights[i].lightAtten.z * d * d);
 
         // Inner product of vectors toward the light
         float3 dotlightnormal = dot(lightv, input.normal);
@@ -86,14 +86,14 @@ float4 PSmain(VSOutput input) : SV_TARGET
         float3 specular = pow(saturate(dot(reflect, halfVec)), shininess) * m_specular;
 
         // All add up
-        shadecolor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor * pointLights[i].active;
+        shadecolor.rgb += atten * (diffuse + specular) * pointLights[i].lightColor * pointLights[i].active;
     }
 
     // Spotlight
     for (int i = 0; i < SPOTLIGHT_NUM; i++)
     {
         // Light Vector
-        float3 lightv = spotLights[i].lightpos - input.worldpos.xyz;
+        float3 lightv = spotLights[i].lightPos - input.worldpos.xyz;
 
         // Vector Length
         float d = length(lightv);
@@ -102,10 +102,10 @@ float4 PSmain(VSOutput input) : SV_TARGET
         lightv = normalize(lightv);
 
         // Distance attenuation coefficient
-        float atten = saturate(1.0f / (spotLights[i].lightatten.x + spotLights[i].lightatten.y * d + spotLights[i].lightatten.z * d * d));
+        float atten = saturate(1.0f / (spotLights[i].lightAtten.x + spotLights[i].lightAtten.y * d + spotLights[i].lightAtten.z * d * d));
 
         // Angular attenuation
-        float cos = dot(lightv, spotLights[i].lightv);
+        float cos = dot(lightv, spotLights[i].lightV);
 
         // Damping from the start angle to the end angle of damping
         //1x luminance inside the attenuation start angle; 0x luminance outside the attenuation end angle

@@ -30,10 +30,7 @@ static const matrix MatInitialize = {
 
 // Outputs a rectangle from a point input
 [maxvertexcount(vnum)]
-void GSmain(
-	point VSOutput input[1] : SV_POSITION,
-	inout TriangleStream< GSOutput > output
-)
+void GSmain(point VSOutput input[1] : SV_POSITION, inout TriangleStream<GSOutput> output)
 {
 	GSOutput element;
 	element.color = input[0].color;

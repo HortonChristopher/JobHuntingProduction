@@ -8,7 +8,7 @@ cbuffer cbuff0 : register(b0)
 struct VSOutput
 {
 	float4 pos : POSITION; // Position coordinates
-	float scale : TEXCOORD; // Scale
+	float2 scale : TEXCOORD; // Scale
 	float4 color : COLOR;
 	float3 rotation : ROTATION; // Rotation
 	uint billboardActive : BILLBOARD;

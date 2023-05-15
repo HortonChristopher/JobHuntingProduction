@@ -138,6 +138,7 @@
     <ClCompile Include="model\Material.cpp" />
     <ClCompile Include="model\Mesh.cpp" />
     <ClCompile Include="model\Model.cpp" />
+    <ClCompile Include="model\OBJLoader.cpp" />
     <ClCompile Include="model\Textures.cpp" />
     <ClCompile Include="scene\BaseArea.cpp" />
     <ClCompile Include="scene\GameClearCutscene.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="model\Material.h" />
     <ClInclude Include="model\Mesh.h" />
     <ClInclude Include="model\Model.h" />
+    <ClInclude Include="model\OBJLoader.h" />
     <ClInclude Include="model\OBJModel.h" />
     <ClInclude Include="model\Textures.h" />
     <ClInclude Include="scene\BaseArea.h" />
