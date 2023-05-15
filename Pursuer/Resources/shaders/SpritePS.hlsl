@@ -1,9 +1,15 @@
 #include "Sprite.hlsli"
 
-Texture2D<float4> tex : register(t0);  // 0番スロットに設定されたテクスチャ
-SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
+Texture2D<float4> tex0 : register(t0); // Texture set in slot 0
+SamplerState smp : register(s0); // Sampler set in slot 0
 
-float4 main(VSOutput input) : SV_TARGET
+float4 PSmain(VSOutput input) :SV_TARGET
 {
-	return tex.Sample(smp, input.uv) * color;
+    float4 colorSRGB = tex0.Sample(smp, input.uv);
+    float4 colorLINEAR = pow(colorSRGB, 2.2);
+    float4 returnColor = colorLINEAR * color;
+
+    returnColor = pow(returnColor, 1.0 / 2.2);
+
+    return returnColor;
 }

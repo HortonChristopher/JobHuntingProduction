@@ -1,9 +1,11 @@
 #include "Sprite.hlsli"
 
-VSOutput main(float4 pos : POSITION, float2 uv : TEXCOORD)
+VSOutput VSmain(float4 pos : POSITION, float2 uv : TEXCOORD)
 {
-	VSOutput output; // ピクセルシェーダーに渡す値
+	VSOutput output; // Value to pass to the pixel shader
+
 	output.svpos = mul(mat, pos);
 	output.uv = uv;
+
 	return output;
 }
