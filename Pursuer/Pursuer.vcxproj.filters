@@ -383,6 +383,9 @@
     <ClInclude Include="light\LightGroup.h">
       <Filter>Header Files\Light</Filter>
     </ClInclude>
+    <ClInclude Include="model\OBJModel.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">

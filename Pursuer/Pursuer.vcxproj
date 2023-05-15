@@ -205,6 +205,7 @@
     <ClInclude Include="model\Material.h" />
     <ClInclude Include="model\Mesh.h" />
     <ClInclude Include="model\Model.h" />
+    <ClInclude Include="model\OBJModel.h" />
     <ClInclude Include="model\Textures.h" />
     <ClInclude Include="scene\BaseArea.h" />
     <ClInclude Include="scene\GameClearCutscene.h" />
