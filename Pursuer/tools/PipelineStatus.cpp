@@ -73,7 +73,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	{
 	case BasePostEffect:
 	{
-		CompileShader("SpriteVertexShader", vsBlob, errorBlob, VS);
+		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
 		CompileShader("BasePostEffectPS", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
@@ -122,8 +122,8 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	}
 	case SPRITE:
 	{
-		CompileShader("SpriteVertexShader", vsBlob, errorBlob, VS);
-		CompileShader("SpritePixelShader", psBlob, errorBlob, PS);
+		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
+		CompileShader("SpritePS", psBlob, errorBlob, PS);
 		gpipeline.BlendState.AlphaToCoverageEnable = true;
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
@@ -138,7 +138,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	}
 	case Ssao:
 	{
-		CompileShader("SpriteVertexShader", vsBlob, errorBlob, VS);
+		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
 		CompileShader("SSAOPS", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
@@ -156,7 +156,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	}
 	case SsaoCombine:
 	{
-		CompileShader("SpriteVertexShader", vsBlob, errorBlob, VS);
+		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
 		CompileShader("SSAOCombinePS", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
@@ -172,7 +172,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	}
 	case Blur:
 	{
-		CompileShader("SpriteVertexShader", vsBlob, errorBlob, VS);
+		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
 		CompileShader("BlurPS", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
@@ -214,8 +214,8 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	}
 	case BasicObj:
 	{
-		CompileShader("BasicVertexShader", vsBlob, errorBlob, VS);
-		CompileShader("BasicPixelShader", psBlob, errorBlob, PS);
+		CompileShader("OBJVertexShader", vsBlob, errorBlob, VS);
+		CompileShader("OBJPixelShader", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
 		SetVSLayout("NORMAL", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
