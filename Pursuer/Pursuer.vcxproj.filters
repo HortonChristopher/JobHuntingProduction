@@ -49,6 +49,9 @@
     <FxCompile Include="Resources\shaders\ShadowMapFBXVS.hlsl">
       <Filter>Shader Files\ShadowMap</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\BasePostEffectPS.hlsl">
+      <Filter>Shader Files\Post Effect</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
