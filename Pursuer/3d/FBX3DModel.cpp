@@ -107,13 +107,13 @@ void FBX3DModel::Draw()
 	cmdList->IASetIndexBuffer(&ibView);
 
 	// Descriptor heap set
-	ID3D12DescriptorHeap* ppHeaps[] = { Texture::GetBasicDescriptorHeap().Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { Textures::GetBasicDescriptorHeap().Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	if (!Object3D::GetShadowDrawing())
 	{
 		// Set shader resource view
-		cmdList->SetGraphicsRootDescriptorTable(2, Texture::GetGPUDescriptorHandleSRV(texName));
+		cmdList->SetGraphicsRootDescriptorTable(2, Textures::GetGPUDescriptorHandleSRV(texName));
 		cmdList->SetGraphicsRootConstantBufferView(4, constBuffSkin->GetGPUVirtualAddress());
 	}
 	else

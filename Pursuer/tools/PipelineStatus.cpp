@@ -160,7 +160,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	case SsaoCombine:
 	{
 		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
-		CompileShader("SSAOCombinePS", psBlob, errorBlob, PS);
+		CompileShader("SSAOCombinationPS", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
 		SetVSLayout("TEXCOORD", inputLayout, DXGI_FORMAT_R32G32_FLOAT);

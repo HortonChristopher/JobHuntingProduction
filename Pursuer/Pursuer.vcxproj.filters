@@ -55,6 +55,9 @@
     <FxCompile Include="Resources\shaders\SSAOPS.hlsl">
       <Filter>Shader Files\Post Effect</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\SSAOCombinationPS.hlsl">
+      <Filter>Shader Files\Post Effect</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

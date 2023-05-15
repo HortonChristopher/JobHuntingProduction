@@ -139,7 +139,7 @@ private:
 public: // Member function
 	~FBX3DModel();
 	// Drawing
-	void Draw() override;
+	void Draw();
 	// Getter
 	std::vector <Bone>& GetBones() { return bones; }
 	// Maximum number of bone indices
@@ -163,6 +163,7 @@ public: // Member function
 	void AnimationInit();
 
 	void SetAnimationFrame(const int startFrame, const int endFrame, const int frameTime = 1);
+
 	void SetAnimation(const std::string& animationName, const int frameTime = 1);
 
 	bool PlayAnimation(bool endless = false);
