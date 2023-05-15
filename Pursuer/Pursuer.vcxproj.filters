@@ -46,6 +46,9 @@
     <FxCompile Include="Resources\shaders\DrawShadowOBJVS.hlsl">
       <Filter>Shader Files\ShadowMap</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowMapFBXVS.hlsl">
+      <Filter>Shader Files\ShadowMap</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
