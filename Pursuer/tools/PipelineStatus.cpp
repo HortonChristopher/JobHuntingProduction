@@ -143,9 +143,12 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
 		SetVSLayout("TEXCOORD", inputLayout, DXGI_FORMAT_R32G32_FLOAT);
+
 		primitiveTopologies[keyName] = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+
 		gpipeline.BlendState.RenderTarget[0].BlendEnable = false;
 		gpipeline.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
+
 		blenddesc.BlendEnable = false; // ƒuƒŒƒ“ƒh‚ð–³Œø‚É‚·‚é
 
 		SetDescriptorConstantBuffer(rootparams, 2, 2, descRangeSRVs);
@@ -177,6 +180,7 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
 		SetVSLayout("TEXCOORD", inputLayout, DXGI_FORMAT_R32G32_FLOAT);
+
 		primitiveTopologies[keyName] = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
 		SetDescriptorConstantBuffer(rootparams, 1, 1, descRangeSRVs);
