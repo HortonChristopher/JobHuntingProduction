@@ -173,22 +173,6 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 
 		break;
 	}
-	case Blur:
-	{
-		CompileShader("SpriteVS", vsBlob, errorBlob, VS);
-		CompileShader("BlurPS", psBlob, errorBlob, PS);
-
-		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
-		SetVSLayout("TEXCOORD", inputLayout, DXGI_FORMAT_R32G32_FLOAT);
-
-		primitiveTopologies[keyName] = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-
-		SetDescriptorConstantBuffer(rootparams, 1, 1, descRangeSRVs);
-
-		rootSignatureDesc.Init_1_0(rootparams.size(), rootparams.data(), 1, &samplerDesc, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-		break;
-	}
 	case PARTICLE:
 	{
 		CompileShader("ParticleVS", vsBlob, errorBlob, VS);

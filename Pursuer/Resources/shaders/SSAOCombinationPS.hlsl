@@ -22,6 +22,7 @@ float JoinedBilateralGaussianBlur(float2 uv)
     float g_sigmaV = 0.03 * -0.3 + 0.001;
     float g_sigmaY = 3;
     float w, h, miplevels;
+
     texSSAO.GetDimensions(0, w, h, miplevels);
 
     float2 g_pixelSize = (1.0f / w, 1.0f / h);

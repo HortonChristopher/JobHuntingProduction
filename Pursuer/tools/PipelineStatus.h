@@ -31,7 +31,6 @@ enum SHADER
 	FBXShadowMap,
 	DrawShadowOBJ,
 	GPUPARTICLE,
-	Blur,
 	Ssao,
 	SsaoCombine,
 	SkyDome,
