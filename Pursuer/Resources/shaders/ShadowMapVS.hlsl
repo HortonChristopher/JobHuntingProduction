@@ -1,6 +1,6 @@
-#include"ShadowMap.hlsli"
+#include "ShadowMap.hlsli"
 
-VSOutput VSmain(VSInput input)
+VSOutput VSmain(float4 pos : POSITION)
 {
     // Value to pass to the pixel shader
     VSOutput output;

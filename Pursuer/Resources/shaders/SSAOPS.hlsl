@@ -43,12 +43,12 @@ float PSmain(VSOutput input) : SV_Target
         {
             float3 omega = normalRandom[i].xyz;
 
-            float dot = dot(norm, omega);
-            float sign = sign(dot);
-            omega *= sign;
+            float dotP = dot(norm, omega);
+            float signP = sign(dotP);
+            omega *= signP;
             float4 resPos = mul(proj, mul(view, float4(restorePosition.xyz + omega * radius, 1)));
             resPos.xyz /= resPos.w;
-            ambientOcclusion += step(texDepth.Sample(smp, (resPos.xy + float2(1, -1)) * float2(0.5, -0.5)), resPos.z) * dot * sign;
+            ambientOcclusion += step(texDepth.Sample(smp, (resPos.xy + float2(1, -1)) * float2(0.5, -0.5)), resPos.z) * dotP * signP;
         }
 
         ambientOcclusion /= (float)loopCount;

@@ -1,4 +1,4 @@
-#include"ShadowMap.hlsli"
+#include "ShadowMap.hlsli"
 
 float4 PSmain(VSOutput input) : SV_TARGET
 {

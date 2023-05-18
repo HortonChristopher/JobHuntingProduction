@@ -58,6 +58,12 @@
     <FxCompile Include="Resources\shaders\SSAOCombinationPS.hlsl">
       <Filter>Shader Files\Post Effect</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\SkyBoxPS.hlsl">
+      <Filter>Shader Files\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\SkyBoxVS.hlsl">
+      <Filter>Shader Files\Sprite</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -426,6 +432,9 @@
     </None>
     <None Include="Resources\shaders\DrawShadowOBJ.hlsli">
       <Filter>Shader Files\ShadowMap</Filter>
+    </None>
+    <None Include="Resources\shaders\SkyBox.hlsli">
+      <Filter>Shader Files\Sprite</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
