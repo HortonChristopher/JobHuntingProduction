@@ -4,7 +4,7 @@
 #include <d3d12.h>
 
 // Entry point in Windows app (main function)
-GameFramework* GameFramework::instance = nullptr;
+GameFramework* GameFramework::gameInstance = nullptr;
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -25,11 +25,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	srand(time(nullptr));
 
-	std::unique_ptr<GameFramework> game(GameFramework::GetInstance());
+	std::unique_ptr<GameFramework> gameData(GameFramework::GetInstance());
 
-	game->Initialize();
-	game->Run();
-	game->End();
+	gameData->Initialize();
+
+	gameData->Run();
+
+	gameData->End();
 
 	return 0;
 }

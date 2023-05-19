@@ -17,7 +17,7 @@
 #include "FBXManager.h"
 #include "ComputeShade.h"
 #include "ComputeWrapper.h"
-#include "GameSettingParam.h"
+#include "SettingParameters.h"
 #include "GameWindow.h"
 #include "DirectXCommon.h"
 #include "LightCamera.h"
@@ -34,7 +34,72 @@
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 
+class GameWindow;
+class DirectXCommon;
+class LightCamera;
+class SceneManager;
+class Sprite;
+class SSAO;
+class SSAOCombine;
+class TextureResource;
+class Vector;
 class GameFramework
 {
+public:
+	static GameFramework* GetInstance();
 
+	~GameFramework();
+
+	void Initialize();
+
+	void Run();
+
+	void End();
+private:
+	GameFramework();
+
+	static GameFramework* gameInstance;
+
+	void AssetLoading();
+
+	void PipelineCreation();
+
+	void PostLoading();
+
+	void DrawLoadTex();
+
+	SceneManager* sceneManager = nullptr;
+	std::unique_ptr<GameWindow> gameWindow;
+	DirectXCommon* directX = nullptr;
+
+	Vector3 cameraPos;
+
+	std::unique_ptr <LightCamera> lightCamera = nullptr;
+	std::unique_ptr <TextureResource> shadowMap = nullptr;
+	std::unique_ptr <SSAO> ssao = nullptr;
+	std::unique_ptr <SSAOCombine> ssaoCombine = nullptr;
+
+	std::unique_ptr <TextureResource> normalResource = nullptr;
+	std::unique_ptr <TextureResource> halfNormalResource = nullptr;
+	std::unique_ptr <TextureResource> mainResource = nullptr;
+	std::unique_ptr <TextureResource> depthResource = nullptr;
+	std::unique_ptr <TextureResource> halfDepthResource = nullptr;
+	std::unique_ptr <TextureResource> ssaoResource = nullptr;
+
+	std::unique_ptr <Sprite> depthTex = nullptr;
+	std::unique_ptr <Sprite> normalTex = nullptr;
+	std::unique_ptr <Sprite> loadTex = nullptr;
+	std::unique_ptr <Sprite> loadDot = nullptr;
+
+	float dir[3] = { 1.0f,-0.60f,0.0f };
+	float distance = 150;
+
+	// Loading bool
+	bool nowLoading;
+
+	int loadAssetLevel = 0;
+	int createPipelineLevel = 0;
+
+	bool loadAssetFinish = false;
+	bool createPipelineFinish = false;
 };
