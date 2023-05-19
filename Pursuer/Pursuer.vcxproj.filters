@@ -219,6 +219,9 @@
     <ClCompile Include="model\OBJLoader.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="base\GameFramework.cpp">
+      <Filter>Source Files\Base Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -406,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="model\OBJLoader.h">
       <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="base\GameFramework.h">
+      <Filter>Header Files\Base Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

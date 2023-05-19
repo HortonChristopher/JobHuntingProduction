@@ -166,7 +166,7 @@ void ShadowMap::Initialize()
 		dsvHeap->GetCPUDescriptorHandleForHeapStart());
 
 	// Shader resource view creation
-	Texture::AddTexture("shadowMap", shadowResource.Get());
+	Textures::AddTexture("shadowMap", shadowResource.Get());
 }
 
 void ShadowMap::PreDraw()
@@ -223,13 +223,13 @@ void ShadowMap::Draw()
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	// Array of descriptor heaps
-	ID3D12DescriptorHeap* ppHeaps[] = { Texture::GetBasicDescriptorHeap().Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { Textures::GetBasicDescriptorHeap().Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 
 	// Index buffer set command
-	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(Texture::GetBasicDescriptorHeap().Get()->GetGPUDescriptorHandleForHeapStart(), Texture::GetTextureIndex("shadowMap"),
+	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(Textures::GetBasicDescriptorHeap().Get()->GetGPUDescriptorHandleForHeapStart(), Textures::GetTextureIndex("shadowMap"),
 		device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
 	cmdList->DrawInstanced(4, 1, 0, 0);
