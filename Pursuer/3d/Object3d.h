@@ -128,7 +128,7 @@ public: // Structure
 private: // Member variable
 	std::array<ComPtr<ID3D12Resource>, 3> constBuff; // Constant buffer
 	std::array<ComPtr<ID3D12Resource>, 3> lCameraConstBuff; // Constant buffer
-	std::array<ComPtr<ID3D12Resource>, 3> constCameraBuff;
+	std::array<ComPtr<ID3D12Resource>, 3> constCameraBuff; // Constant buffer
 
 	// Local-world transformation matrix
 	XMMATRIX matWorld;
