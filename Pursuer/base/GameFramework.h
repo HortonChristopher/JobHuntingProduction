@@ -27,6 +27,7 @@
 #include "SSAOCombine.h"
 #include "TextureResource.h"
 #include "Vector.h"
+#include "DeltaTime.h"
 
 #include <memory>
 
