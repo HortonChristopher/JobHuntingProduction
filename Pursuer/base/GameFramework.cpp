@@ -21,3 +21,12 @@ GameFramework* GameFramework::GetInstance()
 GameFramework::~GameFramework()
 {
 }
+
+void GameFramework::AssetLoading()
+{
+	switch (assetLevel)
+	{
+	case TITLE:
+		break;
+	}
+}

@@ -16,7 +16,6 @@
 #include "PipelineStatus.h"
 #include "FBXManager.h"
 #include "ComputeShade.h"
-#include "ComputeWrapper.h"
 #include "SettingParameters.h"
 #include "GameWindow.h"
 #include "DirectXCommon.h"
@@ -57,6 +56,17 @@ public:
 
 	void End();
 private:
+	enum AssetLevel
+	{
+		TITLE = 1,
+		TUTORIAL = 2,
+		MAINGAME = 3,
+		GAMECLEAR = 4,
+		GAMEOVER = 5,
+	};
+
+	AssetLevel assetLevel = TITLE;
+
 	GameFramework();
 
 	static GameFramework* gameInstance;
