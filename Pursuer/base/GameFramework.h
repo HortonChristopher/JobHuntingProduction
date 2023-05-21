@@ -112,9 +112,6 @@ private:
 	// Loading bool
 	bool nowLoading;
 
-	int loadAssetLevel = 0;
-	int createPipelineLevel = 0;
-
 	bool finishedLoadingAssets = false;
-	bool createPipelineFinish = false;
+	bool finishedPipelineCreation = false;
 };

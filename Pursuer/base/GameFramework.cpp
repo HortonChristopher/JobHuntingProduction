@@ -222,3 +222,22 @@ void GameFramework::AssetLoading()
 		break;
 	}
 }
+
+void GameFramework::PipelineCreation()
+{
+	PipelineStatus::CreatePipeline("FBX", FBX);
+	PipelineStatus::CreatePipeline("Particle", PARTICLE);
+	PipelineStatus::CreatePipeline("Sprite", SPRITE);
+	PipelineStatus::CreatePipeline("BasePostEffect", BasePostEffect);
+	PipelineStatus::CreatePipeline("BasicObj", BasicObj);
+	PipelineStatus::CreatePipeline("NormalMap", NormalMap);
+	PipelineStatus::CreatePipeline("NormalShadowMap", NormalShadowMap);
+	PipelineStatus::CreatePipeline("FBXShadowMap", FBXShadowMap);
+	PipelineStatus::CreatePipeline("DrawShadowOBJ", DrawShadowOBJ);
+	PipelineStatus::CreatePipeline("GPUParticle", GPUPARTICLE);
+	PipelineStatus::CreatePipeline("SSAO", Ssao);
+	PipelineStatus::CreatePipeline("SSAOCombine", SsaoCombine);
+	PipelineStatus::CreatePipeline("SkyDome", SkyDome);
+
+	finishedPipelineCreation = true;
+}
