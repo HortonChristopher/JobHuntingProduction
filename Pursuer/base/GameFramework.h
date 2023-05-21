@@ -115,6 +115,6 @@ private:
 	int loadAssetLevel = 0;
 	int createPipelineLevel = 0;
 
-	bool loadAssetFinish = false;
+	bool finishedLoadingAssets = false;
 	bool createPipelineFinish = false;
 };

@@ -41,6 +41,10 @@ void GameFramework::AssetLoading()
 		Textures::LoadTexture("TitleTutorialSelection_k", "TitleTutorialSelection_k.png");
 		Textures::LoadTexture("TitleTutorialSelection_c", "TitleTutorialSelection_c.png");
 
+		// Particles (used throughout the game)
+		Textures::LoadTexture("BasicParticles", "effect1.png");
+		Textures::LoadTexture("ExplosionParticles", "effect2.png");
+
 		// 3D object loading
 		OBJLoader::LoadModelFromFile("Skydome", "skydome/skydome.obj", false);
 		OBJLoader::LoadModelFromFile("Landscape", "Landscape2/Landscape2.obj", false);
@@ -160,7 +164,60 @@ void GameFramework::AssetLoading()
 		break;
 	case MAINGAME:
 		// 2D Sprite Loading
+		// All HP Bar assets are carried over from Tutorial
 
+		// All ST Bar assets are carried over from Tutorial
+
+		// Mission
+		Textures::LoadTexture("Mission1", "Mission1.png");
+
+		// Minimap
+		Textures::LoadTexture("BaseAreaMinimap", "BaseAreaMinimap.png");
+		// Player minimap sprite carried over
+		// Enemy minimap sprite carried over
+
+		// Black Screen carried over
+
+		// Enemy HP Bar
+		Textures::LoadTexture("EnemyHumanHPBar", "EnemyHumanHPBar.png");
+		Textures::LoadTexture("EnemyHumanHPBarFrame", "EnemyHumanHPBarFrame.png");
+
+		// All heal assets carried over from tutorial
+
+		// 3D Objects
+		// skydome carries over
+		// landscape carries over
+		// tutorial stage carries over
+		// ground carries over from title
+		// yuka carries over
+
+		// FBX Objects
+		// Player FBX carries over
+		// Enemy FBX carries over
+		
+		// All animations carry over
+
+		break;
+	case GAMECLEAR:
+		// 2D Sprite loading
+		Textures::LoadTexture("GameClearScreen", "p4.png");
+		
+		// All other assets carried over
+
+		break;
+	case GAMEOVER:
+		// 2D Sprite loading
+		Textures::LoadTexture("GameOverScreen", "p3.png");
+
+		// All other assets carried over
+
+		break;
+	case FINISHED:
+		finishedLoadingAssets = true;
+
+		break;
+	default:
+		finishedLoadingAssets = true;
 
 		break;
 	}
