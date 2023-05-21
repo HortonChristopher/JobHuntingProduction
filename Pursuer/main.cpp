@@ -23,15 +23,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 #endif // End of conditional compilation section
 
+	// Returns current time as time_t value, which is used as seed for random number generator ensuring that each program execution starts with a different random seed
 	srand(time(nullptr));
 
+	// Declares unique pointer gameData to GameFramework class 
+	// unique_ptr provides automatic memory management and ensures that object is properly destroyed when out of scope
 	std::unique_ptr<GameFramework> gameData(GameFramework::GetInstance());
 
-	gameData->Initialize();
+	// Initialization
+	gameData->Initialize(); 
 
-	gameData->Run();
+	// Main game loop is inside this function
+	gameData->Run(); 
 
-	gameData->End();
+	// Cleanup
+	gameData->End(); 
 
-	return 0;
+	// Returns exit code 0 to OS saying that program execution was successful
+	return 0; 
 }

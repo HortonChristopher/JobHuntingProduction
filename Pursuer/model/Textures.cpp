@@ -19,7 +19,7 @@ void Textures::LoadTexture(const std::string& name, const std::string& texName)
 	ScratchImage scratchlmg{};
 
 	// Combine file paths
-	std::string filepath = "Resources/Texture/" + texName;
+	std::string filepath = "Resources/Sprite/" + texName;
 	wchar_t wfilepath[128];
 
 	// Convert to Unicode string

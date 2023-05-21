@@ -9,10 +9,13 @@
 #include "Create3DObject.h"
 #include "Textures.h"
 #include "Scene.h"
-#include "Title.h"
+#include "TitleScreen.h"
+#include "TutorialArea.h"
+#include "BaseArea.h"
 #include "Play.h"
 #include "Alpha.h"
-#include "Ending.h"
+#include "GameClearCutscene.h"
+#include "GameOverCutscene.h"
 #include "PipelineStatus.h"
 #include "FBXManager.h"
 #include "ComputeShade.h"
@@ -63,6 +66,7 @@ private:
 		MAINGAME = 3,
 		GAMECLEAR = 4,
 		GAMEOVER = 5,
+		FINISHED = 6,
 	};
 
 	AssetLevel assetLevel = TITLE;
