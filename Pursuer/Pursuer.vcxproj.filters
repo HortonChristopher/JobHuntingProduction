@@ -222,6 +222,9 @@
     <ClCompile Include="base\GameFramework.cpp">
       <Filter>Source Files\Base Files</Filter>
     </ClCompile>
+    <ClCompile Include="model\TextureResource.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -412,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="base\GameFramework.h">
       <Filter>Header Files\Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="model\TextureResource.h">
+      <Filter>Header Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

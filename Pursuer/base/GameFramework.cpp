@@ -241,3 +241,23 @@ void GameFramework::PipelineCreation()
 
 	finishedPipelineCreation = true;
 }
+
+void GameFramework::PostLoading()
+{
+	Input::Initialize(gameWindow->GetHwnd());
+
+	CollisionManager::GetInstance()->Initialize(Vector3{ -70.0f, -10.0f, -70.0f } + 100.0f, Vector3{ 70.0f, 50.0f, 70.0f } + 100.0f);
+
+	// Light Camera
+	lightCamera = std::make_unique<LightCamera>();
+	lightCamera->SetDistance(100);
+	lightCamera->SetLightDir({ dir[0], dir[1], dir[2] });
+	Object3d::SetLightCamera(lightCamera.get());
+
+	// If scene manager, add here
+
+	mainResource = std::make_unique<TextureResource>("mainTex");
+	TextureResource::SetMainResource(mainResource.get());
+
+	shadowMap.reset(new TextureResource("shadowMap", { 1920, 1080 }, DXGI_FORMAT_R32_FLOAT, { 0, 0, 0, 0 }));
+}

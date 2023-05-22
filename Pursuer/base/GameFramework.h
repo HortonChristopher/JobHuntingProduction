@@ -106,11 +106,11 @@ private:
 	std::unique_ptr <Sprite> loadTex = nullptr;
 	std::unique_ptr <Sprite> loadDot = nullptr;
 
-	float dir[3] = { 1.0f,-0.60f,0.0f };
+	float dir[3] = { 1.0f, -0.60f, 0.0f };
 	float distance = 150;
 
 	// Loading bool
-	bool nowLoading;
+	bool loading;
 
 	bool finishedLoadingAssets = false;
 	bool finishedPipelineCreation = false;

@@ -224,8 +224,8 @@ void PipelineStatus::CreatePipeline(const std::string& keyName, const SHADER sha
 	}
 	case SkyDome:
 	{
-		CompileShader("SkyVS", vsBlob, errorBlob, VS);
-		CompileShader("SkyPS", psBlob, errorBlob, PS);
+		CompileShader("SkyBoxVS", vsBlob, errorBlob, VS);
+		CompileShader("SkyBoxPS", psBlob, errorBlob, PS);
 
 		SetVSLayout("POSITION", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
 		SetVSLayout("NORMAL", inputLayout, DXGI_FORMAT_R32G32B32_FLOAT);
