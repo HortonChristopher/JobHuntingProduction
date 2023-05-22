@@ -260,4 +260,174 @@ void GameFramework::PostLoading()
 	TextureResource::SetMainResource(mainResource.get());
 
 	shadowMap.reset(new TextureResource("shadowMap", { 1920, 1080 }, DXGI_FORMAT_R32_FLOAT, { 0, 0, 0, 0 }));
+	depthResource.reset(new TextureResource("depthTex", { 1920,1080 }, DXGI_FORMAT_R32_FLOAT, { 1,1,1,1 }, false));
+	halfDepthResource.reset(new TextureResource("halfDepthTex", { 1920 / 2,1080 / 2 }, DXGI_FORMAT_R32_FLOAT));
+	normalResource = std::make_unique<TextureResource>("normalTex", false);
+	halfNormalResource.reset(new TextureResource("halfNormalTex", { 1920 / 2,1080 / 2 }));
+	ssaoResource.reset(new TextureResource("SSAO", { 1920 / 2,1080 / 2 }, DXGI_FORMAT_R32_FLOAT, { 1,0,0,0 }));
+	ssao = std::make_unique<SSAO>();
+	ssaoCombine = std::make_unique<SSAOCombine>();
+
+	depthTex = std::make_unique<Sprite>();
+	normalTex = std::make_unique<Sprite>();
+
+	loading = false;
+}
+
+void GameFramework::DrawLoadTex()
+{
+	directX->DepthClear();
+
+	/*loadTex->DrawSprite("LoadPicture", { 0,0 }, 0, { 1,1 }, { 1,1,1,1 }, { 0,0 });
+	loadDot->SpriteSetTextureRect("LoadDot", 0, 0, 42.0f * (createPipelineLevel % 8), 25);
+	loadDot->DrawSprite("LoadDot", { 1560,1010 }, 0, { 1,1 }, { 1,1,1,1 }, { 0,0 });*/
+}
+
+void GameFramework::Initialize()
+{
+	gameWindow->CreateWidow(GameWindow::WINDOW);
+
+	directX->Initialize(gameWindow.get());
+
+	FbxLoader::GetInstance()->Initialize();
+	Sprite::StaticInitialize(gameWindow.get());
+	Audio::Initialize();
+	ShowCursor(false);
+	loading = true;
+
+	ShadingComputation::StaticInitialize();
+
+	DebugText::Initialize();
+
+	loadTex = std::make_unique<Sprite>();
+	loadDot = std::make_unique<Sprite>();
+}
+
+void GameFramework::Run()
+{
+	MSG msg{}; // メッセージ
+
+	while (true)
+	{
+		// メッセージがある?
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg); // キー入力メッセージの処理
+			DispatchMessage(&msg); // プロシージャにメッセージを送る
+		}
+
+		// 終了メッセージが来たらループを抜ける
+		if (msg.message == WM_QUIT) {
+			break;
+		}
+
+		if (loading)
+		{
+			//アセットロード
+			AssetLoading();
+			//パイプラインの生成
+			PipelineCreation();
+
+			if (finishedLoadingAssets && finishedPipelineCreation)
+			{
+				PostLoading();
+			}
+
+			directX->BeginDraw();
+			directX->ImguiDraw();
+
+			DrawLoadTex();
+		}
+		else if (!loading)
+		{
+			Object::SetBbIndex();
+			TextureResource::SetBbIndex();
+			Sprite::SetBbIndex();
+			Input::Update();
+			Alpha::Update();
+			if (Input::TriggerKey(DIK_1))
+			{
+				DrawMode::SetMode(DrawMode::None);
+			}
+			lightCamera->Update();
+			Object3D::ClucLightViewProjection();
+			sceneManeger->Update();
+			ParticleEmitter::Update();
+			directX->ComputeBegin();
+			//2.画面クリアコマンドここまで
+			Object3D::SetDrawShadow(true);
+			shadowMap->PreDraw();
+			directX->ImguiDraw();
+			sceneManeger->PreDraw();
+			//directX->DepthClear();
+			shadowMap->PostDraw(false);
+			Object3D::SetDrawShadow(false);
+
+			//3.描画コマンドここから
+			if (SettingParameters::GetOnSSAO())
+			{
+				mainResource->PreDraw();
+				normalResource->PreDraw(2);
+				depthResource->PreDraw(3);
+			}
+			else
+			{
+				directX->BeginDraw();
+			}
+
+			sceneManeger->PreDraw();
+			CollisionManager::GetInstance()->DrawCollider();
+			if (!SettingParameters::GetOnSSAO())
+			{
+				directX->DepthClear();
+			}
+			//背面描画ここまで
+
+			DebugText::Draw();
+
+			sceneManeger->PostDraw();
+			ParticleEmitter::Draw();
+
+			if (SettingParameters::GetOnSSAO())
+			{
+				depthResource->PostDraw(false);
+				normalResource->PostDraw(false);
+				mainResource->PostDraw();
+				halfDepthResource->PreDraw(1, 0, 0, 1920 / 2, 1080 / 2);
+				depthTex->DrawSprite("depthTex" + std::to_string(directX->GetBbIndex()), { 0,0 }, 0, { 1,1 }, { 1,1,1,1 }, { 0,0 }, "DepthSprite");
+				halfDepthResource->PostDraw();
+				halfNormalResource->PreDraw(1, 0, 0, 1920 / 2, 1080 / 2);
+				normalTex->DrawSprite("normalTex" + std::to_string(directX->GetBbIndex()), { 0,0 }, 0, { 1,1 }, { 1,1,1,1 }, { 0,0 }, "NoAlphaToCoverageSprite");
+				halfNormalResource->PostDraw();
+				ssaoResource->PreDraw(1, 0, 0, 1920 / 2, 1080 / 2);
+				ssao->Draw();
+				ssaoResource->PostDraw();
+				directX->BeginDraw();
+				ssaoCombine->Draw();
+			}
+		}
+		directX->EndDraw();
+
+		LevelEditor::GetInstance()->Delete();
+	}
+}
+
+void GameFramework::End()
+{
+	while (1)
+	{
+		if (ShowCursor(true) >= 0)
+			break;
+	}
+
+	directX->End();
+
+	computeWrapper->End();
+	ParticleEmitter::End();
+	DebugText::End();
+
+	FbxLoader::GetInstance()->Finalize();
+	FBXManager::ModelDeletion();
+
+	//デリートはここまでに終わらせる
+	gameWindow->End();
 }

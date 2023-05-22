@@ -153,7 +153,9 @@
     <ClCompile Include="scene\TitleScreen.cpp" />
     <ClCompile Include="scene\TutorialArea.cpp" />
     <ClCompile Include="tools\PipelineStatus.cpp" />
+    <ClCompile Include="tools\ShadingComputation.cpp" />
     <ClCompile Include="tools\ShadowMap.cpp" />
+    <ClCompile Include="WrapperComputation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\imgui\imgui.vcxproj">
@@ -199,6 +201,7 @@
     <ClInclude Include="light\CircleShadow.h" />
     <ClInclude Include="light\DirectionalLight.h" />
     <ClInclude Include="light\LightGroup.h" />
+    <ClInclude Include="light\ParticleParameters.h" />
     <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="light\SpotLight.h" />
     <ClInclude Include="math\DeltaTime.h" />
@@ -224,7 +227,9 @@
     <ClInclude Include="scene\TutorialArea.h" />
     <ClInclude Include="tools\PipelineStatus.h" />
     <ClInclude Include="tools\SettingParameters.h" />
+    <ClInclude Include="tools\ShadingComputation.h" />
     <ClInclude Include="tools\ShadowMap.h" />
+    <ClInclude Include="tools\WrapperComputation.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasePostEffectPS.hlsl">
@@ -318,6 +323,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadingComputation.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSmain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CSmain</EntryPointName>
     </FxCompile>
     <FxCompile Include="Resources\shaders\ShadowMapFBXVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

@@ -18,7 +18,7 @@
 #include "GameOverCutscene.h"
 #include "PipelineStatus.h"
 #include "FBXManager.h"
-#include "ComputeShade.h"
+#include "ShadingComputation.h"
 #include "SettingParameters.h"
 #include "GameWindow.h"
 #include "DirectXCommon.h"

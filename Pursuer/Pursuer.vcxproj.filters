@@ -64,6 +64,9 @@
     <FxCompile Include="Resources\shaders\SkyBoxVS.hlsl">
       <Filter>Shader Files\Sprite</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadingComputation.hlsl">
+      <Filter>Shader Files\Tools</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -224,6 +227,12 @@
     </ClCompile>
     <ClCompile Include="model\TextureResource.cpp">
       <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\ShadingComputation.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="WrapperComputation.cpp">
+      <Filter>Source Files\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +427,15 @@
     </ClInclude>
     <ClInclude Include="model\TextureResource.h">
       <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\ShadingComputation.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\WrapperComputation.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="light\ParticleParameters.h">
+      <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
