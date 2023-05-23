@@ -42,7 +42,9 @@ public:
 	inline static void SetPipeline(const std::string& keyName, const BLENDING blendType = ALPHA)
 	{
 		if (rootsignature[keyName].Get() == nullptr || pipelinestate[keyName][blendType].Get() == nullptr)
+		{
 			assert(0);
+		}
 		auto cmdList = DirectXCommon::GetInstance()->GetCommandList();
 
 		cmdList->SetGraphicsRootSignature(rootsignature[keyName].Get());

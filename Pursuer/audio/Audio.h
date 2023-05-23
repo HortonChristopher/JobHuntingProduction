@@ -3,91 +3,79 @@
 #include <Windows.h>
 #include <xaudio2.h>
 #include <cstdint>
-#pragma comment(lib, "xaudio2.lib")
-
 #include <wrl.h>
 #include <map>
 #include <string>
+#include <array>
+#include <fstream>
+#include <cassert>
+
+#include "XAudio2VoiceCallback.h"
+
+using namespace Microsoft::WRL;
+
+#pragma comment(lib, "xaudio2.lib")
+
+// Chunk header
+struct ChunkHeader
+{
+	std::array<char, 4> id; // ID for each chunk
+	int32_t		size;  // Chunk size
+};
+
+// RIFF header chunk
+struct RiffHeader
+{
+	ChunkHeader	chunk; // "RIFF"
+	std::array<char, 4> type; // "WAVE"
+};
+
+// FMT chunk
+struct FormatChunk
+{
+	ChunkHeader	chunk; // "fmt "
+	WAVEFORMATEX fmt; // Waveform format
+};
+
+// Sound Data
+struct SoundData
+{
+	ChunkHeader chunkHeader;
+
+	RiffHeader riffHeader;
+
+	FormatChunk formatChunk;
+
+	char* buff;
+};
 
 /// <summary>
-/// オーディオコールバック
+/// Audio Callback
 /// </summary>
 class Audio
 {
-private: // エイリアス alias
-	// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-public: // サブクラス Subclass
-	// チャンクヘッダ Chunk header
-	struct ChunkHeader
-	{
-		char	id[4]; // チャンク毎のID ID for each chunk
-		int32_t		size;  // チャンクサイズ Chunk size
-	};
+public:
+	Audio();
 
-	// RIFFヘッダチャンク RIFF header chunk
-	struct RiffHeader
-	{
-		ChunkHeader	chunk;   // "RIFF"
-		char	type[4]; // "WAVE"
-	};
+	~Audio();
 
-	// FMTチャンク FMT chunk
-	struct FormatChunk
-	{
-		ChunkHeader		chunk; // "fmt "
-		WAVEFORMATEX	fmt;   // 波形フォーマット Waveform format
-	};
+	static void Initialize();
 
-	//音声データ
-	struct SoundData
-	{
-		//波形フォーマット
-		WAVEFORMATEX wfex;
+	static void LoadFile(const std::string& keyName, const std::string& fileName);
 
-		//バッファの先頭アドレス
-		BYTE* pBuffer;
+	static void PlayWave(const std::string& keyName, const float& volume = 0.07f, bool loop = false, int loopCount = XAUDIO2_LOOP_INFINITE);
 
-		//バッファのサイズ
-		unsigned int bufferSize;
+	static void StopWave(const std::string& keyName);
 
-		IXAudio2SourceVoice* pSourceVoice;
-	};
+	static void ShutDown();
+private:
+	static ComPtr<IXAudio2> xAudio2;
 
-	static Audio* GetInstance();
+	static IXAudio2MasteringVoice* masterVoice;
 
-public: // メンバ関数 Member function
+	static std::map<std::string, IXAudio2SourceVoice*> soundVoices;
 
-
-	// 初期化 Initialization
-	void Initialize(const std::string& directoryPath = "Resources/Audio/");
-
-	//解放処理
-	void Finalize();
-
-	//音声読み込み
-	void LoadWave(const std::string& filename);
-
-	//サウンドデータの解放
-	void UnLoad(SoundData* soundData);
-
-	// サウンドファイルの再生 playing sound files
-	void PlayWave(const std::string& filename, const float Volume, bool Loop = false);
-
-	//サウンドファイルの停止
-	void StopWave(const std::string& filename);
-
-private: // メンバ変数 Member variables
-	ComPtr<IXAudio2> xAudio2;
-
-	//サウンドデータの連想配列
-	std::map<std::string, SoundData> soundDatas;
-
-	//サウンド格納ディレクトリ
-	std::string directoryPath_;
-
-	XAUDIO2_BUFFER buf{};
-	
+	static std::map<std::string, SoundData> soundData;
 public: // Member variables
 	const float titleVolume = 0.07f;
 	const float gameplayVolume = 0.07f;

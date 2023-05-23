@@ -464,6 +464,9 @@
     <ClInclude Include="scene\SceneManager.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
+    <ClInclude Include="audio\XAudio2VoiceCallback.h">
+      <Filter>Header Files\Audio &amp; Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">

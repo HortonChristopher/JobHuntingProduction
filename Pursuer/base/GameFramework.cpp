@@ -282,7 +282,7 @@ void GameFramework::PostLoading()
 
 void GameFramework::DrawLoadTex()
 {
-	directX->DepthClear();
+	directX->ClearDepth();
 
 	/*loadTex->DrawSprite("LoadPicture", { 0,0 }, 0, { 1,1 }, { 1,1,1,1 }, { 0,0 });
 	loadDot->SpriteSetTextureRect("LoadDot", 0, 0, 42.0f * (createPipelineLevel % 8), 25);
@@ -349,15 +349,11 @@ void GameFramework::Run()
 			TextureResource::SetBbIndex();
 			Sprite::SetBbIndex();
 			Input::Update();
-			if (Input::TriggerKey(DIK_1))
-			{
-				DrawMode::SetMode(DrawMode::None);
-			}
 			lightCamera->Update();
 			Object3d::ClucLightViewProjection();
 			sceneManager->Update();
 			ParticleEmitter::Update();
-			directX->ComputeBegin();
+			directX->BeginWrapperComputation();
 			//2.画面クリアコマンドここまで
 			Object3d::SetDrawShadow(true);
 			shadowMap->PreDraw();
@@ -422,7 +418,7 @@ void GameFramework::End()
 			break;
 	}
 
-	directX->End();
+	directX->ShutDown();
 
 	computationWrapper->End();
 	ParticleEmitter::End();

@@ -177,6 +177,7 @@
     <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="3d\ParticleManager.h" />
     <ClInclude Include="audio\Audio.h" />
+    <ClInclude Include="audio\XAudio2VoiceCallback.h" />
     <ClInclude Include="base\GameFramework.h" />
     <ClInclude Include="base\GameWindow.h" />
     <ClInclude Include="behavior\EnemyHuman.h" />

@@ -1,19 +1,32 @@
 ﻿#include "Input.h"
-#include <cassert>
-using namespace Microsoft::WRL;
 
-#pragma comment(lib, "dinput8.lib")
+ComPtr<IDirectInputDevice8> Input::devKeyboard = nullptr;
+ComPtr<IDirectInputDevice8> Input::devController = nullptr;
+ComPtr<IDirectInputDevice8> Input::devMouse = nullptr;
+
+std::array<BYTE, 256> Input::key = {};
+std::array<BYTE, 256> Input::keyPre = {};
+
+DIMOUSESTATE2 Input::mouseState = {};
+DIMOUSESTATE2 Input::mouseStatePre = {};
+
+int Input::num = 0;
+int Input::controller_LStickX = 0;
+int Input::controller_LStickY = 0;
+int Input::controller_LStickX = 0;
+int Input::controller_LStickY = 0;
+
+XINPUT_STATE Input::controllerState = {};
+XINPUT_STATE Input::prevControllerState = {};
+XINPUT_VIBRATION Input::controllerVibration = {};
+int Input::time = 0;
+
+int Input::screenW = 0;
+int Input::screenH = 0;
 
 #define STICKMAX 32767
 
-Input * Input::GetInstance()
-{
-	static Input instance;
-
-	return &instance;
-}
-
-bool Input::Initialize(HINSTANCE hInstance, HWND hwnd)
+void Input::Initialize(HWND hwnd)
 {
 	HRESULT result = S_FALSE;
 
@@ -26,62 +39,42 @@ bool Input::Initialize(HINSTANCE hInstance, HWND hwnd)
 	controller_RStickX = 0;
 	controller_RStickY = 0;
 
-	assert(!dinput);
+	// Creation of DirectInput objects
+	IDirectInput8* dinput = nullptr;
+	result = DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput, nullptr);
+	assert(SUCCEEDED(result));
 
-	// DirectInputオブジェクトの生成	
-	result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput, nullptr);
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	IDirectInput8* dinput2 = nullptr;
+	result = DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput2, nullptr);
+	assert(SUCCEEDED(result));
 
-	// キーボードデバイスの生成	
+	// Keyboard device generation
 	result = dinput->CreateDevice(GUID_SysKeyboard, &devKeyboard, NULL);
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	assert(SUCCEEDED(result));
 
-	// マウスデバイスの生成	
+	// Mouse device generation
 	result = dinput->CreateDevice(GUID_SysMouse, &devMouse, NULL);
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	assert(SUCCEEDED(result));
 
-	// 入力データ形式のセット
+	// Set of input data formats
 	result = devKeyboard->SetDataFormat(&c_dfDIKeyboard); // 標準形式
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	assert(SUCCEEDED(result));
 
-	// 排他制御レベルのセット
+	// Exclusive control level set
 	result = devKeyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	assert(SUCCEEDED(result));
 
-	// 入力データ形式のセット
+	// Set of input data formats
 	result = devMouse->SetDataFormat(&c_dfDIMouse2); // 標準形式
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	assert(SUCCEEDED(result));
 
-	// 排他制御レベルのセット
+	// Exclusive control level set
 	result = devMouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-	if (FAILED(result)) {
-		assert(0);
-		return result;
-	}
+	assert(SUCCEEDED(result));
 
 	ZeroMemory(&controllerState, sizeof(XINPUT_STATE));
 	ZeroMemory(&prevControllerState, sizeof(XINPUT_STATE));
 	ZeroMemory(&controllerVibration, sizeof(XINPUT_VIBRATION));
-
-	return true;
 }
 
 void Input::Update()
@@ -89,22 +82,22 @@ void Input::Update()
 	HRESULT result;
 
 	{// Keyboard
-		result = devKeyboard->Acquire();	// キーボード動作開始
+		result = devKeyboard->Acquire(); // Keyboard start 
 
-		// 前回のキー入力を保存
-		memcpy(keyPre, key, sizeof(key));
+		// Save previous keystrokes
+		memcpy(keyPre.data(), key.data(), sizeof(key));
 
-		// キーの入力
-		result = devKeyboard->GetDeviceState(sizeof(key), key);
+		// Key entry
+		result = devKeyboard->GetDeviceState(sizeof(key), key.data());
 	}
 
 	{// Mouse
-		result = devMouse->Acquire();	// マウス動作開始
+		result = devMouse->Acquire(); // Mouse movement initiation
 
-		// 前回の入力を保存
+		// Save previous entry
 		mouseStatePre = mouseState;
 
-		// マウスの入力
+		// Mouse Input
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
 
