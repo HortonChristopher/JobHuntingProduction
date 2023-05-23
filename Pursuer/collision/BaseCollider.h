@@ -39,6 +39,10 @@ public:
 	/// Update
 	/// </summary>
 	virtual void Update() = 0;
+
+	virtual inline const Vector3& GetMin() = 0;
+	virtual inline const Vector3& GetMax() = 0;
+
 	// Shape type acquisition
 
 	inline CollisionShapeType GetShapeType() { return shapeType; }

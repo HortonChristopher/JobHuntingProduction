@@ -252,6 +252,9 @@
     <ClCompile Include="3d\BasicOBJ.cpp">
       <Filter>Source Files\3D</Filter>
     </ClCompile>
+    <ClCompile Include="collision\BoxCollider.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -481,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="3d\BasicOBJ.h">
       <Filter>Header Files\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\BoxCollider.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

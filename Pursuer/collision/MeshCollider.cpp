@@ -1,23 +1,22 @@
 #include "MeshCollider.h"
-#include "Collision.h"
-
-using namespace DirectX;
 
 void MeshCollider::ConstructTriangles(Model* model)
 {
-	// 三角形リストをクリア Clear the triangle list
+	// Clear the triangle list
 	triangles.clear();
 
-	// モデルの待つメッシュリストを取得 Get the waiting mesh list for the model
+	// Get the waiting mesh list for the model
 	const std::vector<Mesh*>& meshes = model->GetMeshes();
 
-	// 現在のメッシュの開始三角形番号を入れておく変数（0で初期化）A variable that holds the start triangle number of the current mesh (initialized with 0)
+	// A variable that holds the start triangle number of the current mesh (initialized with 0)
 	int start = 0;
 
-	// 全メッシュについて
+	// For all meshes
 	std::vector<Mesh*>::const_iterator it = meshes.cbegin();
+
 	for (; it != meshes.cend(); ++it) {
 		Mesh* mesh = *it;
+
 		const std::vector<Mesh::VertexPosNormalUv>& vertices = mesh->GetVertices();
 		const std::vector<unsigned short>& indices = mesh->GetIndices();
 
@@ -51,6 +50,10 @@ void MeshCollider::ConstructTriangles(Model* model)
 				1 };
 
 			tri.ComputeNormal();
+
+			CheckMaxMinPoint(tri.p0);
+			CheckMaxMinPoint(tri.p1);
+			CheckMaxMinPoint(tri.p2);
 		}
 
 		start += (int)triangleNum;
@@ -59,32 +62,34 @@ void MeshCollider::ConstructTriangles(Model* model)
 
 void MeshCollider::Update()
 {
-	invMatWorld = XMMatrixInverse(nullptr, GetObject3d()->GetMatWorld());
+	invMatWorld = XMMatrixInverse(nullptr, object->GetMatWorld());
 }
 
 bool MeshCollider::CheckCollisionSphere(const Sphere& sphere, DirectX::XMVECTOR* inter, DirectX::XMVECTOR* reject)
 {
-	// オブジェクトのローカル座標系での球を得る（半径はXスケールを参照)
+	// Obtain a sphere in the object's local coordinate system (see X scale for radius)
 	Sphere localSphere;
 	localSphere.center = XMVector3Transform(sphere.center, invMatWorld);
 	localSphere.radius *= XMVector3Length(invMatWorld.r[0]).m128_f32[0];
 
 	std::vector<Triangle>::const_iterator it = triangles.cbegin();
 
-	for (; it != triangles.cend(); ++it) {
+	for (; it != triangles.cend(); ++it) 
+	{
 		const Triangle& triangle = *it;
 
 		if (Collision::CheckSphere2Triangle(localSphere, triangle, inter, reject)) {
 			if (inter) {
-				const XMMATRIX& matWorld = GetObject3d()->GetMatWorld();
+				const XMMATRIX& matWorld = GetObject3D()->GetMatWorld();
 
 				*inter = XMVector3Transform(*inter, matWorld);
 			}
 			if (reject) {
-				const XMMATRIX& matWorld = GetObject3d()->GetMatWorld();
+				const XMMATRIX& matWorld = GetObject3D()->GetMatWorld();
 
 				*reject = XMVector3TransformNormal(*reject, matWorld);
 			}
+
 			return true;
 		}
 	}
@@ -94,25 +99,29 @@ bool MeshCollider::CheckCollisionSphere(const Sphere& sphere, DirectX::XMVECTOR*
 
 bool MeshCollider::CheckCollisionRay(const Ray& ray, float* distance, DirectX::XMVECTOR* inter)
 {
-	// オブジェクトのローカル座標系でのレイを得る
+	// Obtain a ray in the object's local coordinate system
 	Ray localRay;
 	localRay.start = XMVector3Transform(ray.start, invMatWorld);
 	localRay.dir = XMVector3TransformNormal(ray.dir, invMatWorld);
 
+	// Check for intersections in the local coordinate system
 	std::vector<Triangle>::const_iterator it = triangles.cbegin();
+	const std::vector<Triangle>::const_iterator endIt = triangles.cend();
 
-	for (; it != triangles.cend(); ++it) {
+	for (; it != endIt; ++it) 
+	{
 		const Triangle& triangle = *it;
 
 		XMVECTOR tempInter;
 
 		if (Collision::CheckRay2Triangle(localRay, triangle, nullptr, &tempInter)) {
 
-			const XMMATRIX& matWorld = GetObject3d()->GetMatWorld();
+			const XMMATRIX& matWorld = GetObject3D()->GetMatWorld();
 
 			tempInter = XMVector3Transform(tempInter, matWorld);
 
-			if (distance) {
+			if (distance) 
+			{
 				XMVECTOR sub = tempInter - ray.start;
 				*distance = XMVector3Dot(sub, ray.dir).m128_f32[0];
 			}
@@ -126,4 +135,19 @@ bool MeshCollider::CheckCollisionRay(const Ray& ray, float* distance, DirectX::X
 	}
 
 	return false;
+}
+
+void MeshCollider::CheckMaxMinPoint(const XMVECTOR& point)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (point.m128_f32[i] > maxPoint.m128_f32[i])
+		{
+			maxPoint.m128_f32[i] = point.m128_f32[i];
+		}
+		else if (point.m128_f32[i] < minPoint.m128_f32[i])
+		{
+			minPoint.m128_f32[i] = point.m128_f32[i];
+		}
+	}
 }

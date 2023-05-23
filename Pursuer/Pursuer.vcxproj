@@ -122,6 +122,7 @@
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="camera\LightCamera.cpp" />
+    <ClCompile Include="collision\BoxCollider.cpp" />
     <ClCompile Include="collision\Collision.cpp" />
     <ClCompile Include="collision\CollisionManager.cpp" />
     <ClCompile Include="collision\CollisionPrimitive.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="camera\LightCamera.h" />
     <ClInclude Include="collision\BaseCollider.h" />
+    <ClInclude Include="collision\BoxCollider.h" />
     <ClInclude Include="collision\Collision.h" />
     <ClInclude Include="collision\CollisionAttribute.h" />
     <ClInclude Include="collision\CollisionManager.h" />
