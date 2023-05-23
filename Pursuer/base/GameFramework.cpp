@@ -379,7 +379,7 @@ void GameFramework::Run()
 			CollisionManager::GetInstance()->DrawCollider();
 			if (!SettingParameters::GetOnSSAO())
 			{
-				directX->DepthClear();
+				directX->ClearDepth();
 			}
 			//”w–Ê•`‰æ‚±‚±‚Ü‚Å
 
