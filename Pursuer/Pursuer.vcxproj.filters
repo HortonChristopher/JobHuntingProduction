@@ -231,9 +231,6 @@
     <ClCompile Include="tools\ShadingComputation.cpp">
       <Filter>Source Files\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="WrapperComputation.cpp">
-      <Filter>Source Files\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="tools\SSAO.cpp">
       <Filter>Source Files\Tools</Filter>
     </ClCompile>
@@ -242,6 +239,12 @@
     </ClCompile>
     <ClCompile Include="Object3DCreation.cpp">
       <Filter>Source Files\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\WrapperComputation.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneManager.cpp">
+      <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -456,6 +459,9 @@
       <Filter>Header Files\3D</Filter>
     </ClInclude>
     <ClInclude Include="scene\Scene.h">
+      <Filter>Header Files\AreaScene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneManager.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
   </ItemGroup>

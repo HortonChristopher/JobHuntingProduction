@@ -254,7 +254,13 @@ void GameFramework::PostLoading()
 	lightCamera->SetLightDir({ dir[0], dir[1], dir[2] });
 	Object3d::SetLightCamera(lightCamera.get());
 
-	// If scene manager, add here
+	// Scene Manager
+	sceneManager = SceneManager::GetInstance();
+	sceneManager->Initialize();
+	sceneManager->AddScene(Scene::SCENE::Title, new TitleScreen());
+	sceneManager->AddScene(Scene::SCENE::Tutorial, new TutorialArea());
+	// Add other scenes here
+	sceneManager->ChangeScene(Scene::SCENE::Title);
 
 	mainResource = std::make_unique<TextureResource>("mainTex");
 	TextureResource::SetMainResource(mainResource.get());
@@ -349,14 +355,14 @@ void GameFramework::Run()
 			}
 			lightCamera->Update();
 			Object3d::ClucLightViewProjection();
-			sceneManeger->Update();
+			sceneManager->Update();
 			ParticleEmitter::Update();
 			directX->ComputeBegin();
 			//2.画面クリアコマンドここまで
 			Object3d::SetDrawShadow(true);
 			shadowMap->PreDraw();
 			directX->ImguiDraw();
-			sceneManeger->PreDraw();
+			sceneManager->PreDraw();
 			//directX->DepthClear();
 			shadowMap->PostDraw(false);
 			Object3d::SetDrawShadow(false);
@@ -373,7 +379,7 @@ void GameFramework::Run()
 				directX->BeginDraw();
 			}
 
-			sceneManeger->PreDraw();
+			sceneManager->PreDraw();
 			CollisionManager::GetInstance()->DrawCollider();
 			if (!SettingParameters::GetOnSSAO())
 			{
@@ -383,7 +389,7 @@ void GameFramework::Run()
 
 			DebugText::Draw();
 
-			sceneManeger->PostDraw();
+			sceneManager->PostDraw();
 			ParticleEmitter::Draw();
 
 			if (SettingParameters::GetOnSSAO())
@@ -405,8 +411,6 @@ void GameFramework::Run()
 			}
 		}
 		directX->EndDraw();
-
-		LevelEditor::GetInstance()->Delete();
 	}
 }
 
@@ -420,7 +424,7 @@ void GameFramework::End()
 
 	directX->End();
 
-	computeWrapper->End();
+	computationWrapper->End();
 	ParticleEmitter::End();
 	DebugText::End();
 

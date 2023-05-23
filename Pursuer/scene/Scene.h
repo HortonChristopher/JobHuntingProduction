@@ -29,9 +29,9 @@ public:
 	virtual void PostDraw() = 0; // If sprite drawing is included in PostDraw, the sprite will be drawn on top of the object.
 
 	// Get endGame flag
-	inline bool GetGameShutdownStatus()
+	inline bool GetSceneStatus()
 	{
-		return endGame;
+		return endScene;
 	}
 
 	// Proceed to next scene
@@ -40,14 +40,14 @@ public:
 		return nextScene;
 	}
 protected:
-	// Set the endGame flag to true
-	inline void GameShutdown()
+	// Set the endScene flag to true
+	inline void SceneShutdown()
 	{
-		endGame = true;
+		endScene = true;
 	}
 
 	// endGame flag
-	bool endGame;
+	bool endScene;
 
 	// Scene transition start flag
 	bool nextFeed;

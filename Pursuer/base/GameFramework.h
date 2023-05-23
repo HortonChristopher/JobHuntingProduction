@@ -29,6 +29,7 @@
 #include "TextureResource.h"
 #include "Vector.h"
 #include "DeltaTime.h"
+#include "WrapperComputation.h"
 
 #include <memory>
 
@@ -85,6 +86,7 @@ private:
 	SceneManager* sceneManager = nullptr;
 	std::unique_ptr<GameWindow> gameWindow;
 	DirectXCommon* directX = nullptr;
+	WrapperComputation* computationWrapper = nullptr;
 
 	Vector3 cameraPos;
 

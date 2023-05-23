@@ -139,7 +139,7 @@ void ParticleManager::Update()
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	constMap->mat = camera->GetViewProjectionMatrix();
+	constMap->mat = camera->GetViewMatrixProjection();
 	constMap->matBillboard = camera->GetBillboardMatrix();
 	constBuff->Unmap(0, nullptr);
 }

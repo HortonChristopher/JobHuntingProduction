@@ -151,6 +151,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="scene\Loading.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
     <ClCompile Include="scene\TitleScreen.cpp" />
     <ClCompile Include="scene\TutorialArea.cpp" />
     <ClCompile Include="tools\PipelineStatus.cpp" />
@@ -158,7 +159,7 @@
     <ClCompile Include="tools\ShadowMap.cpp" />
     <ClCompile Include="tools\SSAO.cpp" />
     <ClCompile Include="tools\SSAOCombination.cpp" />
-    <ClCompile Include="WrapperComputation.cpp" />
+    <ClCompile Include="tools\WrapperComputation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\imgui\imgui.vcxproj">
@@ -228,6 +229,7 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="scene\Loading.h" />
     <ClInclude Include="scene\Scene.h" />
+    <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="scene\TitleScreen.h" />
     <ClInclude Include="scene\TutorialArea.h" />
     <ClInclude Include="tools\PipelineStatus.h" />
