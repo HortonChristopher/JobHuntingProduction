@@ -142,6 +142,7 @@
     <ClCompile Include="model\OBJLoader.cpp" />
     <ClCompile Include="model\TextureResource.cpp" />
     <ClCompile Include="model\Textures.cpp" />
+    <ClCompile Include="Object3DCreation.cpp" />
     <ClCompile Include="scene\BaseArea.cpp" />
     <ClCompile Include="scene\GameClearCutscene.cpp" />
     <ClCompile Include="scene\GameOverCutscene.cpp" />
@@ -155,6 +156,8 @@
     <ClCompile Include="tools\PipelineStatus.cpp" />
     <ClCompile Include="tools\ShadingComputation.cpp" />
     <ClCompile Include="tools\ShadowMap.cpp" />
+    <ClCompile Include="tools\SSAO.cpp" />
+    <ClCompile Include="tools\SSAOCombination.cpp" />
     <ClCompile Include="WrapperComputation.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +219,7 @@
     <ClInclude Include="model\OBJModel.h" />
     <ClInclude Include="model\TextureResource.h" />
     <ClInclude Include="model\Textures.h" />
+    <ClInclude Include="Object3DCreation.h" />
     <ClInclude Include="scene\BaseArea.h" />
     <ClInclude Include="scene\GameClearCutscene.h" />
     <ClInclude Include="scene\GameOverCutscene.h" />
@@ -223,12 +227,15 @@
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="scene\Loading.h" />
+    <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="scene\TitleScreen.h" />
     <ClInclude Include="scene\TutorialArea.h" />
     <ClInclude Include="tools\PipelineStatus.h" />
     <ClInclude Include="tools\SettingParameters.h" />
     <ClInclude Include="tools\ShadingComputation.h" />
     <ClInclude Include="tools\ShadowMap.h" />
+    <ClInclude Include="tools\SSAO.h" />
+    <ClInclude Include="tools\SSAOCombination.h" />
     <ClInclude Include="tools\WrapperComputation.h" />
   </ItemGroup>
   <ItemGroup>

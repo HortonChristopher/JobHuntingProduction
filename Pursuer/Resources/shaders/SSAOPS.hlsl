@@ -1,8 +1,8 @@
 #include "Sprite.hlsli"
 
 // Shader only for SSAO processing
-Texture2D<float4> texNormal : register(t0); //1パス目の法線描画
-Texture2D<float> texDepth : register(t1); //1パス目の深度テクスチャ
+Texture2D<float4> texNormal : register(t0); // Normal drawing for the first pass
+Texture2D<float> texDepth : register(t1); // Depth texture for the first pass
 
 SamplerState smp : register(s0);
 

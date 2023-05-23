@@ -266,7 +266,7 @@ void GameFramework::PostLoading()
 	halfNormalResource.reset(new TextureResource("halfNormalTex", { 1920 / 2,1080 / 2 }));
 	ssaoResource.reset(new TextureResource("SSAO", { 1920 / 2,1080 / 2 }, DXGI_FORMAT_R32_FLOAT, { 1,0,0,0 }));
 	ssao = std::make_unique<SSAO>();
-	ssaoCombine = std::make_unique<SSAOCombine>();
+	ssaoCombination = std::make_unique<SSAOCombination>();
 
 	depthTex = std::make_unique<Sprite>();
 	normalTex = std::make_unique<Sprite>();
@@ -343,24 +343,23 @@ void GameFramework::Run()
 			TextureResource::SetBbIndex();
 			Sprite::SetBbIndex();
 			Input::Update();
-			Alpha::Update();
 			if (Input::TriggerKey(DIK_1))
 			{
 				DrawMode::SetMode(DrawMode::None);
 			}
 			lightCamera->Update();
-			Object3D::ClucLightViewProjection();
+			Object3d::ClucLightViewProjection();
 			sceneManeger->Update();
 			ParticleEmitter::Update();
 			directX->ComputeBegin();
 			//2.画面クリアコマンドここまで
-			Object3D::SetDrawShadow(true);
+			Object3d::SetDrawShadow(true);
 			shadowMap->PreDraw();
 			directX->ImguiDraw();
 			sceneManeger->PreDraw();
 			//directX->DepthClear();
 			shadowMap->PostDraw(false);
-			Object3D::SetDrawShadow(false);
+			Object3d::SetDrawShadow(false);
 
 			//3.描画コマンドここから
 			if (SettingParameters::GetOnSSAO())
@@ -402,7 +401,7 @@ void GameFramework::Run()
 				ssao->Draw();
 				ssaoResource->PostDraw();
 				directX->BeginDraw();
-				ssaoCombine->Draw();
+				ssaoCombination->Draw();
 			}
 		}
 		directX->EndDraw();

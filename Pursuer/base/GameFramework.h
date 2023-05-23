@@ -6,14 +6,13 @@
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "Object3D.h"
-#include "Create3DObject.h"
+#include "Object3DCreation.h"
 #include "Textures.h"
 #include "Scene.h"
 #include "TitleScreen.h"
 #include "TutorialArea.h"
 #include "BaseArea.h"
 #include "Play.h"
-#include "Alpha.h"
 #include "GameClearCutscene.h"
 #include "GameOverCutscene.h"
 #include "PipelineStatus.h"
@@ -25,8 +24,8 @@
 #include "LightCamera.h"
 #include "SceneManager.h"
 #include "Sprite.h"
-#include "SSAO.h"
-#include "SSAOCombine.h"
+#include "SSAO.h" // Screen Space Ambient Occlusion
+#include "SSAOCombination.h" // Screen Space Ambient Occlusion Combine Pass
 #include "TextureResource.h"
 #include "Vector.h"
 #include "DeltaTime.h"
@@ -43,7 +42,7 @@ class LightCamera;
 class SceneManager;
 class Sprite;
 class SSAO;
-class SSAOCombine;
+class SSAOCombination;
 class TextureResource;
 class Vector;
 class GameFramework
@@ -92,7 +91,7 @@ private:
 	std::unique_ptr <LightCamera> lightCamera = nullptr;
 	std::unique_ptr <TextureResource> shadowMap = nullptr;
 	std::unique_ptr <SSAO> ssao = nullptr;
-	std::unique_ptr <SSAOCombine> ssaoCombine = nullptr;
+	std::unique_ptr <SSAOCombination> ssaoCombination = nullptr;
 
 	std::unique_ptr <TextureResource> normalResource = nullptr;
 	std::unique_ptr <TextureResource> halfNormalResource = nullptr;
