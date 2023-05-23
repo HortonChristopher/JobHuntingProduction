@@ -525,6 +525,11 @@ void Player::Update()
 			lowStaminaWarningActivation = true;
 		}
 
+		if (slowMotion)
+		{
+			powerRemaining -= 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+
 		if (lowStaminaWarningActivation)
 		{
 			staminaWarningSpriteAlpha = 1.0f;

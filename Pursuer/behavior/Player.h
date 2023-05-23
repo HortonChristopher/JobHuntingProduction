@@ -216,4 +216,6 @@ public:
 	bool cameraResetActive = false;
 	float radY = 0.0f;
 	float cameraMoveCounter = 0.0f;
+	bool slowMotion = false;
+	float powerRemaining = 100.0f;
 };

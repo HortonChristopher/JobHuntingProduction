@@ -259,6 +259,11 @@ private:
 	int closestEnemy = 20;
 	bool lockOnSet = false;
 
+	Sprite* slowMotionSPRITE = nullptr;
+	Sprite* slowMotionBarSPRITE = nullptr;
+	Sprite* slowMotionBarFrameSPRITE = nullptr;
+	float slowMotionSpriteALPHA = 0.0f;
+
 	int oddEven = 1;
 
 	bool firstRun = true;

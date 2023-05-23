@@ -1019,20 +1019,28 @@ void BaseArea::Update()
 	HPBarFrameSPRITE->SetSize({ 25.0f * 20.0f, 40.0f });
 	STBarSPRITE->SetSize({ playerFBX->stamina / 2.0f, 20.0f });
 	STBarFrameSPRITE->SetSize({ 50.0f, 20.0f });
+	slowMotionBarSPRITE->SetSize({ playerFBX->powerRemaining / 2.0f, 20.0f });
+	slowMotionBarFrameSPRITE->SetSize({ 50.0f, 20.0f });
 	if (camera->lockOn)
 	{
 		STBarSPRITE->SetPosition({ 720.0f, 480.0f });
 		STBarFrameSPRITE->SetPosition({ 720.0f, 480.0f });
 		staminaWarningSPRITE->SetPosition({ 720.0f, 490.0f });
+		slowMotionBarSPRITE->SetPosition({ 745.0f, 480.0f });
+		slowMotionBarFrameSPRITE->SetPosition({ 745.0f, 480.0f });
 	}
 	else
 	{
 		STBarSPRITE->SetPosition({ 720.0f, 380.0f });
 		STBarFrameSPRITE->SetPosition({ 720.0f, 380.0f });
 		staminaWarningSPRITE->SetPosition({ 720.0f, 390.0f });
+		slowMotionBarSPRITE->SetPosition({ 745.0f, 380.0f });
+		slowMotionBarFrameSPRITE->SetPosition({ 745.0f, 380.0f });
 	}
 	STBarSPRITE->SetRotation(270.0f);
 	STBarFrameSPRITE->SetRotation(270.0f);
+	slowMotionBarSPRITE->SetRotation(270.0f);
+	slowMotionBarFrameSPRITE->SetRotation(270.0f);
 	if (playerFBX->stamina < 100.0f && playerFBX->stamina >= 40.0f)
 	{
 		staminaSpriteAlpha = 1.0f;
@@ -1064,12 +1072,28 @@ void BaseArea::Update()
 		}
 	}
 
+	if (playerFBX->powerRemaining < 100.0f)
+	{
+		slowMotionSpriteALPHA = 1.0f;
+	}
+	else
+	{
+		slowMotionSpriteALPHA -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	}
+
 	STBarSPRITE->SetColor({ 1.0f, blinkingStaminaAlpha, blinkingStaminaAlpha, staminaSpriteAlpha });
 	STBarFrameSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, staminaSpriteAlpha });
+	slowMotionBarSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, slowMotionSpriteALPHA });
+	slowMotionBarFrameSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, slowMotionSpriteALPHA });
 
 	if (staminaSpriteAlpha <= 0.0f)
 	{
 		staminaSpriteAlpha = 0.0f;
+	}
+
+	if (slowMotionSpriteALPHA <= 0.0f)
+	{
+		slowMotionSpriteALPHA = 0.0f;
 	}
 
 	staminaWarningSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, playerFBX->staminaWarningSpriteAlpha });
@@ -1077,6 +1101,23 @@ void BaseArea::Update()
 	if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && playerFBX->stamina > 0.0f)
 	{
 		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, 10, -1.0f, 1.0f);
+	}
+
+	if (input->PushKey(DIK_CAPSLOCK) && playerFBX->powerRemaining >= 0.0f)
+	{
+		playerFBX->slowMotion = true;
+		for (int i = 0; i < 10; i++)
+		{
+			baseAreaEnemyFBX[i]->slowMotion = true;
+		}
+	}
+	else
+	{
+		playerFBX->slowMotion = false;
+		for (int i = 0; i < 10; i++)
+		{
+			baseAreaEnemyFBX[i]->slowMotion = false;
+		}
 	}
 #pragma endregion
 
@@ -1459,6 +1500,8 @@ void BaseArea::Draw()
 	HPBarFrameSPRITE->Draw();
 	STBarSPRITE->Draw();
 	STBarFrameSPRITE->Draw();
+	slowMotionBarSPRITE->Draw();
+	slowMotionBarFrameSPRITE->Draw();
 	baseAreaMinimapSPRITE->Draw();
 	baseAreaMinimapPlayerSPRITE->Draw();
 	healSPRITE->Draw();
@@ -1490,6 +1533,11 @@ void BaseArea::Draw()
 	}
 	staminaWarningSPRITE->Draw();
 	baseAreaMissionSPRITE->Draw();
+
+	if (playerFBX->slowMotion)
+	{
+		slowMotionSPRITE->Draw();
+	}
 
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
@@ -1666,6 +1714,9 @@ void BaseArea::thread1()
 	if (!Sprite::LoadTexture(15, "HealK.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(16, "HealC.png")) { assert(0); return; } // Heal Graphic
 	if (!Sprite::LoadTexture(17, "LowStaminaWarning.png")) { assert(0); return; } // Low Stamina Warning Graphic
+	if (!Sprite::LoadTexture(18, "SlowMotion.png")) { assert(0); return; } // Slow Motion Graphic
+	if (!Sprite::LoadTexture(19, "LoadingBar.png")) { assert(0); return; } // Slow Motion Graphic
+	if (!Sprite::LoadTexture(20, "LoadingBarFrame.png")) { assert(0); return; } // Slow Motion Graphic
 
 	loadingPercent++;
 
@@ -1674,6 +1725,8 @@ void BaseArea::thread1()
 	HPBarFrameSPRITE = Sprite::Create(2, { 25.0f, 25.0f });
 	STBarSPRITE = Sprite::Create(3, { 25.0f, 55.0f });
 	STBarFrameSPRITE = Sprite::Create(4, { 25.0f, 55.0f });
+	slowMotionBarSPRITE = Sprite::Create(19, { 25.0f, 25.0f });
+	slowMotionBarFrameSPRITE = Sprite::Create(20, { 25.0f, 25.0f });
 	baseAreaMissionSPRITE = Sprite::Create(5, { 1150.0f, 100.0f });
 	baseAreaMinimapSPRITE = Sprite::Create(6, { 50.0f , 430.0f });
 	baseAreaMinimapPlayerSPRITE = Sprite::Create(7, { 0.0f, 0.0f });
@@ -1690,6 +1743,7 @@ void BaseArea::thread1()
 	healKeyboardSPRITE = Sprite::Create(15, { 1102.0f, 542.0f });
 	healControllerSPRITE = Sprite::Create(16, { 1102.0f, 542.0f });
 	staminaWarningSPRITE = Sprite::Create(17, { 720.0f, 390.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
+	slowMotionSPRITE = Sprite::Create(18, { 0.0f, 0.0f });
 	// Resizing mission sprite
 	baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
 	staminaWarningSPRITE->SetSize({ 75.0f, 42.0f });

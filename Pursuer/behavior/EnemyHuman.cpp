@@ -99,7 +99,14 @@ void EnemyHuman::Update()
 
 		if (!FirstRun)
 		{
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 		}
 		else
 		{
@@ -143,13 +150,28 @@ void EnemyHuman::Update()
 			}
 			else
 			{
-				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (slowMotion)
+				{
+					timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
 			}
 
 			if (!FirstRun)
 			{
-				position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (slowMotion)
+				{
+					position.x += (x * 50.0f) * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.z += (y * 50.0f) * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					position.x += x * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.z += y * 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
 			}
 			else
 			{
@@ -180,8 +202,16 @@ void EnemyHuman::Update()
 			degrees = XMConvertToDegrees(radians);
 			if (!FirstRun)
 			{
-				position.x += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-				position.z += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+				if (slowMotion)
+				{
+					position.x += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+					position.z += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+				}
+				else
+				{
+					position.x += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+					position.z += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+				}
 			}
 			else
 			{
@@ -214,11 +244,25 @@ void EnemyHuman::Update()
 
 		if (attackTimer < 47.0f || attackTimer > 69.0f)
 		{
-			frameSpeed = POINTSEVENFIVE;
+			if (slowMotion)
+			{
+				frameSpeed = POINTTWOFIVE;
+			}
+			else
+			{
+				frameSpeed = POINTSEVENFIVE;
+			}
 		}
 		else
 		{
-			frameSpeed = NORMAL;
+			if (slowMotion)
+			{
+				frameSpeed = POINTTWOFIVE;
+			}
+			else
+			{
+				frameSpeed = NORMAL;
+			}
 		}
 
 		if (attackTimer > 53.3f && attackTimer < 63.2f)
@@ -256,6 +300,9 @@ void EnemyHuman::Update()
 		case POINTSEVENFIVE:
 			attackTimer += 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
+		case POINTTWOFIVE:
+			attackTimer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			break;
 		default:
 			attackTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			break;
@@ -271,7 +318,14 @@ void EnemyHuman::Update()
 			modelChange = false;
 		}
 		SetPosition(cooldownPosition);
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (slowMotion)
+		{
+			timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		else
+		{
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
 		if (timer > 20.0f)
 		{
 			timer = 0.0f;
@@ -288,7 +342,14 @@ void EnemyHuman::Update()
 			animationNo = 4;
 			modelChange = false;
 		}
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		if (slowMotion)
+		{
+			timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
+		else
+		{
+			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		}
 		if (timer > 53.0f)
 		{
 			timer = 0.0f;
@@ -321,12 +382,27 @@ void EnemyHuman::Update()
 			hypotenuse = sqrt((x * x) + (y * y));
 			radians = atan2(y, x);
 			degrees = XMConvertToDegrees(radians);
-			position.x -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			if (slowMotion)
+			{
+				position.x -= 90.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z -= 90.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			}
+			else
+			{
+				position.x -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z -= 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+			}
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 			if (currentTime < endTime / 2 && timer > 0.0f)
 			{
-				position.y += 1.0f;
+				if (slowMotion)
+				{
+					position.y += 1.0f * 0.25f;
+				}
+				else
+				{
+					position.y += 1.0f;
+				}
 			}
 			SetPosition(position);
 			if (currentTime > endTime && timer > 0.0f)
@@ -334,7 +410,14 @@ void EnemyHuman::Update()
 				particleAttackStage = 1;
 				modelChange = true;
 			}
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		case 1:
 			if (modelChange)
@@ -347,11 +430,25 @@ void EnemyHuman::Update()
 			}
 			if (currentTime - startTime < (endTime - startTime) / 2 && !particleAttackActive)
 			{
-				frameSpeed = POINTSEVENFIVE;
+				if (slowMotion)
+				{
+					frameSpeed = POINTTWOFIVE;
+				}
+				else
+				{
+					frameSpeed = POINTSEVENFIVE;
+				}
 			}
 			else
 			{
-				frameSpeed = NORMAL;
+				if (slowMotion)
+				{
+					frameSpeed = POINTTWOFIVE;
+				}
+				else
+				{
+					frameSpeed = NORMAL;
+				}
 			}
 			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f && !particleAttackActive)
 			{
@@ -360,10 +457,20 @@ void EnemyHuman::Update()
 			}
 			if (particleAttackActive)
 			{
-				particleAttackPosition.x += 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-				particleAttackPosition.y += 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
-				particleAttackPosition.z += 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
-				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (slowMotion)
+				{
+					particleAttackPosition.x += 180.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+					particleAttackPosition.y += 180.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+					particleAttackPosition.z += 180.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+					timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					particleAttackPosition.x += 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+					particleAttackPosition.y += 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+					particleAttackPosition.z += 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+					timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
 			}
 			else
 			{
@@ -374,7 +481,14 @@ void EnemyHuman::Update()
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (slowMotion)
+				{
+					timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
 			}
 			if (currentTime - startTime > (endTime - startTime) && particleAttackActive)
 			{
@@ -410,7 +524,14 @@ void EnemyHuman::Update()
 
 			if (position.y < 100.0f)
 			{
-				position.y += 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (slowMotion)
+				{
+					position.y += 50.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					position.y += 50.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
 				landingAttackPosition = objectPosition;
 			}
 			else
@@ -440,9 +561,18 @@ void EnemyHuman::Update()
 					landed = true;
 				}
 
-				position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.y -= 150.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				if (slowMotion)
+				{
+					position.x += x * 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.y -= 150.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.z += z * 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
+				else
+				{
+					position.x += x * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.y -= 150.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					position.z += z * 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				}
 			}
 			else
 			{
@@ -518,11 +648,26 @@ void EnemyHuman::Update()
 				chargeAttackStage = 1;
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		case 1:
-			position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			if (slowMotion)
+			{
+				position.x += 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			}
+			else
+			{
+				position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			}
 
 			if (timer > 45.0f)
 			{
@@ -533,7 +678,14 @@ void EnemyHuman::Update()
 				SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		default:
 			timer = 0.0f;
@@ -573,8 +725,16 @@ void EnemyHuman::Update()
 				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 			}
 
-			position.x += 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z += 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			if (slowMotion)
+			{
+				position.x += 80.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += 80.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			}
+			else
+			{
+				position.x += 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += 80.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			}
 			SetPosition(position);
 
 			if (timer >= 120.0f)
@@ -594,7 +754,14 @@ void EnemyHuman::Update()
 				break;
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		case 1:
 			if (patrolStatus == FRONT)
@@ -643,8 +810,16 @@ void EnemyHuman::Update()
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
-			position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
-			position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			if (slowMotion)
+			{
+				position.x += surroundSpeed * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += surroundSpeed * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			}
+			else
+			{
+				position.x += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				position.z += surroundSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (z / hypotenuse);
+			}
 			SetPosition(position);
 
 			if (patrolStatus == FRONT)
@@ -653,17 +828,38 @@ void EnemyHuman::Update()
 				{
 					if (surroundSpeed < 180.0f)
 					{
-						surroundSpeed += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						if (slowMotion)
+						{
+							surroundSpeed += 40.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						}
+						else
+						{
+							surroundSpeed += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						}
 					}
 					else
 					{
-						surroundSpeed = 180.0f;
+						if (slowMotion)
+						{
+							surroundSpeed = 180.0f * 0.25f;
+						}
+						else
+						{
+							surroundSpeed = 180.0f;
+						}
 					}
 				}
 
 				if (nextDegree < (initialDegree + XMConvertToRadians(290.0f)))
 				{
-					nextDegree += XMConvertToRadians(100.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+					if (slowMotion)
+					{
+						nextDegree += XMConvertToRadians(100.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+					}
+					else
+					{
+						nextDegree += XMConvertToRadians(100.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+					}
 				}
 				else
 				{
@@ -680,17 +876,38 @@ void EnemyHuman::Update()
 				{
 					if (surroundSpeed < 180.0f)
 					{
-						surroundSpeed += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						if (slowMotion)
+						{
+							surroundSpeed += 40.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						}
+						else
+						{
+							surroundSpeed += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						}
 					}
 					else
 					{
-						surroundSpeed = 180.0f;
+						if (slowMotion)
+						{
+							surroundSpeed = 180.0f * 0.25f;
+						}
+						else
+						{
+							surroundSpeed = 180.0f;
+						}
 					}
 				}
 
 				if (nextDegree > (initialDegree - XMConvertToRadians(290.0f)))
 				{
-					nextDegree -= XMConvertToRadians(100.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+					if (slowMotion)
+					{
+						nextDegree -= XMConvertToRadians(100.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+					}
+					else
+					{
+						nextDegree -= XMConvertToRadians(100.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f));
+					}
 				}
 				else
 				{
@@ -758,7 +975,14 @@ void EnemyHuman::Update()
 				jetStreamAttackStage = 1;
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 
 			switch (xQuadrant)
 			{
@@ -769,7 +993,14 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					if (slowMotion)
+					{
+						position.x += 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					}
+					else
+					{
+						position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					}
 				}
 				break;
 			case 1:
@@ -779,7 +1010,14 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					if (slowMotion)
+					{
+						position.x += 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					}
+					else
+					{
+						position.x += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse2);
+					}
 				}
 				break;
 			}
@@ -793,7 +1031,14 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					if (slowMotion)
+					{
+						position.z += 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					}
+					else
+					{
+						position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					}
 				}
 				break;
 			case 1:
@@ -803,11 +1048,25 @@ void EnemyHuman::Update()
 				}
 				else
 				{
-					position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					if (slowMotion)
+					{
+						position.z += 240.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					}
+					else
+					{
+						position.z += 240.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse2);
+					}
 				}
 				break;
 			}
-			position.y += 5.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				position.y += 5.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				position.y += 5.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		case 1: // From here on it's the same as charge attack, but with a delay between each enemy doing the attack
 			if (animationNo != 10)
@@ -845,11 +1104,26 @@ void EnemyHuman::Update()
 				jetStreamAttackStage = 2;
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		case 2:
-			position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				position.x += x * 180.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 180.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				position.x += x * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				position.z += z * 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 
 			if (timer > 45.0f)
 			{
@@ -860,7 +1134,14 @@ void EnemyHuman::Update()
 				SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
 			}
 
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			if (slowMotion)
+			{
+				timer += 60.0f * 0.25f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
+			else
+			{
+				timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			}
 			break;
 		default:
 			timer = 0.0f;
@@ -1039,6 +1320,11 @@ void EnemyHuman::Update()
 		PlayAnimation();
 	}
 
+	if (slowMotion)
+	{
+		frameSpeed = POINTTWOFIVE;
+	}
+
 	if (isPlay)
 	{
 		// Advance one frame
@@ -1060,6 +1346,9 @@ void EnemyHuman::Update()
 		case POINTSEVENFIVE:
 			sec *= 0.75f;
 			break;
+		case POINTTWOFIVE:
+			sec *= 0.25f;
+			break;
 		default:
 			break;
 		}
@@ -1077,6 +1366,11 @@ void EnemyHuman::Update()
 		{
 			currentTime = endTime;
 		}
+	}
+
+	if (!slowMotion)
+	{
+		frameSpeed = NORMAL;
 	}
 
 	// Constant buffer data transfer

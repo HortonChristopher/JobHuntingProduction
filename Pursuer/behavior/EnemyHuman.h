@@ -80,7 +80,8 @@ public:
 		HALF = 2,
 		DOUBLE = 3,
 		ONEPOINTFIVE = 4,
-		POINTSEVENFIVE = 5
+		POINTSEVENFIVE = 5,
+		POINTTWOFIVE = 6,
 	};
 
 	FrameSpeed frameSpeed = NORMAL;
@@ -266,4 +267,5 @@ public:
 	bool debugJetAttacked = false;
 	bool jetStreamCounted = false;
 	bool isPartnerDead = false;
+	bool slowMotion = false;
 };
