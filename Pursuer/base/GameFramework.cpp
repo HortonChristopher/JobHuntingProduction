@@ -259,7 +259,9 @@ void GameFramework::PostLoading()
 	sceneManager->Initialize();
 	sceneManager->AddScene(Scene::SCENE::Title, new TitleScreen());
 	sceneManager->AddScene(Scene::SCENE::Tutorial, new TutorialArea());
-	// Add other scenes here
+	sceneManager->AddScene(Scene::SCENE::MainGame, new BaseArea());
+	sceneManager->AddScene(Scene::SCENE::GameClear, new GameClearCutscene());
+	sceneManager->AddScene(Scene::SCENE::GameOver, new GameOverCutscene());
 	sceneManager->ChangeScene(Scene::SCENE::Title);
 
 	mainResource = std::make_unique<TextureResource>("mainTex");
@@ -421,8 +423,8 @@ void GameFramework::End()
 	directX->ShutDown();
 
 	computationWrapper->End();
-	ParticleEmitter::End();
-	DebugText::End();
+	ParticleEmitter::ShutDown();
+	DebugText::ShutDown();
 
 	FbxLoader::GetInstance()->Finalize();
 	FBXManager::ModelDeletion();

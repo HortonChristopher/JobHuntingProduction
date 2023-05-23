@@ -246,6 +246,9 @@
     <ClCompile Include="scene\SceneManager.cpp">
       <Filter>Source Files\AreaScene</Filter>
     </ClCompile>
+    <ClCompile Include="light\ParticleEmitter.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -466,6 +469,12 @@
     </ClInclude>
     <ClInclude Include="audio\XAudio2VoiceCallback.h">
       <Filter>Header Files\Audio &amp; Input</Filter>
+    </ClInclude>
+    <ClInclude Include="light\Particle.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="light\ParticleEmitter.h">
+      <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

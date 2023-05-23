@@ -1,175 +1,90 @@
 ﻿#pragma once
 
+#include <forward_list>
+#include <unordered_map>
+#include <string>
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <DirectXMath.h>
 #include <d3dx12.h>
-#include <forward_list>
 
+#include "Particle.h"
+#include "ShadingComputation.h"
+#include "WrapperComputation.h"
+#include "DirectXCommon.h"
+#include "PipelineStatus.h"
+#include "Textures.h"
 #include "Camera.h"
 
 /// <summary>
-/// パーティクルマネージャ
+/// Particle Manager
 /// </summary>
 class ParticleManager
 {
-private: // エイリアス
-	// Microsoft::WRL::を省略
+private: // Alias
+	// Using Microsoft::WRL::
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
+	// Using DirectX::
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-public: // サブクラス
-	// 頂点データ構造体
-	struct VertexPos
-	{
-		XMFLOAT3 pos; // xyz座標
-		float scale; // スケール
-	};
-
-	// 定数バッファ用データ構造体
+public:
+	// Constant Buffer
 	struct ConstBufferData
 	{
-		XMMATRIX mat;	// ビュープロジェクション行列
-		XMMATRIX matBillboard;	// ビルボード行列
+		XMMATRIX mat; // View projection matrix
+		XMMATRIX matBillboard; // Billboard matrix
 	};
 
-	// パーティクル1粒
-	class Particle
-	{
-		// Microsoft::WRL::を省略
-		template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-		// DirectX::を省略
-		using XMFLOAT2 = DirectX::XMFLOAT2;
-		using XMFLOAT3 = DirectX::XMFLOAT3;
-		using XMFLOAT4 = DirectX::XMFLOAT4;
-		using XMMATRIX = DirectX::XMMATRIX;
+public:
+	static ParticleManager* GetInstance();
 
-	public:
-		// 座標
-		XMFLOAT3 position = {};
-		// 速度
-		XMFLOAT3 velocity = {};
-		// 加速度
-		XMFLOAT3 accel = {};
-		// 色
-		XMFLOAT3 color = {};
-		// スケール
-		float scale = 1.0f;
-		// 回転
-		float rotation = 0.0f;
-		// 初期値
-		XMFLOAT3 s_color = {};
-		float s_scale = 1.0f;
-		float s_rotation = 0.0f;
-		// 最終値
-		XMFLOAT3 e_color = {};
-		float e_scale = 0.0f;
-		float e_rotation = 0.0f;
-		// 現在フレーム
-		int frame = 0;
-		// 終了フレーム
-		int num_frame = 0;
-	};
+	void Add(Particle* newParticle,const std::string& TexName);
 
-private: // 定数
-	static const int vertexCount = 65536;		// 頂点数
+	void Initialize();
 
-public:// 静的メンバ関数
-	static ParticleManager* Create(ID3D12Device* device, Camera* camera, const wchar_t* filename);
-	static const int maxTextures = 1024;
-
-public: // メンバ関数	
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <returns></returns>
-	void Initialize(const wchar_t* filename);
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw(ID3D12GraphicsCommandList * cmdList);
+	void Draw();
 
-	/// <summary>
-	/// カメラのセット
-	/// </summary>
-	/// <param name="camera">カメラ</param>
 	inline void SetCamera(Camera* camera) { this->camera = camera; }
 
-	/// <summary>
-	/// パーティクルの追加
-	/// </summary>
-	/// <param name="life">生存時間</param>
-	/// <param name="position">初期座標</param>
-	/// <param name="velocity">速度</param>
-	/// <param name="accel">加速度</param>
-	/// <param name="start_scale">開始時スケール</param>
-	/// <param name="end_scale">終了時スケール</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale );
+	void CreateConstantBuffer();
 
-	/// <summary>
-	/// デスクリプタヒープの初期化
-	/// </summary>
-	/// <returns></returns>
-	void InitializeDescriptorHeap();
-
-	/// <summary>
-	/// グラフィックパイプライン生成
-	/// </summary>
-	/// <returns>成否</returns>
-	void InitializeGraphicsPipeline();
-
-	/// <summary>
-	/// テクスチャ読み込み
-	/// </summary>
-	/// <returns>成否</returns>
-	void LoadTexture(const wchar_t* filename);
-
-	/// <summary>
-	/// モデル作成
-	/// </summary>
 	void CreateModel();
 
-private: // メンバ変数
-	// デバイス
-	ID3D12Device* device = nullptr;
-	// デスクリプタサイズ
-	UINT descriptorHandleIncrementSize = 0u;
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> rootsignature;
-	// パイプラインステートオブジェクト
-	ComPtr<ID3D12PipelineState> pipelinestate;
-	// デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> descHeap;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> vertBuff;
-	// テクスチャバッファ
-	ComPtr<ID3D12Resource> texbuff;
-	// シェーダリソースビューのハンドル(CPU)
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
-	// シェーダリソースビューのハンドル(CPU)
-	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
-	// 頂点バッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vbView;
-	// 定数バッファ
-	ComPtr<ID3D12Resource> constBuff;
-	// パーティクル配列
-	std::forward_list<Particle> particles;
-	// カメラ
-	Camera* camera = nullptr;
+	void ShutDown();
 private:
-	ParticleManager(ID3D12Device* device, Camera* camera);
+	ParticleManager() = default;
+
 	ParticleManager(const ParticleManager&) = delete;
+
 	~ParticleManager() = default;
+
 	ParticleManager& operator=(const ParticleManager&) = delete;
+
+	int activeParticleCount = 0;
+
+	// Data not changed on update
+	std::unordered_map<std::string,std::vector<ParticleParameters>> parameterData;
+
+	// Data changed during update and sent to VS
+	std::unordered_map<std::string, std::vector<OutputData>> vertData;
+private:
+	Camera* camera = nullptr;
+
+	ComPtr<ID3D12Resource> constBuff;
+	ComPtr<ID3D12Resource> vertBuff;
+
+	D3D12_VERTEX_BUFFER_VIEW vbView;
+
+	std::unique_ptr<ShadingComputation> shadingComputation;
+	std::vector<OutputData> vert;
+	std::vector<ParticleParameters> parameters;
+private:
+	static const int vertexCount = 10000; // Number of vertices
 };
 

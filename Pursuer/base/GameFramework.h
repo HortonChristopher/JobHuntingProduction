@@ -3,6 +3,7 @@
 #include "OBJLoader.h"
 #include "Audio.h"
 #include "ParticleManager.h"
+#include "ParticleEmitter.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "Object3D.h"
