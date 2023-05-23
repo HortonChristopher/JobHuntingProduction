@@ -1,58 +1,93 @@
 #pragma once
-/// <summary>
-/// 当たり判定プリミティブ Collision Detection Primitive
-/// </summary>
 
+#include <array>
 #include <DirectXMath.h>
 
+#include "Camera.h"
+#include "Vector.h"
+
 /// <summary>
-/// 球　Ball/Sphere
+/// Collision Detection Primitive
+/// </summary>
+
+/// <summary>
+/// Ball/Sphere
 /// </summary>
 struct Sphere
 {
-	// 中心座標 Center Coordinates
+	// Center Coordinates
 	DirectX::XMVECTOR center = { 0,0,0,1 };
-	// 半径 radius
+	// Radius
 	float radius = 1.0f;
 };
 
 /// <summary>
-/// 平面 Plane
+/// Plane
 /// </summary>
 struct Plane
 {
-	// 法線ベクトル　Normal Vector
+	// Normal Vector
 	DirectX::XMVECTOR normal = { 0, 1, 0, 0 };
-	// 原点(0,0,0)からの距離 Distance from the origin
+
+	// Distance from the origin
 	float distance = 0.0f;
 };
 
 /// <summary>
-/// 法線付き三角形（時計回りが表面）Triangle with traced line (clockwise is the surface)
+/// Triangle with traced line (clockwise is the surface)
 /// </summary>
 class Triangle
 {
 public:
-	// 頂点座標3つ 3 vertex coordinates
+	// 3 vertex coordinates
 	DirectX::XMVECTOR p0;
 	DirectX::XMVECTOR p1;
 	DirectX::XMVECTOR p2;
-	// 法線ベクトル Normal Vector
+
+	// Normal Vector
 	DirectX::XMVECTOR normal;
 
 	/// <summary>
-	/// 法線の計算 Normal calculation
+	/// Normal calculation
 	/// </summary>
 	void ComputeNormal();
 };
 
 /// <summary>
-/// レイ（半直線）
+/// Ray (semi-linear)
 /// </summary>
 struct Ray
 {
-	// 始点座標 Start point coordinates
+	// Start point coordinates
 	DirectX::XMVECTOR start = { 0,0,0,1 };
-	// 方向 direction
+
+	// Direction
 	DirectX::XMVECTOR dir = { 1,0,0,0 };
+};
+
+// Capsule
+struct Capsule
+{
+	DirectX::XMVECTOR startPosition = {};
+	DirectX::XMVECTOR endPosition = {};
+
+	// Radius
+	float radius = 1.0f;
+};
+
+// Box
+struct Box
+{
+	// Centerpoint
+	DirectX::XMVECTOR center = {};
+
+	std::array<DirectX::XMVECTOR, 3> normaDirect;
+
+	// Size
+	Vector3 scale = { 1,1,1 };
+
+	Vector3 minPosition = {};
+	Vector3 maxPosition = {};
+
+	Vector3 rotation = {};
 };

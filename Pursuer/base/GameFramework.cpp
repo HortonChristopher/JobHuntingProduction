@@ -347,7 +347,7 @@ void GameFramework::Run()
 		}
 		else if (!loading)
 		{
-			Object::SetBbIndex();
+			BasicOBJ::SetBbIndex();
 			TextureResource::SetBbIndex();
 			Sprite::SetBbIndex();
 			Input::Update();

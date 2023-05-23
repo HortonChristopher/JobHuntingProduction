@@ -6,6 +6,7 @@
 #include "ParticleEmitter.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
+#include "BasicOBJ.h"
 #include "Object3D.h"
 #include "Object3DCreation.h"
 #include "Textures.h"

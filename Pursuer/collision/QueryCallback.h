@@ -6,33 +6,37 @@ class Object3d;
 class BaseCollider;
 
 /// <summary>
-/// クエリーによる情報を得る為の構造体
+/// Structure for obtaining information by querying
 /// </summary>
 struct QueryHit
 {
-	// 衝突相手のオブジェクト
+	// Objects to collide with
 	Object3d* object = nullptr;
-	// 衝突相手のコライダー
+
+	// Collision partner collider
 	BaseCollider* collider = nullptr;
-	// 衝突点
+
+	// Point of collision
 	DirectX::XMVECTOR inter;
-	// 排斥ベクトル
+
+	// Rejection vector
 	DirectX::XMVECTOR reject;
 };
 
 /// <summary>
-/// クエリーで交差を検出した時の動作を規定するクラス
+/// Class that specifies behavior when a query detects an intersection
 /// </summary>
 class QueryCallback
 {
 public:
 	QueryCallback() = default;
+
 	virtual ~QueryCallback() = default;
 
 	/// <summary>
-	/// 交差時コールバック
+	/// Call-back at crossing
 	/// </summary>
-	/// <param name="info">交差情報</param>
-	/// <returns>クエリーを続けるならtrue、打ち切るならfalseを返す</returns>
+	/// <param name="info">Intersection information</param>
+	/// <returns>Returns true to continue query, false to terminate</returns>
 	virtual bool OnQueryHit(const QueryHit& info) = 0;
 };

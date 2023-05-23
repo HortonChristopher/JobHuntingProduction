@@ -249,6 +249,9 @@
     <ClCompile Include="light\ParticleEmitter.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="3d\BasicOBJ.cpp">
+      <Filter>Source Files\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\FBX3DModel.h">
@@ -475,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="light\ParticleEmitter.h">
       <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\BasicOBJ.h">
+      <Filter>Header Files\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
