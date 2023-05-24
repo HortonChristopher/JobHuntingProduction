@@ -9,3 +9,4 @@ Injured: 819 - 925
 Dodge Roll: 925 - 999
 Dead: 999 - 1140
 Heal: 1140 - 1300
+Block: 1300 - 1340

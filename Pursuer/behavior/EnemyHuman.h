@@ -183,7 +183,6 @@ protected:
 	bool aggroSwitch = false;
 
 	bool attack = false;
-	bool attackAnimation = false;
 
 	bool FirstRun = true;
 
@@ -268,4 +267,5 @@ public:
 	bool jetStreamCounted = false;
 	bool isPartnerDead = false;
 	bool slowMotion = false;
+	bool attackAnimation = false;
 };

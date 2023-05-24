@@ -355,6 +355,7 @@ void EnemyHuman::Update()
 			timer = 0.0f;
 			aggroSet = false;
 			modelChange = true;
+			attackAnimation = false;
 			enumStatus = AGGRO;
 		}
 		break;

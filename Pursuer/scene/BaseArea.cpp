@@ -471,7 +471,7 @@ void BaseArea::Update()
 
 		if (baseAreaEnemyFBX[i]->landingParticles)
 		{
-			ParticleCreationExplosion(baseAreaEnemyFBX[i]->landingAttackPosition.x, baseAreaEnemyFBX[i]->landingAttackPosition.y, baseAreaEnemyFBX[i]->landingAttackPosition.z, 60, 2.0f, 40.0f);
+			ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 2.0f, 40.0f);
 		}
 
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 
@@ -735,6 +735,27 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerAttack
+	if (playerFBX->enumStatus == Player::PARRY)
+	{
+		for (int i = 0; i < numberOfEnemiesTotal; i++)
+		{
+			if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange) &&
+				intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange) && baseAreaEnemyAliveBOOL[i] == true)
+			{
+				if (baseAreaEnemyFBX[i]->attackTimer > 43.0f && baseAreaEnemyFBX[i]->attackTimer < 73.0f)
+				{
+					baseAreaEnemyFBX[i]->timer = 0.0f;
+					baseAreaEnemyFBX[i]->attackTimer = 0.0f;
+					baseAreaEnemyFBX[i]->attackAnimation = false;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+					ParticleCreationExplosion((playerFBX->GetPosition().x + baseAreaEnemyFBX[i]->GetPosition().x) / 2.0f, (playerFBX->GetPosition().y + baseAreaEnemyFBX[i]->GetPosition().y) / 2.0f, (playerFBX->GetPosition().z + baseAreaEnemyFBX[i]->GetPosition().z) / 2.0f, 60, 6.0f, 20.0f);
+					playerFBX->parryActive = true;
+				}
+			}
+		}
+	}
+
 	if (playerFBX->enumStatus == Player::ATTACK)
 	{
 		if (playerFBX->timer >= playerFirstAttackStartTimer && playerFBX->timer <= playerFirstAttackEndTimer ||

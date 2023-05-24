@@ -59,7 +59,8 @@ public:
 		ATTACK = 8,
 		DAMAGED = 9,
 		DEAD = 10,
-		HEAL = 11
+		HEAL = 11,
+		PARRY = 12
 	};
 
 	status enumStatus = STAND;
@@ -218,4 +219,5 @@ public:
 	float cameraMoveCounter = 0.0f;
 	bool slowMotion = false;
 	float powerRemaining = 100.0f;
+	bool parryActive = false;
 };

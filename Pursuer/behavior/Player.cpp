@@ -286,6 +286,38 @@ void Player::Update()
 		}
 		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
+	case PARRY:
+		if (animationNo != 11)
+		{
+			timer = 0.0f;
+			animationNo = 11;
+			animationSet = false;
+		}
+
+		if (currentTime > endTime && timer > 0.0f)
+		{
+			timer = 0.0f;
+			enumStatus = STAND;
+		}
+		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		break;
+	}
+
+	if (animationNo != 11)
+	{
+		SetScale({ 0.075f, 0.075f, 0.075f });
+		if (rotation.x != 0.0f)
+		{
+			rotation.x = 0.0f;
+		}
+	}
+	else if (animationNo == 11)
+	{
+		SetScale({ 0.075f * 0.01f, 0.075f * 0.01f, 0.075f * 0.01f });
+		if (rotation.x != 90.0f)
+		{
+			rotation.x = 90.0f;
+		}
 	}
 
 	XMMATRIX camMatWorld = XMMatrixInverse(nullptr, camera->GetViewMatrix());
@@ -295,7 +327,7 @@ void Player::Update()
 
 	if (!baseAreaOpeningCutscene)
 	{
-		if (input->TriggerMouseLeft() && stamina >= 25.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina >= 25.0f)
+		if (input->TriggerMouseLeft() && stamina >= 25.0f && enumStatus != PARRY || input->TriggerControllerButton(XINPUT_GAMEPAD_A) && stamina >= 25.0f && enumStatus != PARRY)
 		{
 			switch (attackCombo)
 			{
@@ -321,6 +353,22 @@ void Player::Update()
 			lowStaminaWarningActivation = true;
 		}
 
+		if (input->TriggerMouseMiddle() && enumStatus != ATTACK)
+		{
+			timer = 0.0f;
+			enumStatus = PARRY;
+		}
+
+		if (parryActive && powerRemaining < 100.0f)
+		{
+			powerRemaining += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+			if (powerRemaining >= 100.0f)
+			{
+				parryActive = false;
+			}
+		}
+
 		if (input->TriggerKey(DIK_H) && healRemaining > 0 && enumStatus != HEAL||
 			input->TriggerControllerButton(XINPUT_GAMEPAD_Y) && healRemaining > 0 && enumStatus != HEAL)
 		{
@@ -331,7 +379,7 @@ void Player::Update()
 		if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 			input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != DODGE && enumStatus != HEAL)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != DODGE && enumStatus != HEAL && enumStatus != PARRY)
 			{
 				if (enumStatus == ATTACK)
 				{
@@ -356,7 +404,7 @@ void Player::Update()
 		}
 		else
 		{
-			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL)
+			if (enumStatus != DEAD && enumStatus != DAMAGED && enumStatus != ATTACK && enumStatus != DODGE && enumStatus != HEAL && enumStatus != PARRY)
 			{
 				enumStatus = STAND;
 			}
@@ -422,7 +470,7 @@ void Player::Update()
 										   moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
 										   moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
 						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						if (enumStatus != ATTACK && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
+						if (enumStatus != ATTACK && enumStatus != PARRY && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
 						{
 							enumStatus = RUN;
 						}
@@ -435,7 +483,7 @@ void Player::Update()
 						playerMovement = { moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
 										   moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
 										   moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
-						if (enumStatus != ATTACK && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
+						if (enumStatus != ATTACK && enumStatus != PARRY && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
 						{
 							enumStatus = WALK;
 						}
@@ -638,6 +686,13 @@ void Player::Update()
 		case 10:
 			startFrame = 1141;
 			endFrame = 1299;
+			repeatAnimation = false;
+			isPlay = false;
+			animationSet = true;
+			break;
+		case 11:
+			startFrame = 1301;
+			endFrame = 1339;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
