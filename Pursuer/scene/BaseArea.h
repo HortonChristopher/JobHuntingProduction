@@ -65,6 +65,9 @@ public:
 	void ParticleCreationExplosion(float x, float y, float z, int life, float offset, float start_scale);
 	float Distance(XMFLOAT3 player, XMFLOAT3 center);
 
+	bool DontStackOnTop(XMFLOAT3 enemyPos, XMFLOAT3 playerPos, float collisionRadius);
+	void MoveTowards(float& current, float target, float speed, float elapsedTime);
+
 	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
 
 	void thread1();

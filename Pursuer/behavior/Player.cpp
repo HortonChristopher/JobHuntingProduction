@@ -575,7 +575,7 @@ void Player::Update()
 
 		if (slowMotion)
 		{
-			powerRemaining -= 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			powerRemaining -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 
 		if (lowStaminaWarningActivation)

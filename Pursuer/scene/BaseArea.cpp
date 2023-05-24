@@ -1372,12 +1372,35 @@ void BaseArea::Update()
 	{
 		if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::FLEE && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
 		{
-			if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 4.0f, 4.0f))
+			if (DontStackOnTop(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f))
 			{
-				float x = (playerFBX->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x);
-				float z = (playerFBX->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z);
+				float dx = playerFBX->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
+				float dy = playerFBX->GetPosition().y - baseAreaEnemyFBX[i]->GetPosition().y;
+				float dz = playerFBX->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
 
-				baseAreaEnemyFBX[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x - (9.0f - x)), (baseAreaEnemyFBX[i]->GetPosition().y + 0.5f), (baseAreaEnemyFBX[i]->GetPosition().z - (9.0f - z)) });
+				float length = sqrtf(powf(dx, 2) + powf(dy, 2) + powf(dz, 2));
+
+				if (length > 0.0f)
+				{
+					dx /= length;
+					dy /= length;
+					dz /= length;
+				}
+
+				float newX = playerFBX->GetPosition().x;
+				float newY = playerFBX->GetPosition().y;
+				float newZ = playerFBX->GetPosition().z;
+
+				float elapsedTime = 0.0f;
+
+				while (DontStackOnTop(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f))
+				{
+					playerFBX->MoveTowards(newX, playerFBX->GetPosition().x + dx, 1.0f, elapsedTime);
+					playerFBX->MoveTowards(newY, playerFBX->GetPosition().y + dy, 1.0f, elapsedTime);
+					playerFBX->MoveTowards(newZ, playerFBX->GetPosition().z + dz, 1.0f, elapsedTime);
+					playerFBX->SetPosition({ newX, newY, newZ });
+					elapsedTime += 0.1f;
+				}
 			}
 
 			for (int j = 0; j < numberOfEnemiesTotal; j++)
@@ -1387,13 +1410,36 @@ void BaseArea::Update()
 					continue;
 				}
 
-				if (FBXCollisionDetection(baseAreaEnemyFBX[i]->GetPosition(), baseAreaEnemyFBX[j]->GetPosition(), 4.0f, 4.0f)
+				if (DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)
 					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
 				{
-					float x = (baseAreaEnemyFBX[i]->GetPosition().x - 2.0f - baseAreaEnemyFBX[j]->GetPosition().x);
-					float z = (baseAreaEnemyFBX[i]->GetPosition().z - 2.0f - baseAreaEnemyFBX[j]->GetPosition().z);
+					float dx = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
+					float dy = baseAreaEnemyFBX[j]->GetPosition().y - baseAreaEnemyFBX[i]->GetPosition().y;
+					float dz = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
 
-					baseAreaEnemyFBX[j]->SetPosition({ (baseAreaEnemyFBX[j]->GetPosition().x - (9.0f - x)), (baseAreaEnemyFBX[j]->GetPosition().y + 0.5f), (baseAreaEnemyFBX[j]->GetPosition().z - (9.0f - z)) });
+					float length = sqrtf(powf(dx, 2.0f) + powf(dy, 2.0f) + powf(dz, 2.0f));
+
+					if (length > 0.0f)
+					{
+						dx /= length;
+						dy /= length;
+						dz /= length;
+					}
+
+					float newX = baseAreaEnemyFBX[j]->GetPosition().x;
+					float newY = baseAreaEnemyFBX[j]->GetPosition().y;
+					float newZ = baseAreaEnemyFBX[j]->GetPosition().z;
+
+					float elapsedTime = 0.0f;
+
+					while (DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f))
+					{
+						baseAreaEnemyFBX[j]->MoveTowards(newX, baseAreaEnemyFBX[j]->GetPosition().x + dx, 1.0f, elapsedTime);
+						baseAreaEnemyFBX[j]->MoveTowards(newY, baseAreaEnemyFBX[j]->GetPosition().y + dy, 1.0f, elapsedTime);
+						baseAreaEnemyFBX[j]->MoveTowards(newZ, baseAreaEnemyFBX[j]->GetPosition().z + dz, 1.0f, elapsedTime);
+						baseAreaEnemyFBX[j]->SetPosition({ newX, newY, newZ });
+						elapsedTime += 0.1f;
+					}
 				}
 			}
 		}
@@ -1534,7 +1580,7 @@ void BaseArea::Draw()
 	{
 		healControllerSPRITE->Draw();
 	}
-	for (int i = 0; i < numberOfEnemiesTotal; i++)
+	/*for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (Distance(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition()) < 300.0f)
 		{
@@ -1544,7 +1590,7 @@ void BaseArea::Draw()
 				baseAreaEnemyHPBarSPRITE[i]->Draw();
 			}
 		}
-	}
+	}*/
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (!baseAreaEnemyFBX[i]->dead)
@@ -1696,6 +1742,34 @@ float BaseArea::Distance(XMFLOAT3 player, XMFLOAT3 center)
 	return d;
 }
 
+bool BaseArea::DontStackOnTop(XMFLOAT3 enemyPos, XMFLOAT3 playerPos, float collisionRadius)
+{
+	float dx = playerPos.x - enemyPos.x;
+	float dy = playerPos.y - enemyPos.y;
+	float dz = playerPos.z - enemyPos.z;
+
+	float distance = sqrtf(powf(dx, 2) + powf(dy, 2) + powf(dz, 2));
+
+	return distance <= powf(collisionRadius, 2.0f);
+
+	return false;
+}
+
+void BaseArea::MoveTowards(float& current, float target, float speed, float elapsedTime)
+{
+	float delta = target - current;
+	float step = speed * elapsedTime;
+
+	if (step > abs(delta))
+	{
+		current = target;
+	}
+	else
+	{
+		current += step * (delta < 0 ? -1 : 1);
+	}
+}
+
 XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
 {
 	XMFLOAT3 shakePosition;
@@ -1747,7 +1821,7 @@ void BaseArea::thread1()
 	STBarSPRITE = Sprite::Create(3, { 25.0f, 55.0f });
 	STBarFrameSPRITE = Sprite::Create(4, { 25.0f, 55.0f });
 	slowMotionBarSPRITE = Sprite::Create(19, { 25.0f, 25.0f });
-	slowMotionBarFrameSPRITE = Sprite::Create(20, { 25.0f, 25.0f });
+	slowMotionBarFrameSPRITE = Sprite::Create(4, { 25.0f, 25.0f });
 	baseAreaMissionSPRITE = Sprite::Create(5, { 1150.0f, 100.0f });
 	baseAreaMinimapSPRITE = Sprite::Create(6, { 50.0f , 430.0f });
 	baseAreaMinimapPlayerSPRITE = Sprite::Create(7, { 0.0f, 0.0f });
