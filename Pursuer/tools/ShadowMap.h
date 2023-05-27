@@ -12,15 +12,6 @@
 #include "Input.h"
 #include "GameWindow.h"
 
-enum BLENDTYPE
-{
-	NOBLEND,
-	ALPHA,
-	ADD,
-	SUB,
-	COLORFLIP,
-};
-
 class ShadowMap
 {
 public:

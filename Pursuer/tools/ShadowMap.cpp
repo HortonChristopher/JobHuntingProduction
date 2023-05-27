@@ -57,14 +57,13 @@ void ShadowMap::Initialize()
 {
 	HRESULT result;
 
-	auto heapDesc = DirectXCommon::GetInstance()->GetRTVHeap()->GetDesc();
+	auto heapDesc = DirectXCommon::GetInstance()->GetRtvHeaps()->GetDesc();
 
 	// Use information about the back buffer you are using
 	auto& bbuff = DirectXCommon::GetInstance()->GetBackBuffers()[0];
 	auto resDesc = bbuff->GetDesc();
 	resDesc.Format = DXGI_FORMAT_R32_FLOAT;
-	D3D12_HEAP_PROPERTIES heapProp =
-		CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+	D3D12_HEAP_PROPERTIES heapProp = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
 	resDesc.Height = resourceHeight;
 	resDesc.Width = resourceWidth;
 
