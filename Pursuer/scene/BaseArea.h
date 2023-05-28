@@ -101,10 +101,10 @@ private:
 	Model* extendedGroundMODEL = nullptr;
 
 	// Playable Area Limit
-	float mapBorder = 398.0f;
-	float mapBorderParticles = 100.0f;
-	float mapBorderParticlePosition = 400.0f;
-	float mapBorderVisibleDistance = 25.0f;
+	const float mapBorder = 398.0f;
+	const float mapBorderParticles = 100.0f;
+	const float mapBorderParticlePosition = 400.0f;
+	const float mapBorderVisibleDistance = 25.0f;
 
 	// Attack range visual objects (Debug Use Only)
 	std::array<Object3d*, 11> attackRangeOBJ = { {} }; // 0 = Player; 1 = Enemy1; 2 = Enemy2; 3 = Enemy3; 4 = Enemy4
@@ -118,7 +118,7 @@ private:
 	// Mission sprite for base area
 	Sprite* baseAreaMissionSPRITE = nullptr;
 	bool startMissionSpriteMovement = false;
-	float movementStartZPosition = 600.0f;
+	const float movementStartZPosition = 600.0f;
 	bool xSet = false;
 	bool ySet = false;
 	bool sizeSet = false;
@@ -135,9 +135,9 @@ private:
 	Sprite* loadingBarFrameSPRITE = nullptr;
 	Sprite* staminaWarningSPRITE = nullptr;
 	float staminaSpriteAlpha = 1.0f;
-	float staminaSpriteInteger = 0.8f;
+	const float staminaSpriteInteger = 0.8f;
 	float blinkingStaminaAlpha = 1.0f;
-	float blinkingStaminaSpriteInteger = 2.4f;
+	const float blinkingStaminaSpriteInteger = 2.4f;
 	bool staminaBlinkingEffect = false;
 
 	// Player aspects
@@ -147,8 +147,8 @@ private:
 	float playerInteresectSize = 3.0f;
 
 	// Base area enemy aspects
-	int numberOfEnemiesTotal = 10;
-	int closestEnemyDefaultNumber = 10; // This number should always be equal to numberOfEnemiesTotal
+	const int numberOfEnemiesTotal = 10;
+	const int closestEnemyDefaultNumber = 10; // This number should always be equal to numberOfEnemiesTotal
 	std::array<EnemyHuman*, 10> baseAreaEnemyFBX = { {} };
 	std::array<PlayerPositionObject*, 10> baseAreaEnemyPositionOBJ = { {} };
 	// Base area enemy alive bool
@@ -166,47 +166,47 @@ private:
 															{-210.0f, 20.0f, 0.0f}, // Pair 4
 															{0.0f, 20.0f, 0.0f}, // Pair 5
 															{10.0f, 20.0f, 0.0f}} }; // Pair 5
-	float enemyAggroVisionRange = 80.0f;
-	float maxChargeDistance = 80.0f;
-	float minChargeDistance = 15.0f;
-	float damageAdvantageShortLongRangeBorder = 40.0f;
+	const float enemyAggroVisionRange = 80.0f;
+	const float maxChargeDistance = 80.0f;
+	const float minChargeDistance = 15.0f;
+	const float damageAdvantageShortLongRangeBorder = 40.0f;
 
 	// Player Attack aspects
-	float playerAttackRange = 25.0f;
-	float playerAttackDamage = 1.0f;
-	float playerFirstAttackStartTimer = 54.2f;
-	float playerFirstAttackEndTimer = 62.2f;
-	float playerSecondAttackStartTimer = 90.35f;
-	float playerSecondAttackEndTimer = 98.3f;
-	float playerThirdAttackStartTimer = 152.6f;
-	float playerThirdAttackEndTimer = 160.64f;
-	float playerAttackKnockbackDistance = 180.0f;
-	float playerAttackKnockbackInterval = 60.0f;
-	float playerAttackKnockbackMaxtime = 30.0f;
+	const float playerAttackRange = 25.0f;
+	const float playerAttackDamage = 1.0f;
+	const float playerFirstAttackStartTimer = 54.2f;
+	const float playerFirstAttackEndTimer = 62.2f;
+	const float playerSecondAttackStartTimer = 90.35f;
+	const float playerSecondAttackEndTimer = 98.3f;
+	const float playerThirdAttackStartTimer = 152.6f;
+	const float playerThirdAttackEndTimer = 160.64f;
+	const float playerAttackKnockbackDistance = 180.0f;
+	const float playerAttackKnockbackInterval = 60.0f;
+	const float playerAttackKnockbackMaxtime = 30.0f;
 
 	// Player heal particle aspects
 	int healNumberOfParticles = 180;
-	float healFirstParticleRingTimer = 80.0f;
-	float healSecondParticleRingTimer = 90.0f;
-	float healThirdParticleRingTimer = 100.0f;
+	const float healFirstParticleRingTimer = 80.0f;
+	const float healSecondParticleRingTimer = 90.0f;
+	const float healThirdParticleRingTimer = 100.0f;
 
 	// Enemy Attack aspects
-	float baseAttackRange = 18.0f;
-	float baseAttackDamage = 1.0f;
-	float particleAttackRange = 12.0f;
-	float particleAttackDamage = 3.0f;
-	float particleAttackKnockbackDistance = 60.0f;
-	float landingAttackRange = 24.0f;
-	float landingAttackDamage = 5.0f;
-	float landingAttackKnockbackDistance = 180.0f;
-	float chargeAttackRange = 12.0f;
-	float chargeAttackDamage = 4.0f;
-	float chargeAttackKnockbackDistance = 120.0f;
-	float twoEnemySurroundRange = 24.0f;
-	float twoEnemySurroundDamage = 4.0f;
-	float twoEnemySurroundKnockbackDistance = 120.0f;
-	float knockbackInterval = 60.0f;
-	float knockbackMaxTime = 30.0f;
+	const float baseAttackRange = 18.0f;
+	const float baseAttackDamage = 1.0f;
+	const float particleAttackRange = 12.0f;
+	const float particleAttackDamage = 3.0f;
+	const float particleAttackKnockbackDistance = 60.0f;
+	const float landingAttackRange = 24.0f;
+	const float landingAttackDamage = 5.0f;
+	const float landingAttackKnockbackDistance = 180.0f;
+	const float chargeAttackRange = 12.0f;
+	const float chargeAttackDamage = 4.0f;
+	const float chargeAttackKnockbackDistance = 120.0f;
+	const float twoEnemySurroundRange = 24.0f;
+	const float twoEnemySurroundDamage = 4.0f;
+	const float twoEnemySurroundKnockbackDistance = 120.0f;
+	const float knockbackInterval = 60.0f;
+	const float knockbackMaxTime = 30.0f;
 
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
@@ -219,9 +219,9 @@ private:
 	std::array<bool, 10> isInFront = { {} };
 
 	// Fleeing aspects
-	float fleeHP = 2.0f;
-	float fleeSpeed = 30.0f;
-	float fleeHelpCallRange = 35.0f;
+	const float fleeHP = 2.0f;
+	const float fleeSpeed = 30.0f;
+	const float fleeHelpCallRange = 35.0f;
 
 	// Damage Overlay
 	Sprite* baseAreaDamageOverlaySPRITE = nullptr;
@@ -231,20 +231,20 @@ private:
 	// Screen shake
 	bool screenShake = false;
 	float shakeTimer = 0.0f;
-	float shakeTimerInterval = 60.0f;
-	float maxShakeTimer = 15.0f;
+	const float shakeTimerInterval = 60.0f;
+	const float maxShakeTimer = 15.0f;
 
 	// Base area general aspects
 	bool attacking = false;
 	float attackTime = 0.0f;
 	int enemyDefeated = 0;
-	int clearCondition = 5;
-	float yRotationOffset = 90.0f;
+	const int clearCondition = 5;
+	const float yRotationOffset = 90.0f;
 
 	// Fade in-out sprite
 	Sprite* fadeSPRITE = nullptr;
 	float fadeSpriteALPHA = 1.0f;
-	float fadeSpriteInteger = 0.4f;
+	const float fadeSpriteInteger = 0.4f;
 
 	bool gameStart = false;
 
@@ -255,11 +255,11 @@ private:
 
 	// Used due to heavy loading
 	float startTimer = 0.0f;
-	float startTimerLimit = 220.0f;
-	float startTimerIntegral = 20.0f;
+	const float startTimerLimit = 220.0f;
+	const float startTimerIntegral = 20.0f;
 
 	//Lock on aspects
-	int closestEnemy = 20;
+	const int closestEnemy = 20;
 	bool lockOnSet = false;
 
 	Sprite* slowMotionSPRITE = nullptr;
