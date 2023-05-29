@@ -123,29 +123,29 @@ void Player::Update()
 		}
 		if (dodgeStartPosition.x == 0.0f && dodgeStartPosition.y == 10.0f && dodgeStartPosition.z == 0.0f)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			dodgeStartPosition = position;
 		}
-		dodgeCameraTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		dodgeCameraTime += deltaTimeOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		dodgePosition.x = Easing::EaseInSin(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
 		dodgePosition.y = position.y;
 		dodgePosition.z = Easing::EaseInSin(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
-		if (currentTime > endTime && timer > 0.0f)
+		if (currentTime > endTime && timer > resetTime)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			dodgeStartPosition = { 0.0f, 10.0f, 0.0f };
-			dodgeCameraTime = 0.0f;
+			dodgeCameraTime = resetTime;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		timer += dodgeCameraTime * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		break;
 	case ATTACK:
 		if (animationNo != 7)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			animationNo = 7;
 			animationSet = false;
 		}

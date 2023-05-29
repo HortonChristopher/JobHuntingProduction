@@ -187,10 +187,14 @@ protected:
 	bool isPlay = false;
 	bool repeatAnimation = false;
 
-	float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
-	float speed = 40.0f; // Currently using delta time; 1.0f using frame speed
-	float sprintSpeed = 80.0f; // 1.5f using frame speed
-	float rollSpeed = 45.0f; // 0.75 using frame speed
+	const float rotateSpeed = 1350.0f; // Currently using delta time; 22.5f using frame speed
+	const float speed = 40.0f; // Currently using delta time; 1.0f using frame speed
+	const float sprintSpeed = 80.0f; // 1.5f using frame speed
+	const float rollSpeed = 45.0f; // 0.75 using frame speed
+
+	const float deltaTimeOneSecond = 60.0f;
+	const float resetTime = 0.0f;
+
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
 	bool movementAllowed = false;
