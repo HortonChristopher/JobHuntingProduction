@@ -1062,12 +1062,12 @@ void BaseArea::Update()
 	STBarFrameSPRITE->SetRotation(270.0f);
 	slowMotionBarSPRITE->SetRotation(270.0f);
 	slowMotionBarFrameSPRITE->SetRotation(270.0f);
-	if (playerFBX->stamina < 100.0f && playerFBX->stamina >= 40.0f)
+	if (playerFBX->stamina < playerFBX->staminaMaximum && playerFBX->stamina >= playerFBX->dodgeStaminaNeeded)
 	{
-		staminaSpriteAlpha = 1.0f;
-		blinkingStaminaAlpha = 1.0f;
+		staminaSpriteAlpha = maxAlpha;
+		blinkingStaminaAlpha = maxAlpha;
 	}
-	else if (playerFBX->stamina >= 100.0f)
+	else if (playerFBX->stamina >= playerFBX->staminaMaximum)
 	{
 		staminaSpriteAlpha -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 	}
@@ -1076,26 +1076,26 @@ void BaseArea::Update()
 		if (!staminaBlinkingEffect)
 		{
 			blinkingStaminaAlpha -= blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (blinkingStaminaAlpha <= 0.0f)
+			if (blinkingStaminaAlpha <= minAlpha)
 			{
-				blinkingStaminaAlpha = 0.0f;
+				blinkingStaminaAlpha = minAlpha;
 				staminaBlinkingEffect = true;
 			}
 		}
 		else
 		{
 			blinkingStaminaAlpha += blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (blinkingStaminaAlpha >= 1.0f)
+			if (blinkingStaminaAlpha >= maxAlpha)
 			{
-				blinkingStaminaAlpha = 1.0f;
+				blinkingStaminaAlpha = maxAlpha;
 				staminaBlinkingEffect = false;
 			}
 		}
 	}
 
-	if (playerFBX->powerRemaining < 100.0f)
+	if (playerFBX->powerRemaining < playerFBX->staminaMaximum)
 	{
-		slowMotionSpriteALPHA = 1.0f;
+		slowMotionSpriteALPHA = maxAlpha;
 	}
 	else
 	{

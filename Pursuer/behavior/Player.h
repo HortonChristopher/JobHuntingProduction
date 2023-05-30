@@ -224,4 +224,6 @@ public:
 	bool slowMotion = false;
 	float powerRemaining = 100.0f;
 	bool parryActive = false;
+	const float staminaMaximum = 100.0f;
+	const float dodgeStaminaNeeded = 40.0f;
 };

@@ -139,6 +139,8 @@ private:
 	float blinkingStaminaAlpha = 1.0f;
 	const float blinkingStaminaSpriteInteger = 2.4f;
 	bool staminaBlinkingEffect = false;
+	const float minAlpha = 0.0f;
+	const float maxAlpha = 1.0f;
 
 	// Player aspects
 	Player* playerFBX = nullptr;
