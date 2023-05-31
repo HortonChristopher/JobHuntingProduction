@@ -110,10 +110,14 @@ private:
 	std::array<Object3d*, 11> attackRangeOBJ = { {} }; // 0 = Player; 1 = Enemy1; 2 = Enemy2; 3 = Enemy3; 4 = Enemy4
 	std::array<Object3d*, 10> landingPositionOBJ = { {} }; // Unlike above, no player object needed (players don't have flying attacks)
 	Model* attackRangeMODEL = nullptr;
+	const int attackRangeRadius = 15;
+	const float attackRangeYOffset = 0.5f;
 
 	// Vision range visual objects (Debug Use Only)
 	std::array<Object3d*, 10> enemyVisionRangeOBJ = { {} }; // 0 = Enemy1; 1 = Enemy2; 2 = Enemy3; 3 = Enemy4
 	Model* visionRangeMODEL = nullptr;
+	const int visionRangeRadius = 40;
+	const float visionRangeYOffset = 0.5f;
 
 	// Mission sprite for base area
 	Sprite* baseAreaMissionSPRITE = nullptr;
@@ -192,6 +196,27 @@ private:
 	const float healSecondParticleRingTimer = 90.0f;
 	const float healThirdParticleRingTimer = 100.0f;
 
+	// Particle aspects
+	const int particleLifeStandardPlusHalf = 90;
+	const int particleLifeStandard = 60;
+	const int particleLifeHalf = 30;
+	const int particleHealLife = 10;
+	const float particleAttackOffset = 0.0f;
+	const float particleAttackStartScale = 10.0f;
+	const float landingAttackOffset = 2.0f;
+	const float landingAttackStartScale = 40.0f;
+	const float chargeAttackOffset = 4.0f;
+	const float chargeAttackScale = 30.0f;
+	const float parryParticleOffset = 6.0f;
+	const float parryParticleStartScale = 20.0f;
+	const float playerKnockbackAttackOffset = 5.0f;
+	const float playerKnockbackAttackStartScale = 10.0f;
+	const float healParticleOffset = 0.0f;
+	const float healParticleStartScale = 1.0f;
+	const float healParticleRadius = 10.0f;
+	const float mapBorderParticleOffset = 5.0f;
+	const float mapBorderParticleStartScale = 3.0f;
+
 	// Enemy Attack aspects
 	const float baseAttackRange = 18.0f;
 	const float baseAttackDamage = 1.0f;
@@ -209,6 +234,8 @@ private:
 	const float twoEnemySurroundKnockbackDistance = 120.0f;
 	const float knockbackInterval = 60.0f;
 	const float knockbackMaxTime = 30.0f;
+	const float knockbackYOffset = 3.0f;
+	const float knockbackTimeReset = 0.0f;
 
 	// Base Area minimap
 	Sprite* baseAreaMinimapSPRITE = nullptr;
@@ -235,6 +262,7 @@ private:
 	float shakeTimer = 0.0f;
 	const float shakeTimerInterval = 60.0f;
 	const float maxShakeTimer = 15.0f;
+	const float shakeTimerReset = 0.0f;
 
 	// Base area general aspects
 	bool attacking = false;
@@ -264,6 +292,9 @@ private:
 	const int closestEnemy = 20;
 	bool lockOnSet = false;
 
+	const float deltaTimeOneSecond = 60.0f;
+
+	// Slow Motion aspects
 	Sprite* slowMotionSPRITE = nullptr;
 	Sprite* slowMotionBarSPRITE = nullptr;
 	Sprite* slowMotionBarFrameSPRITE = nullptr;
@@ -277,4 +308,6 @@ public:
 	bool initializeFinished = false;
 	bool deletion = false;
 	int result = 0; // 0 = default, 1 = defeat, 2 = victory
+	const int defeat = 1;
+	const int victory = 2;
 };

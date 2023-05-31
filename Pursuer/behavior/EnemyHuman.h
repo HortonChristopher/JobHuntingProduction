@@ -240,6 +240,7 @@ public:
 	XMFLOAT3 landingAttackPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 frontPatrolPosition = { 0.0f, 0.0f, 0.0f };
 	float HP = 5.0f; // Default 10.0f
+	const float minAliveHP = 1.0f;
 	bool dead = false;
 	bool aggroSet = false;
 	bool modelChange = false;
@@ -249,6 +250,8 @@ public:
 	bool set = false;
 	bool particleAttackActive = false;
 	float attackTimer = 0.0f;
+	const float parryPossibleMin = 43.0f;
+	const float parryPossibleMax = 73.0f;
 	float timer = 179.0f;
 	bool fleeSet = false;
 	bool helpCall = false;
@@ -257,9 +260,14 @@ public:
 	int particleAttackStage = 0;
 	int landingAttackStage = 0;
 	int chargeAttackStage = 0;
+	const int chargeAttackStageReset = 0;
 	int jetStreamAttackStage = 0;
 	int twoEnemySurroundStage = 0;
 	int agrooNumber = 0;
+	const int jetStreamAttackRequiredEnemyNumber = 2;
+	const int jetStreamAttackStageReset = 0;
+	const float timerReset = 0.0f;
+	const int twoEnemySurroundStageReset = 0;
 	bool landed = false;
 	bool landingParticles = false;
 	bool chargeAttackCheck = false;

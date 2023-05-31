@@ -43,19 +43,19 @@ BaseArea::~BaseArea()
 	//safe_delete(attackRangeMODEL);
 	//safe_delete(visionRangeMODEL);
 	safe_delete(skydomeOBJ);
-	for (int i = 0; i < 11; i++) { safe_delete(attackRangeOBJ[i]); }
-	for (int i = 0; i < 10; i++) { safe_delete(enemyVisionRangeOBJ[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal + 1; i++) { safe_delete(attackRangeOBJ[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(enemyVisionRangeOBJ[i]); }
 	safe_delete(playerPositionOBJ);
-	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyPositionOBJ[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(baseAreaEnemyPositionOBJ[i]); }
 	safe_delete(groundOBJ);
 	safe_delete(extendedGroundOBJ);
 	safe_delete(playerFBX);
-	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyFBX[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(baseAreaEnemyFBX[i]); }
 	safe_delete(baseAreaMinimapSPRITE);
 	safe_delete(baseAreaMinimapPlayerSPRITE);
-	for (int i = 0; i < 10; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
-	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyHPBarSPRITE[i]); }
-	for (int i = 0; i < 10; i++) { safe_delete(baseAreaEnemyHPBarFrameSPRITE[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(baseAreaMinimapEnemySPRITE[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(baseAreaEnemyHPBarSPRITE[i]); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(baseAreaEnemyHPBarFrameSPRITE[i]); }
 	safe_delete(baseAreaDamageOverlaySPRITE);
 	audio->StopWave("MainArea.wav");
 }
@@ -152,11 +152,11 @@ void BaseArea::Update()
 	{
 		if (!camera->lockOn && !playerFBX->dodge)
 		{
-			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
 		else if (playerFBX->dodge)
 		{
-			camera->SetTarget({ playerFBX->dodgePosition.x, playerFBX->dodgePosition.y + 15.0f, playerFBX->dodgePosition.z });
+			camera->SetTarget({ playerFBX->dodgePosition.x, playerFBX->dodgePosition.y + playerFBX->playerCameraYOffset, playerFBX->dodgePosition.z });
 		}
 		camera->Update();
 	}
@@ -168,12 +168,12 @@ void BaseArea::Update()
 		{
 			fadeSpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
-			fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+			fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
 
-			if (fadeSpriteALPHA <= 0.0f)
+			if (fadeSpriteALPHA <= minAlpha)
 			{
-				fadeSpriteALPHA = 0.0f;
-				fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
+				fadeSpriteALPHA = minAlpha;
+				fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
 				gameStart = true;
 			}
 		}
@@ -186,14 +186,14 @@ void BaseArea::Update()
 	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > startTimerLimit)
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + deltaTimeOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
 		if (playerFBX->GetPosition().z >= -movementStartZPosition)
 		{
 			startMissionSpriteMovement = true;
 		}
 		if (playerFBX->GetPosition().z >= -mapBorder)
 		{
-			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -398.0f });
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -mapBorder });
 			playerFBX->baseAreaOpeningCutscene = false;
 		}
 	}
@@ -205,12 +205,12 @@ void BaseArea::Update()
 	skydomeOBJ->SetPosition(objectPosition);
 
 #pragma region DebugAttackRange
-	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * 15)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * 15)) });
+	attackRangeOBJ[0]->SetPosition({ (objectPosition.x + (sinf(XMConvertToRadians(objectRotation.y)) * attackRangeRadius)), objectPosition.y + 0.5f, (objectPosition.z + (cosf(XMConvertToRadians(objectRotation.y)) * attackRangeRadius)) });
 	attackRangeOBJ[0]->SetRotation(objectRotation);
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		attackRangeOBJ[i + 1]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 15)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 15)) });
+		attackRangeOBJ[i + 1]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * attackRangeRadius)), baseAreaEnemyFBX[i]->GetPosition().y + attackRangeYOffset, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * attackRangeRadius)) });
 		attackRangeOBJ[i + 1]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
 		landingPositionOBJ[i]->SetPosition(baseAreaEnemyFBX[i]->landingAttackPosition);
 	}
@@ -219,7 +219,7 @@ void BaseArea::Update()
 #pragma region VisionRange
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		enemyVisionRangeOBJ[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 40)), baseAreaEnemyFBX[i]->GetPosition().y + 0.5f, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * 40))});
+		enemyVisionRangeOBJ[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * visionRangeRadius)), baseAreaEnemyFBX[i]->GetPosition().y + visionRangeYOffset, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * visionRangeRadius))});
 		enemyVisionRangeOBJ[i]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
 	}
 #pragma endregion
@@ -346,7 +346,7 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->fleeSet = false;
 			}
 		}
-		else if (agroodEnemies > 2 && baseAreaEnemyFBX[i]->debugJetAttacked == false && baseAreaEnemyFBX[i]->jetStreamCounted == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO)
+		else if (agroodEnemies > baseAreaEnemyFBX[i]->jetStreamAttackRequiredEnemyNumber && baseAreaEnemyFBX[i]->debugJetAttacked == false && baseAreaEnemyFBX[i]->jetStreamCounted == false && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::AGGRO)
 		{
 			debugJetStream++;
 			baseAreaEnemyFBX[i]->jetStreamCounted = true;
@@ -412,12 +412,12 @@ void BaseArea::Update()
 						{
 							if (baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::AGGRO)
 							{
-								baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
-								baseAreaEnemyFBX[i]->timer = 0.0f;
+								baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
+								baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
 								baseAreaEnemyFBX[i]->modelChange = true;
 								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
-								baseAreaEnemyFBX[i + 1]->twoEnemySurroundStage = 0;
-								baseAreaEnemyFBX[i + 1]->timer = 0.0f;
+								baseAreaEnemyFBX[i + 1]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
+								baseAreaEnemyFBX[i + 1]->timer = baseAreaEnemyFBX[i + 1]->timerReset;
 								baseAreaEnemyFBX[i + 1]->modelChange = true;
 								baseAreaEnemyFBX[i + 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
 							}
@@ -430,12 +430,12 @@ void BaseArea::Update()
 						{
 							if (baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::AGGRO)
 							{
-								baseAreaEnemyFBX[i]->twoEnemySurroundStage = 0;
-								baseAreaEnemyFBX[i]->timer = 0.0f;
+								baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
+								baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
 								baseAreaEnemyFBX[i]->modelChange = true;
 								baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
-								baseAreaEnemyFBX[i - 1]->twoEnemySurroundStage = 0;
-								baseAreaEnemyFBX[i - 1]->timer = 0.0f;
+								baseAreaEnemyFBX[i - 1]->twoEnemySurroundStage = baseAreaEnemyFBX[i - 1]->twoEnemySurroundStageReset;
+								baseAreaEnemyFBX[i - 1]->timer = baseAreaEnemyFBX[i - 1]->timerReset;
 								baseAreaEnemyFBX[i - 1]->modelChange = true;
 								baseAreaEnemyFBX[i - 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
 							}
@@ -466,18 +466,18 @@ void BaseArea::Update()
 
 		if (baseAreaEnemyFBX[i]->particleAttackActive)
 		{
-			ParticleCreation(baseAreaEnemyFBX[i]->particleAttackPosition.x, baseAreaEnemyFBX[i]->particleAttackPosition.y, baseAreaEnemyFBX[i]->particleAttackPosition.z, 60, 0.0f, 10.0f);
+			ParticleCreation(baseAreaEnemyFBX[i]->particleAttackPosition.x, baseAreaEnemyFBX[i]->particleAttackPosition.y, baseAreaEnemyFBX[i]->particleAttackPosition.z, particleLifeStandard, particleAttackOffset, particleAttackStartScale);
 		}
 
 		if (baseAreaEnemyFBX[i]->landingParticles)
 		{
-			ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 2.0f, 40.0f);
+			ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, landingAttackOffset, landingAttackStartScale);
 		}
 
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->chargeAttackStage == 1 
 			|| baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 2)
 		{
-			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 30, 4.0f, 30.0f);
+			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
 		}
 
 		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::TWOENEMYSURROUND
@@ -487,14 +487,14 @@ void BaseArea::Update()
 			{
 				if (baseAreaEnemyFBX[i]->nextDegree > (baseAreaEnemyFBX[i]->initialDegree + XMConvertToRadians(90.0f)))
 				{
-					ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 30, 4.0f, 30.0f);
+					ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, chargeAttackOffset, chargeAttackScale);
 				}
 			}
 			else
 			{
 				if (baseAreaEnemyFBX[i]->nextDegree < (baseAreaEnemyFBX[i]->initialDegree - XMConvertToRadians(90.0f)))
 				{
-					ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 30, 4.0f, 30.0f);
+					ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
 				}
 			}
 		}
@@ -521,7 +521,7 @@ void BaseArea::Update()
 		}
 	}
 
-	if (debugJetStream > 2 && enemyDefeated <= clearCondition - 2)
+	if (debugJetStream > baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber && enemyDefeated <= clearCondition - 2)
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
@@ -535,7 +535,7 @@ void BaseArea::Update()
 				&& enemyDefeated <= (clearCondition - 2))
 			{
 				baseAreaEnemyFBX[i]->debugJetAttacked = true;
-				baseAreaEnemyFBX[i]->jetStreamAttackStage = 0;
+				baseAreaEnemyFBX[i]->jetStreamAttackStage = baseAreaEnemyFBX[i]->jetStreamAttackStageReset;
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::JETSTREAMATTACK);
 			}
 		}
@@ -547,10 +547,10 @@ void BaseArea::Update()
 		if (intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange) && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[i]->attackDamagePossible && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
-			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlaySpriteALPHA = maxAlpha;
 			damageOverlayDisplay = true;
 			screenShake = true;
-			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
 			playerFBX->hp -= baseAttackDamage;
 			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
@@ -559,10 +559,10 @@ void BaseArea::Update()
 		if (intersect(baseAreaEnemyFBX[i]->particleAttackPosition, playerFBX->GetPosition(), playerInteresectSize, particleAttackRange, particleAttackRange) && baseAreaEnemyFBX[i]->particleAttackActive && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
-			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlaySpriteALPHA = maxAlpha;
 			damageOverlayDisplay = true;
 			screenShake = true;
-			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
 			playerFBX->hp -= particleAttackDamage;
 			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
@@ -572,10 +572,10 @@ void BaseArea::Update()
 		if (intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, twoEnemySurroundRange, twoEnemySurroundRange) && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::TWOENEMYSURROUND && baseAreaEnemyFBX[i]->twoEnemySurroundStage == 1 && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
-			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlaySpriteALPHA = maxAlpha;
 			damageOverlayDisplay = true;
 			screenShake = true;
-			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
 			playerFBX->hp -= twoEnemySurroundDamage;
 			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
@@ -585,10 +585,10 @@ void BaseArea::Update()
 		if (intersect(baseAreaEnemyFBX[i]->landingAttackPosition, playerFBX->GetPosition(), playerInteresectSize, landingAttackRange, landingAttackRange) && baseAreaEnemyFBX[i]->landingParticles && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
-			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlaySpriteALPHA = maxAlpha;
 			damageOverlayDisplay = true;
 			screenShake = true;
-			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
 			playerFBX->hp -= landingAttackDamage;
 			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
@@ -599,10 +599,10 @@ void BaseArea::Update()
 			|| intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, chargeAttackRange, chargeAttackRange) && baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 2 && baseAreaEnemyFBX[i]->ableToDamage)
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
-			damageOverlaySpriteALPHA = 1.0f;
+			damageOverlaySpriteALPHA = maxAlpha;
 			damageOverlayDisplay = true;
 			screenShake = true;
-			baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+			baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
 			playerFBX->hp -= chargeAttackDamage;
 			playerFBX->damageAdvantage = true;
 			playerFBX->SetEnumStatus(Player::DAMAGED);
@@ -618,41 +618,41 @@ void BaseArea::Update()
 			{
 				playerFBX->SetPosition({
 					knockbackPrevPosition.x -= particleAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.y += knockbackYOffset,
 					knockbackPrevPosition.z -= particleAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
 			{
 				playerFBX->SetPosition({
 					knockbackPrevPosition.x -= landingAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.y += knockbackYOffset,
 					knockbackPrevPosition.z -= landingAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::CHARGEATTACK)
 			{
 				playerFBX->SetPosition({
 					knockbackPrevPosition.x += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.y += knockbackYOffset,
 					knockbackPrevPosition.z += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK)
 			{
 				playerFBX->SetPosition({
 					knockbackPrevPosition.x += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.y += knockbackYOffset,
 					knockbackPrevPosition.z += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::TWOENEMYSURROUND)
 			{
 				playerFBX->SetPosition({
 					knockbackPrevPosition.x += twoEnemySurroundKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-					knockbackPrevPosition.y += 3.0f,
+					knockbackPrevPosition.y += knockbackYOffset,
 					knockbackPrevPosition.z += twoEnemySurroundKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 			}
 			knockbackTime += knockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			if (knockbackTime >= knockbackMaxTime)
 			{
-				knockbackTime = 0.0f;
+				knockbackTime = knockbackTimeReset;
 				knockback = false;
 			}
 		}
@@ -672,13 +672,13 @@ void BaseArea::Update()
 				float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
 				if (distance < damageAdvantageShortLongRangeBorder)
 				{
-					baseAreaEnemyFBX[i]->chargeAttackStage = 0;
+					baseAreaEnemyFBX[i]->chargeAttackStage = baseAreaEnemyFBX[i]->chargeAttackStageReset;
 					baseAreaEnemyFBX[i]->modelChange = true;
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
 				}
 				else
 				{
-					baseAreaEnemyFBX[i]->landingAttackStage = 0;
+					baseAreaEnemyFBX[i]->landingAttackStage = baseAreaEnemyFBX[i]->chargeAttackStageReset;
 					baseAreaEnemyFBX[i]->modelChange = true;
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
 				}
@@ -688,33 +688,33 @@ void BaseArea::Update()
 
 	playerFBX->damageAdvantage = false;
 
-	if (playerFBX->hp <= 0.0f)
+	if (playerFBX->hp <= playerFBX->defeatHP)
 	{
-		playerFBX->hp = 0.0f;
+		playerFBX->hp = playerFBX->defeatHP;
 		playerFBX->SetEnumStatus(Player::DEAD);
 	}
 	
 	if (playerFBX->isPlayerDead)
 	{
 		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
-		if (fadeSpriteALPHA >= 1.0f)
+		fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
+		if (fadeSpriteALPHA >= maxAlpha)
 		{
-			fadeSpriteALPHA = 1.0f;
+			fadeSpriteALPHA = maxAlpha;
 			audio->StopWave("MainArea.wav");
-			result = 1;
+			result = defeat;
 			deletion = true;
 		}
 	}
 
 	if (screenShake)
 	{
-		camera->SetTarget(ScreenShake({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z }));
+		camera->SetTarget(ScreenShake({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z }));
 		camera->Update();
 		shakeTimer += shakeTimerInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		if (shakeTimer >= maxShakeTimer)
 		{
-			shakeTimer = 0.0f;
+			shakeTimer = shakeTimerReset;
 			screenShake = false;
 		}
 	}
@@ -726,8 +726,8 @@ void BaseArea::Update()
 		{
 			damageOverlaySpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
-		baseAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
-		if (damageOverlaySpriteALPHA <= 0.0f)
+		baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
+		if (damageOverlaySpriteALPHA <= minAlpha)
 		{
 			damageOverlayDisplay = false;
 		}
@@ -742,14 +742,14 @@ void BaseArea::Update()
 			if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange) &&
 				intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange) && baseAreaEnemyAliveBOOL[i] == true)
 			{
-				if (baseAreaEnemyFBX[i]->attackTimer > 43.0f && baseAreaEnemyFBX[i]->attackTimer < 73.0f)
+				if (baseAreaEnemyFBX[i]->attackTimer > baseAreaEnemyFBX[i]->parryPossibleMin && baseAreaEnemyFBX[i]->attackTimer < baseAreaEnemyFBX[i]->parryPossibleMax)
 				{
-					baseAreaEnemyFBX[i]->timer = 0.0f;
-					baseAreaEnemyFBX[i]->attackTimer = 0.0f;
+					baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
+					baseAreaEnemyFBX[i]->attackTimer = baseAreaEnemyFBX[i]->timerReset;
 					baseAreaEnemyFBX[i]->attackAnimation = false;
 					baseAreaEnemyFBX[i]->modelChange = true;
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
-					ParticleCreationExplosion((playerFBX->GetPosition().x + baseAreaEnemyFBX[i]->GetPosition().x) / 2.0f, (playerFBX->GetPosition().y + baseAreaEnemyFBX[i]->GetPosition().y) / 2.0f, (playerFBX->GetPosition().z + baseAreaEnemyFBX[i]->GetPosition().z) / 2.0f, 60, 6.0f, 20.0f);
+					ParticleCreationExplosion((playerFBX->GetPosition().x + baseAreaEnemyFBX[i]->GetPosition().x) / 2.0f, (playerFBX->GetPosition().y + baseAreaEnemyFBX[i]->GetPosition().y) / 2.0f, (playerFBX->GetPosition().z + baseAreaEnemyFBX[i]->GetPosition().z) / 2.0f, particleLifeStandard, parryParticleOffset, parryParticleStartScale);
 					playerFBX->parryActive = true;
 				}
 			}
@@ -772,34 +772,36 @@ void BaseArea::Update()
 						baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
 						if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 						{
-							enemyKnockbackTime = 0.0f;
+							enemyKnockbackTime = knockbackTimeReset;
 							enemyKnockback = true;
 						}
 
-						if (baseAreaEnemyFBX[i]->HP < 0.9f)
+						if (baseAreaEnemyFBX[i]->HP < baseAreaEnemyFBX[i]->minAliveHP)
 						{
 							baseAreaEnemyAliveBOOL[i] = false;
 							enemyDefeated++;
 							agroodEnemies--;
 							baseAreaEnemyFBX[i]->dead = true;
 							baseAreaEnemyFBX[i]->modelChange = true;
-							baseAreaEnemyRespawnTimerFLOAT[i] = 600;
+							//baseAreaEnemyRespawnTimerFLOAT[i] = 600;
 							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
 						}
 						else
 						{
-							baseAreaEnemyFBX[i]->timer = 0.0f;
+							baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
 							baseAreaEnemyFBX[i]->modelChange = true;
 							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
 						}
+
 						if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 						{
-							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 90, 5.0f, 20.0f);
+							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandardPlusHalf, playerKnockbackAttackOffset, playerKnockbackAttackStartScale * 2.0f);
 						}
 						else
 						{
-							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, 60, 5.0f, 10.0f);
+							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, playerKnockbackAttackOffset, playerKnockbackAttackStartScale);
 						}
+
 						playerFBX->ableToDamage = false;
 					}
 				}
@@ -815,12 +817,12 @@ void BaseArea::Update()
 				float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
 				baseAreaEnemyFBX[i]->SetPosition({
 						knockbackPrevPosition.x -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-						knockbackPrevPosition.y += 3.0f,
+						knockbackPrevPosition.y += knockbackYOffset,
 						knockbackPrevPosition.z -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
 				enemyKnockbackTime += playerAttackKnockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 				if (enemyKnockbackTime >= playerAttackKnockbackMaxtime)
 				{
-					enemyKnockbackTime = 0.0f;
+					enemyKnockbackTime = knockbackTimeReset;
 					enemyKnockback = false;
 				}
 			}
@@ -835,7 +837,7 @@ void BaseArea::Update()
 	else
 	{
 		playerFBX->ableToDamage = true;
-		playerFBX->attackCombo = 0;
+		playerFBX->attackCombo = playerFBX->attackComboReset;
 	}
 	
 #pragma endregion
@@ -847,27 +849,27 @@ void BaseArea::Update()
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
-				ParticleCreationHeal(playerFBX->healParticlePosition[0].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+				ParticleCreationHeal(playerFBX->healParticlePosition[0].x + cosf(XMConvertToRadians(i * 2.0f)) * healParticleRadius,
 					playerFBX->healParticlePosition[0].y,
-					playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
 		if (playerFBX->timer >= healSecondParticleRingTimer)
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
-				ParticleCreationHeal(playerFBX->healParticlePosition[1].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+				ParticleCreationHeal(playerFBX->healParticlePosition[1].x + cosf(XMConvertToRadians(i * 2.0f)) * healParticleRadius,
 					playerFBX->healParticlePosition[1].y,
-					playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
 		if (playerFBX->timer >= healThirdParticleRingTimer)
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
-				ParticleCreationHeal(playerFBX->healParticlePosition[2].x + cosf(XMConvertToRadians(i * 2.0f)) * 10.0f,
+				ParticleCreationHeal(playerFBX->healParticlePosition[2].x + cosf(XMConvertToRadians(i * 2.0f)) * healParticleRadius,
 					playerFBX->healParticlePosition[2].y,
-					playerFBX->healParticlePosition[2].z + sinf(XMConvertToRadians(i * 2.0f)) * 10.0f, 10, 0.0f, 1.0f);
+					playerFBX->healParticlePosition[2].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
 	}
@@ -898,12 +900,12 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
 		}
 		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteALPHA });
-		if (fadeSpriteALPHA >= 1.0f)
+		fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
+		if (fadeSpriteALPHA >= maxAlpha)
 		{
-			fadeSpriteALPHA = 1.0f;
+			fadeSpriteALPHA = maxAlpha;
 			audio->StopWave("MainArea.wav");
-			result = 2;
+			result = victory;
 			deletion = true;
 		}
 	}
@@ -915,45 +917,45 @@ void BaseArea::Update()
 		if (playerFBX->GetPosition().x > mapBorder)
 		{
 			playerFBX->SetPosition({ mapBorder, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
-			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
 		else if (playerFBX->GetPosition().x < -mapBorder)
 		{
 			playerFBX->SetPosition({ -mapBorder, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
-			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
 
 		if (playerFBX->GetPosition().z > mapBorder)
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, mapBorder });
-			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
 		else if (playerFBX->GetPosition().z < -mapBorder)
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -mapBorder });
-			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
 
 		for (float i = 0.0f; i < mapBorderParticles; i++)
 		{
 			if (Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, -mapBorderParticlePosition}) <= mapBorderVisibleDistance)
 			{
-				ParticleCreationEdge(-mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, -mapBorderParticlePosition, 30, 5.0f, 3.0f);
+				ParticleCreationEdge(-mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, -mapBorderParticlePosition, particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 
 			if (Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, mapBorderParticlePosition }) <= mapBorderVisibleDistance)
 			{
-				ParticleCreationEdge(-mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, mapBorderParticlePosition, 30, 5.0f, 3.0f);
+				ParticleCreationEdge(-mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, mapBorderParticlePosition, particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 
 			if (Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i) }) <= mapBorderVisibleDistance)
 			{
-				ParticleCreationEdge(-mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i), 30, 5.0f, 3.0f);
+				ParticleCreationEdge(-mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i), particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 
 			if (Distance(playerFBX->GetPosition(), { mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i) }) <= mapBorderVisibleDistance)
 			{
-				ParticleCreationEdge(mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i), 30, 5.0f, 3.0f);
+				ParticleCreationEdge(mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i), particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 		}
 	}

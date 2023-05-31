@@ -208,7 +208,9 @@ public:
 	bool baseAreaOpeningCutscene = true;
 	float stamina = 100.0f;
 	float hp = 25.0f; // Base of 25.0f
+	const float defeatHP = 0.0f;
 	int attackCombo = 0; // Which attack the animation stops at
+	const int attackComboReset = 0;
 	int healRemaining = 4;
 	bool healed = false;
 	std::array<XMFLOAT3, 3> healParticlePosition = { {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} }};
@@ -226,4 +228,5 @@ public:
 	bool parryActive = false;
 	const float staminaMaximum = 100.0f;
 	const float dodgeStaminaNeeded = 40.0f;
+	const float playerCameraYOffset = 15.0f;
 };
