@@ -289,7 +289,7 @@ private:
 	const float startTimerIntegral = 20.0f;
 
 	//Lock on aspects
-	const int closestEnemy = 20;
+	int closestEnemy = 20;
 	bool lockOnSet = false;
 
 	const float deltaTimeOneSecond = 60.0f;
