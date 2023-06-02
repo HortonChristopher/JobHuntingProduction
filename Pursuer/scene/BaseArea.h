@@ -126,6 +126,13 @@ private:
 	bool xSet = false;
 	bool ySet = false;
 	bool sizeSet = false;
+	const XMFLOAT2 initialBaseAreaMissionSpritePosition = { 100.0f, 50.0f };
+	const XMFLOAT2 initialBaseAreaMissionSpriteSize = { 1080.0f, 620.0f };
+	const XMFLOAT2 targetBaseAreaMissionSpritePosition = { 1150.0f, 100.0f };
+	const XMFLOAT2 targetBaseAreaMissionSpriteSize = { 100.0f, 80.0f };
+	const float baseAreaMissionSpriteMovementSpeed = 360.0f;
+	const XMFLOAT2 baseAreaMissionSpriteSizeSpeed = { 360.0f, 180.0f };
+	const XMFLOAT2 missionTrackerPosition = { 1173.0f, 160.0f };
 
 	// HP and Stamina Bar Sprites
 	Sprite* HPBarSPRITE = nullptr;
@@ -145,6 +152,14 @@ private:
 	bool staminaBlinkingEffect = false;
 	const float minAlpha = 0.0f;
 	const float maxAlpha = 1.0f;
+	const float HPBarSpriteMultiplier = 20.0f;
+	const XMFLOAT2 HPBarSpriteSize = { 25.0f * 20.0f, 40.0f };
+	const XMFLOAT2 STBarSpriteSize = { 50.0f, 20.0f };
+	const XMFLOAT2 lockOnSTBarPosition = { 720.0f, 480.0f };
+	const XMFLOAT2 lockOnSTWarningPosition = { 720.0f, 490.0f };
+	const XMFLOAT2 standardSTBarPosition = { 720.0f, 380.0f };
+	const XMFLOAT2 standardSTWarningPosition = { 720.0f, 390.0f };
+	const float STBarRotation = 270.0f;
 
 	// Player aspects
 	Player* playerFBX = nullptr;
@@ -195,12 +210,14 @@ private:
 	const float healFirstParticleRingTimer = 80.0f;
 	const float healSecondParticleRingTimer = 90.0f;
 	const float healThirdParticleRingTimer = 100.0f;
+	const XMFLOAT2 healTrackerPosition = { 1182.0f, 614.0f };
 
 	// Particle aspects
 	const int particleLifeStandardPlusHalf = 90;
 	const int particleLifeStandard = 60;
 	const int particleLifeHalf = 30;
 	const int particleHealLife = 10;
+	const int particleSprintLife = 10;
 	const float particleAttackOffset = 0.0f;
 	const float particleAttackStartScale = 10.0f;
 	const float landingAttackOffset = 2.0f;
@@ -216,6 +233,8 @@ private:
 	const float healParticleRadius = 10.0f;
 	const float mapBorderParticleOffset = 5.0f;
 	const float mapBorderParticleStartScale = 3.0f;
+	const float sprintParticleOffset = 1.0f;
+	const float sprintParticleStartScale = 1.0f;
 
 	// Enemy Attack aspects
 	const float baseAttackRange = 18.0f;
@@ -241,6 +260,8 @@ private:
 	Sprite* baseAreaMinimapSPRITE = nullptr;
 	Sprite* baseAreaMinimapPlayerSPRITE = nullptr;
 	std::array<Sprite*, 10> baseAreaMinimapEnemySPRITE = { {} };
+	const float minimapSpriteMultiplier = 0.3f;
+	const XMFLOAT2 minimapSpriteOffset = { 165.0f, 545.0f };
 
 	// Base Area enemy HP bar
 	std::array<Sprite*, 10> baseAreaEnemyHPBarSPRITE = { {} };
@@ -289,7 +310,7 @@ private:
 	const float startTimerIntegral = 20.0f;
 
 	//Lock on aspects
-	const int closestEnemy = 20;
+	int closestEnemy = 20;
 	bool lockOnSet = false;
 
 	const float deltaTimeOneSecond = 60.0f;
@@ -299,8 +320,13 @@ private:
 	Sprite* slowMotionBarSPRITE = nullptr;
 	Sprite* slowMotionBarFrameSPRITE = nullptr;
 	float slowMotionSpriteALPHA = 0.0f;
+	const XMFLOAT2 slowMotionSpriteBarSize = { 50.0f, 20.0f };
+	const XMFLOAT2 lockOnSlowMotionSpritePosition = { 745.0f, 480.0f };
+	const XMFLOAT2 standardSlowMotionSpritePosition = { 745.0f, 380.0f };
+	const float lockOnRotation = 270.0f;
 
 	int oddEven = 1;
+	
 
 	bool firstRun = true;
 public:

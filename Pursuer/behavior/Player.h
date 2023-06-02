@@ -225,8 +225,10 @@ public:
 	float cameraMoveCounter = 0.0f;
 	bool slowMotion = false;
 	float powerRemaining = 100.0f;
+	const float powerMinimum = 0.0f;
 	bool parryActive = false;
 	const float staminaMaximum = 100.0f;
+	const float staminaMinimum = 0.0f;
 	const float dodgeStaminaNeeded = 40.0f;
 	const float playerCameraYOffset = 15.0f;
 };

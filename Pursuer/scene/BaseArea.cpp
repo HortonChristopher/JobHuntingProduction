@@ -964,106 +964,105 @@ void BaseArea::Update()
 #pragma region HPSTUpdates
 	if (!startMissionSpriteMovement)
 	{
-		baseAreaMissionSPRITE->SetPosition({ 100.0f, 50.0f });
-		baseAreaMissionSPRITE->SetSize({ 1080.0f, 620.0f });
+		baseAreaMissionSPRITE->SetPosition({ initialBaseAreaMissionSpritePosition.x, initialBaseAreaMissionSpritePosition.y });
+		baseAreaMissionSPRITE->SetSize({ initialBaseAreaMissionSpriteSize.x, initialBaseAreaMissionSpriteSize.y });
 	}
 	else
 	{
 		if (!xSet || !ySet)
 		{
-			float x = (1150.0f - baseAreaMissionSPRITE->GetPosition().x);
-			float y = (100.0f - baseAreaMissionSPRITE->GetPosition().y);
+			float x = (targetBaseAreaMissionSpritePosition.x - baseAreaMissionSPRITE->GetPosition().x);
+			float y = (targetBaseAreaMissionSpritePosition.y - baseAreaMissionSPRITE->GetPosition().y);
 			float hypotenuse = sqrtf((x * x) + (y * y));
-			/*x = (1150.0f - baseAreaMissionSPRITE->GetPosition().x) / 2.0f;
-			y = (100.0f - baseAreaMissionSPRITE->GetPosition().y) / 30.0f;*/
+			
 			XMFLOAT2 newMissionPosition = baseAreaMissionSPRITE->GetPosition();
-			if (baseAreaMissionSPRITE->GetPosition().x < 1150.0f)
+			if (baseAreaMissionSPRITE->GetPosition().x < targetBaseAreaMissionSpritePosition.x)
 			{
-				newMissionPosition.x += 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				newMissionPosition.x += baseAreaMissionSpriteMovementSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
 			}
-			if (baseAreaMissionSPRITE->GetPosition().y < 100.0f)
+			if (baseAreaMissionSPRITE->GetPosition().y < targetBaseAreaMissionSpritePosition.y)
 			{
-				newMissionPosition.y += 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+				newMissionPosition.y += baseAreaMissionSpriteMovementSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 			}
 			baseAreaMissionSPRITE->SetPosition(newMissionPosition);
 		}
 		else
 		{
-			baseAreaMissionSPRITE->SetPosition({ 1150.0f, 100.0f });
+			baseAreaMissionSPRITE->SetPosition({ targetBaseAreaMissionSpritePosition.x, targetBaseAreaMissionSpritePosition.y });
 		}
 
 		if (!sizeSet)
 		{
 			XMFLOAT2 missionSpriteSize = baseAreaMissionSPRITE->GetSize();
-			if (baseAreaMissionSPRITE->GetSize().x > 100.0f)
+			if (baseAreaMissionSPRITE->GetSize().x > targetBaseAreaMissionSpriteSize.x)
 			{
-				missionSpriteSize.x -= 360.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				missionSpriteSize.x -= baseAreaMissionSpriteSizeSpeed.x * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
-			if (baseAreaMissionSPRITE->GetSize().y > 80.0f)
+			if (baseAreaMissionSPRITE->GetSize().y > targetBaseAreaMissionSpriteSize.y)
 			{
-				missionSpriteSize.y -= 180.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				missionSpriteSize.y -= baseAreaMissionSpriteSizeSpeed.y * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 			baseAreaMissionSPRITE->SetSize(missionSpriteSize);
 		}
 		else
 		{
-			baseAreaMissionSPRITE->SetSize({ 100.0f, 80.0f });
+			baseAreaMissionSPRITE->SetSize({ targetBaseAreaMissionSpriteSize.x, targetBaseAreaMissionSpriteSize.y });
 		}
 
-		if (baseAreaMissionSPRITE->GetPosition().x >= 1150.0f)
+		if (baseAreaMissionSPRITE->GetPosition().x >= targetBaseAreaMissionSpritePosition.x)
 		{
-			baseAreaMissionSPRITE->SetPosition({ 1150.0f, baseAreaMissionSPRITE->GetPosition().y });
+			baseAreaMissionSPRITE->SetPosition({ targetBaseAreaMissionSpritePosition.x, baseAreaMissionSPRITE->GetPosition().y });
 			xSet = true;
 		}
-		if (baseAreaMissionSPRITE->GetPosition().y >= 100.0f)
+		if (baseAreaMissionSPRITE->GetPosition().y >= targetBaseAreaMissionSpritePosition.y)
 		{
-			baseAreaMissionSPRITE->SetPosition({ baseAreaMissionSPRITE->GetPosition().x, 100.0f });
+			baseAreaMissionSPRITE->SetPosition({ baseAreaMissionSPRITE->GetPosition().x, targetBaseAreaMissionSpritePosition.y });
 			ySet = true;
 		}
 
-		if (baseAreaMissionSPRITE->GetSize().x <= 100.0f || baseAreaMissionSPRITE->GetSize().y <= 80.0f)
+		if (baseAreaMissionSPRITE->GetSize().x <= targetBaseAreaMissionSpriteSize.x || baseAreaMissionSPRITE->GetSize().y <= targetBaseAreaMissionSpriteSize.y)
 		{
-			if (baseAreaMissionSPRITE->GetSize().x <= 100.0f)
+			if (baseAreaMissionSPRITE->GetSize().x <= targetBaseAreaMissionSpriteSize.x)
 			{
-				baseAreaMissionSPRITE->SetSize({ 100.0f, baseAreaMissionSPRITE->GetSize().y });
+				baseAreaMissionSPRITE->SetSize({ targetBaseAreaMissionSpriteSize.x, baseAreaMissionSPRITE->GetSize().y });
 			}
-			if (baseAreaMissionSPRITE->GetSize().y <= 80.0f)
+			if (baseAreaMissionSPRITE->GetSize().y <= targetBaseAreaMissionSpriteSize.y)
 			{
-				baseAreaMissionSPRITE->SetSize({ baseAreaMissionSPRITE->GetSize().x, 80.0f });
+				baseAreaMissionSPRITE->SetSize({ baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.y });
 			}
 
-			if (baseAreaMissionSPRITE->GetSize().x <= 100.0f && baseAreaMissionSPRITE->GetSize().y <= 80.0f)
+			if (baseAreaMissionSPRITE->GetSize().x <= targetBaseAreaMissionSpriteSize.x && baseAreaMissionSPRITE->GetSize().y <= targetBaseAreaMissionSpriteSize.y)
 			{
 				sizeSet = true;
 			}
 		}
 	}
-	HPBarSPRITE->SetSize({ playerFBX->hp * 20.0f, 40.0f });
-	HPBarFrameSPRITE->SetSize({ 25.0f * 20.0f, 40.0f });
-	STBarSPRITE->SetSize({ playerFBX->stamina / 2.0f, 20.0f });
-	STBarFrameSPRITE->SetSize({ 50.0f, 20.0f });
-	slowMotionBarSPRITE->SetSize({ playerFBX->powerRemaining / 2.0f, 20.0f });
-	slowMotionBarFrameSPRITE->SetSize({ 50.0f, 20.0f });
+	HPBarSPRITE->SetSize({ playerFBX->hp * HPBarSpriteMultiplier, HPBarSpriteSize.y });
+	HPBarFrameSPRITE->SetSize(HPBarSpriteSize);
+	STBarSPRITE->SetSize({ playerFBX->stamina / 2.0f, STBarSpriteSize.y });
+	STBarFrameSPRITE->SetSize(STBarSpriteSize);
+	slowMotionBarSPRITE->SetSize({ playerFBX->powerRemaining / 2.0f, slowMotionSpriteBarSize.y });
+	slowMotionBarFrameSPRITE->SetSize(slowMotionSpriteBarSize);
 	if (camera->lockOn)
 	{
-		STBarSPRITE->SetPosition({ 720.0f, 480.0f });
-		STBarFrameSPRITE->SetPosition({ 720.0f, 480.0f });
-		staminaWarningSPRITE->SetPosition({ 720.0f, 490.0f });
-		slowMotionBarSPRITE->SetPosition({ 745.0f, 480.0f });
-		slowMotionBarFrameSPRITE->SetPosition({ 745.0f, 480.0f });
+		STBarSPRITE->SetPosition(lockOnSTBarPosition);
+		STBarFrameSPRITE->SetPosition(lockOnSTBarPosition);
+		staminaWarningSPRITE->SetPosition(lockOnSTWarningPosition);
+		slowMotionBarSPRITE->SetPosition(lockOnSlowMotionSpritePosition);
+		slowMotionBarFrameSPRITE->SetPosition(lockOnSlowMotionSpritePosition);
 	}
 	else
 	{
-		STBarSPRITE->SetPosition({ 720.0f, 380.0f });
-		STBarFrameSPRITE->SetPosition({ 720.0f, 380.0f });
-		staminaWarningSPRITE->SetPosition({ 720.0f, 390.0f });
-		slowMotionBarSPRITE->SetPosition({ 745.0f, 380.0f });
-		slowMotionBarFrameSPRITE->SetPosition({ 745.0f, 380.0f });
+		STBarSPRITE->SetPosition(standardSTBarPosition);
+		STBarFrameSPRITE->SetPosition(standardSTBarPosition);
+		staminaWarningSPRITE->SetPosition(standardSTWarningPosition);
+		slowMotionBarSPRITE->SetPosition(standardSlowMotionSpritePosition);
+		slowMotionBarFrameSPRITE->SetPosition(standardSlowMotionSpritePosition);
 	}
-	STBarSPRITE->SetRotation(270.0f);
-	STBarFrameSPRITE->SetRotation(270.0f);
-	slowMotionBarSPRITE->SetRotation(270.0f);
-	slowMotionBarFrameSPRITE->SetRotation(270.0f);
+	STBarSPRITE->SetRotation(STBarRotation);
+	STBarFrameSPRITE->SetRotation(STBarRotation);
+	slowMotionBarSPRITE->SetRotation(lockOnRotation);
+	slowMotionBarFrameSPRITE->SetRotation(lockOnRotation);
 	if (playerFBX->stamina < playerFBX->staminaMaximum && playerFBX->stamina >= playerFBX->dodgeStaminaNeeded)
 	{
 		staminaSpriteAlpha = maxAlpha;
@@ -1104,32 +1103,33 @@ void BaseArea::Update()
 		slowMotionSpriteALPHA -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 	}
 
-	STBarSPRITE->SetColor({ 1.0f, blinkingStaminaAlpha, blinkingStaminaAlpha, staminaSpriteAlpha });
-	STBarFrameSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, staminaSpriteAlpha });
-	slowMotionBarSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, slowMotionSpriteALPHA });
-	slowMotionBarFrameSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, slowMotionSpriteALPHA });
+	STBarSPRITE->SetColor({ maxAlpha, blinkingStaminaAlpha, blinkingStaminaAlpha, staminaSpriteAlpha });
+	STBarFrameSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, staminaSpriteAlpha });
+	slowMotionBarSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, slowMotionSpriteALPHA });
+	slowMotionBarFrameSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, slowMotionSpriteALPHA });
 
-	if (staminaSpriteAlpha <= 0.0f)
+	if (staminaSpriteAlpha <= minAlpha)
 	{
-		staminaSpriteAlpha = 0.0f;
+		staminaSpriteAlpha = minAlpha;
 	}
 
-	if (slowMotionSpriteALPHA <= 0.0f)
+	if (slowMotionSpriteALPHA <= minAlpha)
 	{
-		slowMotionSpriteALPHA = 0.0f;
+		slowMotionSpriteALPHA = minAlpha;
 	}
 
-	staminaWarningSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, playerFBX->staminaWarningSpriteAlpha });
+	staminaWarningSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, playerFBX->staminaWarningSpriteAlpha });
 
-	if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && playerFBX->stamina > 0.0f)
+	if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > playerFBX->staminaMinimum || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && playerFBX->stamina > playerFBX->staminaMinimum)
 	{
-		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, 10, -1.0f, 1.0f);
+		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, particleSprintLife, -sprintParticleOffset, sprintParticleStartScale);
 	}
 
-	if (input->PushKey(DIK_CAPSLOCK) && playerFBX->powerRemaining >= 0.0f)
+	if (input->PushKey(DIK_CAPSLOCK) && playerFBX->powerRemaining >= playerFBX->powerMinimum)
 	{
 		playerFBX->slowMotion = true;
-		for (int i = 0; i < 10; i++)
+
+		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
 			baseAreaEnemyFBX[i]->slowMotion = true;
 		}
@@ -1137,7 +1137,8 @@ void BaseArea::Update()
 	else
 	{
 		playerFBX->slowMotion = false;
-		for (int i = 0; i < 10; i++)
+
+		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
 			baseAreaEnemyFBX[i]->slowMotion = false;
 		}
@@ -1145,10 +1146,11 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region minimapUpdates
-	baseAreaMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * 0.3f + 165.0f, playerFBX->GetPosition().z * 0.3f + 545.0f});
+	baseAreaMinimapPlayerSPRITE->SetPosition({ playerFBX->GetPosition().x * minimapSpriteMultiplier + minimapSpriteOffset.x, playerFBX->GetPosition().z * minimapSpriteMultiplier + minimapSpriteOffset.y });
+	
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		baseAreaMinimapEnemySPRITE[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x * 0.3f + 165.0f, baseAreaEnemyFBX[i]->GetPosition().z * 0.3f + 545.0f });
+		baseAreaMinimapEnemySPRITE[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x * minimapSpriteMultiplier + minimapSpriteOffset.x, baseAreaEnemyFBX[i]->GetPosition().z * minimapSpriteMultiplier + minimapSpriteOffset.y });
 	}
 #pragma endregion
 
@@ -1158,7 +1160,7 @@ void BaseArea::Update()
 		<< std::setw(2) << std::setfill('0');
 	if (!playerFBX->baseAreaOpeningCutscene && xSet && ySet && sizeSet)
 	{
-		debugText->Print(missionTracker.str(), 1173.0f, 160.0f, 1.0f);
+		debugText->Print(missionTracker.str(), missionTrackerPosition.x, missionTrackerPosition.y, 1.0f);
 	}
 #pragma endregion
 
@@ -1166,7 +1168,7 @@ void BaseArea::Update()
 	healTracker << playerFBX->healRemaining
 		<< std::fixed << std::setprecision(0)
 		<< std::setw(2) << std::setfill('0');
-	debugText->Print(healTracker.str(), 1182.0f, 614.0f, 1.0f);
+	debugText->Print(healTracker.str(), healTrackerPosition.x, healTrackerPosition.y, 1.0f);
 #pragma endregion
 
 #pragma region enemyHPBar
@@ -1265,7 +1267,7 @@ void BaseArea::Update()
 	}
 #pragma endregion
 
-#pragma region InCaseEnemyFallsThroughWorld
+#pragma region InCaseFallingThroughWorld
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
@@ -1273,6 +1275,12 @@ void BaseArea::Update()
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
+	}
+
+	if (playerFBX->GetPosition().y <= -9.0f)
+	{
+		playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 18.0f, playerFBX->GetPosition().z });
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, 18.0f, playerFBX->GetPosition().z });
 	}
 #pragma endregion
 
