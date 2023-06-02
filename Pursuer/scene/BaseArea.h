@@ -325,6 +325,15 @@ private:
 	const XMFLOAT2 standardSlowMotionSpritePosition = { 745.0f, 380.0f };
 	const float lockOnRotation = 270.0f;
 
+	const float standardCameraDistance = 48.0f;
+	const float cameraYOffset = 15.0f;
+	const XMFLOAT3 skydomeScale = { 6, 6, 6 };
+	const XMFLOAT3 enemyVisionRangeOBJScale = { 90, 1, 90 };
+	const XMFLOAT3 attackRangeOBJScale = { 15, 1, 15 };
+
+	const float initialPlayerYPosition = 20.0f;
+	const float initialEnemyYPosition = 30.0f;
+
 	int oddEven = 1;
 	
 

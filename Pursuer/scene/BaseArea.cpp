@@ -1860,11 +1860,11 @@ void BaseArea::thread2()
 {
 	// 3D Object creation
 	skydomeOBJ = Object3d::Create();
-	for (int i = 0; i < 11; i++) { attackRangeOBJ[i] = Object3d::Create(); }
-	for (int i = 0; i < 10; i++) { landingPositionOBJ[i] = Object3d::Create(); }
-	for (int i = 0; i < 10; i++) { enemyVisionRangeOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < numberOfEnemiesTotal + 1; i++) { attackRangeOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { landingPositionOBJ[i] = Object3d::Create(); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { enemyVisionRangeOBJ[i] = Object3d::Create(); }
 	playerPositionOBJ = PlayerPositionObject::Create();
-	for (int i = 0; i < 10; i++) { baseAreaEnemyPositionOBJ[i] = PlayerPositionObject::Create(); }
+	for (int i = 0; i < numberOfEnemiesTotal; i++) { baseAreaEnemyPositionOBJ[i] = PlayerPositionObject::Create(); }
 
 	// Player initialization
 	playerFBX = new Player;
@@ -1882,9 +1882,9 @@ void BaseArea::thread2()
 	loadingPercent++;
 
 	// Camera initial values
-	camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });
+	camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + cameraYOffset, playerFBX->GetPosition().z });
 	camera->SetUp({ 0, 1, 0 });
-	camera->SetDistance(48.0f);
+	camera->SetDistance(standardCameraDistance);
 
 	// Attack range initial values
 	for (int i = 0; i < numberOfEnemiesTotal + 1; i++)
@@ -1897,7 +1897,7 @@ void BaseArea::thread2()
 		{
 			attackRangeOBJ[i]->SetPosition({ baseAreaEnemyFBX[i - 1]->GetPosition().x, baseAreaEnemyFBX[i - 1]->GetPosition().y + 0.5f, baseAreaEnemyFBX[i - 1]->GetPosition().z + 5.0f });
 		}
-		attackRangeOBJ[i]->SetScale({ 15, 1, 15 });
+		attackRangeOBJ[i]->SetScale(attackRangeOBJScale);
 	}
 
 	loadingPercent++;
@@ -1905,17 +1905,17 @@ void BaseArea::thread2()
 	// Vision range initial values
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		enemyVisionRangeOBJ[i]->SetScale({ 90, 1, 90 });
+		enemyVisionRangeOBJ[i]->SetScale(enemyVisionRangeOBJScale);
 	}
 
 	// Skydome scale
-	skydomeOBJ->SetScale({ 6,6,6 });
+	skydomeOBJ->SetScale(skydomeScale);
 
 	// Position Object initial positions
-	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 20.0f, playerFBX->GetPosition().z });
+	playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, initialPlayerYPosition, playerFBX->GetPosition().z });
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 30.0f, baseAreaEnemyFBX[i]->GetPosition().z });
+		baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, initialEnemyYPosition, baseAreaEnemyFBX[i]->GetPosition().z });
 	}
 
 	loadingPercent++;
