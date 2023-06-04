@@ -330,6 +330,15 @@ private:
 	const XMFLOAT3 skydomeScale = { 6, 6, 6 };
 	const XMFLOAT3 enemyVisionRangeOBJScale = { 90, 1, 90 };
 	const XMFLOAT3 attackRangeOBJScale = { 15, 1, 15 };
+	const XMFLOAT3 standardCameraUp = { 0, 1, 0 };
+
+	const XMFLOAT3 groundOBJScale = { 2, 0.5f, 2 };
+	const XMFLOAT3 tutorialGroundOBJScale = { 50, 10, 50 };
+	const XMFLOAT3 extendedGroundOBJScale = { 1000, 1, 1000 };
+
+	const XMFLOAT3 groundOBJPosition = { 0, -15, 0 };
+	const XMFLOAT3 tutorialGroundOBJPosition = { 0.0f, 18.0f, -1450.0f };
+	const XMFLOAT3 extendedGroundOBJPosition = { 0, -10, 0 };
 
 	const float initialPlayerYPosition = 20.0f;
 	const float initialEnemyYPosition = 30.0f;

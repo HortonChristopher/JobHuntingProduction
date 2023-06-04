@@ -1883,7 +1883,7 @@ void BaseArea::thread2()
 
 	// Camera initial values
 	camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + cameraYOffset, playerFBX->GetPosition().z });
-	camera->SetUp({ 0, 1, 0 });
+	camera->SetUp(standardCameraUp);
 	camera->SetDistance(standardCameraDistance);
 
 	// Attack range initial values
