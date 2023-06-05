@@ -1950,14 +1950,14 @@ void BaseArea::thread3()
 	loadingPercent++;
 
 	// Ground scale
-	groundOBJ->SetScale({ 2,0.5f,2 });
-	tutorialGroundOBJ->SetScale({ 50, 10, 50 });
-	extendedGroundOBJ->SetScale({ 1000, 1, 1000 });
+	groundOBJ->SetScale(groundOBJScale);
+	tutorialGroundOBJ->SetScale(tutorialGroundOBJScale);
+	extendedGroundOBJ->SetScale(extendedGroundOBJScale);
 
 	// Ground positions
-	groundOBJ->SetPosition({ 0, -15, 0 });
-	tutorialGroundOBJ->SetPosition({ 0.0f, 18.0f, -1450.0f });
-	extendedGroundOBJ->SetPosition({ 0, -10, 0 });
+	groundOBJ->SetPosition(groundOBJPosition);
+	tutorialGroundOBJ->SetPosition(tutorialGroundOBJPosition);
+	extendedGroundOBJ->SetPosition(extendedGroundOBJPosition);
 
 	srand((unsigned int)time(NULL));
 

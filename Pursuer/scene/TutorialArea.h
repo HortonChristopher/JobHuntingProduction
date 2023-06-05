@@ -129,6 +129,10 @@ private:
 	float blinkingStaminaAlpha = 1.0f;
 	float blinkingStaminaSpriteInteger = 2.4f;
 	bool staminaBlinkingEffect = false;
+	const XMFLOAT2 tutorialTextFrameSPRITEPos = { 390.0f, 300.0f };
+	const XMFLOAT2 tutorialTextSpritePos = { 390.0f, 300.0f };
+	const XMFLOAT2 tutorialMissionSPRITEPos = { 1150.0f, 100.0f };
+	const XMFLOAT2 tutorialMissionSPRITESize = { 100.0f, 80.0f };
 
 	// Player Attack aspects
 	float playerAttackRange = 25.0f;

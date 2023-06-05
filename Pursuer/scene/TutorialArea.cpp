@@ -162,16 +162,16 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 
 	loadingPercent++;
 
-	tutorialTextFrameSPRITEk = Sprite::Create(1, { 390.0f, 300.0f });
-	tutorialTextFrameSPRITEc = Sprite::Create(41, { 390.0f, 300.0f });
+	tutorialTextFrameSPRITEk = Sprite::Create(1, tutorialTextFrameSPRITEPos);
+	tutorialTextFrameSPRITEc = Sprite::Create(41, tutorialTextFrameSPRITEPos);
 	for (int i = 0; i < numberOfTutorialTextSprites; i++)
 	{
-		tutorialTextSPRITE[i] = Sprite::Create((i + 2), { 390.0f, 300.0f });
+		tutorialTextSPRITE[i] = Sprite::Create((i + 2), tutorialTextSpritePos);
 	}
 	for (int i = 94; i > 90; i--)
 	{
-		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), { 1150.0f, 100.0f });
-		tutorialMissionSPRITE[94 - i]->SetSize({ 100.0f, 80.0f });
+		tutorialMissionSPRITE[94 - i] = Sprite::Create((94 - (94 - i)), tutorialMissionSPRITEPos);
+		tutorialMissionSPRITE[94 - i]->SetSize(tutorialMissionSPRITESize);
 	}
 	loadingPercent++;
 	missionBarSPRITE = Sprite::Create(85, { 1150.0f, 150.0f });
