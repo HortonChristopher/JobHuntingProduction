@@ -96,6 +96,8 @@ private:
 	Object3d* skydomeOBJ = nullptr;
 	Model* skydomeMODEL = nullptr;
 
+	XMFLOAT3 skydomeScale = { 5, 5, 5 };
+
 	Object3d* playerAttackRangeOBJ = nullptr;
 	Object3d* enemyAttackRangeOBJ = nullptr;
 
@@ -129,10 +131,33 @@ private:
 	float blinkingStaminaAlpha = 1.0f;
 	float blinkingStaminaSpriteInteger = 2.4f;
 	bool staminaBlinkingEffect = false;
+
+	// Sprite Positions and Sizes
 	const XMFLOAT2 tutorialTextFrameSPRITEPos = { 390.0f, 300.0f };
 	const XMFLOAT2 tutorialTextSpritePos = { 390.0f, 300.0f };
 	const XMFLOAT2 tutorialMissionSPRITEPos = { 1150.0f, 100.0f };
 	const XMFLOAT2 tutorialMissionSPRITESize = { 100.0f, 80.0f };
+	const XMFLOAT2 missionBarSPRITEPos = { 1150.0f, 150.0f };
+	const XMFLOAT2 missionBarFrameSPRITEPos = { 1150.0f, 150.0f };
+	const XMFLOAT2 missionBarSPRITESize = { 100.0f, 30.0f };
+	const XMFLOAT2 missionBarFrameSPRITESize = { 100.0f, 30.0f };
+	const XMFLOAT2 HPBarSPRITEPos = { 25.0f, 25.0f };
+	const XMFLOAT2 HPBarFrameSPRITEpos = { 25.0f, 25.0f };
+	const XMFLOAT2 STBarSPRITEPos = { 25.0f, 55.0f };
+	const XMFLOAT2 STBarFrameSPRITEPos = { 25.0f, 55.0f };
+	const XMFLOAT2 staminaTutorialMaskSPRITEPos = { 0.0f, 0.0f };
+	const XMFLOAT2 tutorialMinimapSPRITEPos = { 50.0f, 430.0f };
+	const XMFLOAT2 minimapTutorialMaskSPRITEPos = { 0.0f, 0.0f };
+	XMFLOAT2 tutorialMinimapEnemySPRITEPos = { 0.0f, 0.0f };
+	XMFLOAT2 tutorialMinimapPlayerSPRITEPos = { 0.0f, 0.0f };
+	const XMFLOAT2 tutorialAreaDamageOverlaySPRITEPos = { 0.0f, 0.0f };
+	const XMFLOAT2 healSPRITEPos = { 1102.0f, 542.0f };
+	const XMFLOAT2 healKeyboardSPRITEPos = { 1102.0f, 542.0f };
+	const XMFLOAT2 healControllerSPRITEPos = { 1102.0f, 542.0f };
+	const XMFLOAT2 healTutorialMaskSPRITEPos = { 0.0f, 0.0f };
+	const XMFLOAT2 fadeSPRITEPos = { 0.0f, 0.0f };
+	const XMFLOAT2 staminaWarningSPRITEPos = { 720.0f, 190.0f };
+	const XMFLOAT2 staminaWarningSPRITESize = { 75.0f, 42.0f };
 
 	// Player Attack aspects
 	float playerAttackRange = 25.0f;
@@ -158,18 +183,32 @@ private:
 
 	bool doorClose = false;
 	bool doorOpenCutscene = false;
+	const int numberOfDoorsTotal = 2;
+	const XMFLOAT3 doorScale = { 50, 40, 10 };
+	const XMFLOAT3 doorPos = { 0.0f, 80.0f, -520.0f };
 
 	// Player aspects
 	TutorialPlayer* playerFBX = nullptr;
 	PlayerPositionObject* playerPositionOBJ = nullptr;
 	Model* positionMODEL = nullptr; // Used for both player and enemies
+	const XMFLOAT3 playerInitialPos = { 0.0f, 0.0f, -700.0f };
 
 	// Enemy aspects
 	TutorialEnemy* enemyFBX = nullptr;
 	PlayerPositionObject* enemyPositionOBJ = nullptr;
+	const XMFLOAT3 enemyInitialPos = { 0.0f, 0.0f, 0.0f };
 
 	std::array<TouchableObject*, 2> doorOBJ = { {} };
 	Model* doorMODEL = nullptr;
+	const XMFLOAT3 groundPos = { 0, 0, 0 };
+	const XMFLOAT3 groundScale = { 50, 10, 50 };
+	const XMFLOAT3 outsideGroundPos = { 0.0f, -33.0f, 1150.0f };
+	const XMFLOAT3 outsideGroundScale = { 400, 200, 400 };
+	const XMFLOAT3 playerPositionOBJScale = { 10, 10, 10 };
+	const XMFLOAT3 enemyPositionOBJScale = { 10, 10, 10 };
+
+	const XMFLOAT3 cameraUp = { 0, 1, 0 };
+	float cameraDistance = 48.0f;
 
 	bool arenaClamp = false;
 	XMFLOAT3 fromOriginToObject = { 0.0f, 0.0f, 0.0f };

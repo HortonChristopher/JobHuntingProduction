@@ -174,27 +174,27 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 		tutorialMissionSPRITE[94 - i]->SetSize(tutorialMissionSPRITESize);
 	}
 	loadingPercent++;
-	missionBarSPRITE = Sprite::Create(85, { 1150.0f, 150.0f });
-	missionBarFrameSPRITE = Sprite::Create(86, { 1150.0f, 150.0f });
-	missionBarSPRITE->SetSize({ 100.0f, 30.0f });
-	missionBarFrameSPRITE->SetSize({ 100.0f, 30.0f });
-	HPBarSPRITE = Sprite::Create(87, { 25.0f, 25.0f });
-	HPBarFrameSPRITE = Sprite::Create(88, { 25.0f, 25.0f });
-	STBarSPRITE = Sprite::Create(89, { 25.0f, 55.0f });
-	STBarFrameSPRITE = Sprite::Create(90, { 25.0f, 55.0f });
-	staminaTutorialMaskSPRITE = Sprite::Create(95, { 0.0f, 0.0f });
-	tutorialMinimapSPRITE = Sprite::Create(96, { 50.0f , 430.0f });
-	minimapTutorialMaskSPRITE = Sprite::Create(97, { 0.0f, 0.0f });
-	tutorialMinimapEnemySPRITE = Sprite::Create(98, { 0.0f, 0.0f });
-	tutorialMinimapPlayerSPRITE = Sprite::Create(99, { 0.0f, 0.0f });
-	tutorialAreaDamageOverlaySPRITE = Sprite::Create(28, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
-	healSPRITE = Sprite::Create(29, { 1102.0f, 542.0f });
-	healKeyboardSPRITE = Sprite::Create(30, { 1102.0f, 542.0f });
-	healControllerSPRITE = Sprite::Create(31, { 1102.0f, 542.0f });
-	healTutorialMaskSPRITE = Sprite::Create(32, { 0.0f, 0.0f });
-	fadeSPRITE = Sprite::Create(115, { 0.0f, 0.0f }, {1.0f, 1.0f, 1.0f, fadeSpriteAlpha});
-	staminaWarningSPRITE = Sprite::Create(40, { 720.0f, 190.0f }, { 1.0f, 1.0f, 1.0f, 0.0f });
-	staminaWarningSPRITE->SetSize({ 75.0f, 42.0f });
+	missionBarSPRITE = Sprite::Create(85, missionBarSPRITEPos);
+	missionBarFrameSPRITE = Sprite::Create(86, missionBarFrameSPRITEPos);
+	missionBarSPRITE->SetSize(missionBarSPRITESize);
+	missionBarFrameSPRITE->SetSize(missionBarFrameSPRITESize);
+	HPBarSPRITE = Sprite::Create(87, HPBarSPRITEPos);
+	HPBarFrameSPRITE = Sprite::Create(88, HPBarFrameSPRITEpos);
+	STBarSPRITE = Sprite::Create(89, STBarSPRITEPos);
+	STBarFrameSPRITE = Sprite::Create(90, STBarFrameSPRITEPos);
+	staminaTutorialMaskSPRITE = Sprite::Create(95, staminaTutorialMaskSPRITEPos);
+	tutorialMinimapSPRITE = Sprite::Create(96, tutorialMinimapSPRITEPos);
+	minimapTutorialMaskSPRITE = Sprite::Create(97, minimapTutorialMaskSPRITEPos);
+	tutorialMinimapEnemySPRITE = Sprite::Create(98, tutorialMinimapEnemySPRITEPos);
+	tutorialMinimapPlayerSPRITE = Sprite::Create(99, tutorialMinimapPlayerSPRITEPos);
+	tutorialAreaDamageOverlaySPRITE = Sprite::Create(28, tutorialAreaDamageOverlaySPRITEPos, { 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
+	healSPRITE = Sprite::Create(29, healSPRITEPos);
+	healKeyboardSPRITE = Sprite::Create(30, healKeyboardSPRITEPos);
+	healControllerSPRITE = Sprite::Create(31, healControllerSPRITEPos);
+	healTutorialMaskSPRITE = Sprite::Create(32, healTutorialMaskSPRITEPos);
+	fadeSPRITE = Sprite::Create(115, fadeSPRITEPos, {1.0f, 1.0f, 1.0f, fadeSpriteAlpha});
+	staminaWarningSPRITE = Sprite::Create(40, staminaWarningSPRITEPos, { 1.0f, 1.0f, 1.0f, 0.0f });
+	staminaWarningSPRITE->SetSize(staminaWarningSPRITESize);
 
 	loadingPercent++;
 
@@ -213,14 +213,15 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	// Touchable Objection Creation
 	groundOBJ = TouchableObject::Create(groundMODEL);
 	outsideGroundOBJ = TouchableObject::Create(outsideGroundMODEL);
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < numberOfDoorsTotal; i++)
 	{
 		doorOBJ[i] = TouchableObject::Create(doorMODEL);
-		doorOBJ[i]->SetScale({ 50, 40, 10 });
+		doorOBJ[i]->SetScale(doorScale);
+		doorOBJ[i]->SetPosition({ doorPos.x, doorPos.y - (50.0f * i), doorPos.z + (1020.0f * i) });
 		doorOBJ[i]->SetPosition({ 0.0f, 80.0f - (50.0f * i), -520.0f + (1020.0f * i)});
 	}
 	skydomeOBJ->SetModel(skydomeMODEL);
-	skydomeOBJ->SetScale({ 5,5,5 });
+	skydomeOBJ->SetScale(skydomeScale);
 	playerAttackRangeOBJ->SetModel(positionMODEL);
 	enemyAttackRangeOBJ->SetModel(positionMODEL);
 	loadingPercent++;
@@ -230,28 +231,28 @@ void TutorialArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audi
 	playerFBX->Initialize();
 	playerPositionOBJ = PlayerPositionObject::Create();
 	playerPositionOBJ->SetModel(positionMODEL);
-	playerFBX->SetPosition({ 0.0f, 0.0f, -700.0f });
+	playerFBX->SetPosition(playerInitialPos);
 
 	// Enemy initialization
 	enemyFBX = new TutorialEnemy;
 	enemyFBX->Initialize();
 	enemyPositionOBJ = PlayerPositionObject::Create();
 	playerPositionOBJ->SetModel(positionMODEL);
-	enemyFBX->SetPosition({ 0.0f, 0.0f, 0.0f });
+	enemyFBX->SetPosition(enemyInitialPos);
 	loadingPercent++;
 
 	// Ground Aspects
-	groundOBJ->SetPosition({ 0, 0, 0 });
-	groundOBJ->SetScale({ 50, 10, 50 });
-	outsideGroundOBJ->SetPosition({ 0.0f, -33.0f, 1150.0f });
-	outsideGroundOBJ->SetScale({ 400, 200, 400 });
-	playerPositionOBJ->SetScale({ 10, 10, 10 });
-	enemyPositionOBJ->SetScale({ 10, 10, 10 });
+	groundOBJ->SetPosition(groundPos);
+	groundOBJ->SetScale(groundScale);
+	outsideGroundOBJ->SetPosition(outsideGroundPos);
+	outsideGroundOBJ->SetScale(outsideGroundScale);
+	playerPositionOBJ->SetScale(playerPositionOBJScale);
+	enemyPositionOBJ->SetScale(enemyPositionOBJScale);
 
 	// Camera initial values
 	camera->SetTarget(playerFBX->GetPosition());
-	camera->SetUp({ 0, 1, 0 });
-	camera->SetDistance(48.0f);
+	camera->SetUp(cameraUp);
+	camera->SetDistance(cameraDistance);
 
 	srand((unsigned int)time(NULL));
 	loadingPercent++;
