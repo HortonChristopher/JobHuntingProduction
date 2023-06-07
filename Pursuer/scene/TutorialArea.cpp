@@ -276,11 +276,11 @@ void TutorialArea::Update()
 	switch (tutorialStatus)
 	{
 	case INTROCUTSCENE:
-		if (startTimer >= 60.0f)
+		if (startTimer >= timerOneSecond)
 		{
 			playerFBX->SetEnumStatus(TutorialPlayer::WALK);
-			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
-			if (playerFBX->GetPosition().z >= -450.0f)
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+			if (playerFBX->GetPosition().z >= tutorialStartTrigger)
 			{
 				tutorialStatus = MOVEMENTTUTORIAL;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
@@ -290,7 +290,7 @@ void TutorialArea::Update()
 		else
 		{
 			playerFBX->SetEnumStatus(TutorialPlayer::STAND);
-			startTimer += 20.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			startTimer += timerOneThirdSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
 		break;
 	case MOVEMENTTUTORIAL:
@@ -307,13 +307,13 @@ void TutorialArea::Update()
 			}
 			else if (tutorialPage == 3)
 			{
-				progress = 0.0f;
-				tutorialPage = 0;
+				progress = progressReset;
+				tutorialPage = tutorialPageReset;
 				tutorialStatus = STAMINATUTORIAL;
 			}
 		}
 
-		if (doorOBJ[0]->GetPosition().y > 30.0f)
+		if (doorOBJ[0]->GetPosition().y > doorTrigger)
 		{
 			doorClose = true;
 		}
@@ -325,7 +325,7 @@ void TutorialArea::Update()
 		if (doorClose)
 		{
 			XMFLOAT3 doorPosition = doorOBJ[0]->GetPosition();
-			doorPosition.y -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			doorPosition.y -= timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			doorOBJ[0]->SetPosition(doorPosition);
 			doorOBJ[0]->Update();
 		}
@@ -335,15 +335,15 @@ void TutorialArea::Update()
 			if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 				input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 			{
-				progress += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				progress += timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
 
-			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
+			missionBarSPRITE->SetSize({ progress + 0.1f, missionBarSPRITESize.y });
 			
-			if (progress >= 100.0f)
+			if (progress >= progressMax)
 			{
 				tutorialPage = 3;
-				playerFBX->tutorialPart = 0;
+				playerFBX->tutorialPart = tutorialPageReset;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
 				tutorialActive = true;
 			}
@@ -363,21 +363,21 @@ void TutorialArea::Update()
 			}
 			else if (tutorialPage == 3)
 			{
-				progress = 0.0f;
-				tutorialPage = 0;
+				progress = progressReset;
+				tutorialPage = tutorialPageReset;
 				tutorialStatus = ATTACKTUTORIAL;
 			}
 		}
 
 		if (!tutorialActive)
 		{
-			progress = (100.0f - playerFBX->stamina);
-			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
+			progress = (progressMax - playerFBX->stamina);
+			missionBarSPRITE->SetSize({ progress + 0.1f, missionBarSPRITESize.y });
 
-			if (progress >= 100.0f)
+			if (progress >= progressMax)
 			{
 				tutorialPage = 3;
-				playerFBX->tutorialPart = 0;
+				playerFBX->tutorialPart = tutorialPageReset;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
 				tutorialActive = true;
 			}
@@ -397,8 +397,8 @@ void TutorialArea::Update()
 			}
 			else if (tutorialPage == 2)
 			{
-				progress = 0.0f;
-				tutorialPage = 0;
+				progress = progressReset;
+				tutorialPage = tutorialPageReset;
 				tutorialStatus = DODGETUTORIAL;
 			}
 		}
@@ -421,10 +421,10 @@ void TutorialArea::Update()
 								enemyKnockback = true;
 							}
 
-							enemyFBX->timer = 0.0f;
+							enemyFBX->timer = timerReset;
 							enemyFBX->modelChange = true;
 							enemyFBX->SetEnumStatus(TutorialEnemy::DAMAGED);
-							progress += 15.0f;
+							progress += attackProgress;
 
 							if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 							{
