@@ -417,7 +417,7 @@ void TutorialArea::Update()
 						{
 							if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 							{
-								enemyKnockbackTime = 0.0f;
+								enemyKnockbackTime = timerReset;
 								enemyKnockback = true;
 							}
 
@@ -445,13 +445,13 @@ void TutorialArea::Update()
 					XMFLOAT3 knockbackPrevPosition = enemyFBX->GetPosition();
 					float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
 					enemyFBX->SetPosition({
-							knockbackPrevPosition.x -= 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+							knockbackPrevPosition.x -= timerTwoSeconds * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
 							knockbackPrevPosition.y,
-							knockbackPrevPosition.z -= 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
-					enemyKnockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-					if (enemyKnockbackTime >= 30.0f)
+							knockbackPrevPosition.z -= timerTwoSeconds * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					enemyKnockbackTime += timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					if (enemyKnockbackTime >= timerHalfSecond)
 					{
-						enemyKnockbackTime = 0.0f;
+						enemyKnockbackTime = timerReset;
 						enemyKnockback = false;
 					}
 				}
@@ -465,16 +465,16 @@ void TutorialArea::Update()
 			else
 			{
 				playerFBX->ableToDamage = true;
-				playerFBX->attackCombo = 0;
+				playerFBX->attackCombo = intReset;
 			}
 
 			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
 
-			if (progress >= 100.0f)
+			if (progress >= progressMax)
 			{
-				progress = 100.0f;
+				progress = progressMax;
 				tutorialPage = 2;
-				playerFBX->tutorialPart = 0;
+				playerFBX->tutorialPart = intReset;
 				playerFBX->SetEnumStatus(TutorialPlayer::STAND);
 				tutorialActive = true;
 			}

@@ -229,8 +229,11 @@ private:
 	const float doorTrigger = 30.0f;
 	const float attackProgress = 15.0f;
 
+	const int intReset = 0;
 	const float timerReset = 0.0f;
 	const float timerOneSecond = 60.0f;
+	const float timerHalfSecond = 30.0f;
+	const float timerTwoSeconds = 120.0f;
 	const float timerOneThirdSecond = 20.0f;
 	const float tutorialStartTrigger = -450.0f;
 
