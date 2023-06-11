@@ -468,7 +468,7 @@ void TutorialArea::Update()
 				playerFBX->attackCombo = intReset;
 			}
 
-			missionBarSPRITE->SetSize({ progress + 0.1f, 30.0f });
+			missionBarSPRITE->SetSize({ progress + 0.1f, missionBarFrameSPRITESize.y });
 
 			if (progress >= progressMax)
 			{
