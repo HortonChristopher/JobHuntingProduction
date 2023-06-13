@@ -183,15 +183,15 @@ void BaseArea::Update()
 		}
 	}
 
-	if (playerFBX->baseAreaOpeningCutscene && initializeFinished == true && startTimer > startTimerLimit)
+	if (BaseAreaConditionals::IsBaseAreaOpeningCutscenePlaying(playerFBX->baseAreaOpeningCutscene, initializeFinished, startTimer, startTimerLimit))
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + deltaTimeOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
-		if (playerFBX->GetPosition().z >= -movementStartZPosition)
+		if (BaseAreaConditionals::HasPlayerReachedTriggerToMoveMissionSprite(playerFBX->GetPosition().z, movementStartZPosition))
 		{
 			startMissionSpriteMovement = true;
 		}
-		if (playerFBX->GetPosition().z >= -mapBorder)
+		if (BaseAreaConditionals::IsOpeningCutsceneFinished(playerFBX->GetPosition().z, mapBorder))
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -mapBorder });
 			playerFBX->baseAreaOpeningCutscene = false;
@@ -237,22 +237,21 @@ void BaseArea::Update()
 		firstRun = false;
 	}
 
+	// This code aggros the patrol's partner if one of them starts combat with the player
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND)
+		if (BaseAreaConditionals::IsTheEnemyWanderingOrStanding(baseAreaEnemyFBX[i]->enumStatus))
 		{
 			if (i % 2 == 0 || i == 0)
 			{
-				if (baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::AGGRO || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::CHARGEATTACK || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::JETSTREAMATTACK || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::LANDINGATTACK
-					|| baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::PARTICLEATTACK || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::COOLDOWN || baseAreaEnemyFBX[i + 1]->enumStatus == EnemyHuman::ATTACK)
+				if (BaseAreaConditionals::IsEnemyAggroAttackOrCooldown(baseAreaEnemyFBX[i + 1]->enumStatus))
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
 			}
 			else
 			{
-				if (baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::AGGRO || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::CHARGEATTACK || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::JETSTREAMATTACK || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::LANDINGATTACK
-					|| baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::PARTICLEATTACK || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::COOLDOWN || baseAreaEnemyFBX[i - 1]->enumStatus == EnemyHuman::ATTACK)
+				if (BaseAreaConditionals::IsEnemyAggroAttackOrCooldown(baseAreaEnemyFBX[i - 1]->enumStatus))
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
@@ -263,11 +262,10 @@ void BaseArea::Update()
 #pragma region EnemyAggro
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (baseAreaEnemyFBX[i]->HP <= fleeHP && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD
-			|| baseAreaEnemyFBX[i]->isPartnerDead && !enemyKnockback && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DAMAGED && !baseAreaEnemyFBX[i]->helpCall && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
+		if (BaseAreaConditionals::ShouldEnemyFlee(baseAreaEnemyFBX[i]->HP, fleeHP, enemyKnockback, baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->helpCall, baseAreaEnemyFBX[i]->isPartnerDead))
 		{
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
-			if (!baseAreaEnemyFBX[i]->fleeSet)
+			if (BaseAreaConditionals::HasEnemyNotYetSetFleeTarget(baseAreaEnemyFBX[i]->fleeSet))
 			{
 				if (oddEven == 1)
 				{

@@ -323,7 +323,7 @@
     <ClInclude Include="tools\SettingParameters.h">
       <Filter>Header Files\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="BaseAreaConditionals.h">
+    <ClInclude Include="scene\BaseAreaConditionals.h">
       <Filter>Header Files\AreaScene</Filter>
     </ClInclude>
   </ItemGroup>

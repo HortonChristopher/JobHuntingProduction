@@ -164,7 +164,6 @@
     <ClInclude Include="3d\PointLight.h" />
     <ClInclude Include="3d\SpotLight.h" />
     <ClInclude Include="audio\Audio.h" />
-    <ClInclude Include="BaseAreaConditionals.h" />
     <ClInclude Include="behavior\EnemyHuman.h" />
     <ClInclude Include="behavior\Player.h" />
     <ClInclude Include="behavior\TutorialEnemy.h" />
@@ -194,6 +193,7 @@
     <ClInclude Include="model\Mesh.h" />
     <ClInclude Include="model\Model.h" />
     <ClInclude Include="scene\BaseArea.h" />
+    <ClInclude Include="scene\BaseAreaConditionals.h" />
     <ClInclude Include="scene\GameClearCutscene.h" />
     <ClInclude Include="scene\GameOverCutscene.h" />
     <ClInclude Include="scene\GameScene.h" />
