@@ -279,7 +279,7 @@ void TutorialArea::Update()
 		if (startTimer >= timerOneSecond)
 		{
 			playerFBX->SetEnumStatus(TutorialPlayer::WALK);
-			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + timerOneSecond * (deltaTime->deltaTimeCalculated.count() / milisecondConversion) });
 			if (playerFBX->GetPosition().z >= tutorialStartTrigger)
 			{
 				tutorialStatus = MOVEMENTTUTORIAL;
@@ -290,7 +290,7 @@ void TutorialArea::Update()
 		else
 		{
 			playerFBX->SetEnumStatus(TutorialPlayer::STAND);
-			startTimer += timerOneThirdSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			startTimer += timerOneThirdSecond * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 		}
 		break;
 	case MOVEMENTTUTORIAL:
@@ -325,7 +325,7 @@ void TutorialArea::Update()
 		if (doorClose)
 		{
 			XMFLOAT3 doorPosition = doorOBJ[0]->GetPosition();
-			doorPosition.y -= timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			doorPosition.y -= timerOneSecond * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 			doorOBJ[0]->SetPosition(doorPosition);
 			doorOBJ[0]->Update();
 		}
@@ -335,7 +335,7 @@ void TutorialArea::Update()
 			if (input->PushKey(DIK_A) || input->PushKey(DIK_D) || input->PushKey(DIK_S) || input->PushKey(DIK_W) ||
 				input->PushLStickLeft() || input->PushLStickRight() || input->PushLStickDown() || input->PushLStickUp())
 			{
-				progress += timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				progress += timerOneSecond * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 			}
 
 			missionBarSPRITE->SetSize({ progress + 0.1f, missionBarSPRITESize.y });
@@ -445,10 +445,10 @@ void TutorialArea::Update()
 					XMFLOAT3 knockbackPrevPosition = enemyFBX->GetPosition();
 					float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
 					enemyFBX->SetPosition({
-							knockbackPrevPosition.x -= timerTwoSeconds * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+							knockbackPrevPosition.x -= timerTwoSeconds * (deltaTime->deltaTimeCalculated.count() / milisecondConversion) * (xyz.x / hypotenuse),
 							knockbackPrevPosition.y,
-							knockbackPrevPosition.z -= timerTwoSeconds * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
-					enemyKnockbackTime += timerOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+							knockbackPrevPosition.z -= timerTwoSeconds * (deltaTime->deltaTimeCalculated.count() / milisecondConversion) * (xyz.z / hypotenuse) });
+					enemyKnockbackTime += timerOneSecond * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 					if (enemyKnockbackTime >= timerHalfSecond)
 					{
 						enemyKnockbackTime = timerReset;
@@ -602,10 +602,10 @@ void TutorialArea::Update()
 				XMFLOAT3 knockbackPrevPosition = playerFBX->GetPosition();
 				float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
 				playerFBX->SetPosition({
-						knockbackPrevPosition.x -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+						knockbackPrevPosition.x -= 60.0f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion) * (xyz.x / hypotenuse),
 						knockbackPrevPosition.y,
-						knockbackPrevPosition.z -= 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
-				knockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						knockbackPrevPosition.z -= 60.0f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion) * (xyz.z / hypotenuse) });
+				knockbackTime += 60.0f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 				if (knockbackTime >= 30.0f)
 				{
 					knockbackTime = 0.0f;
@@ -618,7 +618,7 @@ void TutorialArea::Update()
 			{
 				if (playerFBX->enumStatus != TutorialPlayer::DEAD)
 				{
-					damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 				}
 				tutorialAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 				if (damageOverlaySpriteALPHA <= 0.0f)
@@ -632,7 +632,7 @@ void TutorialArea::Update()
 			{
 				camera->SetTarget(ScreenShake(playerFBX->GetPosition()));
 				camera->Update();
-				shakeTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				shakeTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 				if (shakeTimer >= 15.0f)
 				{
 					shakeTimer = 0.0f;
@@ -691,7 +691,7 @@ void TutorialArea::Update()
 				if (doorClose)
 				{
 					XMFLOAT3 doorPosition = doorOBJ[1]->GetPosition();
-					doorPosition.y += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+					doorPosition.y += 60.0f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 					doorOBJ[1]->SetPosition(doorPosition);
 					doorOBJ[1]->Update();
 				}
@@ -710,7 +710,7 @@ void TutorialArea::Update()
 		{
 			if (playerFBX->enumStatus != TutorialPlayer::DEAD)
 			{
-				damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				damageOverlaySpriteALPHA -= 0.4f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 			}
 			tutorialAreaDamageOverlaySPRITE->SetColor({ 1.0f, 1.0f, 1.0f, damageOverlaySpriteALPHA });
 			if (damageOverlaySpriteALPHA <= 0.0f)
@@ -766,8 +766,8 @@ void TutorialArea::Update()
 				playerFBX->tutorialPart = 0;
 				playerFBX->SetEnumStatus(TutorialPlayer::RUN);
 				playerFBX->SetRotation({ 0.0f, 0.0f, 0.0f });
-				playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
-				fadeSpriteAlpha += 0.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + 60.0f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion) });
+				fadeSpriteAlpha += 0.4f * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 				fadeSPRITE->SetColor({ 1.0f, 1.0f, 1.0f, fadeSpriteAlpha });
 				if (fadeSpriteAlpha >= 1.0f)
 				{
@@ -849,13 +849,13 @@ void TutorialArea::Update()
 		}
 		else if (playerFBX->stamina >= 100.0f)
 		{
-			staminaSpriteAlpha -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			staminaSpriteAlpha -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 		}
 		else
 		{
 			if (!staminaBlinkingEffect)
 			{
-				blinkingStaminaAlpha -= blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				blinkingStaminaAlpha -= blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 				if (blinkingStaminaAlpha <= 0.0f)
 				{
 					blinkingStaminaAlpha = 0.0f;
@@ -864,7 +864,7 @@ void TutorialArea::Update()
 			}
 			else
 			{
-				blinkingStaminaAlpha += blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				blinkingStaminaAlpha += blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / milisecondConversion);
 				if (blinkingStaminaAlpha >= 1.0f)
 				{
 					blinkingStaminaAlpha = 1.0f;

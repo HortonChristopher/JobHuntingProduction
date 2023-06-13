@@ -148,13 +148,13 @@ void BaseArea::Update()
 	std::ostringstream missionTracker;
 	std::ostringstream healTracker;
 
-	if (!screenShake)
+	if (BaseAreaConditionals::IsScreenNotShaking(screenShake))
 	{
-		if (!camera->lockOn && !playerFBX->dodge)
+		if (BaseAreaConditionals::IsCameraNotLockedOnAndPlayerNotDodging(camera->lockOn, playerFBX->dodge))
 		{
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
-		else if (playerFBX->dodge)
+		else if (BaseAreaConditionals::IsPlayerDodging(playerFBX->dodge))
 		{
 			camera->SetTarget({ playerFBX->dodgePosition.x, playerFBX->dodgePosition.y + playerFBX->playerCameraYOffset, playerFBX->dodgePosition.z });
 		}
@@ -162,15 +162,15 @@ void BaseArea::Update()
 	}
 
 #pragma region openingCutscene
-	if (!gameStart && initializeFinished == true)
+	if (BaseAreaConditionals::IsInitializationFinishedAndGameStarting(gameStart, initializeFinished))
 	{
-		if (startTimer >= startTimerLimit)
+		if (BaseAreaConditionals::ShouldFadeInBegin(startTimer, startTimerLimit))
 		{
 			fadeSpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
 
-			if (fadeSpriteALPHA <= minAlpha)
+			if (BaseAreaConditionals::IsFadeSpriteAlphaBelowZero(fadeSpriteALPHA, minAlpha))
 			{
 				fadeSpriteALPHA = minAlpha;
 				fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });

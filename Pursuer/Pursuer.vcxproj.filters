@@ -323,6 +323,9 @@
     <ClInclude Include="tools\SettingParameters.h">
       <Filter>Header Files\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="BaseAreaConditionals.h">
+      <Filter>Header Files\AreaScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">

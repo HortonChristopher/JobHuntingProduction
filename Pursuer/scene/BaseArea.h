@@ -20,6 +20,7 @@
 #include "PlayerPositionObject.h"
 #include "CollisionManager.h"
 #include "Loading.h"
+#include "BaseAreaConditionals.h"
 
 #include <chrono>
 #include <vector>
