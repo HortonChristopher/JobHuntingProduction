@@ -193,6 +193,7 @@
     <ClInclude Include="model\Mesh.h" />
     <ClInclude Include="model\Model.h" />
     <ClInclude Include="scene\BaseArea.h" />
+    <ClInclude Include="scene\BaseAreaConditionals.h" />
     <ClInclude Include="scene\GameClearCutscene.h" />
     <ClInclude Include="scene\GameOverCutscene.h" />
     <ClInclude Include="scene\GameScene.h" />
