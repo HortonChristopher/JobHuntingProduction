@@ -136,4 +136,74 @@ public:
 
 		return true;
 	}
+
+	static bool IsEnemyFrontPatrolPosition(EnemyHuman::patrol patrolStatus)
+	{
+		if (patrolStatus == EnemyHuman::FRONT)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyBackPatrolPosition(EnemyHuman::patrol patrolStatus)
+	{
+		if (patrolStatus == EnemyHuman::BACK)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyBeingComparedWithItself(int j, int i, EnemyHuman::patrol patrolStatus)
+	{
+		if (j == i || patrolStatus == EnemyHuman::FRONT && j == (i + 1) || patrolStatus == EnemyHuman::BACK && j == (i - 1))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+
+	static bool IsEnemyMinDistanceNewMinDistance(float x, float y, float min, bool isBeingCalledToHelp)
+	{
+		if (abs(sqrt(x * x + y * y)) < min && isBeingCalledToHelp == false)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsThereNoEnemyAbleToBeCalledToHelp(int closestEnemy, const int closestEnemyDefaultNumber)
+	{
+		if (closestEnemy == closestEnemyDefaultNumber)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool ThereIsAnEnemyAbleToHelp(int closestEnemy, const int closestEnemyDefaultNumber)
+	{
+		if (closestEnemy != closestEnemyDefaultNumber)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyBeingCalledFrontPatroller(EnemyHuman::patrol patrolStatus)
+	{
+		if (patrolStatus == EnemyHuman::FRONT)
+		{
+			return true;
+		}
+
+		return false;
+	}
 };

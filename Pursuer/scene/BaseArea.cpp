@@ -269,14 +269,14 @@ void BaseArea::Update()
 			{
 				if (oddEven == 1)
 				{
-					if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT)
+					if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
 					{
 						continue;
 					}
 				}
 				else
 				{
-					if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
+					if (BaseAreaConditionals::IsEnemyBackPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
 					{
 						continue;
 					}
@@ -288,20 +288,20 @@ void BaseArea::Update()
 				{
 					if (!baseAreaEnemyFBX[j]->dead && j != i && !baseAreaEnemyFBX[j]->helpCall)
 					{
-						if (j == i || baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::FRONT && j == (i + 1) || baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK && j == (i - 1))
+						if (BaseAreaConditionals::IsEnemyBeingComparedWithItself(j, i, baseAreaEnemyFBX[i]->patrolStatus))
 						{
 							continue;
 						}
 						float x = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 						float y = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
-						if (abs(sqrt(x * x + y * y)) < min && baseAreaEnemyFBX[j]->isBeingCalledToHelp == false)
+						if (BaseAreaConditionals::IsEnemyMinDistanceNewMinDistance(x, y, min, baseAreaEnemyFBX[j]->isBeingCalledToHelp))
 						{
 							min = abs(sqrt(x * x + y * y));
 							baseAreaEnemyFBX[i]->closestEnemy = j;
 						}
 					}
 				}
-				if (baseAreaEnemyFBX[i]->closestEnemy == closestEnemyDefaultNumber)
+				if (BaseAreaConditionals::IsThereNoEnemyAbleToBeCalledToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
 				{
 					baseAreaEnemyFBX[i]->aggroSet = false;
 					baseAreaEnemyFBX[i]->Reset();
@@ -309,9 +309,9 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->helpCall = true;
 				}
 				baseAreaEnemyFBX[i]->fleeSet = true;
-				if (baseAreaEnemyFBX[i]->closestEnemy != closestEnemyDefaultNumber)
+				if (BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
 				{
-					if (baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->patrolStatus == EnemyHuman::FRONT)
+					if (BaseAreaConditionals::IsEnemyBeingCalledFrontPatroller(baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->patrolStatus))
 					{
 						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
 						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy + 1]->isBeingCalledToHelp = true;
