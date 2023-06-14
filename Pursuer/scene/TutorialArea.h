@@ -231,6 +231,7 @@ private:
 
 	const float timerReset = 0.0f;
 	const float timerOneSecond = 60.0f;
+	const float timerTwoSeconds = 120.0f;
 	const float timerOneThirdSecond = 20.0f;
 	const float tutorialStartTrigger = -450.0f;
 
