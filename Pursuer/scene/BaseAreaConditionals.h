@@ -2,6 +2,8 @@
 
 #include "EnemyHuman.h"
 
+#include <DirectXMath.h>
+
 class BaseAreaConditionals
 {
 public:
@@ -200,6 +202,158 @@ public:
 	static bool IsEnemyBeingCalledFrontPatroller(EnemyHuman::patrol patrolStatus)
 	{
 		if (patrolStatus == EnemyHuman::FRONT)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyCloseEnoughToCall(float distance, const float helpCallRange, bool helpCall)
+	{
+		if (distance <= helpCallRange && !helpCall)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool ShouldEnemyDoJetStreamAttack(int agroodEnemies, const int jetStreamAttackRequiredEnemyNumber, bool debugJetAttacked, bool jetStreamCounted, EnemyHuman::status enumStatus)
+	{
+		if (agroodEnemies > jetStreamAttackRequiredEnemyNumber && !debugJetAttacked && !jetStreamCounted && enumStatus == EnemyHuman::AGGRO)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool CanEnemySeePlayer(int intersect, bool enemyKnockback, bool enemyAlive, EnemyHuman::status enumStatus)
+	{
+		if (intersect && !enemyKnockback && enemyAlive || enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyWithinChargingDistanceAndHasntChargedYet(float distance, const float maxChargeDistance, const float minChargeDistance, bool chargeAttackCheck, EnemyHuman::status enumStatus, bool enemyKnockback, bool enemyAlive)
+	{
+		if (distance < maxChargeDistance && distance > minChargeDistance && !chargeAttackCheck && enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool SetEnemyAgrooNumberForJetStreamAttackUse(int agrooNumber)
+	{
+		if (agrooNumber == 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyAgrood(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus == EnemyHuman::AGGRO)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyNOTAgrood(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus != EnemyHuman::AGGRO)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyWithinMinimumChargeDistance(float distance, float minChargeDistance)
+	{
+		if (distance <= minChargeDistance)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyNotDamagedCooldownOrAttacking(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus != EnemyHuman::DAMAGED && enumStatus != EnemyHuman::COOLDOWN && enumStatus != EnemyHuman::PARTICLEATTACK && enumStatus != EnemyHuman::ATTACK
+			&& enumStatus != EnemyHuman::LANDINGATTACK && enumStatus != EnemyHuman::CHARGEATTACK && enumStatus != EnemyHuman::JETSTREAMATTACK && enumStatus != EnemyHuman::TWOENEMYSURROUND)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+
+	static bool IsEnemyCurrentlyParticleAttacking(bool particleAttackActive)
+	{
+		if (particleAttackActive)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool HasEnemyHitTheGroundDuringLandingAttack(bool landingParticles)
+	{
+		if (landingParticles)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyChargeOrJetStreamAttacking(EnemyHuman::status enumStatus, int chargeAttackStage, int jetStreamAttackStage)
+	{
+		if (enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1
+			|| enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemySurroundAttackingThePlayer(EnemyHuman::status enumStatus, int twoEnemySurroundStage)
+	{
+		if (enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool CreateParticlesAtFrontPatrolPosition(float nextDegree, float initialDegree)
+	{
+		if (nextDegree > (initialDegree + XMConvertToRadians(90.0f)))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool CreateParticlesAtBackPatrolPosition(float nextDegree, float initialDegree)
+	{
+		if (nextDegree < (initialDegree - XMConvertToRadians(90.0f)))
 		{
 			return true;
 		}
