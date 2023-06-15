@@ -150,7 +150,7 @@ void BaseArea::Update()
 
 	if (BaseAreaConditionals::IsScreenNotShaking(screenShake))
 	{
-		if (BaseAreaConditionals::IsCameraNotLockedOnAndPlayerNotDodging(camera->lockOn, playerFBX->dodge))
+		if (!BaseAreaConditionals::IsCameraLockedOn(camera->lockOn) && !BaseAreaConditionals::IsPlayerDodging(playerFBX->dodge))
 		{
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
@@ -162,7 +162,7 @@ void BaseArea::Update()
 	}
 
 #pragma region openingCutscene
-	if (BaseAreaConditionals::IsInitializationFinishedAndGameStarting(gameStart, initializeFinished))
+	if (!BaseAreaConditionals::IsGameStarting(gameStart) && BaseAreaConditionals::IsInitializationFinished(initializeFinished))
 	{
 		if (BaseAreaConditionals::ShouldFadeInBegin(startTimer, startTimerLimit))
 		{

@@ -17,9 +17,9 @@ public:
 		return true;
 	}
 
-	static bool IsCameraNotLockedOnAndPlayerNotDodging(bool lockOn, bool dodge)
+	static bool IsCameraLockedOn(bool lockOn)
 	{
-		if (!lockOn && !dodge)
+		if (lockOn)
 		{
 			return true;
 		}
@@ -40,6 +40,26 @@ public:
 	static bool IsInitializationFinishedAndGameStarting(bool gameStart, bool initializeFinished)
 	{
 		if (!gameStart && initializeFinished)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsInitializationFinished(bool initializeFinished)
+	{
+		if (initializeFinished)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsGameStarting(bool gameStart)
+	{
+		if (gameStart)
 		{
 			return true;
 		}
