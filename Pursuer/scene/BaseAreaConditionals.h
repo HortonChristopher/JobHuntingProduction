@@ -363,7 +363,7 @@ public:
 
 	static bool CreateParticlesAtFrontPatrolPosition(float nextDegree, float initialDegree)
 	{
-		if (nextDegree > (initialDegree + XMConvertToRadians(90.0f)))
+		if (nextDegree > (initialDegree + DirectX::XMConvertToRadians(90.0f)))
 		{
 			return true;
 		}
@@ -373,7 +373,7 @@ public:
 
 	static bool CreateParticlesAtBackPatrolPosition(float nextDegree, float initialDegree)
 	{
-		if (nextDegree < (initialDegree - XMConvertToRadians(90.0f)))
+		if (nextDegree < (initialDegree - DirectX::XMConvertToRadians(90.0f)))
 		{
 			return true;
 		}
