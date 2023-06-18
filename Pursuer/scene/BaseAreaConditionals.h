@@ -37,16 +37,6 @@ public:
 		return false;
 	}
 
-	static bool IsInitializationFinishedAndGameStarting(bool gameStart, bool initializeFinished)
-	{
-		if (!gameStart && initializeFinished)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 	static bool IsInitializationFinished(bool initializeFinished)
 	{
 		if (initializeFinished)
@@ -117,9 +107,9 @@ public:
 		return false;
 	}
 
-	static bool IsTheEnemyWanderingOrStanding(EnemyHuman::status enumStatus)
+	static bool IsEnemyWandering(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::WANDER || enumStatus == EnemyHuman::STAND)
+		if (enumStatus == EnemyHuman::WANDER)
 		{
 			return true;
 		}
@@ -127,10 +117,40 @@ public:
 		return false;
 	}
 
-	static bool IsEnemyAggroAttackOrCooldown(EnemyHuman::status enumStatus)
+	static bool IsEnemyStanding(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::AGGRO || enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK
-			|| enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::COOLDOWN || enumStatus == EnemyHuman::ATTACK)
+		if (enumStatus == EnemyHuman::STAND)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyAggro(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus == EnemyHuman::AGGRO)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyAttacking(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK
+			|| enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyCoolingDown(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus == EnemyHuman::COOLDOWN)
 		{
 			return true;
 		}

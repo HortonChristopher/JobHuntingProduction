@@ -240,18 +240,18 @@ void BaseArea::Update()
 	// This code aggros the patrol's partner if one of them starts combat with the player
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::IsTheEnemyWanderingOrStanding(baseAreaEnemyFBX[i]->enumStatus))
+		if (BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus))
 		{
 			if (i % 2 == 0 || i == 0)
 			{
-				if (BaseAreaConditionals::IsEnemyAggroAttackOrCooldown(baseAreaEnemyFBX[i + 1]->enumStatus))
+				if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i + 1]->enumStatus) || BaseAreaConditionals::IsEnemyAttacking(baseAreaEnemyFBX[i + 1]->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i + 1]->enumStatus))
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
 			}
 			else
 			{
-				if (BaseAreaConditionals::IsEnemyAggroAttackOrCooldown(baseAreaEnemyFBX[i - 1]->enumStatus))
+				if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i - 1]->enumStatus) || BaseAreaConditionals::IsEnemyAttacking(baseAreaEnemyFBX[i - 1]->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i - 1]->enumStatus))
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
