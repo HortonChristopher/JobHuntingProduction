@@ -219,16 +219,6 @@ public:
 		return false;
 	}
 
-	static bool IsThereNoEnemyAbleToBeCalledToHelp(int closestEnemy, const int closestEnemyDefaultNumber)
-	{
-		if (closestEnemy == closestEnemyDefaultNumber)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 	static bool ThereIsAnEnemyAbleToHelp(int closestEnemy, const int closestEnemyDefaultNumber)
 	{
 		if (closestEnemy != closestEnemyDefaultNumber)
@@ -299,26 +289,6 @@ public:
 		return false;
 	}
 
-	static bool IsEnemyAgrood(EnemyHuman::status enumStatus)
-	{
-		if (enumStatus == EnemyHuman::AGGRO)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	static bool IsEnemyNOTAgrood(EnemyHuman::status enumStatus)
-	{
-		if (enumStatus != EnemyHuman::AGGRO)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 	static bool IsEnemyWithinMinimumChargeDistance(float distance, float minChargeDistance)
 	{
 		if (distance <= minChargeDistance)
@@ -329,14 +299,13 @@ public:
 		return false;
 	}
 
-	static bool IsEnemyNotDamagedCooldownOrAttacking(EnemyHuman::status enumStatus)
+	static bool IsEnemyDamaged(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus != EnemyHuman::DAMAGED && enumStatus != EnemyHuman::COOLDOWN && enumStatus != EnemyHuman::PARTICLEATTACK && enumStatus != EnemyHuman::ATTACK
-			&& enumStatus != EnemyHuman::LANDINGATTACK && enumStatus != EnemyHuman::CHARGEATTACK && enumStatus != EnemyHuman::JETSTREAMATTACK && enumStatus != EnemyHuman::TWOENEMYSURROUND)
+		if (enumStatus == EnemyHuman::DAMAGED)
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 

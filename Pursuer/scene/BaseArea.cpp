@@ -301,7 +301,7 @@ void BaseArea::Update()
 						}
 					}
 				}
-				if (BaseAreaConditionals::IsThereNoEnemyAbleToBeCalledToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
+				if (!BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
 				{
 					baseAreaEnemyFBX[i]->aggroSet = false;
 					baseAreaEnemyFBX[i]->Reset();
@@ -360,7 +360,7 @@ void BaseArea::Update()
 					baseAreaEnemyFBX[i]->agrooNumber = agroodEnemies;
 				}
 
-				if (BaseAreaConditionals::IsEnemyAgrood(baseAreaEnemyFBX[i]->enumStatus))
+				if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
 				{
 					/*int random = rand() % 10;
 
@@ -384,7 +384,7 @@ void BaseArea::Update()
 			}
 			else if (BaseAreaConditionals::IsEnemyWithinMinimumChargeDistance(distance, minChargeDistance))
 			{
-				if (BaseAreaConditionals::IsEnemyAgrood(baseAreaEnemyFBX[i]->enumStatus))
+				if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
 				{
 					int random = rand() % 10;
 
@@ -408,7 +408,7 @@ void BaseArea::Update()
 					{
 						if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
 						{
-							if (BaseAreaConditionals::IsEnemyAgrood(baseAreaEnemyFBX[i + 1]->enumStatus))
+							if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i + 1]->enumStatus))
 							{
 								baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
 								baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
@@ -426,7 +426,7 @@ void BaseArea::Update()
 						}
 						else if (BaseAreaConditionals::IsEnemyBackPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
 						{
-							if (BaseAreaConditionals::IsEnemyAgrood(baseAreaEnemyFBX[i - 1]->enumStatus))
+							if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i - 1]->enumStatus))
 							{
 								baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
 								baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
@@ -451,12 +451,9 @@ void BaseArea::Update()
 			}
 			else
 			{
-				if (BaseAreaConditionals::IsEnemyNotDamagedCooldownOrAttacking(baseAreaEnemyFBX[i]->enumStatus))
+				if (!BaseAreaConditionals::IsEnemyDamaged(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyAttacking(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
 				{
-					if (BaseAreaConditionals::IsEnemyNOTAgrood(baseAreaEnemyFBX[i]->enumStatus))
-					{
-						baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-					}
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
 			}
 		}
