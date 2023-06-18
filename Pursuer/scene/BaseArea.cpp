@@ -468,7 +468,7 @@ void BaseArea::Update()
 			ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, landingAttackOffset, landingAttackStartScale);
 		}
 
-		if (BaseAreaConditionals::IsEnemyChargeOrJetStreamAttacking(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->chargeAttackStage, baseAreaEnemyFBX[i]->jetStreamAttackStage))
+		if (BaseAreaConditionals::IsEnemyChargeAttacking(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->chargeAttackStage) && BaseAreaConditionals::IsEnemyJetStreamAttacking(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->jetStreamAttackStage))
 		{
 			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
 		}

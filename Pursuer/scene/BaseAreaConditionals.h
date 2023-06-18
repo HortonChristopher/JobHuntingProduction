@@ -340,6 +340,26 @@ public:
 		return false;
 	}
 
+	static bool IsEnemyChargeAttacking(EnemyHuman::status enumStatus, int chargeAttackStage)
+	{
+		if (enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool IsEnemyJetStreamAttacking(EnemyHuman::status enumStatus, int jetStreamAttackStage)
+	{
+		if (enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2)
+		{
+			return true;
+		}
+
+		return false;
+	}
+	
 	static bool IsEnemySurroundAttackingThePlayer(EnemyHuman::status enumStatus, int twoEnemySurroundStage)
 	{
 		if (enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1)
