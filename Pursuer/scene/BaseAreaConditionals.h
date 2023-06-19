@@ -389,4 +389,14 @@ public:
 
 		return false;
 	}
+
+	static bool IsEnemyBeingKnockbacked(bool knockback)
+	{
+		if (knockback)
+		{
+			return true;
+		}
+
+		return false;
+	}
 };
