@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EnemyHuman.h"
+#include "Player.h"
 
 #include <DirectXMath.h>
 
@@ -292,9 +293,44 @@ public:
 		return hp < defeatHP;
 	}
 
+	static bool ShouldTheDamageOverlayDisplay(bool damageOverlayDisplay)
+	{
+		return damageOverlayDisplay;
+	}
+
+	static bool AreBothPlayerAndEnemyInParryRange(bool intersect1, bool intersect2)
+	{
+		return intersect1 && intersect2;
+	}
+
+	static bool IsPlayerParryTimingCorrect(float attackTimer, const float minParryTime, const float maxParryTime)
+	{
+		return (attackTimer > minParryTime) && (attackTimer < maxParryTime);
+	}
+
 	static bool IsPlayerDead(bool isPlayerDead)
 	{
 		return isPlayerDead;
+	}
+
+	static bool IsPlayerParrying(Player::status enumStatus)
+	{
+		return enumStatus == Player::PARRY;
+	}
+
+	static bool IsPlayerAttacking(Player::status enumStatus)
+	{
+		return enumStatus == Player::ATTACK;
+	}
+
+	static bool IsPlayerAttackTimingCorrect(float attackTimer, const float firstAttackStart, const float firstAttackEnd, const float secondAttackStart, const float secondAttackEnd, const float thirdAttackStart, const float thirdAttackEnd)
+	{
+		return (attackTimer >= firstAttackStart && attackTimer <= firstAttackEnd) || attackTimer >= secondAttackStart && attackTimer <= secondAttackEnd || attackTimer >= thirdAttackStart && attackTimer <= thirdAttackEnd);
+	}
+
+	static bool CanPlayerDamageEnemy(bool ableToDamage)
+	{
+		return ableToDamage;
 	}
 
 	static bool IsScreenShaking(bool screenShake)

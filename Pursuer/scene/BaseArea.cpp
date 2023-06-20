@@ -704,7 +704,7 @@ void BaseArea::Update()
 	}
 
 	// Damage overlay display
-	if (damageOverlayDisplay)
+	if (BaseAreaConditionals::ShouldTheDamageOverlayDisplay(damageOverlayDisplay))
 	{
 		if (!BaseAreaConditionals::IsPlayerDead(playerFBX->enumStatus))
 		{
@@ -721,14 +721,14 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerAttack
-	if (playerFBX->enumStatus == Player::PARRY)
+	if (BaseAreaConditionals::IsPlayerParrying(playerFBX->enumStatus))
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange) &&
-				intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange) && baseAreaEnemyAliveBOOL[i] == true)
+			if (BaseAreaConditionals::AreBothPlayerAndEnemyInParryRange(intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange), intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange)) 
+				&& BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]))
 			{
-				if (baseAreaEnemyFBX[i]->attackTimer > baseAreaEnemyFBX[i]->parryPossibleMin && baseAreaEnemyFBX[i]->attackTimer < baseAreaEnemyFBX[i]->parryPossibleMax)
+				if (BaseAreaConditionals::IsPlayerParryTimingCorrect(baseAreaEnemyFBX[i]->attackTimer, baseAreaEnemyFBX[i]->parryPossibleMin, baseAreaEnemyFBX[i]->parryPossibleMax))
 				{
 					baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
 					baseAreaEnemyFBX[i]->attackTimer = baseAreaEnemyFBX[i]->timerReset;
@@ -742,20 +742,18 @@ void BaseArea::Update()
 		}
 	}
 
-	if (playerFBX->enumStatus == Player::ATTACK)
+	if (BaseAreaConditionals::IsPlayerAttacking(playerFBX->enumStatus))
 	{
-		if (playerFBX->timer >= playerFirstAttackStartTimer && playerFBX->timer <= playerFirstAttackEndTimer ||
-			playerFBX->timer >= playerSecondAttackStartTimer && playerFBX->timer <= playerSecondAttackEndTimer ||
-			playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
+		if (BaseAreaConditionals::IsPlayerAttackTimingCorrect(playerFBX->timer, playerFirstAttackStartTimer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 		{
-			if (playerFBX->enumStatus == Player::ATTACK && playerFBX->ableToDamage)
+			if (BaseAreaConditionals::IsPlayerAttacking(playerFBX->enumStatus) && BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
 			{
 				for (int i = 0; i < numberOfEnemiesTotal; i++)
 				{
-					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange) && baseAreaEnemyAliveBOOL[i] == true
-						&& (abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) <= 4.0f))
+					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && (abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) <= 4.0f))
 					{
 						baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
+
 						if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
 						{
 							enemyKnockbackTime = knockbackTimeReset;
