@@ -7,173 +7,91 @@
 class BaseAreaConditionals
 {
 public:
-	static bool IsScreenNotShaking(bool screenShake)
+	static bool IsScreenShaking(bool screenShake)
 	{
-		if (screenShake)
-		{
-			return false;
-		}
-
-		return true;
+		return screenShake;
 	}
 
 	static bool IsCameraLockedOn(bool lockOn)
 	{
-		if (lockOn)
-		{
-			return true;
-		}
-
-		return false;
+		return lockOn;
 	}
 
 	static bool IsPlayerDodging(bool dodge)
 	{
-		if (dodge)
-		{
-			return true;
-		}
-
-		return false;
+		return dodge;
 	}
 
 	static bool IsInitializationFinished(bool initializeFinished)
 	{
-		if (initializeFinished)
-		{
-			return true;
-		}
-
-		return false;
+		return initializeFinished;
 	}
 
 	static bool IsGameStarting(bool gameStart)
 	{
-		if (gameStart)
-		{
-			return true;
-		}
-
-		return false;
+		return gameStart;
 	}
 
 	static bool ShouldFadeInBegin(float startTimer, const float startTimerLimit)
 	{
-		if (startTimer >= startTimerLimit)
-		{
-			return true;
-		}
-
-		return false;
+		return startTimer >= startTimerLimit;
 	}
 
 	static bool IsFadeSpriteAlphaBelowZero(float fadeSpriteAlpha, const float minAlpha)
 	{
-		if (fadeSpriteAlpha <= minAlpha)
-		{
-			return true;
-		}
-
-		return false;
+		return fadeSpriteAlpha <= minAlpha;
 	}
 
 	static bool IsBaseAreaOpeningCutscenePlaying(bool baseAreaOpeningCutscene, bool initializeFinished, float startTimer, const float startTimerLimit)
 	{
-		if (baseAreaOpeningCutscene && initializeFinished == true && startTimer > startTimerLimit)
-		{
-			return true;
-		}
-
-		return false;
+		return baseAreaOpeningCutscene && initializeFinished && (startTimer > startTimerLimit);
 	}
 
 	static bool HasPlayerReachedTriggerToMoveMissionSprite(float zPosition, const float movementStartZPosition)
 	{
-		if (zPosition >= -movementStartZPosition)
-		{
-			return true;
-		}
-
-		return false;
+		return zPosition >= -movementStartZPosition;
 	}
 
 	static bool IsOpeningCutsceneFinished(float zPosition, const float mapBorder)
 	{
-		if (zPosition >= -mapBorder)
-		{
-			return true;
-		}
-
-		return false;
+		return zPosition >= -mapBorder;
 	}
 
 	static bool IsEnemyWandering(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::WANDER)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::WANDER;
 	}
 
 	static bool IsEnemyStanding(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::STAND)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::STAND;
 	}
 
 	static bool IsEnemyAggro(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::AGGRO)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::AGGRO;
 	}
 
 	static bool IsEnemyAlive(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::DEAD)
-		{
-			return false;
-		}
-
-		return true;
+		return enumStatus != EnemyHuman::DEAD;
 	}
 
 	static bool IsEnemyAttacking(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK
-			|| enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK || enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK;
 	}
 
 	static bool IsEnemyCoolingDown(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::COOLDOWN)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::COOLDOWN;
 	}
 
 	static bool ShouldEnemyFlee(float hp, const float fleeHP, bool enemyKnockback, EnemyHuman::status enumStatus, bool helpCall, bool isPartnerDead)
 	{
-		if (hp <= fleeHP && !enemyKnockback && enumStatus != EnemyHuman::DAMAGED && !helpCall && enumStatus != EnemyHuman::DEAD
-			|| isPartnerDead && !enemyKnockback && enumStatus != EnemyHuman::DAMAGED && !helpCall && enumStatus != EnemyHuman::DEAD)
+		if (!enemyKnockback && enumStatus != EnemyHuman::DAMAGED && !helpCall && enumStatus != EnemyHuman::DEAD)
 		{
-			return true;
+			return (hp <= fleeHP) || isPartnerDead;
 		}
 
 		return false;
@@ -181,82 +99,37 @@ public:
 
 	static bool HasEnemyNotYetSetFleeTarget(bool fleeSet)
 	{
-		if (fleeSet)
-		{
-			return false;
-		}
-
-		return true;
+		return !fleeSet;
 	}
 
 	static bool IsEnemyFrontPatrolPosition(EnemyHuman::patrol patrolStatus)
 	{
-		if (patrolStatus == EnemyHuman::FRONT)
-		{
-			return true;
-		}
-
-		return false;
+		return patrolStatus == EnemyHuman::FRONT;
 	}
 
 	static bool IsEnemyBackPatrolPosition(EnemyHuman::patrol patrolStatus)
 	{
-		if (patrolStatus == EnemyHuman::BACK)
-		{
-			return true;
-		}
-
-		return false;
+		return patrolStatus == EnemyHuman::BACK;
 	}
 
 	static bool IsEnemyBeingComparedWithItself(int j, int i, EnemyHuman::patrol patrolStatus)
 	{
-		if (j == i || patrolStatus == EnemyHuman::FRONT && j == (i + 1) || patrolStatus == EnemyHuman::BACK && j == (i - 1))
-		{
-			return true;
-		}
-		
-		return false;
+		return (j == i) || (patrolStatus == EnemyHuman::FRONT && j == (i + 1)) || (patrolStatus == EnemyHuman::BACK && j == (i - 1));
 	}
 
 	static bool IsEnemyMinDistanceNewMinDistance(float x, float y, float min, bool isBeingCalledToHelp)
 	{
-		if (abs(sqrt(x * x + y * y)) < min && isBeingCalledToHelp == false)
-		{
-			return true;
-		}
-
-		return false;
+		return (abs(sqrt(x * x + y * y)) < min) && (isBeingCalledToHelp == false);
 	}
 
 	static bool ThereIsAnEnemyAbleToHelp(int closestEnemy, const int closestEnemyDefaultNumber)
 	{
-		if (closestEnemy != closestEnemyDefaultNumber)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	static bool IsEnemyBeingCalledFrontPatroller(EnemyHuman::patrol patrolStatus)
-	{
-		if (patrolStatus == EnemyHuman::FRONT)
-		{
-			return true;
-		}
-
-		return false;
+		return closestEnemy != closestEnemyDefaultNumber;
 	}
 
 	static bool IsEnemyCloseEnoughToCall(float distance, const float helpCallRange, bool helpCall)
 	{
-		if (distance <= helpCallRange && !helpCall)
-		{
-			return true;
-		}
-
-		return false;
+		return (distance <= helpCallRange) && !helpCall;
 	}
 
 	static bool CanJetStreamAttackBeDone(int jetStream, const int jetStreamRequiredNumber)
@@ -266,162 +139,81 @@ public:
 
 	static bool ShouldEnemyDoJetStreamAttack(int agroodEnemies, const int jetStreamAttackRequiredEnemyNumber, bool debugJetAttacked, bool jetStreamCounted, EnemyHuman::status enumStatus)
 	{
-		if (agroodEnemies > jetStreamAttackRequiredEnemyNumber && !debugJetAttacked && !jetStreamCounted && enumStatus == EnemyHuman::AGGRO)
-		{
-			return true;
-		}
-
-		return false;
+		return (agroodEnemies > jetStreamAttackRequiredEnemyNumber) && !debugJetAttacked && !jetStreamCounted && enumStatus == EnemyHuman::AGGRO;
 	}
 
 	static bool CanEnemySeePlayer(int intersect, bool enemyKnockback, bool enemyAlive, EnemyHuman::status enumStatus)
 	{
-		if (intersect && !enemyKnockback && enemyAlive || enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive)
-		{
-			return true;
-		}
-
-		return false;
+		return (intersect && !enemyKnockback && enemyAlive) || (enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive);
 	}
 
 	static bool CanEnemySeeOtherEnemy(int intersect, bool enemy1Alive, bool enemy2Alive, EnemyHuman::status enumStatus)
 	{
-		if (intersect && enemy1Alive && enemy2Alive && !IsEnemyStanding(enumStatus) && !IsEnemyWandering(enumStatus) && IsEnemyAlive(enumStatus))
-		{
-			return true;
-		}
-
-		return false;
+		return intersect && enemy1Alive && enemy2Alive && !IsEnemyStanding(enumStatus) && !IsEnemyWandering(enumStatus) && IsEnemyAlive(enumStatus);
 	}
 
 	static bool IsEnemyWithinChargingDistanceAndHasntChargedYet(float distance, const float maxChargeDistance, const float minChargeDistance, bool chargeAttackCheck, EnemyHuman::status enumStatus, bool enemyKnockback, bool enemyAlive)
 	{
-		if (distance < maxChargeDistance && distance > minChargeDistance && !chargeAttackCheck && enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive)
-		{
-			return true;
-		}
-
-		return false;
+		return (distance < maxChargeDistance) && (distance > minChargeDistance) && !chargeAttackCheck && enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive;
 	}
 
 	static bool SetEnemyAgrooNumberForJetStreamAttackUse(int agrooNumber)
 	{
-		if (agrooNumber == 0)
-		{
-			return true;
-		}
-
-		return false;
+		return agrooNumber == 0;
 	}
 
 	static bool IsEnemyWithinMinimumChargeDistance(float distance, float minChargeDistance)
 	{
-		if (distance <= minChargeDistance)
-		{
-			return true;
-		}
-
-		return false;
+		return distance <= minChargeDistance;
 	}
 
 	static bool IsEnemyDamaged(EnemyHuman::status enumStatus)
 	{
-		if (enumStatus == EnemyHuman::DAMAGED)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::DAMAGED;
 	}
 
 	static bool IsEnemyCurrentlyParticleAttacking(bool particleAttackActive)
 	{
-		if (particleAttackActive)
-		{
-			return true;
-		}
-
-		return false;
+		return particleAttackActive;
 	}
 
 	static bool HasEnemyHitTheGroundDuringLandingAttack(bool landingParticles)
 	{
-		if (landingParticles)
-		{
-			return true;
-		}
-
-		return false;
+		return landingParticles;
 	}
 
 	static bool IsEnemyChargeOrJetStreamAttacking(EnemyHuman::status enumStatus, int chargeAttackStage, int jetStreamAttackStage)
 	{
-		if (enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1
-			|| enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2)
-		{
-			return true;
-		}
-
-		return false;
+		return (enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1) || (enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2);
 	}
 
 	static bool IsEnemyChargeAttacking(EnemyHuman::status enumStatus, int chargeAttackStage)
 	{
-		if (enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1;
 	}
 
 	static bool IsEnemyJetStreamAttacking(EnemyHuman::status enumStatus, int jetStreamAttackStage)
 	{
-		if (enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2;
 	}
 	
 	static bool IsEnemySurroundAttackingThePlayer(EnemyHuman::status enumStatus, int twoEnemySurroundStage)
 	{
-		if (enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1)
-		{
-			return true;
-		}
-
-		return false;
+		return enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1;
 	}
 
 	static bool CreateParticlesAtFrontPatrolPosition(float nextDegree, float initialDegree)
 	{
-		if (nextDegree > (initialDegree + DirectX::XMConvertToRadians(90.0f)))
-		{
-			return true;
-		}
-
-		return false;
+		return nextDegree > (initialDegree + DirectX::XMConvertToRadians(90.0f));
 	}
 
 	static bool CreateParticlesAtBackPatrolPosition(float nextDegree, float initialDegree)
 	{
-		if (nextDegree < (initialDegree - DirectX::XMConvertToRadians(90.0f)))
-		{
-			return true;
-		}
-
-		return false;
+		return nextDegree < (initialDegree - DirectX::XMConvertToRadians(90.0f));
 	}
 
 	static bool IsEnemyBeingKnockbacked(bool knockback)
 	{
-		if (knockback)
-		{
-			return true;
-		}
-
-		return false;
+		return knockback;
 	}
 };

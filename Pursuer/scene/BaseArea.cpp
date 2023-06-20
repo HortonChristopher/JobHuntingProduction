@@ -148,7 +148,7 @@ void BaseArea::Update()
 	std::ostringstream missionTracker;
 	std::ostringstream healTracker;
 
-	if (BaseAreaConditionals::IsScreenNotShaking(screenShake))
+	if (!BaseAreaConditionals::IsScreenShaking(screenShake))
 	{
 		if (!BaseAreaConditionals::IsCameraLockedOn(camera->lockOn) && !BaseAreaConditionals::IsPlayerDodging(playerFBX->dodge))
 		{
@@ -311,7 +311,7 @@ void BaseArea::Update()
 				baseAreaEnemyFBX[i]->fleeSet = true;
 				if (BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
 				{
-					if (BaseAreaConditionals::IsEnemyBeingCalledFrontPatroller(baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->patrolStatus))
+					if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->patrolStatus))
 					{
 						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
 						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy + 1]->isBeingCalledToHelp = true;
