@@ -42,6 +42,11 @@ public:
 		return fadeSpriteAlpha <= minAlpha;
 	}
 
+	static bool IsFadeSpriteAlphaAboveOne(float fadeSpriteAlpha, const float maxAlpha)
+	{
+		return fadeSpriteAlpha >= maxAlpha;
+	}
+
 	static bool IsBaseAreaOpeningCutscenePlaying(bool baseAreaOpeningCutscene, bool initializeFinished, float startTimer, const float startTimerLimit)
 	{
 		return baseAreaOpeningCutscene && initializeFinished && (startTimer > startTimerLimit);
@@ -77,6 +82,11 @@ public:
 		return enumStatus != EnemyHuman::DEAD;
 	}
 
+	static bool IsEnemyAliveBOOLIAN(bool isAlive)
+	{
+		return isAlive;
+	}
+
 	static bool IsEnemyAttacking(EnemyHuman::status enumStatus)
 	{
 		return enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK || enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK;
@@ -85,6 +95,11 @@ public:
 	static bool IsEnemyCoolingDown(EnemyHuman::status enumStatus)
 	{
 		return enumStatus == EnemyHuman::COOLDOWN;
+	}
+
+	static bool IsEnemyFleeing(EnemyHuman::status enumStatus)
+	{
+		return enumStatus == EnemyHuman::FLEE;
 	}
 
 	static bool ShouldEnemyFlee(float hp, const float fleeHP, bool enemyKnockback, EnemyHuman::status enumStatus, bool helpCall, bool isPartnerDead)
@@ -132,14 +147,19 @@ public:
 		return (distance <= helpCallRange) && !helpCall;
 	}
 
-	static bool CanJetStreamAttackBeDone(int jetStream, const int jetStreamRequiredNumber)
+	static bool CanJetStreamAttackBeDone(int jetStream, const int jetStreamRequiredNumber, int enemyDefeated, const int clearCondition)
 	{
-		return jetStream > jetStreamRequiredNumber;
+		return (jetStream > jetStreamRequiredNumber) && (enemyDefeated <= clearCondition - 2);
 	}
 
 	static bool ShouldEnemyDoJetStreamAttack(int agroodEnemies, const int jetStreamAttackRequiredEnemyNumber, bool debugJetAttacked, bool jetStreamCounted, EnemyHuman::status enumStatus)
 	{
 		return (agroodEnemies > jetStreamAttackRequiredEnemyNumber) && !debugJetAttacked && !jetStreamCounted && enumStatus == EnemyHuman::AGGRO;
+	}
+
+	static bool CanEnemyJetStreamAttack(EnemyHuman::status enumStatus, bool jetAttacked)
+	{
+		return enumStatus != EnemyHuman::JETSTREAMATTACK && !jetAttacked;
 	}
 
 	static bool CanEnemySeePlayer(int intersect, bool enemyKnockback, bool enemyAlive, EnemyHuman::status enumStatus)
@@ -212,8 +232,73 @@ public:
 		return nextDegree < (initialDegree - DirectX::XMConvertToRadians(90.0f));
 	}
 
-	static bool IsEnemyBeingKnockbacked(bool knockback)
+	static bool IsEnemyOrPlayerBeingKnockbacked(bool knockback)
 	{
 		return knockback;
+	}
+
+	static bool HasKnockbackFinished(float knockbackTime, const float knockbackMaxTime)
+	{
+		return knockbackTime >= knockbackMaxTime;
+	}
+
+	static bool CanEnemyDamagePlayer(bool ableToDamage)
+	{
+		return ableToDamage;
+	}
+
+	static bool DidEnemyHitPlayerWithNormalAttack(bool intersect, bool attackDamagePossible)
+	{
+		return intersect && attackDamagePossible;
+	}
+
+	static bool DidEnemyHitPlayerWithParticleAttack(bool intersect, bool particleAttackActive)
+	{
+		return intersect && particleAttackActive;
+	}
+
+	static bool DidEnemyHitPlayerDuringSurroundAttack(bool intersect, EnemyHuman::status enumStatus, int twoEnemySurroundStage)
+	{
+		return intersect && enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1;
+	}
+
+	static bool DidEnemyHitPlayerDuringLandingAttack(bool intersect, bool landingParticles)
+	{
+		return intersect && landingParticles;
+	}
+
+	static bool DidEnemyHitPlayerWhileCharging(bool intersect, EnemyHuman::status enumStatus, int chargeStage, int jetStreamStage)
+	{
+		if (intersect)
+		{
+			return (enumStatus == EnemyHuman::CHARGEATTACK && chargeStage == 1) || (enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamStage == 2);
+		}
+
+		return false;
+	}
+
+	static bool ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage(bool damageAdvantage)
+	{
+		return damageAdvantage;
+	}
+
+	static bool ShouldChargeAttackBeUsedDuringDamageAdvantage(float distance, const float damageAdvantageShortLongRangeBorder)
+	{
+		return distance < damageAdvantageShortLongRangeBorder;
+	}
+
+	static bool HasPlayerHPReachedZero(int hp, const int defeatHP)
+	{
+		return hp < defeatHP;
+	}
+
+	static bool IsPlayerDead(bool isPlayerDead)
+	{
+		return isPlayerDead;
+	}
+
+	static bool IsScreenShaking(bool screenShake)
+	{
+		return screenShake;
 	}
 };
