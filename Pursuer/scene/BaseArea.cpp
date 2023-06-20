@@ -502,13 +502,10 @@ void BaseArea::Update()
 				continue;
 			}
 
-			if (intersect(baseAreaEnemyFBX[j]->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange) && baseAreaEnemyAliveBOOL[j] == true && baseAreaEnemyAliveBOOL[i] == true && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::STAND
-				&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::WANDER && baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD)
+			if (BaseAreaConditionals::CanEnemySeeOtherEnemy(intersect(baseAreaEnemyFBX[j]->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange),
+				baseAreaEnemyAliveBOOL[j], baseAreaEnemyAliveBOOL[i], baseAreaEnemyFBX[j]->enumStatus) && BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) && BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
 			{
-				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
-				{
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-				}
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 			}
 		}
 	}

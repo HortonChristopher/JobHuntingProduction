@@ -137,6 +137,16 @@ public:
 		return false;
 	}
 
+	static bool IsEnemyAlive(EnemyHuman::status enumStatus)
+	{
+		if (enumStatus == EnemyHuman::DEAD)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	static bool IsEnemyAttacking(EnemyHuman::status enumStatus)
 	{
 		if (enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK
@@ -249,6 +259,11 @@ public:
 		return false;
 	}
 
+	static bool CanJetStreamAttackBeDone(int jetStream, const int jetStreamRequiredNumber)
+	{
+		return jetStream > jetStreamRequiredNumber;
+	}
+
 	static bool ShouldEnemyDoJetStreamAttack(int agroodEnemies, const int jetStreamAttackRequiredEnemyNumber, bool debugJetAttacked, bool jetStreamCounted, EnemyHuman::status enumStatus)
 	{
 		if (agroodEnemies > jetStreamAttackRequiredEnemyNumber && !debugJetAttacked && !jetStreamCounted && enumStatus == EnemyHuman::AGGRO)
@@ -262,6 +277,16 @@ public:
 	static bool CanEnemySeePlayer(int intersect, bool enemyKnockback, bool enemyAlive, EnemyHuman::status enumStatus)
 	{
 		if (intersect && !enemyKnockback && enemyAlive || enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	static bool CanEnemySeeOtherEnemy(int intersect, bool enemy1Alive, bool enemy2Alive, EnemyHuman::status enumStatus)
+	{
+		if (intersect && enemy1Alive && enemy2Alive && !IsEnemyStanding(enumStatus) && !IsEnemyWandering(enumStatus) && IsEnemyAlive(enumStatus))
 		{
 			return true;
 		}
