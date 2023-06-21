@@ -1257,14 +1257,14 @@ void BaseArea::Update()
 #pragma region InCaseFallingThroughWorld
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (baseAreaEnemyFBX[i]->GetPosition().y < -9.0f)
+		if (BaseAreaConditionals::HasPlayerOrEnemyFallenThroughGround(baseAreaEnemyFBX[i]->GetPosition().y, -9.0f))
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
 	}
 
-	if (playerFBX->GetPosition().y <= -9.0f)
+	if (BaseAreaConditionals::HasPlayerOrEnemyFallenThroughGround(playerFBX->GetPosition().y, -9.0f))
 	{
 		playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 18.0f, playerFBX->GetPosition().z });
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, 18.0f, playerFBX->GetPosition().z });
@@ -1272,9 +1272,9 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region LockOn
-	if (input->PushKey(DIK_SPACE) || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	if (BaseAreaConditionals::CameraLockOn(input->PushKey(DIK_SPACE), input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)))
 	{
-		if (!camera->lockOn)
+		if (!BaseAreaConditionals::IsCameraLockedOn(camera->lockOn))
 		{
 			float min = FLT_MAX;
 			closestEnemy = 20;
@@ -1313,7 +1313,7 @@ void BaseArea::Update()
 	else
 	{
 		camera->lockOn = false;
-		if (input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+		if (BaseAreaConditionals::ResetCameraAfterLockon(input->UpKey(DIK_SPACE), input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)))
 		{
 			// Assigns the camera's current degree of rotation
 			camera->resetPhi *= 3.141592654f / 180.0f;
@@ -1336,12 +1336,12 @@ void BaseArea::Update()
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		baseAreaEnemyFBX[i]->Update();
-		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		if (BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus))
 		{
 			landingPositionOBJ[i]->Update();
 		}
 		// Disable gravity during sky attack
-		if (baseAreaEnemyFBX[i]->landed)
+		if (BaseAreaConditionals::ShouldGravityBeDisabled(baseAreaEnemyFBX[i]->landed))
 		{
 			baseAreaEnemyPositionOBJ[i]->notLandingAttack = true;
 		}
@@ -1350,7 +1350,7 @@ void BaseArea::Update()
 			baseAreaEnemyPositionOBJ[i]->notLandingAttack = false;
 		}
 		baseAreaEnemyPositionOBJ[i]->Update();
-		if (baseAreaEnemyAliveBOOL[i])
+		if (BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]))
 		{
 			enemyVisionRangeOBJ[i]->Update();
 			attackRangeOBJ[i + 1]->Update();
@@ -1367,9 +1367,9 @@ void BaseArea::Update()
 #pragma region dontStackOnTop
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::CHARGEATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::FLEE && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::TWOENEMYSURROUND)
+		if (!BaseAreaConditionals::IsEnemyChargingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyJetStreamAttackingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyFleeing(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemySurroundAttackingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus))
 		{
-			if (DontStackOnTop(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f))
+			if (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f)))
 			{
 				float dx = playerFBX->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 				float dy = playerFBX->GetPosition().y - baseAreaEnemyFBX[i]->GetPosition().y;
@@ -1390,7 +1390,7 @@ void BaseArea::Update()
 
 				float elapsedTime = 0.0f;
 
-				while (DontStackOnTop(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f))
+				while (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(playerFBX->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)))
 				{
 					playerFBX->MoveTowards(newX, playerFBX->GetPosition().x + dx, 1.0f, elapsedTime);
 					playerFBX->MoveTowards(newY, playerFBX->GetPosition().y + dy, 1.0f, elapsedTime);
@@ -1407,8 +1407,7 @@ void BaseArea::Update()
 					continue;
 				}
 
-				if (DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)
-					&& baseAreaEnemyFBX[j]->enumStatus != EnemyHuman::DEAD && baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
+				if (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)) && BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[j]->enumStatus) && BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[i]->enumStatus))
 				{
 					float dx = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 					float dy = baseAreaEnemyFBX[j]->GetPosition().y - baseAreaEnemyFBX[i]->GetPosition().y;
@@ -1429,7 +1428,7 @@ void BaseArea::Update()
 
 					float elapsedTime = 0.0f;
 
-					while (DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f))
+					while (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)))
 					{
 						baseAreaEnemyFBX[j]->MoveTowards(newX, baseAreaEnemyFBX[j]->GetPosition().x + dx, 1.0f, elapsedTime);
 						baseAreaEnemyFBX[j]->MoveTowards(newY, baseAreaEnemyFBX[j]->GetPosition().y + dy, 1.0f, elapsedTime);
@@ -1447,17 +1446,17 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::JETSTREAMATTACK && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
+		if (BaseAreaConditionals::IsEnemyJetStreamAttackingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus) && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
-		else if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::LANDINGATTACK)
+		else if (!BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus))
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
-		else if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::LANDINGATTACK)
+		else if (BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus))
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemyFBX[i]->landingAttackPosition);
 		}
@@ -1556,7 +1555,7 @@ void BaseArea::Draw()
 	Sprite::PreDraw(cmdList);
 
 	// Foreground sprite drawing
-	if (damageOverlayDisplay)
+	if (BaseAreaConditionals::ShouldTheDamageOverlayDisplay(damageOverlayDisplay))
 	{
 		baseAreaDamageOverlaySPRITE->Draw();
 	}
@@ -1590,7 +1589,7 @@ void BaseArea::Draw()
 	}*/
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (!baseAreaEnemyFBX[i]->dead)
+		if (!BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyFBX[i]->dead))
 		{
 			baseAreaMinimapEnemySPRITE[i]->Draw();
 		}
@@ -1598,7 +1597,7 @@ void BaseArea::Draw()
 	staminaWarningSPRITE->Draw();
 	baseAreaMissionSPRITE->Draw();
 
-	if (playerFBX->slowMotion)
+	if (BaseAreaConditionals::IsPlayerInSlowMotion(playerFBX->slowMotion))
 	{
 		slowMotionSPRITE->Draw();
 	}
@@ -1606,7 +1605,7 @@ void BaseArea::Draw()
 	// Debug text drawing
 	debugText->DrawAll(cmdList);
 
-	if (fadeSpriteALPHA > 0.0f)
+	if (BaseAreaConditionals::IsFadeSpriteVisible(fadeSpriteALPHA))
 	{
 		fadeSPRITE->Draw();
 	}

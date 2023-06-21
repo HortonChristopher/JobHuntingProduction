@@ -83,6 +83,31 @@ public:
 		return enumStatus == EnemyHuman::AGGRO;
 	}
 
+	static bool IsEnemyLandingAttack(EnemyHuman::status enumStatus)
+	{
+		return enumStatus == EnemyHuman::LANDINGATTACK;
+	}
+
+	static bool IsEnemyChargingNOSTAGE(EnemyHuman::status enumStatus)
+	{
+		return enumStatus == EnemyHuman::CHARGEATTACK;
+	}
+
+	static bool IsEnemyJetStreamAttackingNOSTAGE(EnemyHuman::status enumStatus)
+	{
+		return enumStatus == EnemyHuman::JETSTREAMATTACK;
+	}
+
+	static bool IsEnemySurroundAttackingNOSTAGE(EnemyHuman::status enumStatus)
+	{
+		return enumStatus == EnemyHuman::TWOENEMYSURROUND;
+	}
+
+	static bool ShouldGravityBeDisabled(bool landed)
+	{
+		return landed;
+	}
+
 	static bool IsEnemyAlive(EnemyHuman::status enumStatus)
 	{
 		return enumStatus != EnemyHuman::DEAD;
@@ -450,6 +475,16 @@ public:
 		return lockOn;
 	}
 
+	static bool CameraLockOn(bool lockOnK, bool lockOnC)
+	{
+		return lockOnK || lockOnC;
+	}
+
+	static bool ResetCameraAfterLockon(bool lockOnK, bool lockOnC)
+	{
+		return lockOnK || lockOnC;
+	}
+
 	static bool ShouldStaminaBarAlphaBeFull(float stamina, const float staminaMax, const float dodgeStaminaNeeded)
 	{
 		return (stamina < staminaMax) && (stamina >= dodgeStaminaNeeded);
@@ -495,5 +530,25 @@ public:
 	static bool CanSlowMotionBeActivated(bool input, float power, const float powerMin)
 	{
 		return input && (power > powerMin);
+	}
+
+	static bool HasPlayerOrEnemyFallenThroughGround(float position, const float threshold)
+	{
+		return position > threshold;
+	}
+
+	static bool AreFBXModelsColliding(bool stacking)
+	{
+		return stacking;
+	}
+
+	static bool IsPlayerInSlowMotion(bool slowMotion)
+	{
+		return slowMotion;
+	}
+
+	static bool IsFadeSpriteVisible(float alpha)
+	{
+		return alpha > 0.0f;
 	}
 };
