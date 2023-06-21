@@ -449,4 +449,51 @@ public:
 	{
 		return lockOn;
 	}
+
+	static bool ShouldStaminaBarAlphaBeFull(float stamina, const float staminaMax, const float dodgeStaminaNeeded)
+	{
+		return (stamina < staminaMax) && (stamina >= dodgeStaminaNeeded);
+	}
+
+	static bool ShouldStaminaBarBeginFading(float stamina, const float staminaMaximum)
+	{
+		return stamina >= staminaMaximum;
+	}
+
+	static bool IsStaminaBarBlinking(bool blinking)
+	{
+		return blinking;
+	}
+
+	static bool SwitchBlinking(float alpha, const float minMaxAlpha)
+	{
+		if (minMaxAlpha == 0.0f)
+		{
+			return alpha <= minMaxAlpha;
+		}
+		else
+		{
+			return alpha >= minMaxAlpha;
+		}
+	}
+
+	static bool ShouldPowerBarAlphaBeFull(float power, const float powerMaximum)
+	{
+		return power < powerMaximum;
+	}
+
+	static bool ShouldBarAlphaBeZero(float alpha, const float minAlpha)
+	{
+		return alpha <= minAlpha;
+	}
+
+	static bool ShouldSprintParticlesBeCreated(bool inputC, bool inputK, float stamina, const float staminaMin)
+	{
+		return (inputC && (stamina > staminaMin)) || (inputK && (stamina > staminaMin));
+	}
+
+	static bool CanSlowMotionBeActivated(bool input, float power, const float powerMin)
+	{
+		return input && (power > powerMin);
+	}
 };

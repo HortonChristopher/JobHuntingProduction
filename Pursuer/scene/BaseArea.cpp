@@ -1050,21 +1050,21 @@ void BaseArea::Update()
 	STBarFrameSPRITE->SetRotation(STBarRotation);
 	slowMotionBarSPRITE->SetRotation(lockOnRotation);
 	slowMotionBarFrameSPRITE->SetRotation(lockOnRotation);
-	if (playerFBX->stamina < playerFBX->staminaMaximum && playerFBX->stamina >= playerFBX->dodgeStaminaNeeded)
+	if (BaseAreaConditionals::ShouldStaminaBarAlphaBeFull(playerFBX->stamina, playerFBX->staminaMaximum, playerFBX->dodgeStaminaNeeded))
 	{
 		staminaSpriteAlpha = maxAlpha;
 		blinkingStaminaAlpha = maxAlpha;
 	}
-	else if (playerFBX->stamina >= playerFBX->staminaMaximum)
+	else if (BaseAreaConditionals::ShouldStaminaBarBeginFading(playerFBX->stamina, playerFBX->staminaMaximum))
 	{
 		staminaSpriteAlpha -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 	}
 	else
 	{
-		if (!staminaBlinkingEffect)
+		if (!BaseAreaConditionals::IsStaminaBarBlinking(staminaBlinkingEffect))
 		{
 			blinkingStaminaAlpha -= blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (blinkingStaminaAlpha <= minAlpha)
+			if (BaseAreaConditionals::SwitchBlinking(blinkingStaminaAlpha, minAlpha))
 			{
 				blinkingStaminaAlpha = minAlpha;
 				staminaBlinkingEffect = true;
@@ -1073,7 +1073,7 @@ void BaseArea::Update()
 		else
 		{
 			blinkingStaminaAlpha += blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (blinkingStaminaAlpha >= maxAlpha)
+			if (BaseAreaConditionals::SwitchBlinking(blinkingStaminaAlpha, maxAlpha))
 			{
 				blinkingStaminaAlpha = maxAlpha;
 				staminaBlinkingEffect = false;
@@ -1081,7 +1081,7 @@ void BaseArea::Update()
 		}
 	}
 
-	if (playerFBX->powerRemaining < playerFBX->staminaMaximum)
+	if (BaseAreaConditionals::ShouldPowerBarAlphaBeFull(playerFBX->powerRemaining, playerFBX->staminaMaximum))
 	{
 		slowMotionSpriteALPHA = maxAlpha;
 	}
@@ -1095,24 +1095,24 @@ void BaseArea::Update()
 	slowMotionBarSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, slowMotionSpriteALPHA });
 	slowMotionBarFrameSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, slowMotionSpriteALPHA });
 
-	if (staminaSpriteAlpha <= minAlpha)
+	if (BaseAreaConditionals::ShouldBarAlphaBeZero(staminaSpriteAlpha, minAlpha))
 	{
 		staminaSpriteAlpha = minAlpha;
 	}
 
-	if (slowMotionSpriteALPHA <= minAlpha)
+	if (BaseAreaConditionals::ShouldBarAlphaBeZero(slowMotionSpriteALPHA, minAlpha))
 	{
 		slowMotionSpriteALPHA = minAlpha;
 	}
 
 	staminaWarningSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, playerFBX->staminaWarningSpriteAlpha });
 
-	if (input->PushKey(DIK_LSHIFT) && playerFBX->stamina > playerFBX->staminaMinimum || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && playerFBX->stamina > playerFBX->staminaMinimum)
+	if (BaseAreaConditionals::ShouldSprintParticlesBeCreated(input->PushKey(DIK_LSHIFT), input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER), playerFBX->stamina, playerFBX->staminaMinimum))
 	{
 		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, particleSprintLife, -sprintParticleOffset, sprintParticleStartScale);
 	}
 
-	if (input->PushKey(DIK_CAPSLOCK) && playerFBX->powerRemaining >= playerFBX->powerMinimum)
+	if (BaseAreaConditionals::CanSlowMotionBeActivated(input->PushKey(DIK_CAPSLOCK), playerFBX->powerRemaining, playerFBX->powerMinimum))
 	{
 		playerFBX->slowMotion = true;
 
