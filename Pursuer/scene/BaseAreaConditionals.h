@@ -323,7 +323,7 @@ public:
 		return distance < damageAdvantageShortLongRangeBorder;
 	}
 
-	static bool HasPlayerHPReachedZero(int hp, const int defeatHP)
+	static bool HasPlayerHPReachedZero(float hp, const float defeatHP)
 	{
 		return hp < defeatHP;
 	}
@@ -373,17 +373,12 @@ public:
 		return ableToDamage;
 	}
 
-	static bool IsScreenShaking(bool screenShake)
-	{
-		return screenShake;
-	}
-
 	static bool HasScreenShakingFinished(float shakeTimer, const float maxShakeTimer)
 	{
 		return shakeTimer >= maxShakeTimer;
 	}
 
-	static bool WillPlayerAttackHit(float intersect)
+	static bool WillPlayerAttackHit(int intersect)
 	{
 		return intersect;
 	}
@@ -430,9 +425,9 @@ public:
 		}
 	}
 
-	static bool ShouldMapBoundaryDotsSpawn(bool intersect, const float visibleDistance)
+	static bool ShouldMapBoundaryDotsSpawn(float distance, const float visibleDistance)
 	{
-		return intersect <= visibleDistance;
+		return (distance <= visibleDistance);
 	}
 
 	static bool ShouldMissionSpriteMovementStart(bool spriteMovement)
@@ -468,11 +463,6 @@ public:
 	static bool ShouldMissionSpriteSizeBeSet(float size, const float targetSize)
 	{
 		return size <= targetSize;
-	}
-
-	static bool IsCameraLockedOn(bool lockOn)
-	{
-		return lockOn;
 	}
 
 	static bool CameraLockOn(bool lockOnK, bool lockOnC)
@@ -534,7 +524,7 @@ public:
 
 	static bool HasPlayerOrEnemyFallenThroughGround(float position, const float threshold)
 	{
-		return position > threshold;
+		return position < threshold;
 	}
 
 	static bool AreFBXModelsColliding(bool stacking)
