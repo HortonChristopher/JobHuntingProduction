@@ -53,6 +53,11 @@ public:
 		return baseAreaOpeningCutscene && initializeFinished && (startTimer > startTimerLimit);
 	}
 
+	static bool BaseAreaOpeningCutscenePlayingCheck(bool baseAreaOpeningCutscene)
+	{
+		return baseAreaOpeningCutscene;
+	}
+
 	static bool HasPlayerReachedTriggerToMoveMissionSprite(float zPosition, const float movementStartZPosition)
 	{
 		return zPosition >= -movementStartZPosition;
@@ -386,5 +391,62 @@ public:
 	static bool HasPlayerReachedGameClearThreshold(int enemyDefeated, int threshold)
 	{
 		return enemyDefeated > (threshold - 1);
+	}
+
+	static bool HasPlayerReachedMapBoundaries(float position, const float mapBorder)
+	{
+		if (mapBorder < 0.0f)
+		{
+			return position < mapBorder;
+		}
+		else
+		{
+			return position > mapBorder;
+		}
+	}
+
+	static bool ShouldMapBoundaryDotsSpawn(bool intersect, const float visibleDistance)
+	{
+		return intersect <= visibleDistance;
+	}
+
+	static bool ShouldMissionSpriteMovementStart(bool spriteMovement)
+	{
+		return spriteMovement;
+	}
+
+	static bool HasMissionSpriteReachedDesiredPosition(bool set)
+	{
+		return set;
+	}
+
+	static bool ShouldMissionSpriteMove(float position, const float targetPosition)
+	{
+		return position < targetPosition;
+	}
+
+	static bool ShouldMissionSpritePositionBeSet(float position, const float targetPosition)
+	{
+		return position >= targetPosition;
+	}
+
+	static bool HasMissionSpriteReachedDesiredSize(bool set)
+	{
+		return set;
+	}
+
+	static bool ShouldMissionSpriteSizeChange(float size, const float targetSize)
+	{
+		return size > targetSize;
+	}
+
+	static bool ShouldMissionSpriteSizeBeSet(float size, const float targetSize)
+	{
+		return size <= targetSize;
+	}
+
+	static bool IsCameraLockedOn(bool lockOn)
+	{
+		return lockOn;
 	}
 };

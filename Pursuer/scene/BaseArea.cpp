@@ -902,25 +902,25 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region areaBoundaryLimits
-	if (!playerFBX->baseAreaOpeningCutscene)
+	if (!BaseAreaConditionals::BaseAreaOpeningCutscenePlayingCheck(playerFBX->baseAreaOpeningCutscene))
 	{
-		if (playerFBX->GetPosition().x > mapBorder)
+		if (BaseAreaConditionals::HasPlayerReachedMapBoundaries(playerFBX->GetPosition().x, mapBorder))
 		{
 			playerFBX->SetPosition({ mapBorder, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
-		else if (playerFBX->GetPosition().x < -mapBorder)
+		else if (BaseAreaConditionals::HasPlayerReachedMapBoundaries(playerFBX->GetPosition().x, -mapBorder))
 		{
 			playerFBX->SetPosition({ -mapBorder, playerFBX->GetPosition().y, playerFBX->GetPosition().z });
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
 
-		if (playerFBX->GetPosition().z > mapBorder)
+		if (BaseAreaConditionals::HasPlayerReachedMapBoundaries(playerFBX->GetPosition().z, mapBorder))
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, mapBorder });
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
-		else if (playerFBX->GetPosition().z < -mapBorder)
+		else if (BaseAreaConditionals::HasPlayerReachedMapBoundaries(playerFBX->GetPosition().z, -mapBorder))
 		{
 			playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, -mapBorder });
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
@@ -928,22 +928,22 @@ void BaseArea::Update()
 
 		for (float i = 0.0f; i < mapBorderParticles; i++)
 		{
-			if (Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, -mapBorderParticlePosition}) <= mapBorderVisibleDistance)
+			if (BaseAreaConditionals::ShouldMapBoundaryDotsSpawn(Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, -mapBorderParticlePosition }), mapBorderVisibleDistance))
 			{
 				ParticleCreationEdge(-mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, -mapBorderParticlePosition, particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 
-			if (Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, mapBorderParticlePosition }) <= mapBorderVisibleDistance)
+			if (BaseAreaConditionals::ShouldMapBoundaryDotsSpawn(Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, mapBorderParticlePosition }), mapBorderVisibleDistance))
 			{
 				ParticleCreationEdge(-mapBorderParticlePosition + (8 * i), playerFBX->GetPosition().y, mapBorderParticlePosition, particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 
-			if (Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i) }) <= mapBorderVisibleDistance)
+			if (BaseAreaConditionals::ShouldMapBoundaryDotsSpawn(Distance(playerFBX->GetPosition(), { -mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i) }), mapBorderVisibleDistance))
 			{
 				ParticleCreationEdge(-mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i), particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
 
-			if (Distance(playerFBX->GetPosition(), { mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i) }) <= mapBorderVisibleDistance)
+			if (BaseAreaConditionals::ShouldMapBoundaryDotsSpawn(Distance(playerFBX->GetPosition(), { mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i) }), mapBorderVisibleDistance))
 			{
 				ParticleCreationEdge(mapBorderParticlePosition, playerFBX->GetPosition().y, -mapBorderParticlePosition + (8 * i), particleLifeHalf, mapBorderParticleOffset, mapBorderParticleStartScale);
 			}
@@ -952,25 +952,25 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region HPSTUpdates
-	if (!startMissionSpriteMovement)
+	if (!BaseAreaConditionals::ShouldMissionSpriteMovementStart(startMissionSpriteMovement))
 	{
 		baseAreaMissionSPRITE->SetPosition({ initialBaseAreaMissionSpritePosition.x, initialBaseAreaMissionSpritePosition.y });
 		baseAreaMissionSPRITE->SetSize({ initialBaseAreaMissionSpriteSize.x, initialBaseAreaMissionSpriteSize.y });
 	}
 	else
 	{
-		if (!xSet || !ySet)
+		if (!BaseAreaConditionals::HasMissionSpriteReachedDesiredPosition(xSet) || !BaseAreaConditionals::HasMissionSpriteReachedDesiredPosition(ySet))
 		{
 			float x = (targetBaseAreaMissionSpritePosition.x - baseAreaMissionSPRITE->GetPosition().x);
 			float y = (targetBaseAreaMissionSpritePosition.y - baseAreaMissionSPRITE->GetPosition().y);
 			float hypotenuse = sqrtf((x * x) + (y * y));
 			
 			XMFLOAT2 newMissionPosition = baseAreaMissionSPRITE->GetPosition();
-			if (baseAreaMissionSPRITE->GetPosition().x < targetBaseAreaMissionSpritePosition.x)
+			if (BaseAreaConditionals::ShouldMissionSpriteMove(baseAreaMissionSPRITE->GetPosition().x, targetBaseAreaMissionSpritePosition.x))
 			{
 				newMissionPosition.x += baseAreaMissionSpriteMovementSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
 			}
-			if (baseAreaMissionSPRITE->GetPosition().y < targetBaseAreaMissionSpritePosition.y)
+			if (BaseAreaConditionals::ShouldMissionSpriteMove(baseAreaMissionSPRITE->GetPosition().y, targetBaseAreaMissionSpritePosition.y))
 			{
 				newMissionPosition.y += baseAreaMissionSpriteMovementSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
 			}
@@ -981,14 +981,14 @@ void BaseArea::Update()
 			baseAreaMissionSPRITE->SetPosition({ targetBaseAreaMissionSpritePosition.x, targetBaseAreaMissionSpritePosition.y });
 		}
 
-		if (!sizeSet)
+		if (!BaseAreaConditionals::HasMissionSpriteReachedDesiredSize(sizeSet))
 		{
 			XMFLOAT2 missionSpriteSize = baseAreaMissionSPRITE->GetSize();
-			if (baseAreaMissionSPRITE->GetSize().x > targetBaseAreaMissionSpriteSize.x)
+			if (BaseAreaConditionals::ShouldMissionSpriteSizeChange(baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.x))
 			{
 				missionSpriteSize.x -= baseAreaMissionSpriteSizeSpeed.x * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
-			if (baseAreaMissionSPRITE->GetSize().y > targetBaseAreaMissionSpriteSize.y)
+			if (BaseAreaConditionals::ShouldMissionSpriteSizeChange(baseAreaMissionSPRITE->GetSize().y, targetBaseAreaMissionSpriteSize.y))
 			{
 				missionSpriteSize.y -= baseAreaMissionSpriteSizeSpeed.y * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 			}
@@ -999,32 +999,29 @@ void BaseArea::Update()
 			baseAreaMissionSPRITE->SetSize({ targetBaseAreaMissionSpriteSize.x, targetBaseAreaMissionSpriteSize.y });
 		}
 
-		if (baseAreaMissionSPRITE->GetPosition().x >= targetBaseAreaMissionSpritePosition.x)
+		if (BaseAreaConditionals::ShouldMissionSpritePositionBeSet(baseAreaMissionSPRITE->GetPosition().x, targetBaseAreaMissionSpritePosition.x))
 		{
 			baseAreaMissionSPRITE->SetPosition({ targetBaseAreaMissionSpritePosition.x, baseAreaMissionSPRITE->GetPosition().y });
 			xSet = true;
 		}
-		if (baseAreaMissionSPRITE->GetPosition().y >= targetBaseAreaMissionSpritePosition.y)
+		if (BaseAreaConditionals::ShouldMissionSpritePositionBeSet(baseAreaMissionSPRITE->GetPosition().y, targetBaseAreaMissionSpritePosition.y))
 		{
 			baseAreaMissionSPRITE->SetPosition({ baseAreaMissionSPRITE->GetPosition().x, targetBaseAreaMissionSpritePosition.y });
 			ySet = true;
 		}
 
-		if (baseAreaMissionSPRITE->GetSize().x <= targetBaseAreaMissionSpriteSize.x || baseAreaMissionSPRITE->GetSize().y <= targetBaseAreaMissionSpriteSize.y)
+		if (BaseAreaConditionals::ShouldMissionSpriteSizeBeSet(baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.x))
 		{
-			if (baseAreaMissionSPRITE->GetSize().x <= targetBaseAreaMissionSpriteSize.x)
-			{
-				baseAreaMissionSPRITE->SetSize({ targetBaseAreaMissionSpriteSize.x, baseAreaMissionSPRITE->GetSize().y });
-			}
-			if (baseAreaMissionSPRITE->GetSize().y <= targetBaseAreaMissionSpriteSize.y)
-			{
-				baseAreaMissionSPRITE->SetSize({ baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.y });
-			}
+			baseAreaMissionSPRITE->SetSize({ targetBaseAreaMissionSpriteSize.x, baseAreaMissionSPRITE->GetSize().y });
+		}
+		if (BaseAreaConditionals::ShouldMissionSpriteSizeBeSet(baseAreaMissionSPRITE->GetSize().y, targetBaseAreaMissionSpriteSize.y))
+		{
+			baseAreaMissionSPRITE->SetSize({ baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.y });
+		}
 
-			if (baseAreaMissionSPRITE->GetSize().x <= targetBaseAreaMissionSpriteSize.x && baseAreaMissionSPRITE->GetSize().y <= targetBaseAreaMissionSpriteSize.y)
-			{
-				sizeSet = true;
-			}
+		if (BaseAreaConditionals::ShouldMissionSpriteSizeBeSet(baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.x) && BaseAreaConditionals::ShouldMissionSpriteSizeBeSet(baseAreaMissionSPRITE->GetSize().y, targetBaseAreaMissionSpriteSize.y))
+		{
+			sizeSet = true;
 		}
 	}
 	HPBarSPRITE->SetSize({ playerFBX->hp * HPBarSpriteMultiplier, HPBarSpriteSize.y });
@@ -1033,7 +1030,7 @@ void BaseArea::Update()
 	STBarFrameSPRITE->SetSize(STBarSpriteSize);
 	slowMotionBarSPRITE->SetSize({ playerFBX->powerRemaining / 2.0f, slowMotionSpriteBarSize.y });
 	slowMotionBarFrameSPRITE->SetSize(slowMotionSpriteBarSize);
-	if (camera->lockOn)
+	if (BaseAreaConditionals::IsCameraLockedOn(camera->lockOn))
 	{
 		STBarSPRITE->SetPosition(lockOnSTBarPosition);
 		STBarFrameSPRITE->SetPosition(lockOnSTBarPosition);
