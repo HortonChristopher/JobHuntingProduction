@@ -169,7 +169,7 @@ void BaseArea::Update()
 			fadeSpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
-
+ 
 			if (BaseAreaConditionals::IsFadeSpriteAlphaBelowZero(fadeSpriteALPHA, minAlpha))
 			{
 				fadeSpriteALPHA = minAlpha;
@@ -696,7 +696,7 @@ void BaseArea::Update()
 		camera->SetTarget(ScreenShake({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z }));
 		camera->Update();
 		shakeTimer += shakeTimerInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		if (shakeTimer >= maxShakeTimer)
+		if (BaseAreaConditionals::HasScreenShakingFinished(shakeTimer, maxShakeTimer))
 		{
 			shakeTimer = shakeTimerReset;
 			screenShake = false;
@@ -750,17 +750,17 @@ void BaseArea::Update()
 			{
 				for (int i = 0; i < numberOfEnemiesTotal; i++)
 				{
-					if (intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && (abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y) <= 4.0f))
+					if (BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
 					{
 						baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
 
-						if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
+						if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 						{
 							enemyKnockbackTime = knockbackTimeReset;
 							enemyKnockback = true;
 						}
 
-						if (baseAreaEnemyFBX[i]->HP < baseAreaEnemyFBX[i]->minAliveHP)
+						if (!BaseAreaConditionals::IsEnemyAliveHP(baseAreaEnemyFBX[i]->HP, baseAreaEnemyFBX[i]->minAliveHP))
 						{
 							baseAreaEnemyAliveBOOL[i] = false;
 							enemyDefeated++;
@@ -777,7 +777,7 @@ void BaseArea::Update()
 							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
 						}
 
-						if (playerFBX->timer >= playerThirdAttackStartTimer && playerFBX->timer <= playerThirdAttackEndTimer)
+						if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 						{
 							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandardPlusHalf, playerKnockbackAttackOffset, playerKnockbackAttackStartScale * 2.0f);
 						}
@@ -794,17 +794,21 @@ void BaseArea::Update()
 
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (enemyKnockback)
+			if (BaseAreaConditionals::IsEnemyOrPlayerBeingKnockbacked(enemyKnockback))
 			{
 				XMFLOAT3 xyz = playerFBX->GetPosition() - baseAreaEnemyFBX[i]->GetPosition();
 				XMFLOAT3 knockbackPrevPosition = baseAreaEnemyFBX[i]->GetPosition();
+				
 				float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
+				
 				baseAreaEnemyFBX[i]->SetPosition({
 						knockbackPrevPosition.x -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
 						knockbackPrevPosition.y += knockbackYOffset,
 						knockbackPrevPosition.z -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+				
 				enemyKnockbackTime += playerAttackKnockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				if (enemyKnockbackTime >= playerAttackKnockbackMaxtime)
+				
+				if (BaseAreaConditionals::HasKnockbackFinished(enemyKnockbackTime, playerAttackKnockbackMaxtime))
 				{
 					enemyKnockbackTime = knockbackTimeReset;
 					enemyKnockback = false;
@@ -812,8 +816,7 @@ void BaseArea::Update()
 			}
 		}
 
-		if (playerFBX->timer > playerFirstAttackEndTimer && playerFBX->timer < playerSecondAttackStartTimer ||
-			playerFBX->timer > playerSecondAttackEndTimer && playerFBX->timer < playerThirdAttackStartTimer)
+		if (BaseAreaConditionals::ShouldPlayerAbilityToDamageReset(playerFBX->timer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer))
 		{
 			playerFBX->ableToDamage = true;
 		}
@@ -827,9 +830,9 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerHeal
-	if (playerFBX->enumStatus == Player::HEAL)
+	if (BaseAreaConditionals::IsPlayerHealing(playerFBX->enumStatus))
 	{
-		if (playerFBX->timer >= healFirstParticleRingTimer)
+		if (BaseAreaConditionals::ShouldHealParticleRingSpawn(playerFBX->timer, healFirstParticleRingTimer))
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
@@ -838,7 +841,7 @@ void BaseArea::Update()
 					playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
-		if (playerFBX->timer >= healSecondParticleRingTimer)
+		if (BaseAreaConditionals::ShouldHealParticleRingSpawn(playerFBX->timer, healSecondParticleRingTimer))
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
@@ -847,7 +850,7 @@ void BaseArea::Update()
 					playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
-		if (playerFBX->timer >= healThirdParticleRingTimer)
+		if (BaseAreaConditionals::ShouldHealParticleRingSpawn(playerFBX->timer, healThirdParticleRingTimer))
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
@@ -860,13 +863,13 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region aggroEveryEnemyWhenOneKillAwayFromWinning
-	if (enemyDefeated > clearCondition - 2)
+	if (BaseAreaConditionals::ShouldEveryEnemyAggro(enemyDefeated, clearCondition))
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (baseAreaEnemyFBX[i]->enumStatus != EnemyHuman::DEAD)
+			if (BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[i]->enumStatus))
 			{
-				if (baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::STAND || baseAreaEnemyFBX[i]->enumStatus == EnemyHuman::WANDER)
+				if (BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
 				{
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 				}
@@ -876,16 +879,19 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region clearCondition
-	if (enemyDefeated > clearCondition - 1)
+	if (BaseAreaConditionals::HasPlayerReachedGameClearThreshold(enemyDefeated, clearCondition))
 	{
 		enemyDefeated = clearCondition;
+
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
 		}
+
 		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
-		if (fadeSpriteALPHA >= maxAlpha)
+
+		if (BaseAreaConditionals::IsFadeSpriteAlphaAboveOne(fadeSpriteALPHA, maxAlpha))
 		{
 			fadeSpriteALPHA = maxAlpha;
 			audio->StopWave("MainArea.wav");

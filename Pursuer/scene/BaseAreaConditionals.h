@@ -88,6 +88,11 @@ public:
 		return isAlive;
 	}
 
+	static bool IsEnemyAliveHP(float hp, float minHp)
+	{
+		return hp > minHp;
+	}
+
 	static bool IsEnemyAttacking(EnemyHuman::status enumStatus)
 	{
 		return enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK || enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK;
@@ -323,9 +328,14 @@ public:
 		return enumStatus == Player::ATTACK;
 	}
 
+	static bool IsPlayerHealing(Player::status enumStatus)
+	{
+		return enumStatus == Player::HEAL;
+	}
+
 	static bool IsPlayerAttackTimingCorrect(float attackTimer, const float firstAttackStart, const float firstAttackEnd, const float secondAttackStart, const float secondAttackEnd, const float thirdAttackStart, const float thirdAttackEnd)
 	{
-		return (attackTimer >= firstAttackStart && attackTimer <= firstAttackEnd) || attackTimer >= secondAttackStart && attackTimer <= secondAttackEnd || attackTimer >= thirdAttackStart && attackTimer <= thirdAttackEnd);
+		return (attackTimer >= firstAttackStart && attackTimer <= firstAttackEnd) || (attackTimer >= secondAttackStart && attackTimer <= secondAttackEnd) || (attackTimer >= thirdAttackStart && attackTimer <= thirdAttackEnd);
 	}
 
 	static bool CanPlayerDamageEnemy(bool ableToDamage)
@@ -336,5 +346,45 @@ public:
 	static bool IsScreenShaking(bool screenShake)
 	{
 		return screenShake;
+	}
+
+	static bool HasScreenShakingFinished(float shakeTimer, const float maxShakeTimer)
+	{
+		return shakeTimer >= maxShakeTimer;
+	}
+
+	static bool WillPlayerAttackHit(float intersect)
+	{
+		return intersect;
+	}
+
+	static bool DoesPlayerKnockbackAttackHit(float timer, const float startTimer, const float endTimer)
+	{
+		return (timer >= startTimer) && (timer <= endTimer);
+	}
+
+	static bool WillPlayerAttackHitBasedOnYPosition(float position, float offset)
+	{
+		return position <= offset;
+	}
+
+	static bool ShouldPlayerAbilityToDamageReset(float timer, const float firstTimerEnd, const float secondTimerStart, const float secondTimerEnd, const float thirdTimerStart)
+	{
+		return (timer > firstTimerEnd && timer < secondTimerEnd) || (timer > secondTimerEnd && timer < thirdTimerStart);
+	}
+
+	static bool ShouldHealParticleRingSpawn(float timer, const float ringTimer)
+	{
+		return timer >= ringTimer;
+	}
+
+	static bool ShouldEveryEnemyAggro(int enemyDefeated, int threshold)
+	{
+		return enemyDefeated > (threshold - 2);
+	}
+
+	static bool HasPlayerReachedGameClearThreshold(int enemyDefeated, int threshold)
+	{
+		return enemyDefeated > (threshold - 1);
 	}
 };
