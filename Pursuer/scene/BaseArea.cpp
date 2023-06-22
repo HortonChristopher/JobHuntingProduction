@@ -143,7 +143,7 @@ void BaseArea::Update()
 	lightGroup->Update();
 	particleMan->Update();
 	particleManExplosion->Update();
-	
+
 	// Debug Text string
 	std::ostringstream missionTracker;
 	std::ostringstream healTracker;
@@ -169,7 +169,7 @@ void BaseArea::Update()
 			fadeSpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 
 			fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
- 
+
 			if (BaseAreaConditionals::IsFadeSpriteAlphaBelowZero(fadeSpriteALPHA, minAlpha))
 			{
 				fadeSpriteALPHA = minAlpha;
@@ -215,25 +215,30 @@ void BaseArea::Update()
 		landingPositionOBJ[i]->SetPosition(baseAreaEnemyFBX[i]->landingAttackPosition);
 	}
 #pragma endregion
-	
+
 #pragma region VisionRange
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		enemyVisionRangeOBJ[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * visionRangeRadius)), baseAreaEnemyFBX[i]->GetPosition().y + visionRangeYOffset, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * visionRangeRadius))});
+		enemyVisionRangeOBJ[i]->SetPosition({ (baseAreaEnemyFBX[i]->GetPosition().x + (sinf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * visionRangeRadius)), baseAreaEnemyFBX[i]->GetPosition().y + visionRangeYOffset, (baseAreaEnemyFBX[i]->GetPosition().z + (cosf(XMConvertToRadians(baseAreaEnemyFBX[i]->GetRotation().y)) * visionRangeRadius)) });
 		enemyVisionRangeOBJ[i]->SetRotation(baseAreaEnemyFBX[i]->GetRotation());
 	}
 #pragma endregion
 
-	if (firstRun)
+	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		for (int i = 0; i < numberOfEnemiesTotal; i++)
+		if (firstRun)
 		{
-			if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
-			{
-				baseAreaEnemyFBX[i]->SetTimer(119.0f);
-			}
+			continue;
 		}
 
+		if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
+		{
+			baseAreaEnemyFBX[i]->SetTimer(119.0f);
+		}
+	}
+
+	if (firstRun)
+	{
 		firstRun = false;
 	}
 
