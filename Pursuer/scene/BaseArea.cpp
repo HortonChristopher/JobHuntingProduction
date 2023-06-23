@@ -478,22 +478,36 @@ void BaseArea::Update()
 			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
 		}
 
-		if (BaseAreaConditionals::IsEnemySurroundAttackingThePlayer(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->twoEnemySurroundStage))
+		if (!BaseAreaConditionals::IsEnemySurroundAttackingThePlayer(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->twoEnemySurroundStage))
 		{
-			if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
-			{
-				if (BaseAreaConditionals::CreateParticlesAtFrontPatrolPosition(baseAreaEnemyFBX[i]->nextDegree, baseAreaEnemyFBX[i]->initialDegree))
-				{
-					ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, chargeAttackOffset, chargeAttackScale);
-				}
-			}
-			else
-			{
-				if (BaseAreaConditionals::CreateParticlesAtBackPatrolPosition(baseAreaEnemyFBX[i]->nextDegree, baseAreaEnemyFBX[i]->initialDegree))
-				{
-					ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
-				}
-			}
+			continue;
+		}
+
+		bool createParticles = false;
+
+		if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		{
+			createParticles = BaseAreaConditionals::CreateParticlesAtFrontPatrolPosition(baseAreaEnemyFBX[i]->nextDegree, baseAreaEnemyFBX[i]->initialDegree);
+		}
+		else
+		{
+			createParticles = BaseAreaConditionals::CreateParticlesAtBackPatrolPosition(baseAreaEnemyFBX[i]->nextDegree, baseAreaEnemyFBX[i]->initialDegree);
+		}
+
+		if (!createParticles)
+		{
+			continue;
+		}
+
+		auto position = baseAreaEnemyFBX[i]->GetPosition();
+
+		if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		{
+			ParticleCreationExplosion(position.x, position.y, position.z, particleLifeStandard, chargeAttackOffset, chargeAttackScale);
+		}
+		else
+		{
+			ParticleCreation(position.x, position.y, position.z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
 		}
 	}
 #pragma endregion
