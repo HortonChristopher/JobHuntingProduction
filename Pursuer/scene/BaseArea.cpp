@@ -226,7 +226,7 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (firstRun)
+		if (!firstRun)
 		{
 			continue;
 		}
