@@ -1796,6 +1796,27 @@ XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
 	return shakePosition;
 }
 
+void BaseArea::updateStaminaSpriteAlpha(float& alpha, int spriteInteger, std::chrono::duration<float> deltaTime)
+{
+	alpha -= spriteInteger * (deltaTime.count() / 1000000.0f);
+}
+
+void BaseArea::updateBlinkingStaminaAlpha(float& alpha, bool increasing, int spriteInteger, std::chrono::duration<float> deltaTime)
+{
+	alpha += increasing ? spriteInteger * (deltaTime.count() / 1000000.0f) : -spriteInteger * (deltaTime.count() / 1000000.0f);
+}
+
+void BaseArea::handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, int spriteInteger, std::chrono::duration<float> deltaTime)
+{
+	updateBlinkingStaminaAlpha(alpha, !effect, spriteInteger, deltaTime);
+
+	if (BaseAreaConditionals::SwitchBlinking(alpha, effect ? maxAlpha : minAlpha)) 
+	{
+		alpha = effect ? maxAlpha : minAlpha;
+		effect = !effect;
+	}
+}
+
 void BaseArea::thread1()
 {
 	// Loading debug text
