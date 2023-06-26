@@ -1069,35 +1069,19 @@ void BaseArea::Update()
 	STBarFrameSPRITE->SetRotation(STBarRotation);
 	slowMotionBarSPRITE->SetRotation(lockOnRotation);
 	slowMotionBarFrameSPRITE->SetRotation(lockOnRotation);
-	if (BaseAreaConditionals::ShouldStaminaBarAlphaBeFull(playerFBX->stamina, playerFBX->staminaMaximum, playerFBX->dodgeStaminaNeeded))
+
+	if (BaseAreaConditionals::ShouldStaminaBarAlphaBeFull(playerFBX->stamina, playerFBX->staminaMaximum, playerFBX->dodgeStaminaNeeded)) 
 	{
 		staminaSpriteAlpha = maxAlpha;
 		blinkingStaminaAlpha = maxAlpha;
 	}
-	else if (BaseAreaConditionals::ShouldStaminaBarBeginFading(playerFBX->stamina, playerFBX->staminaMaximum))
+	else if (BaseAreaConditionals::ShouldStaminaBarBeginFading(playerFBX->stamina, playerFBX->staminaMaximum)) 
 	{
-		staminaSpriteAlpha -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		updateStaminaSpriteAlpha(staminaSpriteAlpha, staminaSpriteInteger, deltaTime->deltaTimeCalculated);
 	}
 	else
 	{
-		if (!BaseAreaConditionals::IsStaminaBarBlinking(staminaBlinkingEffect))
-		{
-			blinkingStaminaAlpha -= blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (BaseAreaConditionals::SwitchBlinking(blinkingStaminaAlpha, minAlpha))
-			{
-				blinkingStaminaAlpha = minAlpha;
-				staminaBlinkingEffect = true;
-			}
-		}
-		else
-		{
-			blinkingStaminaAlpha += blinkingStaminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-			if (BaseAreaConditionals::SwitchBlinking(blinkingStaminaAlpha, maxAlpha))
-			{
-				blinkingStaminaAlpha = maxAlpha;
-				staminaBlinkingEffect = false;
-			}
-		}
+		handleBlinkingStamina(blinkingStaminaAlpha, staminaBlinkingEffect, minAlpha, maxAlpha, blinkingStaminaSpriteInteger, deltaTime->deltaTimeCalculated);
 	}
 
 	if (BaseAreaConditionals::ShouldPowerBarAlphaBeFull(playerFBX->powerRemaining, playerFBX->staminaMaximum))
@@ -1796,17 +1780,17 @@ XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
 	return shakePosition;
 }
 
-void BaseArea::updateStaminaSpriteAlpha(float& alpha, int spriteInteger, std::chrono::duration<float> deltaTime)
+void BaseArea::updateStaminaSpriteAlpha(float& alpha, const float spriteInteger, std::chrono::duration<float> deltaTime)
 {
 	alpha -= spriteInteger * (deltaTime.count() / 1000000.0f);
 }
 
-void BaseArea::updateBlinkingStaminaAlpha(float& alpha, bool increasing, int spriteInteger, std::chrono::duration<float> deltaTime)
+void BaseArea::updateBlinkingStaminaAlpha(float& alpha, bool increasing, const float spriteInteger, std::chrono::duration<float> deltaTime)
 {
 	alpha += increasing ? spriteInteger * (deltaTime.count() / 1000000.0f) : -spriteInteger * (deltaTime.count() / 1000000.0f);
 }
 
-void BaseArea::handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, int spriteInteger, std::chrono::duration<float> deltaTime)
+void BaseArea::handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, const float spriteInteger, std::chrono::duration<float> deltaTime)
 {
 	updateBlinkingStaminaAlpha(alpha, !effect, spriteInteger, deltaTime);
 

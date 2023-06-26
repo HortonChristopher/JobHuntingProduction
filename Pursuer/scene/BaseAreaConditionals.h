@@ -482,7 +482,7 @@ public:
 
 	static bool ShouldStaminaBarBeginFading(float stamina, const float staminaMaximum)
 	{
-		return stamina >= staminaMaximum;
+		return stamina < staminaMaximum;
 	}
 
 	static bool IsStaminaBarBlinking(bool blinking)
