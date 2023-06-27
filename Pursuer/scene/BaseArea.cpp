@@ -1077,11 +1077,11 @@ void BaseArea::Update()
 	}
 	else if (BaseAreaConditionals::ShouldStaminaBarBeginFading(playerFBX->stamina, playerFBX->staminaMaximum)) 
 	{
-		updateStaminaSpriteAlpha(staminaSpriteAlpha, staminaSpriteInteger, deltaTime->deltaTimeCalculated);
+		updateStaminaSpriteAlpha(staminaSpriteAlpha, staminaSpriteInteger);
 	}
 	else
 	{
-		handleBlinkingStamina(blinkingStaminaAlpha, staminaBlinkingEffect, minAlpha, maxAlpha, blinkingStaminaSpriteInteger, deltaTime->deltaTimeCalculated);
+		handleBlinkingStamina(blinkingStaminaAlpha, staminaBlinkingEffect, minAlpha, maxAlpha, blinkingStaminaSpriteInteger);
 	}
 
 	if (BaseAreaConditionals::ShouldPowerBarAlphaBeFull(playerFBX->powerRemaining, playerFBX->staminaMaximum))
@@ -1780,19 +1780,19 @@ XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
 	return shakePosition;
 }
 
-void BaseArea::updateStaminaSpriteAlpha(float& alpha, const float spriteInteger, std::chrono::duration<float> deltaTime)
+void BaseArea::updateStaminaSpriteAlpha(float& alpha, const float spriteInteger)
 {
-	alpha -= spriteInteger * (deltaTime.count() / 1000000.0f);
+	alpha -= spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 }
 
-void BaseArea::updateBlinkingStaminaAlpha(float& alpha, bool increasing, const float spriteInteger, std::chrono::duration<float> deltaTime)
+void BaseArea::updateBlinkingStaminaAlpha(float& alpha, bool increasing, const float spriteInteger)
 {
-	alpha += increasing ? spriteInteger * (deltaTime.count() / 1000000.0f) : -spriteInteger * (deltaTime.count() / 1000000.0f);
+	alpha += increasing ? spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) : -spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 }
 
-void BaseArea::handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, const float spriteInteger, std::chrono::duration<float> deltaTime)
+void BaseArea::handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, const float spriteInteger)
 {
-	updateBlinkingStaminaAlpha(alpha, !effect, spriteInteger, deltaTime);
+	updateBlinkingStaminaAlpha(alpha, effect, spriteInteger);
 
 	if (BaseAreaConditionals::SwitchBlinking(alpha, effect ? maxAlpha : minAlpha)) 
 	{
