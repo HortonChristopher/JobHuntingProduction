@@ -71,10 +71,6 @@ public:
 
 	XMFLOAT3 ScreenShake(XMFLOAT3 playerPosition);
 
-	void updateStaminaSpriteAlpha(float& alpha, const float spriteInteger);
-	void updateBlinkingStaminaAlpha(float& alpha, bool increasing, const float spriteInteger);
-	void handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, const float spriteInteger);
-
 	void thread1();
 	void thread2();
 	void thread3();

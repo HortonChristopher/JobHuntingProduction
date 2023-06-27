@@ -2,12 +2,15 @@
 
 #include "EnemyHuman.h"
 #include "Player.h"
+#include "DeltaTime.h"
 
 #include <DirectXMath.h>
 
+extern DeltaTime* deltaTime;
+
 class BaseAreaConditionals
 {
-public:
+public: // Bool members
 	static bool IsScreenShaking(bool screenShake)
 	{
 		return screenShake;
@@ -252,7 +255,7 @@ public:
 	{
 		return enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2;
 	}
-	
+
 	static bool IsEnemySurroundAttackingThePlayer(EnemyHuman::status enumStatus, int twoEnemySurroundStage)
 	{
 		return enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1;
@@ -395,7 +398,7 @@ public:
 
 	static bool ShouldPlayerAbilityToDamageReset(float timer, const float firstTimerEnd, const float secondTimerStart, const float secondTimerEnd, const float thirdTimerStart)
 	{
-		return (timer > firstTimerEnd && timer < secondTimerEnd) || (timer > secondTimerEnd && timer < thirdTimerStart);
+		return (timer > firstTimerEnd && timer < secondTimerStart) || (timer > secondTimerEnd && timer < thirdTimerStart);
 	}
 
 	static bool ShouldHealParticleRingSpawn(float timer, const float ringTimer)
@@ -541,4 +544,99 @@ public:
 	{
 		return alpha > 0.0f;
 	}
+
+public: // Void members
+	static void UpdateStaminaSpriteAlpha(float& alpha, const float spriteInteger)
+	{
+		alpha -= spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	}
+
+	static void UpdateBlinkingStaminaAlpha(float& alpha, bool increasing, const float spriteInteger)
+	{
+		alpha += increasing ? spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) : -spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+	}
+
+	static void HandleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, const float spriteInteger)
+	{
+		UpdateBlinkingStaminaAlpha(alpha, effect, spriteInteger);
+
+		if (BaseAreaConditionals::SwitchBlinking(alpha, effect ? maxAlpha : minAlpha))
+		{
+			alpha = effect ? maxAlpha : minAlpha;
+			effect = !effect;
+		}
+	}
+
+	static void SetClosestEnemyToHelp(EnemyHuman* enemy, std::array<EnemyHuman*, 10>& baseAreaEnemyFBX)
+	{
+		int closestEnemyIndex = enemy->closestEnemy;
+		EnemyHuman* closestEnemy = baseAreaEnemyFBX[enemy->closestEnemy];
+
+		bool frontPatrol = BaseAreaConditionals::IsEnemyFrontPatrolPosition(closestEnemy->patrolStatus);
+		int helpIndex = frontPatrol ? closestEnemyIndex + 1 : closestEnemyIndex - 1;
+
+		closestEnemy->isBeingCalledToHelp = true;
+		baseAreaEnemyFBX[helpIndex]->isBeingCalledToHelp = true;
+	}
+
+	static void HandleEnemyHelpCall(EnemyHuman* enemy, int closestEnemyDefaultNumber, std::array<EnemyHuman*, 10>& baseAreaEnemyFBX)
+	{
+		if (!BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(enemy->closestEnemy, closestEnemyDefaultNumber)) 
+		{
+			enemy->aggroSet = false;
+			enemy->Reset();
+			enemy->SetEnumStatus(EnemyHuman::AGGRO);
+			enemy->helpCall = true;
+		}
+
+		enemy->fleeSet = true;
+
+		if (BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(enemy->closestEnemy, closestEnemyDefaultNumber)) 
+		{
+			SetClosestEnemyToHelp(enemy, baseAreaEnemyFBX);
+		}
+	}
+
+	static void DetermineClosestEnemy(EnemyHuman* enemy, int i, int numberOfEnemiesTotal, int closestEnemyDefaultNumber, std::array<EnemyHuman*, 10>& baseAreaEnemyFBX) {
+		float minDistance = FLT_MAX;
+
+		enemy->closestEnemy = closestEnemyDefaultNumber;
+
+		for (int j = 0; j < numberOfEnemiesTotal; j++) 
+		{
+			EnemyHuman* comparedEnemy = baseAreaEnemyFBX[j];
+
+			float x = comparedEnemy->GetPosition().x - enemy->GetPosition().x;
+			float y = comparedEnemy->GetPosition().z - enemy->GetPosition().z;
+
+			if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(enemy->patrolStatus) && j == (i + 1) ||
+				BaseAreaConditionals::IsEnemyBackPatrolPosition(enemy->patrolStatus) && j == (i - 1))
+			{
+				continue;
+			}
+
+			if (!comparedEnemy->dead && j != i && !comparedEnemy->helpCall &&
+				BaseAreaConditionals::IsEnemyMinDistanceNewMinDistance(x, y, minDistance, comparedEnemy->isBeingCalledToHelp))
+			{
+				minDistance = abs(sqrt(x * x + y * y));
+				enemy->closestEnemy = j;
+			}
+		}
+
+		HandleEnemyHelpCall(enemy, closestEnemyDefaultNumber, baseAreaEnemyFBX);
+	}
+
+	static void HandleEnemyFleeTarget(EnemyHuman* enemy, int i, int numberOfEnemiesTotal, int closestEnemyDefaultNumber, std::array<EnemyHuman*, 10>& baseAreaEnemyFBX)
+	{
+		if (BaseAreaConditionals::HasEnemyNotYetSetFleeTarget(enemy->fleeSet))
+		{
+			enemy->SetEnumStatus(EnemyHuman::FLEE);
+
+			enemy->SetAggroSwitch(true);
+
+			DetermineClosestEnemy(enemy, i, numberOfEnemiesTotal, closestEnemyDefaultNumber, baseAreaEnemyFBX);
+		}
+	}
+
+	
 };

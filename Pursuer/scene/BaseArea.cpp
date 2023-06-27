@@ -269,65 +269,8 @@ void BaseArea::Update()
 	{
 		if (BaseAreaConditionals::ShouldEnemyFlee(baseAreaEnemyFBX[i]->HP, fleeHP, enemyKnockback, baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->helpCall, baseAreaEnemyFBX[i]->isPartnerDead))
 		{
-			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::FLEE);
-			if (BaseAreaConditionals::HasEnemyNotYetSetFleeTarget(baseAreaEnemyFBX[i]->fleeSet))
-			{
-				if (oddEven == 1)
-				{
-					if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
-					{
-						continue;
-					}
-				}
-				else
-				{
-					if (BaseAreaConditionals::IsEnemyBackPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
-					{
-						continue;
-					}
-				}
-				baseAreaEnemyFBX[i]->SetAggroSwitch(true);
-				float min = FLT_MAX;
-				baseAreaEnemyFBX[i]->closestEnemy = closestEnemyDefaultNumber;
-				for (int j = 0; j < numberOfEnemiesTotal; j++)
-				{
-					if (!baseAreaEnemyFBX[j]->dead && j != i && !baseAreaEnemyFBX[j]->helpCall)
-					{
-						if (BaseAreaConditionals::IsEnemyBeingComparedWithItself(j, i, baseAreaEnemyFBX[i]->patrolStatus))
-						{
-							continue;
-						}
-						float x = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
-						float y = baseAreaEnemyFBX[j]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
-						if (BaseAreaConditionals::IsEnemyMinDistanceNewMinDistance(x, y, min, baseAreaEnemyFBX[j]->isBeingCalledToHelp))
-						{
-							min = abs(sqrt(x * x + y * y));
-							baseAreaEnemyFBX[i]->closestEnemy = j;
-						}
-					}
-				}
-				if (!BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
-				{
-					baseAreaEnemyFBX[i]->aggroSet = false;
-					baseAreaEnemyFBX[i]->Reset();
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-					baseAreaEnemyFBX[i]->helpCall = true;
-				}
-				baseAreaEnemyFBX[i]->fleeSet = true;
-				if (BaseAreaConditionals::ThereIsAnEnemyAbleToHelp(baseAreaEnemyFBX[i]->closestEnemy, closestEnemyDefaultNumber))
-				{
-					if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->patrolStatus))
-					{
-						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
-						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy + 1]->isBeingCalledToHelp = true;
-					}
-					else
-					{
-						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = true;
-						baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy - 1]->isBeingCalledToHelp = true;
-					}
-				}
-			}
+			BaseAreaConditionals::HandleEnemyFleeTarget(baseAreaEnemyFBX[i], i, numberOfEnemiesTotal, closestEnemyDefaultNumber, baseAreaEnemyFBX);
+
 			float x2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 			float y2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
 			float hypotenuse = sqrt((x2 * x2) + (y2 * y2));
@@ -765,7 +708,7 @@ void BaseArea::Update()
 	{
 		if (BaseAreaConditionals::IsPlayerAttackTimingCorrect(playerFBX->timer, playerFirstAttackStartTimer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 		{
-			if (BaseAreaConditionals::IsPlayerAttacking(playerFBX->enumStatus) && BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
+			if (BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
 			{
 				for (int i = 0; i < numberOfEnemiesTotal; i++)
 				{
@@ -1077,11 +1020,11 @@ void BaseArea::Update()
 	}
 	else if (BaseAreaConditionals::ShouldStaminaBarBeginFading(playerFBX->stamina, playerFBX->staminaMaximum)) 
 	{
-		updateStaminaSpriteAlpha(staminaSpriteAlpha, staminaSpriteInteger);
+		BaseAreaConditionals::UpdateStaminaSpriteAlpha(staminaSpriteAlpha, staminaSpriteInteger);
 	}
 	else
 	{
-		handleBlinkingStamina(blinkingStaminaAlpha, staminaBlinkingEffect, minAlpha, maxAlpha, blinkingStaminaSpriteInteger);
+		BaseAreaConditionals::HandleBlinkingStamina(blinkingStaminaAlpha, staminaBlinkingEffect, minAlpha, maxAlpha, blinkingStaminaSpriteInteger);
 	}
 
 	if (BaseAreaConditionals::ShouldPowerBarAlphaBeFull(playerFBX->powerRemaining, playerFBX->staminaMaximum))
@@ -1778,27 +1721,6 @@ XMFLOAT3 BaseArea::ScreenShake(XMFLOAT3 playerPosition)
 	shakePosition.z = playerPosition.z + (rand() % 3 - 1);
 
 	return shakePosition;
-}
-
-void BaseArea::updateStaminaSpriteAlpha(float& alpha, const float spriteInteger)
-{
-	alpha -= spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-}
-
-void BaseArea::updateBlinkingStaminaAlpha(float& alpha, bool increasing, const float spriteInteger)
-{
-	alpha += increasing ? spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) : -spriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-}
-
-void BaseArea::handleBlinkingStamina(float& alpha, bool& effect, float minAlpha, float maxAlpha, const float spriteInteger)
-{
-	updateBlinkingStaminaAlpha(alpha, effect, spriteInteger);
-
-	if (BaseAreaConditionals::SwitchBlinking(alpha, effect ? maxAlpha : minAlpha)) 
-	{
-		alpha = effect ? maxAlpha : minAlpha;
-		effect = !effect;
-	}
 }
 
 void BaseArea::thread1()
