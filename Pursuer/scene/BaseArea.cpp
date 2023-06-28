@@ -558,54 +558,52 @@ void BaseArea::Update()
 
 	if (BaseAreaConditionals::IsPlayerAttacking(playerFBX->enumStatus))
 	{
-		if (!BaseAreaConditionals::IsPlayerAttackTimingCorrect(playerFBX->timer, playerFirstAttackStartTimer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
+		if (BaseAreaConditionals::IsPlayerAttackTimingCorrect(playerFBX->timer, playerFirstAttackStartTimer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 		{
-			return;
-		}
-
-		if (!BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
-		{
-			return;
-		}
-
-		for (int i = 0; i < numberOfEnemiesTotal; i++)
-		{
-			if (!BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) ||
-				!BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) ||
-				!BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
+			if (BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
 			{
-				continue;
+				for (int i = 0; i < numberOfEnemiesTotal; i++)
+				{
+					if (BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
+					{
+						baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
+
+						if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
+						{
+							enemyKnockbackTime = knockbackTimeReset;
+							enemyKnockback = true;
+						}
+
+						if (!BaseAreaConditionals::IsEnemyAliveHP(baseAreaEnemyFBX[i]->HP, baseAreaEnemyFBX[i]->minAliveHP))
+						{
+							baseAreaEnemyAliveBOOL[i] = false;
+							enemyDefeated++;
+							agroodEnemies--;
+							baseAreaEnemyFBX[i]->dead = true;
+							baseAreaEnemyFBX[i]->modelChange = true;
+							//baseAreaEnemyRespawnTimerFLOAT[i] = 600;
+							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+						}
+						else
+						{
+							baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
+							baseAreaEnemyFBX[i]->modelChange = true;
+							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+						}
+
+						if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
+						{
+							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandardPlusHalf, playerKnockbackAttackOffset, playerKnockbackAttackStartScale * 2.0f);
+						}
+						else
+						{
+							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, playerKnockbackAttackOffset, playerKnockbackAttackStartScale);
+						}
+
+						playerFBX->ableToDamage = false;
+					}
+				}
 			}
-
-			baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
-
-			if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
-			{
-				enemyKnockbackTime = knockbackTimeReset;
-				enemyKnockback = true;
-			}
-
-			if (!BaseAreaConditionals::IsEnemyAliveHP(baseAreaEnemyFBX[i]->HP, baseAreaEnemyFBX[i]->minAliveHP))
-			{
-				baseAreaEnemyAliveBOOL[i] = false;
-				enemyDefeated++;
-				agroodEnemies--;
-				baseAreaEnemyFBX[i]->dead = true;
-				baseAreaEnemyFBX[i]->modelChange = true;
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
-			}
-			else
-			{
-				baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
-				baseAreaEnemyFBX[i]->modelChange = true;
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
-			}
-
-			float particleSizeMultiplier = BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer) ? 2.0f : 1.0f;
-			float particleLifeTime = particleSizeMultiplier == 2.0f ? particleLifeStandardPlusHalf : particleLifeStandard;
-			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeTime, playerKnockbackAttackOffset, playerKnockbackAttackStartScale * particleSizeMultiplier);
-
-			playerFBX->ableToDamage = false;
 		}
 
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
