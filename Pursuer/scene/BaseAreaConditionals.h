@@ -545,6 +545,39 @@ public: // Bool members
 		return alpha > 0.0f;
 	}
 
+	static int Intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH)
+	{
+		XMFLOAT2 circleDistance;
+
+		circleDistance.x = abs(player.x - wall.x);
+		circleDistance.y = abs(player.z - wall.z);
+
+		if (circleDistance.x > (rectW / 2.0f + circleR)) { return false; }
+		if (circleDistance.y > (rectH / 2.0f + circleR)) { return false; }
+
+		if (circleDistance.x <= (rectW / 2.0f)) { return true; }
+		if (circleDistance.y <= (rectH / 2.0f)) { return true; }
+
+		float cornerDistance_sq = ((circleDistance.x - rectW / 2.0f) * (circleDistance.x - rectW / 2.0f)) + ((circleDistance.y - rectH / 2.0f) * (circleDistance.y - rectH / 2.0f));
+
+		return (cornerDistance_sq <= (circleR * circleR));
+	}
+
+	static bool CanEnemyBeJetStreamAttacked(EnemyHuman* enemy)
+	{
+		return !IsEnemyStanding(enemy->enumStatus) &&
+			IsEnemyAlive(enemy->enumStatus) &&
+			!IsEnemyFleeing(enemy->enumStatus) &&
+			!IsEnemyWandering(enemy->enumStatus) &&
+			!IsEnemyCoolingDown(enemy->enumStatus) &&
+			CanEnemyJetStreamAttack(enemy->enumStatus, enemy->debugJetAttacked);
+	}
+
+	static bool IsEnemyReadyToTakeAdvantage(EnemyHuman* enemy)
+	{
+		return BaseAreaConditionals::IsEnemyAggro(enemy->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(enemy->enumStatus);
+	}
+
 public: // Void members
 	static void UpdateStaminaSpriteAlpha(float& alpha, const float spriteInteger)
 	{
@@ -795,6 +828,51 @@ public: // Void members
 		else
 		{
 			ResetAggro(baseAreaEnemyFBX, i);
+		}
+	}
+
+	static void EnemySeeEnemyAggroCondition(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i, std::array<Object3d*, 10>& enemyVisionRangeOBJ, float playerInteresectSize, const float enemyAggroVisionRange, std::array<bool, 10>& baseAreaEnemyAliveBOOL, const int numberOfEnemiesTotal)
+	{
+		for (int j = 0; j < numberOfEnemiesTotal; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+
+			bool canSeeOtherEnemy = BaseAreaConditionals::CanEnemySeeOtherEnemy(
+				Intersect(baseAreaEnemyFBX[j]->GetPosition(),
+					enemyVisionRangeOBJ[i]->GetPosition(),
+					playerInteresectSize,
+					enemyAggroVisionRange,
+					enemyAggroVisionRange),
+				baseAreaEnemyAliveBOOL[j],
+				baseAreaEnemyAliveBOOL[i],
+				baseAreaEnemyFBX[j]->enumStatus);
+
+			if (canSeeOtherEnemy)
+			{
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+				break; // As the enemy status has been set, no need to check for other enemies
+			}
+		}
+	}
+
+	static void DecideAndExecuteAttack(EnemyHuman* enemy, Player* player, float rangeBorder)
+	{
+		float distance = sqrt((enemy->GetPosition().x - player->GetPosition().x) * (enemy->GetPosition().x - player->GetPosition().x) + (enemy->GetPosition().z - player->GetPosition().z) * (enemy->GetPosition().z - player->GetPosition().z));
+
+		if (BaseAreaConditionals::ShouldChargeAttackBeUsedDuringDamageAdvantage(distance, rangeBorder))
+		{
+			enemy->chargeAttackStage = enemy->chargeAttackStageReset;
+			enemy->modelChange = true;
+			enemy->SetEnumStatus(EnemyHuman::CHARGEATTACK);
+		}
+		else
+		{
+			enemy->landingAttackStage = enemy->chargeAttackStageReset;
+			enemy->modelChange = true;
+			enemy->SetEnumStatus(EnemyHuman::LANDINGATTACK);
 		}
 	}
 };

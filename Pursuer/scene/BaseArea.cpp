@@ -339,31 +339,19 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		for (int j = 0; j < numberOfEnemiesTotal; j++)
+		if (!BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) || !BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
 		{
-			if (i = j)
-			{
-				continue;
-			}
-
-			if (BaseAreaConditionals::CanEnemySeeOtherEnemy(intersect(baseAreaEnemyFBX[j]->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange),
-				baseAreaEnemyAliveBOOL[j], baseAreaEnemyAliveBOOL[i], baseAreaEnemyFBX[j]->enumStatus) && BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) && BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
-			{
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-			}
+			continue;
 		}
+
+		BaseAreaConditionals::EnemySeeEnemyAggroCondition(baseAreaEnemyFBX, i, enemyVisionRangeOBJ, playerInteresectSize, enemyAggroVisionRange, baseAreaEnemyAliveBOOL, numberOfEnemiesTotal);
 	}
 
 	if (BaseAreaConditionals::CanJetStreamAttackBeDone(debugJetStream, baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber, enemyDefeated, clearCondition))
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) || !BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyFleeing(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i]->enumStatus))
-			{
-				continue;
-			}
-
-			if (BaseAreaConditionals::CanEnemyJetStreamAttack(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->debugJetAttacked))
+			if (BaseAreaConditionals::CanEnemyBeJetStreamAttacked(baseAreaEnemyFBX[i]))
 			{
 				baseAreaEnemyFBX[i]->debugJetAttacked = true;
 				baseAreaEnemyFBX[i]->jetStreamAttackStage = baseAreaEnemyFBX[i]->jetStreamAttackStageReset;
@@ -492,25 +480,9 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage(playerFBX->damageAdvantage))
+		if (BaseAreaConditionals::ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage(playerFBX->damageAdvantage) && BaseAreaConditionals::IsEnemyReadyToTakeAdvantage(baseAreaEnemyFBX[i]))
 		{
-			if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i]->enumStatus))
-			{
-				float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
-				
-				if (BaseAreaConditionals::ShouldChargeAttackBeUsedDuringDamageAdvantage(distance, damageAdvantageShortLongRangeBorder))
-				{
-					baseAreaEnemyFBX[i]->chargeAttackStage = baseAreaEnemyFBX[i]->chargeAttackStageReset;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
-				}
-				else
-				{
-					baseAreaEnemyFBX[i]->landingAttackStage = baseAreaEnemyFBX[i]->chargeAttackStageReset;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
-				}
-			}
+			BaseAreaConditionals::DecideAndExecuteAttack(baseAreaEnemyFBX[i], playerFBX, damageAdvantageShortLongRangeBorder);
 		}
 	}
 
