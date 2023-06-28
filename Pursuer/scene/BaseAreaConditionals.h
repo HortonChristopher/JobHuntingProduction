@@ -545,9 +545,9 @@ public: // Bool members
 		return alpha > 0.0f;
 	}
 
-	static int Intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH)
+	static int Intersect(DirectX::XMFLOAT3 player, DirectX::XMFLOAT3 wall, float circleR, float rectW, float rectH)
 	{
-		XMFLOAT2 circleDistance;
+		DirectX::XMFLOAT2 circleDistance;
 
 		circleDistance.x = abs(player.x - wall.x);
 		circleDistance.y = abs(player.z - wall.z);

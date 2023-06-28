@@ -280,7 +280,7 @@ void BaseArea::Update()
 		}
 		else if (BaseAreaConditionals::ShouldEnemyDoJetStreamAttack(agroodEnemies, baseAreaEnemyFBX[i]->jetStreamAttackRequiredEnemyNumber, baseAreaEnemyFBX[i]->debugJetAttacked, baseAreaEnemyFBX[i]->jetStreamCounted, baseAreaEnemyFBX[i]->enumStatus))
 		{
-			debugJetStream++;
+			debugJetStream++; a
 			baseAreaEnemyFBX[i]->jetStreamCounted = true;
 		}
 		else if (BaseAreaConditionals::CanEnemySeePlayer(intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange), enemyKnockback, baseAreaEnemyAliveBOOL[i], baseAreaEnemyFBX[i]->enumStatus))
