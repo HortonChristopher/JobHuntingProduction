@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "DeltaTime.h"
 
-#include <DirectXMath.h>
+#include <DirectXMath.h> 
 
 extern DeltaTime* deltaTime;
 
@@ -638,5 +638,28 @@ public: // Void members
 		}
 	}
 
-	
+	static void RunToAlly(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i, const float fleeSpeed, const float yRotationOffset)
+	{
+		float x2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
+		float y2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
+		float hypotenuse = sqrt((x2 * x2) + (y2 * y2));
+		float radians = atan2(y2, x2);
+		float degrees = XMConvertToDegrees(radians);
+		baseAreaEnemyFBX[i]->SetRotation({ baseAreaEnemyFBX[i]->GetRotation().x, -degrees + yRotationOffset, baseAreaEnemyFBX[i]->GetRotation().z });
+		baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x + fleeSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse),
+										   baseAreaEnemyFBX[i]->GetPosition().y,
+										   baseAreaEnemyFBX[i]->GetPosition().z + fleeSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y2 / hypotenuse) });
+	}
+
+	static void CallAlly(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
+	{
+		baseAreaEnemyFBX[i]->aggroSet = false;
+		baseAreaEnemyFBX[i]->Reset();
+		baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+		baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->aggroSet = false;
+		baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->SetEnumStatus(EnemyHuman::AGGRO);
+		baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = false;
+		baseAreaEnemyFBX[i]->helpCall = true;
+		baseAreaEnemyFBX[i]->fleeSet = false;
+	}
 };
