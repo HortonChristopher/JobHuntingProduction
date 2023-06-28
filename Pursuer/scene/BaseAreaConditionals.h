@@ -644,7 +644,7 @@ public: // Void members
 		float y2 = baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->GetPosition().z - baseAreaEnemyFBX[i]->GetPosition().z;
 		float hypotenuse = sqrt((x2 * x2) + (y2 * y2));
 		float radians = atan2(y2, x2);
-		float degrees = XMConvertToDegrees(radians);
+		float degrees = DirectX::XMConvertToDegrees(radians);
 		baseAreaEnemyFBX[i]->SetRotation({ baseAreaEnemyFBX[i]->GetRotation().x, -degrees + yRotationOffset, baseAreaEnemyFBX[i]->GetRotation().z });
 		baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x + fleeSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x2 / hypotenuse),
 										   baseAreaEnemyFBX[i]->GetPosition().y,
@@ -661,5 +661,140 @@ public: // Void members
 		baseAreaEnemyFBX[baseAreaEnemyFBX[i]->closestEnemy]->isBeingCalledToHelp = false;
 		baseAreaEnemyFBX[i]->helpCall = true;
 		baseAreaEnemyFBX[i]->fleeSet = false;
+	}
+
+	static void ResetAggro(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
+	{
+		if (!BaseAreaConditionals::IsEnemyDamaged(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyAttacking(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
+		{
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
+		}
+	}
+
+	static void PatrolAttack(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
+	{
+		if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		{
+			if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i + 1]->enumStatus))
+			{
+				baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
+				baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
+				baseAreaEnemyFBX[i]->modelChange = true;
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+				baseAreaEnemyFBX[i + 1]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
+				baseAreaEnemyFBX[i + 1]->timer = baseAreaEnemyFBX[i + 1]->timerReset;
+				baseAreaEnemyFBX[i + 1]->modelChange = true;
+				baseAreaEnemyFBX[i + 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+			}
+			else
+			{
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+			}
+		}
+		else if (BaseAreaConditionals::IsEnemyBackPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		{
+			if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i - 1]->enumStatus))
+			{
+				baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
+				baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
+				baseAreaEnemyFBX[i]->modelChange = true;
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+				baseAreaEnemyFBX[i - 1]->twoEnemySurroundStage = baseAreaEnemyFBX[i - 1]->twoEnemySurroundStageReset;
+				baseAreaEnemyFBX[i - 1]->timer = baseAreaEnemyFBX[i - 1]->timerReset;
+				baseAreaEnemyFBX[i - 1]->modelChange = true;
+				baseAreaEnemyFBX[i - 1]->SetEnumStatus(EnemyHuman::TWOENEMYSURROUND);
+			}
+			else
+			{
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+			}
+		}
+		else
+		{
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+		}
+	}
+
+	static void ChooseEnemyAttack(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
+	{
+		int random = rand() % 10;
+
+		if (random < 2) // Regular Attack
+		{
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
+		}
+		else if (random < 4) // Particle Attack
+		{
+			baseAreaEnemyFBX[i]->particleAttackStage = 0;
+			baseAreaEnemyFBX[i]->modelChange = true;
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::PARTICLEATTACK);
+		}
+		else if (random < 6) // Landing Attack
+		{
+			baseAreaEnemyFBX[i]->landingAttackStage = 0;
+			baseAreaEnemyFBX[i]->modelChange = true;
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::LANDINGATTACK);
+		}
+		else
+		{
+			PatrolAttack(baseAreaEnemyFBX, i);
+		}
+	}
+
+	static void WithinMinimumDistanceAttackProcess(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
+	{
+		if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
+		{
+			ChooseEnemyAttack(baseAreaEnemyFBX, i);
+		}
+	}
+
+	static void InitialCharge(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i, int agroodEnemies)
+	{
+		if (SetEnemyAgrooNumberForJetStreamAttackUse(baseAreaEnemyFBX[i]->agrooNumber))
+		{
+			agroodEnemies++;
+			baseAreaEnemyFBX[i]->agrooNumber = agroodEnemies;
+		}
+
+		if (IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
+		{
+			/*int random = rand() % 10;
+
+			if (random < 5)
+			{
+				baseAreaEnemyFBX[i]->chargeAttackStage = 0;
+				baseAreaEnemyFBX[i]->modelChange = true;
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
+				baseAreaEnemyFBX[i]->chargeAttackCheck = true;
+			}
+			else
+			{
+				baseAreaEnemyFBX[i]->chargeAttackCheck = true;
+			}*/
+
+			baseAreaEnemyFBX[i]->chargeAttackStage = 0;
+			baseAreaEnemyFBX[i]->timer = 0.0f;
+			baseAreaEnemyFBX[i]->modelChange = true;
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::CHARGEATTACK);
+		}
+	}
+
+	static void EnemyAggro(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, Player* playerFBX, int i, const float maxChargeDistance, const float minChargeDistance, bool enemyKnockback, std::array<bool, 10>& baseAreaEnemyAliveBOOL, int agroodEnemies)
+	{
+		float distance = sqrt((baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) * (baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x) + (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z) * (baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z));
+
+		if (IsEnemyWithinChargingDistanceAndHasntChargedYet(distance, maxChargeDistance, minChargeDistance, baseAreaEnemyFBX[i]->chargeAttackCheck, baseAreaEnemyFBX[i]->enumStatus, enemyKnockback, baseAreaEnemyAliveBOOL[i]))
+		{
+			InitialCharge(baseAreaEnemyFBX, i, agroodEnemies);
+		}
+		else if (BaseAreaConditionals::IsEnemyWithinMinimumChargeDistance(distance, minChargeDistance))
+		{
+			WithinMinimumDistanceAttackProcess(baseAreaEnemyFBX, i);
+		}
+		else
+		{
+			ResetAggro(baseAreaEnemyFBX, i);
+		}
 	}
 };
