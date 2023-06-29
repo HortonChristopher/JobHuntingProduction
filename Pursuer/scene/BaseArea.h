@@ -222,7 +222,7 @@ private:
 	const float particleAttackOffset = 0.0f;
 	const float particleAttackStartScale = 10.0f;
 	const float landingAttackOffset = 2.0f;
-	const float landingAttackStartScale = 40.0f;
+	const float landingAttackStartScale = 60.0f;
 	const float chargeAttackOffset = 4.0f;
 	const float chargeAttackScale = 30.0f;
 	const float parryParticleOffset = 6.0f;

@@ -198,7 +198,7 @@ public: // Bool members
 
 	static bool CanEnemyJetStreamAttack(EnemyHuman::status enumStatus, bool jetAttacked)
 	{
-		return enumStatus != EnemyHuman::JETSTREAMATTACK && !jetAttacked;
+		return (enumStatus != EnemyHuman::JETSTREAMATTACK) && !jetAttacked;
 	}
 
 	static bool CanEnemySeePlayer(int intersect, bool enemyKnockback, bool enemyAlive, EnemyHuman::status enumStatus)

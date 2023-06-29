@@ -445,8 +445,6 @@ void BaseArea::Update()
 					knockbackPrevPosition.x -= landingAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
 					knockbackPrevPosition.z -= landingAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
-
-				baseAreaEnemyFBX[i]->landingParticles = false;
 				break;
 			case EnemyHuman::CHARGEATTACK:
 				playerFBX->SetPosition({
@@ -476,6 +474,8 @@ void BaseArea::Update()
 				knockback = false;
 			}
 		}
+
+		baseAreaEnemyFBX[i]->landingParticles = false;
 	}
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
@@ -522,7 +522,7 @@ void BaseArea::Update()
 	// Damage overlay display
 	if (BaseAreaConditionals::ShouldTheDamageOverlayDisplay(damageOverlayDisplay))
 	{
-		if (!BaseAreaConditionals::IsPlayerDead(playerFBX->enumStatus))
+		if (!BaseAreaConditionals::IsPlayerDead(playerFBX->isPlayerDead))
 		{
 			damageOverlaySpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
