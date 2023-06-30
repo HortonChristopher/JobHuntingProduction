@@ -520,9 +520,9 @@ public: // Bool members
 		return (inputC && (stamina > staminaMin)) || (inputK && (stamina > staminaMin));
 	}
 
-	static bool CanSlowMotionBeActivated(bool input, float power, const float powerMin)
+	static bool CanSlowMotionBeActivated(bool input, bool input2, float power, const float powerMin)
 	{
-		return input && (power > powerMin);
+		return (input && (power > powerMin)) || (input2 && (power > powerMin));
 	}
 
 	static bool HasPlayerOrEnemyFallenThroughGround(float position, const float threshold)

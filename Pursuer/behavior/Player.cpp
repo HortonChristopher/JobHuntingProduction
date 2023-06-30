@@ -353,7 +353,7 @@ void Player::Update()
 			lowStaminaWarningActivation = true;
 		}
 
-		if (input->TriggerMouseMiddle() && enumStatus != ATTACK)
+		if (input->TriggerMouseMiddle() && enumStatus != ATTACK || input->TriggerControllerButton(XINPUT_GAMEPAD_X))
 		{
 			timer = 0.0f;
 			enumStatus = PARRY;

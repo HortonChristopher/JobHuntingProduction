@@ -910,7 +910,7 @@ void BaseArea::Update()
 		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, particleSprintLife, -sprintParticleOffset, sprintParticleStartScale);
 	}
 
-	if (BaseAreaConditionals::CanSlowMotionBeActivated(input->PushKey(DIK_CAPSLOCK), playerFBX->powerRemaining, playerFBX->powerMinimum))
+	if (BaseAreaConditionals::CanSlowMotionBeActivated(input->PushKey(DIK_CAPSLOCK), input->PushControllerButton(XINPUT_GAMEPAD_LEFT_THUMB), playerFBX->powerRemaining, playerFBX->powerMinimum))
 	{
 		playerFBX->slowMotion = true;
 
@@ -1070,7 +1070,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region LockOn
-	if (BaseAreaConditionals::CameraLockOn(input->PushKey(DIK_SPACE), input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)))
+	if (BaseAreaConditionals::CameraLockOn(input->PushKey(DIK_SPACE), input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)))
 	{
 		if (!BaseAreaConditionals::IsCameraLockedOn(camera->lockOn))
 		{
@@ -1111,7 +1111,7 @@ void BaseArea::Update()
 	else
 	{
 		camera->lockOn = false;
-		if (BaseAreaConditionals::ResetCameraAfterLockon(input->UpKey(DIK_SPACE), input->UpControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)))
+		if (BaseAreaConditionals::ResetCameraAfterLockon(input->UpKey(DIK_SPACE), input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)))
 		{
 			// Assigns the camera's current degree of rotation
 			camera->resetPhi *= 3.141592654f / 180.0f;
