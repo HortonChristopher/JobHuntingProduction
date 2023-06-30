@@ -226,7 +226,7 @@ private:
 	const float chargeAttackOffset = 4.0f;
 	const float chargeAttackScale = 30.0f;
 	const float parryParticleOffset = 6.0f;
-	const float parryParticleStartScale = 20.0f;
+	const float parryParticleStartScale = 40.0f;
 	const float playerKnockbackAttackOffset = 5.0f;
 	const float playerKnockbackAttackStartScale = 10.0f;
 	const float healParticleOffset = 0.0f;
