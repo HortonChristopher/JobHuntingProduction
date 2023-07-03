@@ -262,9 +262,9 @@ void Player::Update()
 			if (!healed)
 			{
 				hp += 4.0f;
-				if (hp >= 10.0f)
+				if (hp >= 25.0f)
 				{
-					hp = 10.0f;
+					hp = 25.0f;
 				}
 				healed = true;
 			}
