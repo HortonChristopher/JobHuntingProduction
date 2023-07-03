@@ -347,16 +347,18 @@ void BaseArea::Update()
 		BaseAreaConditionals::EnemySeeEnemyAggroCondition(baseAreaEnemyFBX, i, enemyVisionRangeOBJ, playerInteresectSize, enemyAggroVisionRange, baseAreaEnemyAliveBOOL, numberOfEnemiesTotal);
 	}
 
-	if (BaseAreaConditionals::CanJetStreamAttackBeDone(debugJetStream, baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber, enemyDefeated, clearCondition))
+	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		for (int i = 0; i < numberOfEnemiesTotal; i++)
+		if (!BaseAreaConditionals::CanJetStreamAttackBeDone(debugJetStream, baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber, enemyDefeated, clearCondition))
 		{
-			if (BaseAreaConditionals::CanEnemyBeJetStreamAttacked(baseAreaEnemyFBX[i]))
-			{
-				baseAreaEnemyFBX[i]->debugJetAttacked = true;
-				baseAreaEnemyFBX[i]->jetStreamAttackStage = baseAreaEnemyFBX[i]->jetStreamAttackStageReset;
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::JETSTREAMATTACK);
-			}
+			continue;
+		}
+
+		if (BaseAreaConditionals::CanEnemyBeJetStreamAttacked(baseAreaEnemyFBX[i]))
+		{
+			baseAreaEnemyFBX[i]->debugJetAttacked = true;
+			baseAreaEnemyFBX[i]->jetStreamAttackStage = baseAreaEnemyFBX[i]->jetStreamAttackStageReset;
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::JETSTREAMATTACK);
 		}
 	}
 
