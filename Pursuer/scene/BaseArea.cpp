@@ -347,18 +347,21 @@ void BaseArea::Update()
 		BaseAreaConditionals::EnemySeeEnemyAggroCondition(baseAreaEnemyFBX, i, enemyVisionRangeOBJ, playerInteresectSize, enemyAggroVisionRange, baseAreaEnemyAliveBOOL, numberOfEnemiesTotal);
 	}
 
-	for (int i = 0; i < numberOfEnemiesTotal; i++)
+	if (!BaseAreaConditionals::CanJetStreamAttackBeDone(debugJetStream, baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber, enemyDefeated, clearCondition))
 	{
-		if (!BaseAreaConditionals::CanJetStreamAttackBeDone(debugJetStream, baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber, enemyDefeated, clearCondition))
+		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			continue;
-		}
+			if (!BaseAreaConditionals::CanJetStreamAttackBeDone(debugJetStream, baseAreaEnemyFBX[0]->jetStreamAttackRequiredEnemyNumber, enemyDefeated, clearCondition))
+			{
+				continue;
+			}
 
-		if (BaseAreaConditionals::CanEnemyBeJetStreamAttacked(baseAreaEnemyFBX[i]))
-		{
-			baseAreaEnemyFBX[i]->debugJetAttacked = true;
-			baseAreaEnemyFBX[i]->jetStreamAttackStage = baseAreaEnemyFBX[i]->jetStreamAttackStageReset;
-			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::JETSTREAMATTACK);
+			if (BaseAreaConditionals::CanEnemyBeJetStreamAttacked(baseAreaEnemyFBX[i]))
+			{
+				baseAreaEnemyFBX[i]->debugJetAttacked = true;
+				baseAreaEnemyFBX[i]->jetStreamAttackStage = baseAreaEnemyFBX[i]->jetStreamAttackStageReset;
+				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::JETSTREAMATTACK);
+			}
 		}
 	}
 
@@ -543,92 +546,104 @@ void BaseArea::Update()
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (BaseAreaConditionals::AreBothPlayerAndEnemyInParryRange(intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange), intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange)) 
-				&& BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i])
-				&& BaseAreaConditionals::IsPlayerParryTimingCorrect(baseAreaEnemyFBX[i]->attackTimer, baseAreaEnemyFBX[i]->parryPossibleMin, baseAreaEnemyFBX[i]->parryPossibleMax))
+			if (!BaseAreaConditionals::AreBothPlayerAndEnemyInParryRange(intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange), intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange)))
 			{
-				baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
-				baseAreaEnemyFBX[i]->attackTimer = baseAreaEnemyFBX[i]->timerReset;
-				baseAreaEnemyFBX[i]->attackAnimation = false;
-				baseAreaEnemyFBX[i]->modelChange = true;
-				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
-				ParticleCreationExplosion((playerFBX->GetPosition().x + baseAreaEnemyFBX[i]->GetPosition().x) / 2.0f, (playerFBX->GetPosition().y + baseAreaEnemyFBX[i]->GetPosition().y) / 2.0f, (playerFBX->GetPosition().z + baseAreaEnemyFBX[i]->GetPosition().z) / 2.0f, particleLifeStandard, parryParticleOffset, parryParticleStartScale);
-				playerFBX->parryActive = true;
+				continue;
 			}
+
+			if (!BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]))
+			{
+				continue;
+			}
+
+			if (!BaseAreaConditionals::IsPlayerParryTimingCorrect(baseAreaEnemyFBX[i]->attackTimer, baseAreaEnemyFBX[i]->parryPossibleMin, baseAreaEnemyFBX[i]->parryPossibleMax))
+			{
+				continue;
+			}
+			
+			baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
+			baseAreaEnemyFBX[i]->attackTimer = baseAreaEnemyFBX[i]->timerReset;
+			baseAreaEnemyFBX[i]->attackAnimation = false;
+			baseAreaEnemyFBX[i]->modelChange = true;
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+			ParticleCreationExplosion((playerFBX->GetPosition().x + baseAreaEnemyFBX[i]->GetPosition().x) / 2.0f, (playerFBX->GetPosition().y + baseAreaEnemyFBX[i]->GetPosition().y) / 2.0f, (playerFBX->GetPosition().z + baseAreaEnemyFBX[i]->GetPosition().z) / 2.0f, particleLifeStandard, parryParticleOffset, parryParticleStartScale);
+			playerFBX->parryActive = true;
 		}
 	}
 
 	if (BaseAreaConditionals::IsPlayerAttacking(playerFBX->enumStatus))
 	{
-		if (BaseAreaConditionals::IsPlayerAttackTimingCorrect(playerFBX->timer, playerFirstAttackStartTimer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
+		if (BaseAreaConditionals::IsPlayerAttackTimingCorrect(playerFBX->timer, playerFirstAttackStartTimer, playerFirstAttackEndTimer, playerSecondAttackStartTimer, playerSecondAttackEndTimer, playerThirdAttackStartTimer, playerThirdAttackEndTimer)
+			&& BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
 		{
-			if (BaseAreaConditionals::CanPlayerDamageEnemy(playerFBX->ableToDamage))
+			for (int i = 0; i < numberOfEnemiesTotal; i++)
 			{
-				for (int i = 0; i < numberOfEnemiesTotal; i++)
+				if (!BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
 				{
-					if (BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
-					{
-						baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
-
-						if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
-						{
-							enemyKnockbackTime = knockbackTimeReset;
-							enemyKnockback = true;
-						}
-
-						if (!BaseAreaConditionals::IsEnemyAliveHP(baseAreaEnemyFBX[i]->HP, baseAreaEnemyFBX[i]->minAliveHP))
-						{
-							baseAreaEnemyAliveBOOL[i] = false;
-							enemyDefeated++;
-							agroodEnemies--;
-							baseAreaEnemyFBX[i]->dead = true;
-							baseAreaEnemyFBX[i]->modelChange = true;
-							//baseAreaEnemyRespawnTimerFLOAT[i] = 600;
-							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
-						}
-						else
-						{
-							baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
-							baseAreaEnemyFBX[i]->modelChange = true;
-							baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
-						}
-
-						if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
-						{
-							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandardPlusHalf, playerKnockbackAttackOffset, playerKnockbackAttackStartScale * 2.0f);
-						}
-						else
-						{
-							ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, playerKnockbackAttackOffset, playerKnockbackAttackStartScale);
-						}
-
-						playerFBX->ableToDamage = false;
-					}
+					continue;
 				}
+
+				baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
+
+				if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
+				{
+					enemyKnockbackTime = knockbackTimeReset;
+					enemyKnockback = true;
+				}
+
+				if (!BaseAreaConditionals::IsEnemyAliveHP(baseAreaEnemyFBX[i]->HP, baseAreaEnemyFBX[i]->minAliveHP))
+				{
+					baseAreaEnemyAliveBOOL[i] = false;
+					enemyDefeated++;
+					agroodEnemies--;
+					baseAreaEnemyFBX[i]->dead = true;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					//baseAreaEnemyRespawnTimerFLOAT[i] = 600;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+				}
+				else
+				{
+					baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
+					baseAreaEnemyFBX[i]->modelChange = true;
+					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+				}
+
+				if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
+				{
+					ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandardPlusHalf, playerKnockbackAttackOffset, playerKnockbackAttackStartScale * 2.0f);
+				}
+				else
+				{
+					ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, playerKnockbackAttackOffset, playerKnockbackAttackStartScale);
+				}
+
+				playerFBX->ableToDamage = false;
 			}
 		}
 
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (BaseAreaConditionals::IsEnemyOrPlayerBeingKnockbacked(enemyKnockback))
+			if (!BaseAreaConditionals::IsEnemyOrPlayerBeingKnockbacked(enemyKnockback))
 			{
-				XMFLOAT3 xyz = playerFBX->GetPosition() - baseAreaEnemyFBX[i]->GetPosition();
-				XMFLOAT3 knockbackPrevPosition = baseAreaEnemyFBX[i]->GetPosition();
-				
-				float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
-				
-				baseAreaEnemyFBX[i]->SetPosition({
-						knockbackPrevPosition.x -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
-						knockbackPrevPosition.y += knockbackYOffset,
-						knockbackPrevPosition.z -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
-				
-				enemyKnockbackTime += playerAttackKnockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-				
-				if (BaseAreaConditionals::HasKnockbackFinished(enemyKnockbackTime, playerAttackKnockbackMaxtime))
-				{
-					enemyKnockbackTime = knockbackTimeReset;
-					enemyKnockback = false;
-				}
+				continue;
+			}
+
+			XMFLOAT3 xyz = playerFBX->GetPosition() - baseAreaEnemyFBX[i]->GetPosition();
+			XMFLOAT3 knockbackPrevPosition = baseAreaEnemyFBX[i]->GetPosition();
+
+			float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
+
+			baseAreaEnemyFBX[i]->SetPosition({
+					knockbackPrevPosition.x -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.y += knockbackYOffset,
+					knockbackPrevPosition.z -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+
+			enemyKnockbackTime += playerAttackKnockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+
+			if (BaseAreaConditionals::HasKnockbackFinished(enemyKnockbackTime, playerAttackKnockbackMaxtime))
+			{
+				enemyKnockbackTime = knockbackTimeReset;
+				enemyKnockback = false;
 			}
 		}
 
@@ -685,11 +700,15 @@ void BaseArea::Update()
 		{
 			if (BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[i]->enumStatus))
 			{
-				if (BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
-				{
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
-				}
+				continue;
 			}
+
+			if (!BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
+			{
+				continue;
+			}
+
+			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 		}
 	}
 #pragma endregion
