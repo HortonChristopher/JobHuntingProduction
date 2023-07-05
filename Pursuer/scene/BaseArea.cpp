@@ -150,11 +150,11 @@ void BaseArea::Update()
 
 	if (!BaseAreaConditionals::IsScreenShaking(screenShake))
 	{
-		if (!BaseAreaConditionals::IsCameraLockedOn(camera->lockOn) && !BaseAreaConditionals::IsPlayerDodging(playerFBX->dodge))
+		if (!camera->IsCameraLockedOn() && !playerFBX->IsPlayerDodging())
 		{
 			camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z });
 		}
-		else if (BaseAreaConditionals::IsPlayerDodging(playerFBX->dodge))
+		else if (playerFBX->IsPlayerDodging())
 		{
 			camera->SetTarget({ playerFBX->dodgePosition.x, playerFBX->dodgePosition.y + playerFBX->playerCameraYOffset, playerFBX->dodgePosition.z });
 		}
@@ -187,7 +187,7 @@ void BaseArea::Update()
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + deltaTimeOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
-		if (BaseAreaConditionals::HasPlayerReachedTriggerToMoveMissionSprite(playerFBX->GetPosition().z, movementStartZPosition))
+		if (playerFBX->MissionSpriteTriggerPositionReached(movementStartZPosition))
 		{
 			startMissionSpriteMovement = true;
 		}
@@ -245,7 +245,7 @@ void BaseArea::Update()
 	// This code aggros the patrol's partner if one of them starts combat with the player
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		bool isWanderingOrStanding = BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus) || BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus);
+		bool isWanderingOrStanding = baseAreaEnemyFBX[i]->IsEnemyWandering() || baseAreaEnemyFBX[i]->IsEnemyStanding();
 		
 		if (!isWanderingOrStanding)
 		{
@@ -254,7 +254,7 @@ void BaseArea::Update()
 
 		int partnerIndex = (i % 2 == 0 || i == 0) ? i + 1 : i - 1;
 
-		bool isPartnerInCombat = BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[partnerIndex]->enumStatus) || BaseAreaConditionals::IsEnemyAttacking(baseAreaEnemyFBX[partnerIndex]->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[partnerIndex]->enumStatus);
+		bool isPartnerInCombat = baseAreaEnemyFBX[partnerIndex]->IsEnemyAggro() || baseAreaEnemyFBX[partnerIndex]->IsEnemyAttacking() || baseAreaEnemyFBX[partnerIndex]->IsEnemyCoolingDown();
 		
 		if (!isPartnerInCombat)
 		{
@@ -339,7 +339,7 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (!BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) || !BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
+		if (!baseAreaEnemyFBX[i]->IsEnemyStanding() || !baseAreaEnemyFBX[i]->IsEnemyWandering())
 		{
 			continue;
 		}
@@ -703,7 +703,7 @@ void BaseArea::Update()
 				continue;
 			}
 
-			if (!BaseAreaConditionals::IsEnemyStanding(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyWandering(baseAreaEnemyFBX[i]->enumStatus))
+			if (!baseAreaEnemyFBX[i]->IsEnemyStanding() && !baseAreaEnemyFBX[i]->IsEnemyWandering())
 			{
 				continue;
 			}
@@ -865,7 +865,7 @@ void BaseArea::Update()
 	STBarFrameSPRITE->SetSize(STBarSpriteSize);
 	slowMotionBarSPRITE->SetSize({ playerFBX->powerRemaining / 2.0f, slowMotionSpriteBarSize.y });
 	slowMotionBarFrameSPRITE->SetSize(slowMotionSpriteBarSize);
-	if (BaseAreaConditionals::IsCameraLockedOn(camera->lockOn))
+	if (camera->IsCameraLockedOn())
 	{
 		STBarSPRITE->SetPosition(lockOnSTBarPosition);
 		STBarFrameSPRITE->SetPosition(lockOnSTBarPosition);
@@ -1093,7 +1093,7 @@ void BaseArea::Update()
 #pragma region LockOn
 	if (BaseAreaConditionals::CameraLockOn(input->PushKey(DIK_SPACE), input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)))
 	{
-		if (!BaseAreaConditionals::IsCameraLockedOn(camera->lockOn))
+		if (!camera->IsCameraLockedOn())
 		{
 			float min = FLT_MAX;
 			closestEnemy = 20;

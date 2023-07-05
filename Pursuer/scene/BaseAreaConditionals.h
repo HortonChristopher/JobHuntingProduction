@@ -16,16 +16,6 @@ public: // Bool members
 		return screenShake;
 	}
 
-	static bool IsCameraLockedOn(bool lockOn)
-	{
-		return lockOn;
-	}
-
-	static bool IsPlayerDodging(bool dodge)
-	{
-		return dodge;
-	}
-
 	static bool IsInitializationFinished(bool initializeFinished)
 	{
 		return initializeFinished;
@@ -61,29 +51,9 @@ public: // Bool members
 		return baseAreaOpeningCutscene;
 	}
 
-	static bool HasPlayerReachedTriggerToMoveMissionSprite(float zPosition, const float movementStartZPosition)
-	{
-		return zPosition >= -movementStartZPosition;
-	}
-
 	static bool IsOpeningCutsceneFinished(float zPosition, const float mapBorder)
 	{
 		return zPosition >= -mapBorder;
-	}
-
-	static bool IsEnemyWandering(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::WANDER;
-	}
-
-	static bool IsEnemyStanding(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::STAND;
-	}
-
-	static bool IsEnemyAggro(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::AGGRO;
 	}
 
 	static bool IsEnemyLandingAttack(EnemyHuman::status enumStatus)
@@ -124,16 +94,6 @@ public: // Bool members
 	static bool IsEnemyAliveHP(float hp, float minHp)
 	{
 		return hp > minHp;
-	}
-
-	static bool IsEnemyAttacking(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK || enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK;
-	}
-
-	static bool IsEnemyCoolingDown(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::COOLDOWN;
 	}
 
 	static bool IsEnemyFleeing(EnemyHuman::status enumStatus)

@@ -138,6 +138,31 @@ public:
 
 	void MoveTowards(float& current, float target, float speed, float elapsedTime);
 
+	bool IsEnemyWandering()
+	{
+		return enumStatus == EnemyHuman::WANDER;
+	}
+
+	bool IsEnemyStanding()
+	{
+		return enumStatus == EnemyHuman::STAND;
+	}
+
+	bool IsEnemyAggro()
+	{
+		return enumStatus == EnemyHuman::AGGRO;
+	}
+
+	bool IsEnemyAttacking()
+	{
+		return enumStatus == EnemyHuman::CHARGEATTACK || enumStatus == EnemyHuman::JETSTREAMATTACK || enumStatus == EnemyHuman::LANDINGATTACK || enumStatus == EnemyHuman::PARTICLEATTACK || enumStatus == EnemyHuman::ATTACK;
+	}
+
+	bool IsEnemyCoolingDown()
+	{
+		return enumStatus == EnemyHuman::COOLDOWN;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

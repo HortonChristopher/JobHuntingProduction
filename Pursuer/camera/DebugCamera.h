@@ -58,6 +58,11 @@ public:
 		return theta;
 	}
 
+	bool IsCameraLockedOn()
+	{
+		return lockOn;
+	}
+
 private:
 	// 入力クラスのポインタ
 	Input* input;

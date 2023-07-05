@@ -119,6 +119,16 @@ public:
 
 	void MoveTowards(float& current, float target, float speed, float elapsedTime);
 
+	bool IsPlayerDodging()
+	{
+		return dodge;
+	}
+
+	bool MissionSpriteTriggerPositionReached(const float movementStartZPosition)
+	{
+		return position.z >= -movementStartZPosition;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
