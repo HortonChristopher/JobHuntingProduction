@@ -267,7 +267,7 @@ void BaseArea::Update()
 #pragma region EnemyAggro
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::ShouldEnemyFlee(baseAreaEnemyFBX[i]->HP, fleeHP, enemyKnockback, baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->helpCall, baseAreaEnemyFBX[i]->isPartnerDead))
+		if (baseAreaEnemyFBX[i]->ShouldEnemyFlee(fleeHP, enemyKnockback))
 		{
 			BaseAreaConditionals::HandleEnemyFleeTarget(baseAreaEnemyFBX[i], i, numberOfEnemiesTotal, closestEnemyDefaultNumber, baseAreaEnemyFBX);
 
@@ -283,34 +283,34 @@ void BaseArea::Update()
 			debugJetStream++;
 			baseAreaEnemyFBX[i]->jetStreamCounted = true;
 		}
-		else if (BaseAreaConditionals::CanEnemySeePlayer(intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange), enemyKnockback, baseAreaEnemyAliveBOOL[i], baseAreaEnemyFBX[i]->enumStatus))
+		else if (baseAreaEnemyFBX[i]->CanSeePlayer(intersect(playerFBX->GetPosition(), enemyVisionRangeOBJ[i]->GetPosition(), playerInteresectSize, enemyAggroVisionRange, enemyAggroVisionRange), enemyKnockback, baseAreaEnemyAliveBOOL[i]))
 		{
 			BaseAreaConditionals::EnemyAggro(baseAreaEnemyFBX, playerFBX, i, maxChargeDistance, minChargeDistance, enemyKnockback, baseAreaEnemyAliveBOOL, agroodEnemies);
 		}
 
-		if (BaseAreaConditionals::IsEnemyCurrentlyParticleAttacking(baseAreaEnemyFBX[i]->particleAttackActive))
+		if (baseAreaEnemyFBX[i]->CurrentlyParticleAttackingNoStage())
 		{
 			ParticleCreation(baseAreaEnemyFBX[i]->particleAttackPosition.x, baseAreaEnemyFBX[i]->particleAttackPosition.y, baseAreaEnemyFBX[i]->particleAttackPosition.z, particleLifeStandard, particleAttackOffset, particleAttackStartScale);
 		}
 
-		if (BaseAreaConditionals::HasEnemyHitTheGroundDuringLandingAttack(baseAreaEnemyFBX[i]->landingParticles))
+		if (baseAreaEnemyFBX[i]->HasHitGroundDuringLandingAttack())
 		{
 			ParticleCreationExplosion(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeStandard, landingAttackOffset, landingAttackStartScale);
 		}
 
-		if (BaseAreaConditionals::IsEnemyChargeAttacking(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->chargeAttackStage) && BaseAreaConditionals::IsEnemyJetStreamAttacking(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->jetStreamAttackStage))
+		if (baseAreaEnemyFBX[i]->IsChargeAttacking() && baseAreaEnemyFBX[i]->IsJetStreamAttacking())
 		{
 			ParticleCreation(baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z, particleLifeHalf, chargeAttackOffset, chargeAttackScale);
 		}
 
-		if (!BaseAreaConditionals::IsEnemySurroundAttackingThePlayer(baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->twoEnemySurroundStage))
+		if (!baseAreaEnemyFBX[i]->IsSurroundAttacking())
 		{
 			continue;
 		}
 
 		bool createParticles = false;
 
-		if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		if (baseAreaEnemyFBX[i]->IsFrontPatrolPosition())
 		{
 			createParticles = BaseAreaConditionals::CreateParticlesAtFrontPatrolPosition(baseAreaEnemyFBX[i]->nextDegree, baseAreaEnemyFBX[i]->initialDegree);
 		}
@@ -326,7 +326,7 @@ void BaseArea::Update()
 
 		auto position = baseAreaEnemyFBX[i]->GetPosition();
 
-		if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		if (baseAreaEnemyFBX[i]->IsFrontPatrolPosition())
 		{
 			ParticleCreationExplosion(position.x, position.y, position.z, particleLifeStandard, chargeAttackOffset, chargeAttackScale);
 		}

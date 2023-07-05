@@ -163,6 +163,56 @@ public:
 		return enumStatus == EnemyHuman::COOLDOWN;
 	}
 
+	bool ShouldEnemyFlee(const float fleeHP, bool enemyKnockback)
+	{
+		if (!enemyKnockback && enumStatus != EnemyHuman::DAMAGED && !helpCall && enumStatus != EnemyHuman::DEAD)
+		{
+			return (HP <= fleeHP) || isPartnerDead;
+		}
+
+		return false;
+	}
+
+	bool CanSeePlayer(int intersect, bool enemyKnockback, bool enemyAlive)
+	{
+		return (intersect && !enemyKnockback && enemyAlive) || (enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive);
+	}
+
+	bool CurrentlyParticleAttackingNoStage()
+	{
+		return particleAttackActive;
+	}
+
+	bool HasHitGroundDuringLandingAttack()
+	{
+		return landingParticles;
+	}
+
+	bool IsChargeAttacking()
+	{
+		return enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1;
+	}
+
+	bool IsJetStreamAttacking()
+	{
+		return enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2;
+	}
+
+	bool IsSurroundAttacking()
+	{
+		return enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1;
+	}
+
+	bool IsFrontPatrolPosition()
+	{
+		return patrolStatus == EnemyHuman::FRONT;
+	}
+
+	bool IsBackPatrolPosition()
+	{
+		return patrolStatus == EnemyHuman::BACK;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

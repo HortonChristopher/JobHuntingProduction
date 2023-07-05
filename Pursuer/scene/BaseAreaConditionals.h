@@ -101,29 +101,9 @@ public: // Bool members
 		return enumStatus == EnemyHuman::FLEE;
 	}
 
-	static bool ShouldEnemyFlee(float hp, const float fleeHP, bool enemyKnockback, EnemyHuman::status enumStatus, bool helpCall, bool isPartnerDead)
-	{
-		if (!enemyKnockback && enumStatus != EnemyHuman::DAMAGED && !helpCall && enumStatus != EnemyHuman::DEAD)
-		{
-			return (hp <= fleeHP) || isPartnerDead;
-		}
-
-		return false;
-	}
-
 	static bool HasEnemyNotYetSetFleeTarget(bool fleeSet)
 	{
 		return !fleeSet;
-	}
-
-	static bool IsEnemyFrontPatrolPosition(EnemyHuman::patrol patrolStatus)
-	{
-		return patrolStatus == EnemyHuman::FRONT;
-	}
-
-	static bool IsEnemyBackPatrolPosition(EnemyHuman::patrol patrolStatus)
-	{
-		return patrolStatus == EnemyHuman::BACK;
 	}
 
 	static bool IsEnemyBeingComparedWithItself(int j, int i, EnemyHuman::patrol patrolStatus)
@@ -161,11 +141,6 @@ public: // Bool members
 		return (enumStatus != EnemyHuman::JETSTREAMATTACK) && !jetAttacked;
 	}
 
-	static bool CanEnemySeePlayer(int intersect, bool enemyKnockback, bool enemyAlive, EnemyHuman::status enumStatus)
-	{
-		return (intersect && !enemyKnockback && enemyAlive) || (enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive);
-	}
-
 	static bool CanEnemySeeOtherEnemy(int intersect, bool enemy1Alive, bool enemy2Alive, EnemyHuman::status enumStatus)
 	{
 		return intersect && enemy1Alive && enemy2Alive && !IsEnemyStanding(enumStatus) && !IsEnemyWandering(enumStatus) && IsEnemyAlive(enumStatus);
@@ -191,34 +166,9 @@ public: // Bool members
 		return enumStatus == EnemyHuman::DAMAGED;
 	}
 
-	static bool IsEnemyCurrentlyParticleAttacking(bool particleAttackActive)
-	{
-		return particleAttackActive;
-	}
-
-	static bool HasEnemyHitTheGroundDuringLandingAttack(bool landingParticles)
-	{
-		return landingParticles;
-	}
-
 	static bool IsEnemyChargeOrJetStreamAttacking(EnemyHuman::status enumStatus, int chargeAttackStage, int jetStreamAttackStage)
 	{
 		return (enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1) || (enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2);
-	}
-
-	static bool IsEnemyChargeAttacking(EnemyHuman::status enumStatus, int chargeAttackStage)
-	{
-		return enumStatus == EnemyHuman::CHARGEATTACK && chargeAttackStage == 1;
-	}
-
-	static bool IsEnemyJetStreamAttacking(EnemyHuman::status enumStatus, int jetStreamAttackStage)
-	{
-		return enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamAttackStage == 2;
-	}
-
-	static bool IsEnemySurroundAttackingThePlayer(EnemyHuman::status enumStatus, int twoEnemySurroundStage)
-	{
-		return enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1;
 	}
 
 	static bool CreateParticlesAtFrontPatrolPosition(float nextDegree, float initialDegree)
