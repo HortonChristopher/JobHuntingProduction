@@ -231,7 +231,7 @@ void BaseArea::Update()
 			continue;
 		}
 
-		if (baseAreaEnemyFBX[i]->patrolStatus == EnemyHuman::BACK)
+		if (baseAreaEnemyFBX[i]->IsBackPatrolPosition())
 		{
 			baseAreaEnemyFBX[i]->SetTimer(119.0f);
 		}
