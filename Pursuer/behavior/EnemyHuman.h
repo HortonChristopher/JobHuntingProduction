@@ -173,6 +173,16 @@ public:
 		return false;
 	}
 
+	bool CanEnemyBeJetStreamAttacked()
+	{
+		return !IsEnemyStanding(enemy->enumStatus) &&
+			IsEnemyAlive(enemy->enumStatus) &&
+			!IsEnemyFleeing(enemy->enumStatus) &&
+			!IsEnemyWandering(enemy->enumStatus) &&
+			!IsEnemyCoolingDown(enemy->enumStatus) &&
+			CanEnemyJetStreamAttack(enemy->enumStatus, enemy->debugJetAttacked);
+	}
+
 	bool CanSeePlayer(int intersect, bool enemyKnockback, bool enemyAlive)
 	{
 		return (intersect && !enemyKnockback && enemyAlive) || (enumStatus == EnemyHuman::AGGRO && !enemyKnockback && enemyAlive);
