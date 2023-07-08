@@ -368,7 +368,12 @@ void BaseArea::Update()
 #pragma region playerHPDamage
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::DidEnemyHitPlayerWithNormalAttack(intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange), baseAreaEnemyFBX[i]->attackDamagePossible) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
+		if (!baseAreaEnemyFBX[i]->IsEnemyAttacking())
+		{
+			continue;
+		}
+
+		if (baseAreaEnemyFBX[i]->DidEnemyHitPlayerWithNormalAttack(intersect(attackRangeOBJ[i + 1]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, baseAttackRange, baseAttackRange), baseAreaEnemyFBX[i]->attackDamagePossible) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = maxAlpha;
@@ -380,7 +385,7 @@ void BaseArea::Update()
 			playerFBX->SetEnumStatus(Player::DAMAGED);
 		}
 
-		if (BaseAreaConditionals::DidEnemyHitPlayerWithParticleAttack(intersect(baseAreaEnemyFBX[i]->particleAttackPosition, playerFBX->GetPosition(), playerInteresectSize, particleAttackRange, particleAttackRange), baseAreaEnemyFBX[i]->particleAttackActive) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
+		if (baseAreaEnemyFBX[i]->DidEnemyHitPlayerWithParticleAttack(intersect(baseAreaEnemyFBX[i]->particleAttackPosition, playerFBX->GetPosition(), playerInteresectSize, particleAttackRange, particleAttackRange), baseAreaEnemyFBX[i]->particleAttackActive) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = maxAlpha;
@@ -393,7 +398,7 @@ void BaseArea::Update()
 			knockback = true;
 		}
 
-		if (BaseAreaConditionals::DidEnemyHitPlayerDuringSurroundAttack(intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, twoEnemySurroundRange, twoEnemySurroundRange), baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->twoEnemySurroundStage) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
+		if (baseAreaEnemyFBX[i]->DidEnemyHitPlayerDuringSurroundAttack(intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, twoEnemySurroundRange, twoEnemySurroundRange), baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->twoEnemySurroundStage) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = maxAlpha;
@@ -406,7 +411,7 @@ void BaseArea::Update()
 			knockback = true;
 		}
 
-		if (BaseAreaConditionals::DidEnemyHitPlayerDuringLandingAttack(intersect(baseAreaEnemyFBX[i]->landingAttackPosition, playerFBX->GetPosition(), playerInteresectSize, landingAttackRange, landingAttackRange), baseAreaEnemyFBX[i]->landingParticles) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
+		if (baseAreaEnemyFBX[i]->DidEnemyHitPlayerDuringLandingAttack(intersect(baseAreaEnemyFBX[i]->landingAttackPosition, playerFBX->GetPosition(), playerInteresectSize, landingAttackRange, landingAttackRange), baseAreaEnemyFBX[i]->landingParticles) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = maxAlpha;
@@ -419,7 +424,7 @@ void BaseArea::Update()
 			knockback = true;
 		}
 
-		if (BaseAreaConditionals::DidEnemyHitPlayerWhileCharging(intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, chargeAttackRange, chargeAttackRange), baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->chargeAttackStage, baseAreaEnemyFBX[i]->jetStreamAttackStage) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
+		if (baseAreaEnemyFBX[i]->DidEnemyHitPlayerWhileCharging(intersect(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), playerInteresectSize, chargeAttackRange, chargeAttackRange), baseAreaEnemyFBX[i]->enumStatus, baseAreaEnemyFBX[i]->chargeAttackStage, baseAreaEnemyFBX[i]->jetStreamAttackStage) && BaseAreaConditionals::CanEnemyDamagePlayer(baseAreaEnemyFBX[i]->ableToDamage))
 		{
 			baseAreaEnemyFBX[i]->ableToDamage = false;
 			damageOverlaySpriteALPHA = maxAlpha;

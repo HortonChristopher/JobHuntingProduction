@@ -223,6 +223,36 @@ public:
 		return patrolStatus == EnemyHuman::BACK;
 	}
 
+	bool DidEnemyHitPlayerWithNormalAttack(bool intersect, bool attackDamagePossible)
+	{
+		return intersect && attackDamagePossible;
+	}
+
+	bool DidEnemyHitPlayerWithParticleAttack(bool intersect, bool particleAttackActive)
+	{
+		return intersect && particleAttackActive;
+	}
+
+	bool DidEnemyHitPlayerDuringSurroundAttack(bool intersect, EnemyHuman::status enumStatus, int twoEnemySurroundStage)
+	{
+		return intersect && enumStatus == EnemyHuman::TWOENEMYSURROUND && twoEnemySurroundStage == 1;
+	}
+
+	bool DidEnemyHitPlayerDuringLandingAttack(bool intersect, bool landingParticles)
+	{
+		return intersect && landingParticles;
+	}
+
+	bool DidEnemyHitPlayerWhileCharging(bool intersect, EnemyHuman::status enumStatus, int chargeStage, int jetStreamStage)
+	{
+		if (intersect)
+		{
+			return (enumStatus == EnemyHuman::CHARGEATTACK && chargeStage == 1) || (enumStatus == EnemyHuman::JETSTREAMATTACK && jetStreamStage == 2);
+		}
+
+		return false;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
