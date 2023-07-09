@@ -236,11 +236,6 @@ public: // Bool members
 		return distance < damageAdvantageShortLongRangeBorder;
 	}
 
-	static bool HasPlayerHPReachedZero(float hp, const float defeatHP)
-	{
-		return hp < defeatHP;
-	}
-
 	static bool ShouldTheDamageOverlayDisplay(bool damageOverlayDisplay)
 	{
 		return damageOverlayDisplay;
@@ -254,16 +249,6 @@ public: // Bool members
 	static bool IsPlayerParryTimingCorrect(float attackTimer, const float minParryTime, const float maxParryTime)
 	{
 		return (attackTimer > minParryTime) && (attackTimer < maxParryTime);
-	}
-
-	static bool IsPlayerDead(bool isPlayerDead)
-	{
-		return isPlayerDead;
-	}
-
-	static bool IsPlayerParrying(Player::status enumStatus)
-	{
-		return enumStatus == Player::PARRY;
 	}
 
 	static bool IsPlayerAttacking(Player::status enumStatus)

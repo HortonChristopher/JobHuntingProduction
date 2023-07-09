@@ -129,6 +129,21 @@ public:
 		return position.z >= -movementStartZPosition;
 	}
 
+	bool HasPlayerHPReachedZero()
+	{
+		return hp < defeatHP;
+	}
+
+	bool IsPlayerDead()
+	{
+		return isPlayerDead;
+	}
+
+	bool IsPlayerParrying()
+	{
+		return enumStatus == Player::PARRY;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

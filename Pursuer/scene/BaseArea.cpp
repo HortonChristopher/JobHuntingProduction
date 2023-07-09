@@ -498,13 +498,13 @@ void BaseArea::Update()
 
 	playerFBX->damageAdvantage = false;
 
-	if (BaseAreaConditionals::HasPlayerHPReachedZero(playerFBX->hp, playerFBX->defeatHP))
+	if (playerFBX->HasPlayerHPReachedZero())
 	{
 		playerFBX->hp = playerFBX->defeatHP;
 		playerFBX->SetEnumStatus(Player::DEAD);
 	}
 	
-	if (BaseAreaConditionals::IsPlayerDead(playerFBX->isPlayerDead))
+	if (playerFBX->IsPlayerDead())
 	{
 		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
@@ -547,7 +547,7 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerAttack
-	if (BaseAreaConditionals::IsPlayerParrying(playerFBX->enumStatus)) // Player parry
+	if (playerFBX->IsPlayerParrying()) // Player parry
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
