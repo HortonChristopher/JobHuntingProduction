@@ -81,11 +81,6 @@ public: // Bool members
 		return landed;
 	}
 
-	static bool IsEnemyAlive(EnemyHuman::status enumStatus)
-	{
-		return enumStatus != EnemyHuman::DEAD;
-	}
-
 	static bool IsEnemyAliveBOOLIAN(bool isAlive)
 	{
 		return isAlive;

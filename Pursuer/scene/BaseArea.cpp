@@ -532,7 +532,7 @@ void BaseArea::Update()
 	// Damage overlay display
 	if (BaseAreaConditionals::ShouldTheDamageOverlayDisplay(damageOverlayDisplay))
 	{
-		if (!BaseAreaConditionals::IsPlayerDead(playerFBX->isPlayerDead))
+		if (!playerFBX->IsPlayerDead())
 		{
 			damageOverlaySpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
 		}
@@ -703,7 +703,7 @@ void BaseArea::Update()
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[i]->enumStatus))
+			if (baseAreaEnemyFBX[i]->IsEnemyAlive())
 			{
 				continue;
 			}

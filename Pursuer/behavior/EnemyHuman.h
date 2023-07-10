@@ -253,6 +253,16 @@ public:
 		return false;
 	}
 
+	bool IsEnemyAlive()
+	{
+		return enumStatus != EnemyHuman::DEAD;
+	}
+
+	bool IsPlayerDead()
+	{
+		return isPlayerDead;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
