@@ -263,6 +263,11 @@ public:
 		return isPlayerDead;
 	}
 
+	void AttackedAndDamaged()
+	{
+		HP -= playerAttackDamage;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
@@ -348,6 +353,8 @@ protected:
 	int yQuadrant = 0;
 
 	float endAnimationDEBUG = 0.0f;
+
+	const float playerAttackDamage = 1.0f;
 public:
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 meetingPoint = { 0.0f, 0.0f, 0.0f };

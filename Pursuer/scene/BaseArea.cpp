@@ -588,7 +588,7 @@ void BaseArea::Update()
 					continue;
 				}
 
-				baseAreaEnemyFBX[i]->HP -= playerAttackDamage;
+				baseAreaEnemyFBX[i]->AttackedAndDamaged();
 
 				if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 				{
