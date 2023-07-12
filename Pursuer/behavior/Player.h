@@ -144,6 +144,12 @@ public:
 		return enumStatus == Player::PARRY;
 	}
 
+	void ResetPlayerAttackCombo()
+	{
+		ableToDamage = true;
+		attackCombo = attackComboReset;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

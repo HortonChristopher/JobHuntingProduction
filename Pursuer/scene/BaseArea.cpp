@@ -566,11 +566,7 @@ void BaseArea::Update()
 				continue;
 			}
 			
-			baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
-			baseAreaEnemyFBX[i]->attackTimer = baseAreaEnemyFBX[i]->timerReset;
-			baseAreaEnemyFBX[i]->attackAnimation = false;
-			baseAreaEnemyFBX[i]->modelChange = true;
-			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+			baseAreaEnemyFBX[i]->PlayerSuccessfulParry();
 			ParticleCreationExplosion((playerFBX->GetPosition().x + baseAreaEnemyFBX[i]->GetPosition().x) / 2.0f, (playerFBX->GetPosition().y + baseAreaEnemyFBX[i]->GetPosition().y) / 2.0f, (playerFBX->GetPosition().z + baseAreaEnemyFBX[i]->GetPosition().z) / 2.0f, particleLifeStandard, parryParticleOffset, parryParticleStartScale);
 			playerFBX->parryActive = true;
 		}
@@ -608,9 +604,7 @@ void BaseArea::Update()
 				}
 				else
 				{
-					baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DAMAGED);
+					baseAreaEnemyFBX[i]->EnemyDamaged();
 				}
 
 				if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
@@ -659,8 +653,7 @@ void BaseArea::Update()
 	}
 	else
 	{
-		playerFBX->ableToDamage = true;
-		playerFBX->attackCombo = playerFBX->attackComboReset;
+		playerFBX->ResetPlayerAttackCombo();
 	}
 	
 #pragma endregion

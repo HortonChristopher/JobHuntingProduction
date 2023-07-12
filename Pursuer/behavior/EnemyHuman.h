@@ -268,6 +268,22 @@ public:
 		HP -= playerAttackDamage;
 	}
 
+	void PlayerSuccessfulParry()
+	{
+		timer = timerReset;
+		attackTimer = timerReset;
+		attackAnimation = false;
+		modelChange = true;
+		SetEnumStatus(EnemyHuman::DAMAGED);
+	}
+
+	void EnemyDamaged()
+	{
+		timer = timerReset;
+		modelChange = true;
+		SetEnumStatus(EnemyHuman::DAMAGED);
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
