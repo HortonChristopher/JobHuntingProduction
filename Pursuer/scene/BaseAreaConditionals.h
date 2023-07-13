@@ -251,11 +251,6 @@ public: // Bool members
 		return enumStatus == Player::ATTACK;
 	}
 
-	static bool IsPlayerHealing(Player::status enumStatus)
-	{
-		return enumStatus == Player::HEAL;
-	}
-
 	static bool IsPlayerAttackTimingCorrect(float attackTimer, const float firstAttackStart, const float firstAttackEnd, const float secondAttackStart, const float secondAttackEnd, const float thirdAttackStart, const float thirdAttackEnd)
 	{
 		return (attackTimer >= firstAttackStart && attackTimer <= firstAttackEnd) || (attackTimer >= secondAttackStart && attackTimer <= secondAttackEnd) || (attackTimer >= thirdAttackStart && attackTimer <= thirdAttackEnd);
@@ -289,11 +284,6 @@ public: // Bool members
 	static bool ShouldPlayerAbilityToDamageReset(float timer, const float firstTimerEnd, const float secondTimerStart, const float secondTimerEnd, const float thirdTimerStart)
 	{
 		return (timer > firstTimerEnd && timer < secondTimerStart) || (timer > secondTimerEnd && timer < thirdTimerStart);
-	}
-
-	static bool ShouldHealParticleRingSpawn(float timer, const float ringTimer)
-	{
-		return timer >= ringTimer;
 	}
 
 	static bool ShouldEveryEnemyAggro(int enemyDefeated, int threshold)

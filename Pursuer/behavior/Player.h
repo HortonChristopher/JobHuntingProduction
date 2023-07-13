@@ -150,6 +150,16 @@ public:
 		attackCombo = attackComboReset;
 	}
 
+	bool IsPlayerHealing()
+	{
+		return enumStatus == Player::HEAL;
+	}
+
+	bool ShouldHealParticleRingSpawn(const float ringTimer)
+	{
+		return timer >= ringTimer;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

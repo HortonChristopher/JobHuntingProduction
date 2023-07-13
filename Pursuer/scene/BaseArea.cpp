@@ -659,9 +659,9 @@ void BaseArea::Update()
 #pragma endregion
 
 #pragma region playerHeal
-	if (BaseAreaConditionals::IsPlayerHealing(playerFBX->enumStatus))
+	if (playerFBX->IsPlayerHealing())
 	{
-		if (BaseAreaConditionals::ShouldHealParticleRingSpawn(playerFBX->timer, healFirstParticleRingTimer))
+		if (playerFBX->ShouldHealParticleRingSpawn(healFirstParticleRingTimer))
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
@@ -670,7 +670,7 @@ void BaseArea::Update()
 					playerFBX->healParticlePosition[0].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
-		if (BaseAreaConditionals::ShouldHealParticleRingSpawn(playerFBX->timer, healSecondParticleRingTimer))
+		if (playerFBX->ShouldHealParticleRingSpawn(healSecondParticleRingTimer))
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
@@ -679,7 +679,7 @@ void BaseArea::Update()
 					playerFBX->healParticlePosition[1].z + sinf(XMConvertToRadians(i * 2.0f)) * healParticleRadius, particleHealLife, healParticleOffset, healParticleStartScale);
 			}
 		}
-		if (BaseAreaConditionals::ShouldHealParticleRingSpawn(playerFBX->timer, healThirdParticleRingTimer))
+		if (playerFBX->ShouldHealParticleRingSpawn(healThirdParticleRingTimer))
 		{
 			for (int i = 0; i < healNumberOfParticles; i++)
 			{
