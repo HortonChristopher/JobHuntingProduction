@@ -160,6 +160,16 @@ public:
 		return timer >= ringTimer;
 	}
 
+	bool ShouldStaminaBarAlphaBeFull()
+	{
+		return (stamina < staminaMaximum) && (stamina >= dodgeStaminaNeeded);
+	}
+
+	bool ShouldStaminaBarBeginFading()
+	{
+		return stamina >= staminaMaximum;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

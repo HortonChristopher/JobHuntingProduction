@@ -358,16 +358,6 @@ public: // Bool members
 		return lockOnK || lockOnC;
 	}
 
-	static bool ShouldStaminaBarAlphaBeFull(float stamina, const float staminaMax, const float dodgeStaminaNeeded)
-	{
-		return (stamina < staminaMax) && (stamina >= dodgeStaminaNeeded);
-	}
-
-	static bool ShouldStaminaBarBeginFading(float stamina, const float staminaMaximum)
-	{
-		return stamina >= staminaMaximum;
-	}
-
 	static bool IsStaminaBarBlinking(bool blinking)
 	{
 		return blinking;

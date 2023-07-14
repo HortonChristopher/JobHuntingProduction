@@ -884,12 +884,12 @@ void BaseArea::Update()
 	slowMotionBarSPRITE->SetRotation(lockOnRotation);
 	slowMotionBarFrameSPRITE->SetRotation(lockOnRotation);
 
-	if (BaseAreaConditionals::ShouldStaminaBarAlphaBeFull(playerFBX->stamina, playerFBX->staminaMaximum, playerFBX->dodgeStaminaNeeded)) 
+	if (playerFBX->ShouldStaminaBarAlphaBeFull()) 
 	{
 		staminaSpriteAlpha = maxAlpha;
 		blinkingStaminaAlpha = maxAlpha;
 	}
-	else if (BaseAreaConditionals::ShouldStaminaBarBeginFading(playerFBX->stamina, playerFBX->staminaMaximum)) 
+	else if (playerFBX->ShouldStaminaBarBeginFading()) 
 	{
 		BaseAreaConditionals::UpdateStaminaSpriteAlpha(staminaSpriteAlpha, staminaSpriteInteger);
 	}
