@@ -170,6 +170,11 @@ public:
 		return stamina >= staminaMaximum;
 	}
 
+	bool HasPlayerFallenThroughGround()
+	{
+		return position.y < -9.0f;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

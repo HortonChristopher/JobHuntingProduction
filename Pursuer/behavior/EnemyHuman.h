@@ -284,6 +284,11 @@ public:
 		SetEnumStatus(EnemyHuman::DAMAGED);
 	}
 
+	bool HasEnemyFallenThroughGround()
+	{
+		return position.y < -9.0f;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

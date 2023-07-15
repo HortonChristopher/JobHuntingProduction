@@ -395,11 +395,6 @@ public: // Bool members
 		return (input && (power > powerMin)) || (input2 && (power > powerMin));
 	}
 
-	static bool HasPlayerOrEnemyFallenThroughGround(float position, const float threshold)
-	{
-		return position < threshold;
-	}
-
 	static bool AreFBXModelsColliding(bool stacking)
 	{
 		return stacking;

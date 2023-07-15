@@ -1074,14 +1074,19 @@ void BaseArea::Update()
 #pragma region InCaseFallingThroughWorld
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::HasPlayerOrEnemyFallenThroughGround(baseAreaEnemyFBX[i]->GetPosition().y, -9.0f))
+		if (baseAreaEnemyFBX[i]->IsPlayerDead())
+		{
+			continue;
+		}
+
+		if (baseAreaEnemyFBX[i]->HasEnemyFallenThroughGround())
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, 25.0f, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
 	}
 
-	if (BaseAreaConditionals::HasPlayerOrEnemyFallenThroughGround(playerFBX->GetPosition().y, -9.0f))
+	if (playerFBX->HasPlayerFallenThroughGround())
 	{
 		playerPositionOBJ->SetPosition({ playerFBX->GetPosition().x, 18.0f, playerFBX->GetPosition().z });
 		playerFBX->SetPosition({ playerFBX->GetPosition().x, 18.0f, playerFBX->GetPosition().z });
