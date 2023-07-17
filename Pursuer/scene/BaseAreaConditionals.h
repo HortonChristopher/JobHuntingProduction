@@ -353,11 +353,6 @@ public: // Bool members
 		return lockOnK || lockOnC;
 	}
 
-	static bool ResetCameraAfterLockon(bool lockOnK, bool lockOnC)
-	{
-		return lockOnK || lockOnC;
-	}
-
 	static bool IsStaminaBarBlinking(bool blinking)
 	{
 		return blinking;

@@ -1135,14 +1135,10 @@ void BaseArea::Update()
 	else
 	{
 		camera->lockOn = false;
-		if (BaseAreaConditionals::ResetCameraAfterLockon(input->UpKey(DIK_SPACE), input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)))
+		if (camera->ResetCameraAfterLockon())
 		{
-			// Assigns the camera's current degree of rotation
-			camera->resetPhi *= 3.141592654f / 180.0f;
-			camera->SetPhi(camera->resetPhi);
-
+			camera->ResetActive();
 			playerFBX->cameraResetActive = false;
-			camera->resetting = true;
 		}
 		lockOnActive = false;
 		camera->SetTarget({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + 15.0f, playerFBX->GetPosition().z });

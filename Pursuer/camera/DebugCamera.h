@@ -63,6 +63,19 @@ public:
 		return lockOn;
 	}
 
+	bool ResetCameraAfterLockon()
+	{
+		return input->UpKey(DIK_SPACE) || input->UpControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER);
+	}
+
+	void ResetActive()
+	{
+		// Assigns the camera's current degree of rotation
+		resetPhi *= 3.141592654f / 180.0f;
+		SetPhi(resetPhi);
+		resetting = true;
+	}
+
 private:
 	// 入力クラスのポインタ
 	Input* input;
