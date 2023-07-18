@@ -56,31 +56,6 @@ public: // Bool members
 		return zPosition >= -mapBorder;
 	}
 
-	static bool IsEnemyLandingAttack(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::LANDINGATTACK;
-	}
-
-	static bool IsEnemyChargingNOSTAGE(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::CHARGEATTACK;
-	}
-
-	static bool IsEnemyJetStreamAttackingNOSTAGE(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::JETSTREAMATTACK;
-	}
-
-	static bool IsEnemySurroundAttackingNOSTAGE(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::TWOENEMYSURROUND;
-	}
-
-	static bool ShouldGravityBeDisabled(bool landed)
-	{
-		return landed;
-	}
-
 	static bool IsEnemyAliveBOOLIAN(bool isAlive)
 	{
 		return isAlive;
@@ -89,11 +64,6 @@ public: // Bool members
 	static bool IsEnemyAliveHP(float hp, float minHp)
 	{
 		return hp > minHp;
-	}
-
-	static bool IsEnemyFleeing(EnemyHuman::status enumStatus)
-	{
-		return enumStatus == EnemyHuman::FLEE;
 	}
 
 	static bool HasEnemyNotYetSetFleeTarget(bool fleeSet)

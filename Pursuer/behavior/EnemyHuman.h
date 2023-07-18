@@ -289,6 +289,36 @@ public:
 		return position.y < -9.0f;
 	}
 
+	bool IsEnemyLandingAttack()
+	{
+		return enumStatus == EnemyHuman::LANDINGATTACK;
+	}
+
+	bool ShouldGravityBeDisabled()
+	{
+		return landed;
+	}
+
+	bool IsEnemyChargingNOSTAGE()
+	{
+		return enumStatus == EnemyHuman::CHARGEATTACK;
+	}
+
+	bool IsEnemyJetStreamAttackingNOSTAGE()
+	{
+		return enumStatus == EnemyHuman::JETSTREAMATTACK;
+	}
+
+	bool IsEnemyFleeing()
+	{
+		return enumStatus == EnemyHuman::FLEE;
+	}
+
+	static bool IsEnemySurroundAttackingNOSTAGE(EnemyHuman::status enumStatus)
+	{
+		return enumStatus == EnemyHuman::TWOENEMYSURROUND;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

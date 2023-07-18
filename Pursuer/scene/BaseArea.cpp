@@ -1154,12 +1154,12 @@ void BaseArea::Update()
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		baseAreaEnemyFBX[i]->Update();
-		if (BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus))
+		if (baseAreaEnemyFBX[i]->IsEnemyLandingAttack())
 		{
 			landingPositionOBJ[i]->Update();
 		}
 		// Disable gravity during sky attack
-		if (BaseAreaConditionals::ShouldGravityBeDisabled(baseAreaEnemyFBX[i]->landed))
+		if (baseAreaEnemyFBX[i]->ShouldGravityBeDisabled())
 		{
 			baseAreaEnemyPositionOBJ[i]->notLandingAttack = true;
 		}
@@ -1185,7 +1185,7 @@ void BaseArea::Update()
 #pragma region dontStackOnTop
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (!BaseAreaConditionals::IsEnemyChargingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyJetStreamAttackingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyFleeing(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemySurroundAttackingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus))
+		if (!baseAreaEnemyFBX[i]->IsEnemyChargingNOSTAGE() && !baseAreaEnemyFBX[i]->IsEnemyJetStreamAttackingNOSTAGE() && !baseAreaEnemyFBX[i]->IsEnemyLandingAttack() && !baseAreaEnemyFBX[i]->IsEnemyFleeing() && !baseAreaEnemyFBX[i]->IsEnemySurroundAttackingNOSTAGE())
 		{
 			if (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(baseAreaEnemyFBX[i]->GetPosition(), playerFBX->GetPosition(), 3.0f)))
 			{
