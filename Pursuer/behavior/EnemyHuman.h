@@ -314,7 +314,7 @@ public:
 		return enumStatus == EnemyHuman::FLEE;
 	}
 
-	static bool IsEnemySurroundAttackingNOSTAGE(EnemyHuman::status enumStatus)
+	bool IsEnemySurroundAttackingNOSTAGE()
 	{
 		return enumStatus == EnemyHuman::TWOENEMYSURROUND;
 	}
