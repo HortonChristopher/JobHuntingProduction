@@ -37,11 +37,6 @@ BaseArea::~BaseArea()
 	safe_delete(STBarFrameSPRITE);
 	safe_delete(baseAreaMissionSPRITE);
 	safe_delete(skydomeMODEL);
-	//safe_delete(groundMODEL);
-	//safe_delete(extendedGroundMODEL);
-	//safe_delete(positionMODEL);
-	//safe_delete(attackRangeMODEL);
-	//safe_delete(visionRangeMODEL);
 	safe_delete(skydomeOBJ);
 	for (int i = 0; i < numberOfEnemiesTotal + 1; i++) { safe_delete(attackRangeOBJ[i]); }
 	for (int i = 0; i < numberOfEnemiesTotal; i++) { safe_delete(enemyVisionRangeOBJ[i]); }
@@ -107,9 +102,6 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	th2.detach();
 	std::thread th3(&BaseArea::thread3, this); // Model and Touchable Object Initialization
 	th3.detach();
-	//th1.join();
-	//th2.join();
-	//th3.join();
 
 	while (loadingPercent.load() < 10)
 	{
@@ -599,7 +591,6 @@ void BaseArea::Update()
 					agroodEnemies--;
 					baseAreaEnemyFBX[i]->dead = true;
 					baseAreaEnemyFBX[i]->modelChange = true;
-					//baseAreaEnemyRespawnTimerFLOAT[i] = 600;
 					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
 				}
 				else
@@ -1118,8 +1109,6 @@ void BaseArea::Update()
 		float x = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
 		float z = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
 		camera->playerRadius = abs(sqrt(x * x + z * z));
-		//float x2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().x - playerFBX->GetPosition().x;
-		//float y2 = baseAreaEnemyFBX[closestEnemy]->GetPosition().z - playerFBX->GetPosition().z;
 		float radians = atan2(z, x);
 		float degrees = XMConvertToDegrees(radians);
 		playerFBX->SetRotation({ playerFBX->GetRotation().x, -degrees + 90.0f, playerFBX->GetRotation().z });
@@ -1127,9 +1116,7 @@ void BaseArea::Update()
 		objectRotation = playerFBX->GetRotation();
 		lockOnActive = true;
 		camera->playerPos = playerFBX->GetPosition();
-		//camera->SetTarget(baseAreaEnemyFBX[closestEnemy]->GetPosition());
 		camera->lockOnEnemyPos = baseAreaEnemyFBX[closestEnemy]->GetPosition();
-		//camera->lockOn = true;
 		camera->Update();
 	}
 	else
