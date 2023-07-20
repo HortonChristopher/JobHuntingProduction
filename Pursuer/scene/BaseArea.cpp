@@ -1093,15 +1093,17 @@ void BaseArea::Update()
 			closestEnemy = 20;
 			for (int i = 0; i < 10; i++)
 			{
-				if (!baseAreaEnemyFBX[i]->dead)
+				if (baseAreaEnemyFBX[i]->dead)
 				{
-					float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
-					float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
-					if (abs(sqrt(x * x + y * y)) < min)
-					{
-						min = abs(sqrt(x * x + y * y));
-						closestEnemy = i;
-					}
+					continue;
+				}
+
+				float x = baseAreaEnemyFBX[i]->GetPosition().x - playerFBX->GetPosition().x;
+				float y = baseAreaEnemyFBX[i]->GetPosition().z - playerFBX->GetPosition().z;
+				if (abs(sqrt(x * x + y * y)) < min)
+				{
+					min = abs(sqrt(x * x + y * y));
+					closestEnemy = i;
 				}
 			}
 			camera->lockOn = true;
