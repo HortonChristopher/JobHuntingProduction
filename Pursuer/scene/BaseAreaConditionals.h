@@ -340,24 +340,9 @@ public: // Bool members
 		}
 	}
 
-	static bool ShouldPowerBarAlphaBeFull(float power, const float powerMaximum)
-	{
-		return power < powerMaximum;
-	}
-
 	static bool ShouldBarAlphaBeZero(float alpha, const float minAlpha)
 	{
 		return alpha <= minAlpha;
-	}
-
-	static bool ShouldSprintParticlesBeCreated(bool inputC, bool inputK, float stamina, const float staminaMin)
-	{
-		return (inputC && (stamina > staminaMin)) || (inputK && (stamina > staminaMin));
-	}
-
-	static bool CanSlowMotionBeActivated(bool input, bool input2, float power, const float powerMin)
-	{
-		return (input && (power > powerMin)) || (input2 && (power > powerMin));
 	}
 
 	static bool AreFBXModelsColliding(bool stacking)

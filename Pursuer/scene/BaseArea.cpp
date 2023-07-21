@@ -889,7 +889,7 @@ void BaseArea::Update()
 		BaseAreaConditionals::HandleBlinkingStamina(blinkingStaminaAlpha, staminaBlinkingEffect, minAlpha, maxAlpha, blinkingStaminaSpriteInteger);
 	}
 
-	if (BaseAreaConditionals::ShouldPowerBarAlphaBeFull(playerFBX->powerRemaining, playerFBX->staminaMaximum))
+	if (playerFBX->ShouldPowerBarAlphaBeFull())
 	{
 		slowMotionSpriteALPHA = maxAlpha;
 	}
@@ -915,12 +915,12 @@ void BaseArea::Update()
 
 	staminaWarningSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, playerFBX->staminaWarningSpriteAlpha });
 
-	if (BaseAreaConditionals::ShouldSprintParticlesBeCreated(input->PushKey(DIK_LSHIFT), input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER), playerFBX->stamina, playerFBX->staminaMinimum))
+	if (playerFBX->ShouldSprintParticlesBeCreated())
 	{
 		ParticleCreation(playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z, particleSprintLife, -sprintParticleOffset, sprintParticleStartScale);
 	}
 
-	if (BaseAreaConditionals::CanSlowMotionBeActivated(input->PushKey(DIK_CAPSLOCK), input->PushControllerButton(XINPUT_GAMEPAD_LEFT_THUMB), playerFBX->powerRemaining, playerFBX->powerMinimum))
+	if (playerFBX->CanSlowMotionBeActivated())
 	{
 		playerFBX->slowMotion = true;
 

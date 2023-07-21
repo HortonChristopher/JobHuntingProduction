@@ -175,6 +175,21 @@ public:
 		return position.y < -9.0f;
 	}
 
+	bool ShouldSprintParticlesBeCreated()
+	{
+		return (input->PushKey(DIK_LSHIFT) && (stamina > staminaMinimum)) || (input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && (stamina > staminaMinimum));
+	}
+
+	bool CanSlowMotionBeActivated()
+	{
+		return (input->PushKey(DIK_CAPSLOCK) && (powerRemaining > powerMinimum)) || (input->PushControllerButton(XINPUT_GAMEPAD_LEFT_THUMB) && (powerRemaining > powerMinimum));
+	}
+
+	bool ShouldPowerBarAlphaBeFull()
+	{
+		return powerRemaining < staminaMaximum;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
