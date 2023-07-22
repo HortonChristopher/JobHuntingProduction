@@ -709,7 +709,7 @@ void BaseArea::Update()
 
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+			baseAreaEnemyFBX[i]->EnemyDead();
 		}
 
 		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);

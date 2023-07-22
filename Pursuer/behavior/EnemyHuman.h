@@ -319,6 +319,11 @@ public:
 		return enumStatus == EnemyHuman::TWOENEMYSURROUND;
 	}
 
+	void EnemyDead()
+	{
+		SetEnumStatus(DEAD);
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

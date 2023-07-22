@@ -190,6 +190,11 @@ public:
 		return powerRemaining < staminaMaximum;
 	}
 
+	void PlayerDead()
+	{
+		SetEnumStatus(DEAD);
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
