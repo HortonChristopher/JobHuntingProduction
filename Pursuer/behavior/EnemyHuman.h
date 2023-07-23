@@ -324,6 +324,18 @@ public:
 		SetEnumStatus(DEAD);
 	}
 
+	bool IsEnemyAliveHP()
+	{
+		return HP > minAliveHP;
+	}
+
+	void EnemyDeadByPlayerAttack()
+	{
+		dead = true;
+		modelChange = true;
+		SetEnumStatus(DEAD);
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

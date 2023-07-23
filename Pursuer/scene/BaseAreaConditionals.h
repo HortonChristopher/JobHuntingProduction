@@ -61,10 +61,7 @@ public: // Bool members
 		return isAlive;
 	}
 
-	static bool IsEnemyAliveHP(float hp, float minHp)
-	{
-		return hp > minHp;
-	}
+	
 
 	static bool HasEnemyNotYetSetFleeTarget(bool fleeSet)
 	{

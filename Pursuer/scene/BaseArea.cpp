@@ -584,14 +584,12 @@ void BaseArea::Update()
 					enemyKnockback = true;
 				}
 
-				if (!BaseAreaConditionals::IsEnemyAliveHP(baseAreaEnemyFBX[i]->HP, baseAreaEnemyFBX[i]->minAliveHP))
+				if (!baseAreaEnemyFBX[i]->IsEnemyAliveHP())
 				{
 					baseAreaEnemyAliveBOOL[i] = false;
 					enemyDefeated++;
 					agroodEnemies--;
-					baseAreaEnemyFBX[i]->dead = true;
-					baseAreaEnemyFBX[i]->modelChange = true;
-					baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::DEAD);
+					baseAreaEnemyFBX[i]->EnemyDeadByPlayerAttack();
 				}
 				else
 				{
