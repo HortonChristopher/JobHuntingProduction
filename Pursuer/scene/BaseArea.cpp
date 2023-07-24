@@ -482,7 +482,7 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage(playerFBX->damageAdvantage) && BaseAreaConditionals::IsEnemyReadyToTakeAdvantage(baseAreaEnemyFBX[i]))
+		if (playerFBX->ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage() && baseAreaEnemyFBX[i]->IsEnemyReadyToTakeAdvantage())
 		{
 			BaseAreaConditionals::DecideAndExecuteAttack(baseAreaEnemyFBX[i], playerFBX, damageAdvantageShortLongRangeBorder);
 		}
@@ -492,8 +492,7 @@ void BaseArea::Update()
 
 	if (playerFBX->HasPlayerHPReachedZero())
 	{
-		playerFBX->hp = playerFBX->defeatHP;
-		playerFBX->SetEnumStatus(Player::DEAD);
+		playerFBX->WhenPlayerDies();
 	}
 	
 	if (playerFBX->IsPlayerDead())

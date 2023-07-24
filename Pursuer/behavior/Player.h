@@ -195,6 +195,17 @@ public:
 		SetEnumStatus(DEAD);
 	}
 
+	void WhenPlayerDies()
+	{
+		hp = defeatHP;
+		SetEnumStatus(DEAD);
+	}
+
+	bool ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage()
+	{
+		return damageAdvantage;
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

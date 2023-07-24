@@ -61,8 +61,6 @@ public: // Bool members
 		return isAlive;
 	}
 
-	
-
 	static bool HasEnemyNotYetSetFleeTarget(bool fleeSet)
 	{
 		return !fleeSet;
@@ -186,11 +184,6 @@ public: // Bool members
 		}
 
 		return false;
-	}
-
-	static bool ShouldEnemyAttackToTakeAdvantageOfPlayerTakingDamage(bool damageAdvantage)
-	{
-		return damageAdvantage;
 	}
 
 	static bool ShouldChargeAttackBeUsedDuringDamageAdvantage(float distance, const float damageAdvantageShortLongRangeBorder)
@@ -383,11 +376,6 @@ public: // Bool members
 			!IsEnemyWandering(enemy->enumStatus) &&
 			!IsEnemyCoolingDown(enemy->enumStatus) &&
 			CanEnemyJetStreamAttack(enemy->enumStatus, enemy->debugJetAttacked);
-	}
-
-	static bool IsEnemyReadyToTakeAdvantage(EnemyHuman* enemy)
-	{
-		return BaseAreaConditionals::IsEnemyAggro(enemy->enumStatus) || BaseAreaConditionals::IsEnemyCoolingDown(enemy->enumStatus);
 	}
 
 public: // Void members

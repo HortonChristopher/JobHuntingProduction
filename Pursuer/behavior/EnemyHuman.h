@@ -336,6 +336,11 @@ public:
 		SetEnumStatus(DEAD);
 	}
 
+	static bool IsEnemyReadyToTakeAdvantage()
+	{
+		return IsEnemyAggro() || IsEnemyCoolingDown();
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;
