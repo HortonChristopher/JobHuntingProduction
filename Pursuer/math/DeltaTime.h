@@ -9,6 +9,11 @@ public:
 	void deltaTimeNow();
 	void deltaTimePrev();
 
+	float DeltaTimeDividedByMiliseconds()
+	{
+		return deltaTimeCalculated.count() / 1000000.0f;
+	}
+
 private:
 	std::chrono::steady_clock::time_point deltaStartBase;
 	std::chrono::steady_clock::time_point deltaStartNow;

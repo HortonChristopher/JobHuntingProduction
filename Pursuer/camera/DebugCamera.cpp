@@ -37,13 +37,13 @@ void DebugCamera::Update()
 
 	if (title)
 	{
-		angleY -= XMConvertToRadians(10.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		angleY -= XMConvertToRadians(10.0f) * deltaTime->DeltaTimeDividedByMiliseconds();
 		dirty = true;
 	}
 	// Rotate the camera if the right mouse button is pressed
 	else if (cutscene)
 	{
-		angleX += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		angleX += XMConvertToRadians(20.0f) * deltaTime->DeltaTimeDividedByMiliseconds();
 		dirty = true;
 	}
 	else if (lockOn)
@@ -96,17 +96,17 @@ void DebugCamera::Update()
 		switch (wCutscenePart)
 		{
 		case 0:
-			angleY -= XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			angleY -= XMConvertToRadians(20.0f) * deltaTime->DeltaTimeDividedByMiliseconds();
 			dirty = true;
 			break;
 		case 1:
-			angleY += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			angleY += XMConvertToRadians(20.0f) * deltaTime->DeltaTimeDividedByMiliseconds();
 			dirty = true;
 			break;
 		case 2:
 			break;
 		case 3:
-			angleX += XMConvertToRadians(20.0f) * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			angleX += XMConvertToRadians(20.0f) * deltaTime->DeltaTimeDividedByMiliseconds();
 			dirty = true;
 			break;
 		}

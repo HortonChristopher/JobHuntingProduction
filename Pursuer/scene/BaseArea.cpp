@@ -158,7 +158,7 @@ void BaseArea::Update()
 	{
 		if (BaseAreaConditionals::ShouldFadeInBegin(startTimer, startTimerLimit))
 		{
-			fadeSpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			fadeSpriteALPHA -= fadeSpriteInteger * deltaTime->DeltaTimeDividedByMiliseconds();
 
 			fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
 
@@ -171,14 +171,14 @@ void BaseArea::Update()
 		}
 		else
 		{
-			startTimer += startTimerIntegral * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			startTimer += startTimerIntegral * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 	}
 
 	if (BaseAreaConditionals::IsBaseAreaOpeningCutscenePlaying(playerFBX->baseAreaOpeningCutscene, initializeFinished, startTimer, startTimerLimit))
 	{
 		playerFBX->SetEnumStatus(Player::WALK);
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + deltaTimeOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) });
+		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + deltaTimeOneSecond * deltaTime->DeltaTimeDividedByMiliseconds() });
 		if (playerFBX->MissionSpriteTriggerPositionReached(movementStartZPosition))
 		{
 			startMissionSpriteMovement = true;
@@ -438,37 +438,37 @@ void BaseArea::Update()
 			{
 			case EnemyHuman::PARTICLEATTACK:
 				playerFBX->SetPosition({
-					knockbackPrevPosition.x -= particleAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.x -= particleAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
-					knockbackPrevPosition.z -= particleAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					knockbackPrevPosition.z -= particleAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.z / hypotenuse) });
 				break;
 			case EnemyHuman::LANDINGATTACK:
 				playerFBX->SetPosition({
-					knockbackPrevPosition.x -= landingAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.x -= landingAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
-					knockbackPrevPosition.z -= landingAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					knockbackPrevPosition.z -= landingAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.z / hypotenuse) });
 				break;
 			case EnemyHuman::CHARGEATTACK:
 				playerFBX->SetPosition({
-					knockbackPrevPosition.x += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.x += chargeAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
-					knockbackPrevPosition.z += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					knockbackPrevPosition.z += chargeAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.z / hypotenuse) });
 				break;
 			case EnemyHuman::JETSTREAMATTACK:
 				playerFBX->SetPosition({
-					knockbackPrevPosition.x += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.x += chargeAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
-					knockbackPrevPosition.z += chargeAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					knockbackPrevPosition.z += chargeAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.z / hypotenuse) });
 				break;
 			case EnemyHuman::TWOENEMYSURROUND:
 				playerFBX->SetPosition({
-					knockbackPrevPosition.x += twoEnemySurroundKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.x += twoEnemySurroundKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
-					knockbackPrevPosition.z += twoEnemySurroundKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					knockbackPrevPosition.z += twoEnemySurroundKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.z / hypotenuse) });
 				break;
 			}
 
-			knockbackTime += knockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			knockbackTime += knockbackInterval * deltaTime->DeltaTimeDividedByMiliseconds();
 
 			if (BaseAreaConditionals::HasKnockbackFinished(knockbackTime, knockbackMaxTime))
 			{
@@ -497,7 +497,7 @@ void BaseArea::Update()
 	
 	if (playerFBX->IsPlayerDead())
 	{
-		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		fadeSpriteALPHA += fadeSpriteInteger * deltaTime->DeltaTimeDividedByMiliseconds();
 		fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
 		if (BaseAreaConditionals::IsFadeSpriteAlphaAboveOne(fadeSpriteALPHA, maxAlpha))
 		{
@@ -512,7 +512,7 @@ void BaseArea::Update()
 	{
 		camera->SetTarget(ScreenShake({ playerFBX->GetPosition().x, playerFBX->GetPosition().y + playerFBX->playerCameraYOffset, playerFBX->GetPosition().z }));
 		camera->Update();
-		shakeTimer += shakeTimerInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		shakeTimer += shakeTimerInterval * deltaTime->DeltaTimeDividedByMiliseconds();
 		if (BaseAreaConditionals::HasScreenShakingFinished(shakeTimer, maxShakeTimer))
 		{
 			shakeTimer = shakeTimerReset;
@@ -525,7 +525,7 @@ void BaseArea::Update()
 	{
 		if (!playerFBX->IsPlayerDead())
 		{
-			damageOverlaySpriteALPHA -= fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			damageOverlaySpriteALPHA -= fadeSpriteInteger * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 
 		baseAreaDamageOverlaySPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, damageOverlaySpriteALPHA });
@@ -621,11 +621,11 @@ void BaseArea::Update()
 			float hypotenuse = sqrt((xyz.x * xyz.x) + (xyz.z * xyz.z));
 
 			baseAreaEnemyFBX[i]->SetPosition({
-					knockbackPrevPosition.x -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.x / hypotenuse),
+					knockbackPrevPosition.x -= playerAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.x / hypotenuse),
 					knockbackPrevPosition.y += knockbackYOffset,
-					knockbackPrevPosition.z -= playerAttackKnockbackDistance * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (xyz.z / hypotenuse) });
+					knockbackPrevPosition.z -= playerAttackKnockbackDistance * deltaTime->DeltaTimeDividedByMiliseconds() * (xyz.z / hypotenuse) });
 
-			enemyKnockbackTime += playerAttackKnockbackInterval * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			enemyKnockbackTime += playerAttackKnockbackInterval * deltaTime->DeltaTimeDividedByMiliseconds();
 
 			if (BaseAreaConditionals::HasKnockbackFinished(enemyKnockbackTime, playerAttackKnockbackMaxtime))
 			{
@@ -709,7 +709,7 @@ void BaseArea::Update()
 			baseAreaEnemyFBX[i]->EnemyDead();
 		}
 
-		fadeSpriteALPHA += fadeSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		fadeSpriteALPHA += fadeSpriteInteger * deltaTime->DeltaTimeDividedByMiliseconds();
 		fadeSPRITE->SetColor({ maxAlpha, maxAlpha, maxAlpha, fadeSpriteALPHA });
 
 		if (BaseAreaConditionals::IsFadeSpriteAlphaAboveOne(fadeSpriteALPHA, maxAlpha))
@@ -789,11 +789,11 @@ void BaseArea::Update()
 			XMFLOAT2 newMissionPosition = baseAreaMissionSPRITE->GetPosition();
 			if (BaseAreaConditionals::ShouldMissionSpriteMove(baseAreaMissionSPRITE->GetPosition().x, targetBaseAreaMissionSpritePosition.x))
 			{
-				newMissionPosition.x += baseAreaMissionSpriteMovementSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (x / hypotenuse);
+				newMissionPosition.x += baseAreaMissionSpriteMovementSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
 			}
 			if (BaseAreaConditionals::ShouldMissionSpriteMove(baseAreaMissionSPRITE->GetPosition().y, targetBaseAreaMissionSpritePosition.y))
 			{
-				newMissionPosition.y += baseAreaMissionSpriteMovementSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) * (y / hypotenuse);
+				newMissionPosition.y += baseAreaMissionSpriteMovementSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 			}
 			baseAreaMissionSPRITE->SetPosition(newMissionPosition);
 		}
@@ -807,11 +807,11 @@ void BaseArea::Update()
 			XMFLOAT2 missionSpriteSize = baseAreaMissionSPRITE->GetSize();
 			if (BaseAreaConditionals::ShouldMissionSpriteSizeChange(baseAreaMissionSPRITE->GetSize().x, targetBaseAreaMissionSpriteSize.x))
 			{
-				missionSpriteSize.x -= baseAreaMissionSpriteSizeSpeed.x * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				missionSpriteSize.x -= baseAreaMissionSpriteSizeSpeed.x * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			if (BaseAreaConditionals::ShouldMissionSpriteSizeChange(baseAreaMissionSPRITE->GetSize().y, targetBaseAreaMissionSpriteSize.y))
 			{
-				missionSpriteSize.y -= baseAreaMissionSpriteSizeSpeed.y * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				missionSpriteSize.y -= baseAreaMissionSpriteSizeSpeed.y * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			baseAreaMissionSPRITE->SetSize(missionSpriteSize);
 		}
@@ -892,7 +892,7 @@ void BaseArea::Update()
 	}
 	else
 	{
-		slowMotionSpriteALPHA -= staminaSpriteInteger * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		slowMotionSpriteALPHA -= staminaSpriteInteger * deltaTime->DeltaTimeDividedByMiliseconds();
 	}
 
 	STBarSPRITE->SetColor({ maxAlpha, blinkingStaminaAlpha, blinkingStaminaAlpha, staminaSpriteAlpha });

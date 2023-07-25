@@ -126,10 +126,10 @@ void Player::Update()
 			timer = resetTime;
 			dodgeStartPosition = position;
 		}
-		dodgeCameraTime += deltaTimeOneSecond * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		position.x += moveDirection.x * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		position.y += moveDirection.y * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-		position.z += moveDirection.z * rollSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		dodgeCameraTime += deltaTimeOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
+		position.x += moveDirection.x * rollSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+		position.y += moveDirection.y * rollSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+		position.z += moveDirection.z * rollSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
 		dodgePosition.x = Easing::EaseInSin(dodgeStartPosition.x, dodgeStartPosition.x + (moveDirection.x * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
 		dodgePosition.y = position.y;
 		dodgePosition.z = Easing::EaseInSin(dodgeStartPosition.z, dodgeStartPosition.z + (moveDirection.z * 0.75f * 68.0f), 68.0f, dodgeCameraTime);
@@ -140,7 +140,7 @@ void Player::Update()
 			dodgeCameraTime = resetTime;
 			enumStatus = STAND;
 		}
-		timer += dodgeCameraTime * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		timer += dodgeCameraTime * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case ATTACK:
 		if (animationNo != 7)
@@ -195,22 +195,22 @@ void Player::Update()
 		switch (frameSpeed)
 		{
 		case NORMAL:
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case HALF:
-			timer += 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			timer += 30.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case DOUBLE:
-			timer += 120.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			timer += 120.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case ONEPOINTFIVE:
-			timer += 90.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			timer += 90.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case POINTSEVENFIVE:
-			timer += 45.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			timer += 45.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		default:
-			timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		}
 		break;
@@ -228,7 +228,7 @@ void Player::Update()
 			frameSpeed = NORMAL;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case DEAD:
 		if (animationNo != 9)
@@ -242,7 +242,7 @@ void Player::Update()
 			timer = 0.0f;
 			isPlayerDead = true;
 		}
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case HEAL:
 		if (animationNo != 10)
@@ -258,7 +258,7 @@ void Player::Update()
 		}
 		if (timer >= 80.0f)
 		{
-			healParticlePosition[0].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			healParticlePosition[0].y += 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			if (!healed)
 			{
 				hp += 4.0f;
@@ -271,11 +271,11 @@ void Player::Update()
 		}
 		if (timer >= 90.0f)
 		{
-			healParticlePosition[1].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			healParticlePosition[1].y += 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 		if (timer >= 100.0f)
 		{
-			healParticlePosition[2].y += 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			healParticlePosition[2].y += 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 		if (currentTime > endTime && timer > 0.0f)
 		{
@@ -284,7 +284,7 @@ void Player::Update()
 			healed = false;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case PARRY:
 		if (animationNo != 11)
@@ -299,7 +299,7 @@ void Player::Update()
 			timer = 0.0f;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	}
 
@@ -361,7 +361,7 @@ void Player::Update()
 
 		if (parryActive && powerRemaining < 100.0f)
 		{
-			powerRemaining += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			powerRemaining += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 
 			if (powerRemaining >= 100.0f)
 			{
@@ -458,18 +458,18 @@ void Player::Update()
 				rotY = (float)acos(cosA) * 180 / 3.14159365f;
 				const Vector3 CrossVec = direction.Cross(moveDirection);
 
-				float rotSpeed = rotateSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				float rotSpeed = rotateSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
 				if (abs(rotY) < 55 && !dodge && enumStatus != DAMAGED)
 				{
 					if (input->PushKey(DIK_LSHIFT) && stamina > 0.0f || input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && stamina > 0.0f /*|| input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && stamina > 0.0f */)
 					{
-						position.x += moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						position.y += moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						position.z += moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						playerMovement = { moveDirection.x * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
-										   moveDirection.y * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
-										   moveDirection.z * sprintSpeed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
-						stamina -= 30.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+						position.x += moveDirection.x * sprintSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+						position.y += moveDirection.y * sprintSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+						position.z += moveDirection.z * sprintSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+						playerMovement = { moveDirection.x * sprintSpeed * deltaTime->DeltaTimeDividedByMiliseconds(),
+										   moveDirection.y * sprintSpeed * deltaTime->DeltaTimeDividedByMiliseconds(),
+										   moveDirection.z * sprintSpeed * deltaTime->DeltaTimeDividedByMiliseconds() };
+						stamina -= 30.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 						if (enumStatus != ATTACK && enumStatus != PARRY && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
 						{
 							enumStatus = RUN;
@@ -477,12 +477,12 @@ void Player::Update()
 					}
 					else
 					{
-						position.x += moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						position.y += moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						position.z += moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
-						playerMovement = { moveDirection.x * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
-										   moveDirection.y * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f),
-										   moveDirection.z * speed * (deltaTime->deltaTimeCalculated.count() / 1000000.0f) };
+						position.x += moveDirection.x * speed * deltaTime->DeltaTimeDividedByMiliseconds();
+						position.y += moveDirection.y * speed * deltaTime->DeltaTimeDividedByMiliseconds();
+						position.z += moveDirection.z * speed * deltaTime->DeltaTimeDividedByMiliseconds();
+						playerMovement = { moveDirection.x * speed * deltaTime->DeltaTimeDividedByMiliseconds(),
+										   moveDirection.y * speed * deltaTime->DeltaTimeDividedByMiliseconds(),
+										   moveDirection.z * speed * deltaTime->DeltaTimeDividedByMiliseconds() };
 						if (enumStatus != ATTACK && enumStatus != PARRY && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER) && !input->PushKey(DIK_SPACE))
 						{
 							enumStatus = WALK;
@@ -575,7 +575,7 @@ void Player::Update()
 
 		if (slowMotion)
 		{
-			powerRemaining -= 40.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+			powerRemaining -= 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 
 		if (lowStaminaWarningActivation)
@@ -587,11 +587,11 @@ void Player::Update()
 		{
 			if (lowStaminaWarningTimer >= 15.0f)
 			{
-				staminaWarningSpriteAlpha -= 1.4f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				staminaWarningSpriteAlpha -= 1.4f * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				lowStaminaWarningTimer += 60.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				lowStaminaWarningTimer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 		}
 		else
@@ -604,7 +604,7 @@ void Player::Update()
 		{
 			if (stamina < 100.0f)
 			{
-				stamina += 25.0f * (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+				stamina += 25.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 		}
 	}
@@ -790,7 +790,7 @@ void Player::Update()
 		default:
 			break;
 		}
-		sec *= (deltaTime->deltaTimeCalculated.count() / 1000000.0f);
+		sec *= deltaTime->DeltaTimeDividedByMiliseconds();
 		frameTime.SetSecondDouble(sec);
 		currentTime += frameTime;
 
