@@ -206,6 +206,16 @@ public:
 		return damageAdvantage;
 	}
 
+	void OpeningCutscene()
+	{
+		SetPosition({ GetPosition().x, GetPosition().y, GetPosition().z + deltaTimeOneSecond * deltaTime->DeltaTimeDividedByMiliseconds() });
+	}
+
+	void SetPlayerWalking()
+	{
+		SetEnumStatus(Player::WALK);
+	}
+
 protected:
 	// Constant Buffer
 	ComPtr<ID3D12Resource> constBuffTransform;

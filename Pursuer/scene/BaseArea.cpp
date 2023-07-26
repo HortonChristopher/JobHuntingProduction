@@ -177,8 +177,8 @@ void BaseArea::Update()
 
 	if (BaseAreaConditionals::IsBaseAreaOpeningCutscenePlaying(playerFBX->baseAreaOpeningCutscene, initializeFinished, startTimer, startTimerLimit))
 	{
-		playerFBX->SetEnumStatus(Player::WALK);
-		playerFBX->SetPosition({ playerFBX->GetPosition().x, playerFBX->GetPosition().y, playerFBX->GetPosition().z + deltaTimeOneSecond * deltaTime->DeltaTimeDividedByMiliseconds() });
+		playerFBX->SetPlayerWalking();
+		playerFBX->OpeningCutscene();
 		if (playerFBX->MissionSpriteTriggerPositionReached(movementStartZPosition))
 		{
 			startMissionSpriteMovement = true;
