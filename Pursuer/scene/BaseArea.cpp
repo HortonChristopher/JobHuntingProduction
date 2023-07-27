@@ -103,11 +103,6 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	std::thread th3(&BaseArea::thread3, this); // Model and Touchable Object Initialization
 	th3.detach();
 
-	while (loadingPercent.load() < 10)
-	{
-
-	}
-
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (i % 2 == 0 || i == 0)
@@ -118,6 +113,11 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		{
 			baseAreaEnemyFBX[i]->SetPatrolStatus(EnemyHuman::BACK);
 		}
+	}
+
+	while (loadingPercent.load() < 10)
+	{
+
 	}
 
 	initializeFinished = true;
@@ -234,11 +234,12 @@ void BaseArea::Update()
 		firstRun = false;
 	}
 
+#pragma region EnemyAggro
 	// This code aggros the patrol's partner if one of them starts combat with the player
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		bool isWanderingOrStanding = baseAreaEnemyFBX[i]->IsEnemyWandering() || baseAreaEnemyFBX[i]->IsEnemyStanding();
-		
+
 		if (!isWanderingOrStanding)
 		{
 			continue;
@@ -247,7 +248,7 @@ void BaseArea::Update()
 		int partnerIndex = (i % 2 == 0 || i == 0) ? i + 1 : i - 1;
 
 		bool isPartnerInCombat = baseAreaEnemyFBX[partnerIndex]->IsEnemyAggro() || baseAreaEnemyFBX[partnerIndex]->IsEnemyAttacking() || baseAreaEnemyFBX[partnerIndex]->IsEnemyCoolingDown();
-		
+
 		if (!isPartnerInCombat)
 		{
 			continue;
@@ -256,7 +257,6 @@ void BaseArea::Update()
 		baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 	}
 
-#pragma region EnemyAggro
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (baseAreaEnemyFBX[i]->ShouldEnemyFlee(fleeHP, enemyKnockback))

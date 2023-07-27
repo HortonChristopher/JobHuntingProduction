@@ -307,7 +307,6 @@ void EnemyHuman::Update()
 			attackTimer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		}
-		//attackTimer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case COOLDOWN:
 		if (modelChange)
