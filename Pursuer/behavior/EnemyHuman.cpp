@@ -384,13 +384,13 @@ void EnemyHuman::Update()
 			degrees = XMConvertToDegrees(radians);
 			if (slowMotion)
 			{
-				position.x -= 90.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z -= 90.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+				position.x -= particleAttackJumpBackSpeed * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z -= particleAttackJumpBackSpeed * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 			}
 			else
 			{
-				position.x -= 90.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z -= 90.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+				position.x -= particleAttackJumpBackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z -= particleAttackJumpBackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 			}
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 			if (currentTime < endTime / 2 && timer > 0.0f)

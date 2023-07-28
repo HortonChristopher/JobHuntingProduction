@@ -428,6 +428,7 @@ protected:
 	float endAnimationDEBUG = 0.0f;
 
 	const float playerAttackDamage = 1.0f;
+	const float particleAttackJumpBackSpeed = 90.0f;
 public:
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 meetingPoint = { 0.0f, 0.0f, 0.0f };
