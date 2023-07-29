@@ -427,6 +427,10 @@ protected:
 
 	float endAnimationDEBUG = 0.0f;
 
+	const float slowMotionMultiplier = 0.25f;
+	const float timerReset = 0.0f;
+	const float timerOneSecond;
+
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;
 public:

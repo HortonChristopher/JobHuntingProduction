@@ -384,8 +384,8 @@ void EnemyHuman::Update()
 			degrees = XMConvertToDegrees(radians);
 			if (slowMotion)
 			{
-				position.x -= particleAttackJumpBackSpeed * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z -= particleAttackJumpBackSpeed * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+				position.x -= particleAttackJumpBackSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z -= particleAttackJumpBackSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 			}
 			else
 			{
@@ -397,7 +397,7 @@ void EnemyHuman::Update()
 			{
 				if (slowMotion)
 				{
-					position.y += 1.0f * 0.25f;
+					position.y += 1.0f * slowMotionMultiplier;
 				}
 				else
 				{
@@ -412,17 +412,17 @@ void EnemyHuman::Update()
 			}
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		case 1:
 			if (modelChange)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				particleAttackPosition = { position.x, position.y + 8.0f, position.z };
 				animationSet = false;
 				animationNo = 7;
