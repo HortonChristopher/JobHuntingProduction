@@ -87,6 +87,8 @@ public:
 	FrameSpeed frameSpeed = NORMAL;
 
 public:
+	EnemyHuman();
+
 	/// <summary>
 	/// Initialization
 	/// </summary>
@@ -173,14 +175,19 @@ public:
 		return false;
 	}
 
+	bool CanEnemyJetStreamAttack()
+	{
+		return (enumStatus != EnemyHuman::JETSTREAMATTACK) && !debugJetAttacked;
+	}
+
 	bool CanEnemyBeJetStreamAttacked()
 	{
-		return !IsEnemyStanding(enemy->enumStatus) &&
-			IsEnemyAlive(enemy->enumStatus) &&
-			!IsEnemyFleeing(enemy->enumStatus) &&
-			!IsEnemyWandering(enemy->enumStatus) &&
-			!IsEnemyCoolingDown(enemy->enumStatus) &&
-			CanEnemyJetStreamAttack(enemy->enumStatus, enemy->debugJetAttacked);
+		return !IsEnemyStanding() &&
+			IsEnemyAlive() &&
+			!IsEnemyFleeing() &&
+			!IsEnemyWandering() &&
+			!IsEnemyCoolingDown() &&
+			CanEnemyJetStreamAttack();
 	}
 
 	bool CanSeePlayer(int intersect, bool enemyKnockback, bool enemyAlive)
@@ -260,7 +267,7 @@ public:
 
 	bool IsPlayerDead()
 	{
-		return isPlayerDead;
+		return enumStatus == EnemyHuman::DEAD;
 	}
 
 	void AttackedAndDamaged()
@@ -336,7 +343,7 @@ public:
 		SetEnumStatus(DEAD);
 	}
 
-	static bool IsEnemyReadyToTakeAdvantage()
+	bool IsEnemyReadyToTakeAdvantage()
 	{
 		return IsEnemyAggro() || IsEnemyCoolingDown();
 	}
@@ -428,8 +435,7 @@ protected:
 	float endAnimationDEBUG = 0.0f;
 
 	const float slowMotionMultiplier = 0.25f;
-	const float timerReset = 0.0f;
-	const float timerOneSecond;
+	const float timerOneSecond = 60.0f;
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;

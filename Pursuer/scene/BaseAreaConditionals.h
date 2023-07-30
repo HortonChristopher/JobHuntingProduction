@@ -96,14 +96,9 @@ public: // Bool members
 		return (agroodEnemies > jetStreamAttackRequiredEnemyNumber) && !debugJetAttacked && !jetStreamCounted && enumStatus == EnemyHuman::AGGRO;
 	}
 
-	static bool CanEnemyJetStreamAttack(EnemyHuman::status enumStatus, bool jetAttacked)
+	static bool CanEnemySeeOtherEnemy(int intersect, bool enemy1Alive, bool enemy2Alive, EnemyHuman::status enumStatus, EnemyHuman* enemy)
 	{
-		return (enumStatus != EnemyHuman::JETSTREAMATTACK) && !jetAttacked;
-	}
-
-	static bool CanEnemySeeOtherEnemy(int intersect, bool enemy1Alive, bool enemy2Alive, EnemyHuman::status enumStatus)
-	{
-		return intersect && enemy1Alive && enemy2Alive && !IsEnemyStanding(enumStatus) && !IsEnemyWandering(enumStatus) && IsEnemyAlive(enumStatus);
+		return intersect && enemy1Alive && enemy2Alive && !enemy->IsEnemyStanding() && !enemy->IsEnemyWandering() && enemy->IsEnemyAlive();
 	}
 
 	static bool IsEnemyWithinChargingDistanceAndHasntChargedYet(float distance, const float maxChargeDistance, const float minChargeDistance, bool chargeAttackCheck, EnemyHuman::status enumStatus, bool enemyKnockback, bool enemyAlive)
@@ -370,12 +365,12 @@ public: // Bool members
 
 	static bool CanEnemyBeJetStreamAttacked(EnemyHuman* enemy)
 	{
-		return !IsEnemyStanding(enemy->enumStatus) &&
-			IsEnemyAlive(enemy->enumStatus) &&
-			!IsEnemyFleeing(enemy->enumStatus) &&
-			!IsEnemyWandering(enemy->enumStatus) &&
-			!IsEnemyCoolingDown(enemy->enumStatus) &&
-			CanEnemyJetStreamAttack(enemy->enumStatus, enemy->debugJetAttacked);
+		return !enemy->IsEnemyStanding() &&
+			enemy->IsEnemyAlive() &&
+			!enemy->IsEnemyFleeing() &&
+			!enemy->IsEnemyWandering() &&
+			!enemy->IsEnemyCoolingDown() &&
+			enemy->CanEnemyJetStreamAttack();
 	}
 
 public: // Void members
@@ -405,7 +400,7 @@ public: // Void members
 		int closestEnemyIndex = enemy->closestEnemy;
 		EnemyHuman* closestEnemy = baseAreaEnemyFBX[enemy->closestEnemy];
 
-		bool frontPatrol = BaseAreaConditionals::IsEnemyFrontPatrolPosition(closestEnemy->patrolStatus);
+		bool frontPatrol = closestEnemy->IsFrontPatrolPosition();
 		int helpIndex = frontPatrol ? closestEnemyIndex + 1 : closestEnemyIndex - 1;
 
 		closestEnemy->isBeingCalledToHelp = true;
@@ -442,8 +437,8 @@ public: // Void members
 			float x = comparedEnemy->GetPosition().x - enemy->GetPosition().x;
 			float y = comparedEnemy->GetPosition().z - enemy->GetPosition().z;
 
-			if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(enemy->patrolStatus) && j == (i + 1) ||
-				BaseAreaConditionals::IsEnemyBackPatrolPosition(enemy->patrolStatus) && j == (i - 1))
+			if (enemy->IsFrontPatrolPosition() && j == (i + 1) ||
+				enemy->IsBackPatrolPosition() && j == (i - 1))
 			{
 				continue;
 			}
@@ -498,7 +493,7 @@ public: // Void members
 
 	static void ResetAggro(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
 	{
-		if (!BaseAreaConditionals::IsEnemyDamaged(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyCoolingDown(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyAttacking(baseAreaEnemyFBX[i]->enumStatus) && !BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
+		if (!BaseAreaConditionals::IsEnemyDamaged(baseAreaEnemyFBX[i]->enumStatus) && !baseAreaEnemyFBX[i]->IsEnemyCoolingDown() && !baseAreaEnemyFBX[i]->IsEnemyAttacking() && !baseAreaEnemyFBX[i]->IsEnemyAggro())
 		{
 			baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::AGGRO);
 		}
@@ -506,9 +501,9 @@ public: // Void members
 
 	static void PatrolAttack(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
 	{
-		if (BaseAreaConditionals::IsEnemyFrontPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		if (baseAreaEnemyFBX[i]->IsFrontPatrolPosition())
 		{
-			if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i + 1]->enumStatus))
+			if (baseAreaEnemyFBX[i + 1]->IsEnemyAggro())
 			{
 				baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
 				baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
@@ -524,9 +519,9 @@ public: // Void members
 				baseAreaEnemyFBX[i]->SetEnumStatus(EnemyHuman::ATTACK);
 			}
 		}
-		else if (BaseAreaConditionals::IsEnemyBackPatrolPosition(baseAreaEnemyFBX[i]->patrolStatus))
+		else if (baseAreaEnemyFBX[i]->IsBackPatrolPosition())
 		{
-			if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i - 1]->enumStatus))
+			if (baseAreaEnemyFBX[i - 1]->IsEnemyAggro())
 			{
 				baseAreaEnemyFBX[i]->twoEnemySurroundStage = baseAreaEnemyFBX[i]->twoEnemySurroundStageReset;
 				baseAreaEnemyFBX[i]->timer = baseAreaEnemyFBX[i]->timerReset;
@@ -576,7 +571,7 @@ public: // Void members
 
 	static void WithinMinimumDistanceAttackProcess(std::array<EnemyHuman*, 10>& baseAreaEnemyFBX, int i)
 	{
-		if (BaseAreaConditionals::IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
+		if (baseAreaEnemyFBX[i]->IsEnemyAggro())
 		{
 			ChooseEnemyAttack(baseAreaEnemyFBX, i);
 		}
@@ -590,7 +585,7 @@ public: // Void members
 			baseAreaEnemyFBX[i]->agrooNumber = agroodEnemies;
 		}
 
-		if (IsEnemyAggro(baseAreaEnemyFBX[i]->enumStatus))
+		if (baseAreaEnemyFBX[i]->IsEnemyAggro())
 		{
 			/*int random = rand() % 10;
 
@@ -648,7 +643,8 @@ public: // Void members
 					enemyAggroVisionRange),
 				baseAreaEnemyAliveBOOL[j],
 				baseAreaEnemyAliveBOOL[i],
-				baseAreaEnemyFBX[j]->enumStatus);
+				baseAreaEnemyFBX[j]->enumStatus,
+				baseAreaEnemyFBX[i]);
 
 			if (canSeeOtherEnemy)
 			{

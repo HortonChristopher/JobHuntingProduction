@@ -103,6 +103,11 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	std::thread th3(&BaseArea::thread3, this); // Model and Touchable Object Initialization
 	th3.detach();
 
+	while (loadingPercent.load() < 10)
+	{
+
+	}
+
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
 		if (i % 2 == 0 || i == 0)
@@ -113,11 +118,6 @@ void BaseArea::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		{
 			baseAreaEnemyFBX[i]->SetPatrolStatus(EnemyHuman::BACK);
 		}
-	}
-
-	while (loadingPercent.load() < 10)
-	{
-
 	}
 
 	initializeFinished = true;
@@ -570,12 +570,14 @@ void BaseArea::Update()
 		{
 			for (int i = 0; i < numberOfEnemiesTotal; i++)
 			{
-				if (!BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
+				if (BaseAreaConditionals::WillPlayerAttackHit(intersect(attackRangeOBJ[0]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), playerInteresectSize, playerAttackRange, playerAttackRange)) && BaseAreaConditionals::IsEnemyAliveBOOLIAN(baseAreaEnemyAliveBOOL[i]) && BaseAreaConditionals::WillPlayerAttackHitBasedOnYPosition(abs(baseAreaEnemyFBX[i]->GetPosition().y - playerFBX->GetPosition().y), 4.0f))
+				{
+					baseAreaEnemyFBX[i]->AttackedAndDamaged();
+				}
+				else
 				{
 					continue;
 				}
-
-				baseAreaEnemyFBX[i]->AttackedAndDamaged();
 
 				if (BaseAreaConditionals::DoesPlayerKnockbackAttackHit(playerFBX->timer, playerThirdAttackStartTimer, playerThirdAttackEndTimer))
 				{
@@ -684,7 +686,7 @@ void BaseArea::Update()
 	{
 		for (int i = 0; i < numberOfEnemiesTotal; i++)
 		{
-			if (baseAreaEnemyFBX[i]->IsEnemyAlive())
+			if (!baseAreaEnemyFBX[i]->IsEnemyAlive())
 			{
 				continue;
 			}
@@ -1211,7 +1213,7 @@ void BaseArea::Update()
 					continue;
 				}
 
-				if (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)) && BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[j]->enumStatus) && BaseAreaConditionals::IsEnemyAlive(baseAreaEnemyFBX[i]->enumStatus))
+				if (BaseAreaConditionals::AreFBXModelsColliding(DontStackOnTop(baseAreaEnemyFBX[j]->GetPosition(), baseAreaEnemyFBX[i]->GetPosition(), 3.0f)) && baseAreaEnemyFBX[j]->IsEnemyAlive() && baseAreaEnemyFBX[i]->IsEnemyAlive())
 				{
 					float dx = baseAreaEnemyFBX[j]->GetPosition().x - baseAreaEnemyFBX[i]->GetPosition().x;
 					float dy = baseAreaEnemyFBX[j]->GetPosition().y - baseAreaEnemyFBX[i]->GetPosition().y;
@@ -1250,17 +1252,17 @@ void BaseArea::Update()
 
 	for (int i = 0; i < numberOfEnemiesTotal; i++)
 	{
-		if (BaseAreaConditionals::IsEnemyJetStreamAttackingNOSTAGE(baseAreaEnemyFBX[i]->enumStatus) && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
+		if (baseAreaEnemyFBX[i]->IsEnemyJetStreamAttackingNOSTAGE() && baseAreaEnemyFBX[i]->jetStreamAttackStage == 0)
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyFBX[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
-		else if (!BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus))
+		else if (!baseAreaEnemyFBX[i]->IsEnemyLandingAttack())
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 			baseAreaEnemyFBX[i]->SetPosition({ baseAreaEnemyFBX[i]->GetPosition().x, baseAreaEnemyPositionOBJ[i]->GetPosition().y, baseAreaEnemyFBX[i]->GetPosition().z });
 		}
-		else if (BaseAreaConditionals::IsEnemyLandingAttack(baseAreaEnemyFBX[i]->enumStatus))
+		else if (baseAreaEnemyFBX[i]->IsEnemyLandingAttack())
 		{
 			baseAreaEnemyPositionOBJ[i]->SetPosition(baseAreaEnemyFBX[i]->landingAttackPosition);
 		}

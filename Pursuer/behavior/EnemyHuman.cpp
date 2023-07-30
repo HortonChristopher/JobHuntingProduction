@@ -28,6 +28,11 @@ Camera* EnemyHuman::camera = nullptr;
 ComPtr<ID3D12RootSignature> EnemyHuman::rootsignature;
 ComPtr<ID3D12PipelineState> EnemyHuman::pipelinestate;
 
+EnemyHuman::EnemyHuman()
+{
+	
+}
+
 void EnemyHuman::Initialize()
 {
 	modelEnemy = FbxLoader::GetInstance()->LoadModelFromFile("EnemyHuman");

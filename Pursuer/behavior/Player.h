@@ -15,6 +15,8 @@
 #include <array>
 #include <vector>
 
+extern DeltaTime* deltaTime;
+
 class Player
 {
 protected: // Alias
