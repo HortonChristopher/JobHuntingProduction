@@ -436,6 +436,8 @@ protected:
 
 	const float slowMotionMultiplier = 0.25f;
 	const float timerOneSecond = 60.0f;
+	const float wanderTime = 300.0f;
+	const float timerSixSeconds = 360.0f;
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;

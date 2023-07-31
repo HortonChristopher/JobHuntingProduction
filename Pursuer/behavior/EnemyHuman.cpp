@@ -122,8 +122,8 @@ void EnemyHuman::Update()
 	case WANDER:
 		if (!set)
 		{
-			x = (newPosition.x - position.x) / 300.0f;
-			y = (newPosition.z - position.z) / 300.0f;
+			x = (newPosition.x - position.x) / wanderTime;
+			y = (newPosition.z - position.z) / wanderTime;
 			float x2 = newPosition.x - position.x;
 			float y2 = newPosition.z - position.z;
 			float radians = atan2(y2, x2);
@@ -139,9 +139,9 @@ void EnemyHuman::Update()
 		}
 		else
 		{
-			if (timer > 360.0f)
+			if (timer > timerSixSeconds)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				wander = false;
 				set = false;
 				modelChange = true;
@@ -157,11 +157,11 @@ void EnemyHuman::Update()
 			{
 				if (slowMotion)
 				{
-					timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+					timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
-					timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+					timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 			}
 
@@ -169,8 +169,8 @@ void EnemyHuman::Update()
 			{
 				if (slowMotion)
 				{
-					position.x += (x * 50.0f) * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.z += (y * 50.0f) * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.x += (x * 50.0f) * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.z += (y * 50.0f) * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
