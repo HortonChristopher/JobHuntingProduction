@@ -84,7 +84,7 @@ void EnemyHuman::Update()
 	switch (enumStatus)
 	{
 	case STAND:
-		if (timer > 239.0f)
+		if (timer > standTimerMax)
 		{
 			if (patrolStatus == FRONT)
 			{
@@ -98,7 +98,7 @@ void EnemyHuman::Update()
 				newPosition.x = frontPatrolPosition.x - 10.0f;
 				newPosition.z = frontPatrolPosition.z;
 			}
-			timer = 0.0f;
+			timer = timerReset;
 			enumStatus = WANDER;
 		}
 
@@ -106,11 +106,11 @@ void EnemyHuman::Update()
 		{
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 		}
 		else
@@ -169,20 +169,20 @@ void EnemyHuman::Update()
 			{
 				if (slowMotion)
 				{
-					position.x += (x * 50.0f) * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.z += (y * 50.0f) * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.x += (x * wanderSpeed) * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.z += (y * wanderSpeed) * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
-					position.x += x * 50.0f * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.z += y * 50.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.x += x * wanderSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.z += y * wanderSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 			}
 			else
 			{
 				FirstRun = false;
 			}
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 			SetPosition(position);
 		}
 		break;
@@ -209,20 +209,20 @@ void EnemyHuman::Update()
 			{
 				if (slowMotion)
 				{
-					position.x += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-					position.z += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+					position.x += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+					position.z += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 				}
 				else
 				{
-					position.x += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-					position.z += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+					position.x += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+					position.z += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 				}
 			}
 			else
 			{
 				FirstRun = false;
 			}
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 			SetPosition(position);
 			if (aggroSwitch)
 			{
@@ -232,7 +232,7 @@ void EnemyHuman::Update()
 				aggro = false;
 				wander = false;
 				set = false;
-				timer = 0.0f;
+				timer = timerReset;
 				aggroSwitch = false;
 				enumStatus = STAND;
 			}
