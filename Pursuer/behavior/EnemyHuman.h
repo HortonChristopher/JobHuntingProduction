@@ -436,11 +436,19 @@ protected:
 
 	const float slowMotionMultiplier = 0.25f;
 	const float timerOneSecond = 60.0f;
+	const float timerHalfSecond = 30.0f;
+	const float timerTwoSeconds = 120.0f;
+	const float timerSecondAndAHalf = 90.0f;
+	const float timerThreeQuartersSeconds = 45.0f;
 	const float wanderTime = 300.0f;
 	const float timerSixSeconds = 360.0f;
 	const float wanderSpeed = 50.0f;
 	const float yRotationOffset = 90.0f;
 	const float standTimerMax = 239.0f;
+	const float normalAttackTimerStart = 47.0f;
+	const float normalAttackTimerEnd = 69.0f;
+	const float normalAttackCanDamageStart = 53.3f;
+	const float normalAttackCanDamageEnd = 63.2f;
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;

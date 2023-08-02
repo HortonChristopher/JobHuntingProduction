@@ -241,13 +241,13 @@ void EnemyHuman::Update()
 	case ATTACK:
 		if (!attackAnimation)
 		{
-			attackTimer = 0.0f;
+			attackTimer = timerReset;
 			animationSet = false;
 			animationNo = 3;
 			attackAnimation = true;
 		}
 
-		if (attackTimer < 47.0f || attackTimer > 69.0f)
+		if (attackTimer < normalAttackTimerStart || attackTimer > normalAttackTimerEnd)
 		{
 			if (slowMotion)
 			{
@@ -270,7 +270,7 @@ void EnemyHuman::Update()
 			}
 		}
 
-		if (attackTimer > 53.3f && attackTimer < 63.2f)
+		if (attackTimer > normalAttackCanDamageStart && attackTimer < normalAttackCanDamageEnd)
 		{
 			attackDamagePossible = true;
 		}
@@ -279,37 +279,37 @@ void EnemyHuman::Update()
 			attackDamagePossible = false;
 		}
 
-		if (currentTime >= endTime && attackTimer > 0.0f)
+		if (currentTime >= endTime && attackTimer > timerReset)
 		{
-			attackTimer = 0.0f;
+			attackTimer = timerReset;
 			modelChange = true;
 			attackAnimation = false;
-			timer = 0.0f;
+			timer = timerReset;
 			enumStatus = COOLDOWN;
 		}
 
 		switch (frameSpeed)
 		{
 		case NORMAL:
-			attackTimer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case HALF:
-			attackTimer += 30.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerHalfSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case DOUBLE:
-			attackTimer += 120.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerTwoSeconds * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case ONEPOINTFIVE:
-			attackTimer += 90.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerSecondAndAHalf * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case POINTSEVENFIVE:
-			attackTimer += 45.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerThreeQuartersSeconds * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case POINTTWOFIVE:
-			attackTimer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		default:
-			attackTimer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			attackTimer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		}
 		break;
@@ -324,15 +324,15 @@ void EnemyHuman::Update()
 		SetPosition(cooldownPosition);
 		if (slowMotion)
 		{
-			timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 		else
 		{
-			timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 		if (timer > 20.0f)
 		{
-			timer = 0.0f;
+			timer = timerReset;
 			ableToDamage = true;
 			aggroSet = false;
 			modelChange = true;
