@@ -439,6 +439,7 @@ protected:
 	const float timerHalfSecond = 30.0f;
 	const float timerTwoSeconds = 120.0f;
 	const float timerSecondAndAHalf = 90.0f;
+	const float timerOneThirdSecond = 20.0f;
 	const float timerThreeQuartersSeconds = 45.0f;
 	const float wanderTime = 300.0f;
 	const float timerSixSeconds = 360.0f;

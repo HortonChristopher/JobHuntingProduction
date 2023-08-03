@@ -330,7 +330,7 @@ void EnemyHuman::Update()
 		{
 			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
-		if (timer > 20.0f)
+		if (timer > timerOneThirdSecond)
 		{
 			timer = timerReset;
 			ableToDamage = true;
@@ -348,11 +348,11 @@ void EnemyHuman::Update()
 		}
 		if (slowMotion)
 		{
-			timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 		else
 		{
-			timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 		if (timer > 53.0f)
 		{
