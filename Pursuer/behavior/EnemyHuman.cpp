@@ -354,9 +354,9 @@ void EnemyHuman::Update()
 		{
 			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
-		if (timer > 53.0f)
+		if (timer > maxDamagedTime)
 		{
-			timer = 0.0f;
+			timer = timerReset;
 			aggroSet = false;
 			modelChange = true;
 			attackAnimation = false;
@@ -377,7 +377,7 @@ void EnemyHuman::Update()
 		case 0:
 			if (modelChange)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				animationSet = false;
 				animationNo = 6;
 				modelChange = false;
@@ -397,7 +397,7 @@ void EnemyHuman::Update()
 				position.x -= particleAttackJumpBackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
 				position.z -= particleAttackJumpBackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 			}
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 			if (currentTime < endTime / 2 && timer > 0.0f)
 			{
 				if (slowMotion)
@@ -410,7 +410,7 @@ void EnemyHuman::Update()
 				}
 			}
 			SetPosition(position);
-			if (currentTime > endTime && timer > 0.0f)
+			if (currentTime > endTime && timer > timerReset)
 			{
 				particleAttackStage = 1;
 				modelChange = true;

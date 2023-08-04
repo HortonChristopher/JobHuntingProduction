@@ -450,6 +450,7 @@ protected:
 	const float normalAttackTimerEnd = 69.0f;
 	const float normalAttackCanDamageStart = 53.3f;
 	const float normalAttackCanDamageEnd = 63.2f;
+	const float maxCooldownTime = 53.0f;
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;
