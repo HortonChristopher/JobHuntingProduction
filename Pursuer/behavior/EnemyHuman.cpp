@@ -398,7 +398,7 @@ void EnemyHuman::Update()
 				position.z -= particleAttackJumpBackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
 			}
 			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
-			if (currentTime < endTime / 2 && timer > 0.0f)
+			if (currentTime < endTime / 2 && timer > timerReset)
 			{
 				if (slowMotion)
 				{
@@ -455,26 +455,26 @@ void EnemyHuman::Update()
 					frameSpeed = NORMAL;
 				}
 			}
-			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f && !particleAttackActive)
+			if (currentTime - startTime > (endTime - startTime) / 2 && timer > timerReset && !particleAttackActive)
 			{
 				particleAttackActive = true;
-				timer = 0.0f;
+				timer = timerReset;
 			}
 			if (particleAttackActive)
 			{
 				if (slowMotion)
 				{
-					particleAttackPosition.x += 180.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-					particleAttackPosition.y += 180.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
-					particleAttackPosition.z += 180.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
-					timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+					particleAttackPosition.x += timerThreeSeconds * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+					particleAttackPosition.y += timerThreeSeconds * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+					particleAttackPosition.z += timerThreeSeconds * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+					timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
-					particleAttackPosition.x += 180.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-					particleAttackPosition.y += 180.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
-					particleAttackPosition.z += 180.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
-					timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+					particleAttackPosition.x += timerThreeSeconds * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+					particleAttackPosition.y += timerThreeSeconds * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse);
+					particleAttackPosition.z += timerThreeSeconds * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+					timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 			}
 			else
@@ -485,22 +485,22 @@ void EnemyHuman::Update()
 				hypotenuse = sqrt((x * x) + (y * y) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
-				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 				if (slowMotion)
 				{
-					timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+					timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
-					timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+					timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 			}
 			if (currentTime - startTime > (endTime - startTime) && particleAttackActive)
 			{
 				ableToDamage = true;
-				timer = 0.0f;
+				timer = timerReset;
 				particleAttackActive = false;
-				particleAttackStage = 0;
+				particleAttackStage = jetStreamAttackStageReset;
 				modelChange = true;
 				aggroSet = false;
 				enumStatus = AGGRO;
@@ -531,7 +531,7 @@ void EnemyHuman::Update()
 			{
 				if (slowMotion)
 				{
-					position.y += 50.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.y += 50.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
