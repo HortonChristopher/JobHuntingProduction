@@ -527,31 +527,31 @@ void EnemyHuman::Update()
 				modelChange = false;
 			}
 
-			if (position.y < 100.0f)
+			if (position.y < landingAttackYMax)
 			{
 				if (slowMotion)
 				{
-					position.y += 50.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.y += landingAttackStage0Speed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
-					position.y += 50.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.y += landingAttackStage0Speed * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				landingAttackPosition = objectPosition;
 			}
 			else
 			{
-				position.y = 100.0f;
+				position.y = landingAttackYMax;
 				x = (landingAttackPosition.x - position.x);
 				y = (landingAttackPosition.y - position.y);
 				z = (landingAttackPosition.z - position.z);
 				hypotenuse = sqrt((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
-				x = (landingAttackPosition.x - position.x) / 160.0f;
-				y = (landingAttackPosition.y - position.y) / 160.0f;
-				z = (landingAttackPosition.z - position.z) / 160.0f;
-				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				x = (landingAttackPosition.x - position.x) / landingAttackStage0SpeedHypotenuse;
+				y = (landingAttackPosition.y - position.y) / landingAttackStage0SpeedHypotenuse;
+				z = (landingAttackPosition.z - position.z) / landingAttackStage0SpeedHypotenuse;
+				SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 				landingAttackStage = 1;
 			}
 			break;
@@ -568,15 +568,15 @@ void EnemyHuman::Update()
 
 				if (slowMotion)
 				{
-					position.x += x * 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.y -= 150.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.z += z * 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.x += x * landingAttackStage1XZSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.y -= landingAttackStage1YSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.z += z * landingAttackStage1XZSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 				else
 				{
-					position.x += x * 240.0f * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.y -= 150.0f * deltaTime->DeltaTimeDividedByMiliseconds();
-					position.z += z * 240.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.x += x * landingAttackStage1XZSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.y -= landingAttackStage1YSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+					position.z += z * landingAttackStage1XZSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
 				}
 			}
 			else
@@ -592,22 +592,22 @@ void EnemyHuman::Update()
 					}
 					landed = false;
 					landingParticles = true;
-					timer = 0.0f;
-					SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
-					SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+					timer = timerReset;
+					SetScale({ scale.x * landingAttackScale, scale.y * landingAttackScale, scale.z * landingAttackScale });
+					SetRotation({ rotation.x + yRotationOffset, rotation.y, rotation.z });
 				}
 
-				if (currentTime >= endTime && timer > 0.0f)
+				if (currentTime >= endTime && timer > timerReset)
 				{
-					timer = 0.0f;
-					SetPosition({ position.x, position.y + 8.0f, position.z });
+					timer = timerReset;
+					SetPosition({ position.x, position.y + landingAttackYOffset, position.z });
 					modelChange = true;
 					enumStatus = COOLDOWN;
 					landed = false;
-					SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
+					SetRotation({ rotation.x - yRotationOffset, rotation.y, rotation.z });
 				}
 
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		}
@@ -621,9 +621,9 @@ void EnemyHuman::Update()
 				animationSet = false;
 				animationNo = 10;
 				modelChange = false;
-				timer = 0.0f;
-				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
-				SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+				timer = timerReset;
+				SetScale({ scale.x * chargeAttackScale, scale.y * chargeAttackScale, scale.z * chargeAttackScale });
+				SetRotation({ rotation.x + yRotationOffset, rotation.y, rotation.z });
 				chargeAttackCheck = true;
 				frameSpeed = POINTSEVENFIVE;
 			}
@@ -635,65 +635,63 @@ void EnemyHuman::Update()
 			hypotenuse = sqrt((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 
-			if (currentTime >= endTime && timer > 0.0f) // Timer is 53.0f
+			if (currentTime >= endTime && timer > timerReset) // Timer is 53.0f
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				landingAttackPosition = objectPosition;
 				x = (landingAttackPosition.x - position.x);
 				z = (landingAttackPosition.z - position.z);
 				hypotenuse = sqrt((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
-				//x = (landingAttackPosition.x - position.x) / 60.0f;
-				//z = (landingAttackPosition.z - position.z) / 60.0f;
-				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 				frameSpeed = NORMAL;
 				chargeAttackStage = 1;
 			}
 
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		case 1:
 			if (slowMotion)
 			{
-				position.x += 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z += 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+				position.x += chargeAttackSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z += chargeAttackSpeed * slowMotionMultiplier *deltaTime->DeltaTimeDividedByMiliseconds()* (z / hypotenuse);
 			}
 			else
 			{
-				position.x += 240.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z += 240.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+				position.x += chargeAttackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z += chargeAttackSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
 			}
 
-			if (timer > 45.0f)
+			if (timer > chargeAttackTimerMax)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				modelChange = true;
-				SetPosition({ position.x, position.y + 8.0f, position.z });
+				SetPosition({ position.x, position.y + chargeAttackYOffset, position.z });
 				enumStatus = COOLDOWN;
-				SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
+				SetRotation({ rotation.x - yRotationOffset, rotation.y, rotation.z });
 			}
 
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		default:
-			timer = 0.0f;
+			timer = timerReset;
 			enumStatus = STAND;
 			break;
 		}
@@ -701,7 +699,7 @@ void EnemyHuman::Update()
 	case TWOENEMYSURROUND:
 		if (animationNo != 2)
 		{
-			timer = 0.0f;
+			timer = timerReset;
 			animationSet = false;
 			animationNo = 2;
 			modelChange = false;
@@ -710,7 +708,7 @@ void EnemyHuman::Update()
 		switch (twoEnemySurroundStage)
 		{
 		case 0:
-			if (timer == 0.0f)
+			if (timer == timerReset)
 			{
 				meetingPoint = { 0.0f, 0.0f, 0.0f };
 				meetingPoint.x = objectPosition.x + cos(objectRotation.y - 180.0f) * 120.0f;
@@ -727,13 +725,13 @@ void EnemyHuman::Update()
 				hypotenuse = sqrtf((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
-				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 			}
 
 			if (slowMotion)
 			{
-				position.x += 80.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z += 80.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+				position.x += 80.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z += 80.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
 			}
 			else
 			{
@@ -761,7 +759,7 @@ void EnemyHuman::Update()
 
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
@@ -817,8 +815,8 @@ void EnemyHuman::Update()
 			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 			if (slowMotion)
 			{
-				position.x += surroundSpeed * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z += surroundSpeed * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+				position.x += surroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z += surroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
 			}
 			else
 			{
@@ -835,7 +833,7 @@ void EnemyHuman::Update()
 					{
 						if (slowMotion)
 						{
-							surroundSpeed += 40.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += 40.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 						else
 						{
@@ -846,7 +844,7 @@ void EnemyHuman::Update()
 					{
 						if (slowMotion)
 						{
-							surroundSpeed = 180.0f * 0.25f;
+							surroundSpeed = 180.0f * slowMotionMultiplier;
 						}
 						else
 						{
@@ -859,7 +857,7 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						nextDegree += XMConvertToRadians(100.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds());
+						nextDegree += XMConvertToRadians(100.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds());
 					}
 					else
 					{
@@ -883,7 +881,7 @@ void EnemyHuman::Update()
 					{
 						if (slowMotion)
 						{
-							surroundSpeed += 40.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += 40.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 						else
 						{
@@ -894,7 +892,7 @@ void EnemyHuman::Update()
 					{
 						if (slowMotion)
 						{
-							surroundSpeed = 180.0f * 0.25f;
+							surroundSpeed = 180.0f * slowMotionMultiplier;
 						}
 						else
 						{
@@ -907,7 +905,7 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						nextDegree -= XMConvertToRadians(100.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds());
+						nextDegree -= XMConvertToRadians(100.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds());
 					}
 					else
 					{
@@ -982,7 +980,7 @@ void EnemyHuman::Update()
 
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
@@ -1000,7 +998,7 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.x += 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
+						position.x += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
 					}
 					else
 					{
@@ -1017,7 +1015,7 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.x += 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
+						position.x += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
 					}
 					else
 					{
@@ -1038,7 +1036,7 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.z += 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
+						position.z += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
 					}
 					else
 					{
@@ -1055,7 +1053,7 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.z += 240.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
+						position.z += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
 					}
 					else
 					{
@@ -1066,7 +1064,7 @@ void EnemyHuman::Update()
 			}
 			if (slowMotion)
 			{
-				position.y += 5.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.y += 5.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
@@ -1111,7 +1109,7 @@ void EnemyHuman::Update()
 
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
@@ -1121,8 +1119,8 @@ void EnemyHuman::Update()
 		case 2:
 			if (slowMotion)
 			{
-				position.x += x * 180.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
-				position.z += z * 180.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.x += x * 180.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.z += z * 180.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
@@ -1141,7 +1139,7 @@ void EnemyHuman::Update()
 
 			if (slowMotion)
 			{
-				timer += 60.0f * 0.25f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
@@ -1352,7 +1350,7 @@ void EnemyHuman::Update()
 			sec *= 0.75f;
 			break;
 		case POINTTWOFIVE:
-			sec *= 0.25f;
+			sec *= slowMotionMultiplier;
 			break;
 		default:
 			break;

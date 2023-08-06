@@ -452,6 +452,17 @@ protected:
 	const float normalAttackCanDamageStart = 53.3f;
 	const float normalAttackCanDamageEnd = 63.2f;
 	const float maxDamagedTime = 53.0f;
+	const float landingAttackYMax = 100.0f;
+	const float landingAttackStage0Speed = 50.0f;
+	const float landingAttackStage0SpeedHypotenuse = 160.0f;
+	const float landingAttackStage1XZSpeed = 240.0f;
+	const float landingAttackStage1YSpeed = 150.f;
+	const float landingAttackScale = 0.01f;
+	const float landingAttackYOffset = 8.0f;
+	const float chargeAttackScale = 0.01f;
+	const float chargeAttackSpeed = 240.0f;
+	const float chargeAttackTimerMax = 45.0f;
+	const float chargeAttackYOffset = 8.0f;
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;
