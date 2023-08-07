@@ -710,7 +710,7 @@ void EnemyHuman::Update()
 		case 0:
 			if (timer == timerReset)
 			{
-				meetingPoint = { 0.0f, 0.0f, 0.0f };
+				meetingPoint = meetingPointReset;
 				meetingPoint.x = objectPosition.x + cos(objectRotation.y - 180.0f) * 120.0f;
 				meetingPoint.z = objectPosition.z + sin(objectRotation.y - 180.0f) * 120.0f;
 				x = (0.0f - position.x);
@@ -730,13 +730,13 @@ void EnemyHuman::Update()
 
 			if (slowMotion)
 			{
-				position.x += 80.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z += 80.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+				position.x += twoEnemySurroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z += twoEnemySurroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
 			}
 			else
 			{
-				position.x += 80.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
-				position.z += 80.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
+				position.x += twoEnemySurroundSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
+				position.z += twoEnemySurroundSpeed * deltaTime->DeltaTimeDividedByMiliseconds() * (z / hypotenuse);
 			}
 			SetPosition(position);
 
@@ -759,11 +759,11 @@ void EnemyHuman::Update()
 
 			if (slowMotion)
 			{
-				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		case 1:

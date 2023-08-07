@@ -463,6 +463,9 @@ protected:
 	const float chargeAttackSpeed = 240.0f;
 	const float chargeAttackTimerMax = 45.0f;
 	const float chargeAttackYOffset = 8.0f;
+	const float twoEnemySurroundSpeed = 80.0f;
+
+	const XMFLOAT3 meetingPointReset = { 0.0f, 0.0f, 0.0f };
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;
