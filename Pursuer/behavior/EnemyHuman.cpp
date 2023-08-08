@@ -776,14 +776,6 @@ void EnemyHuman::Update()
 					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
 					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
 					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
-					/*if (circleRadius.x > circleRadius.y)
-					{
-						circleRadiusDecider = circleRadius.x;
-					}
-					else
-					{
-						circleRadiusDecider = circleRadius.y;
-					}*/
 				}
 			}
 			else
@@ -795,14 +787,6 @@ void EnemyHuman::Update()
 					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
 					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
 					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
-					/*if (circleRadius.x > circleRadius.y)
-					{
-						circleRadiusDecider = circleRadius.x;
-					}
-					else
-					{
-						circleRadiusDecider = circleRadius.y;
-					}*/
 				}
 			}
 			nextPosition.x = midpoint.x + cosf(nextDegree) * (distanceFloat);
