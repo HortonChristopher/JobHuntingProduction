@@ -1061,9 +1061,9 @@ void EnemyHuman::Update()
 				animationSet = false;
 				animationNo = 10;
 				modelChange = false;
-				timer = 0.0f;
+				timer = timerReset;
 				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
-				SetRotation({ rotation.x + 90.0f, rotation.y, rotation.z });
+				SetRotation({ rotation.x + yRotationOffset, rotation.y, rotation.z });
 				chargeAttackCheck = true;
 			}
 
@@ -1074,30 +1074,30 @@ void EnemyHuman::Update()
 			hypotenuse = sqrt((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 
-			if (currentTime >= endTime && timer > (60.0f * agrooNumber))
+			if (currentTime >= endTime && timer > (timerOneSecond * agrooNumber))
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				landingAttackPosition = objectPosition;
 				x = (landingAttackPosition.x - position.x);
 				z = (landingAttackPosition.z - position.z);
 				hypotenuse = sqrt((x * x) + (z * z));
 				radians = atan2(z, x);
 				degrees = XMConvertToDegrees(radians);
-				x = (landingAttackPosition.x - position.x) / 60.0f;
-				z = (landingAttackPosition.z - position.z) / 60.0f;
-				SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+				x = (landingAttackPosition.x - position.x) / timerOneSecond;
+				z = (landingAttackPosition.z - position.z) / timerOneSecond;
+				SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 				jetStreamAttackStage = 2;
 			}
 
 			if (slowMotion)
 			{
-				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		case 2:
@@ -1118,26 +1118,26 @@ void EnemyHuman::Update()
 				modelChange = true;
 				SetPosition({ position.x, position.y + 8.0f, position.z });
 				enumStatus = COOLDOWN;
-				SetRotation({ rotation.x - 90.0f, rotation.y, rotation.z });
+				SetRotation({ rotation.x - yRotationOffset, rotation.y, rotation.z });
 			}
 
 			if (slowMotion)
 			{
-				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			break;
 		default:
-			timer = 0.0f;
+			timer = timerReset;
 			enumStatus = STAND;
 			break;
 		}
 		break;
 	default:
-		timer = 0.0f;
+		timer = timerReset;
 		enumStatus = STAND;
 		break;
 	}
@@ -1154,9 +1154,9 @@ void EnemyHuman::Update()
 	if (animationNo == 9 || animationNo == 10)
 	{
 		SetScale({ 0.15f * 0.01f, 0.15f * 0.01f, 0.15f * 0.01f });
-		if (rotation.x != 90.0f)
+		if (rotation.x != yRotationOffset)
 		{
-			rotation.x = 90.0f;
+			rotation.x = yRotationOffset;
 		}
 	}
 
@@ -1244,21 +1244,21 @@ void EnemyHuman::Update()
 		}
 	}
 
-	if (position.x >= 398.0f)
+	if (position.x >= mapEdgeBoundary)
 	{
-		position.x = 398.0f;
+		position.x = mapEdgeBoundary;
 	}
-	else if (position.x <= -398.0f)
+	else if (position.x <= -mapEdgeBoundary)
 	{
-		position.x = -398.0f;
+		position.x = -mapEdgeBoundary;
 	}
-	if (position.z >= 398.0f)
+	if (position.z >= mapEdgeBoundary)
 	{
-		position.z = 398.0f;
+		position.z = mapEdgeBoundary;
 	}
-	else if (position.z <= -398.0f)
+	else if (position.z <= -mapEdgeBoundary)
 	{
-		position.z = -398.0f;
+		position.z = -mapEdgeBoundary;
 	}
 
 	XMMATRIX matScale, matRot, matTrans;
@@ -1322,16 +1322,16 @@ void EnemyHuman::Update()
 		case NORMAL:
 			break;
 		case HALF:
-			sec *= 0.5f;
+			sec *= slowMotionHalfMultiplier;
 			break;
 		case DOUBLE:
-			sec *= 2.0f;
+			sec *= slowMotionDoubleMultiplier;
 			break;
 		case ONEPOINTFIVE:
-			sec *= 1.5f;
+			sec *= slowMotionOneAndHalfMultiplier;
 			break;
 		case POINTSEVENFIVE:
-			sec *= 0.75f;
+			sec *= slowMotionThreeQuartersMultiplier;
 			break;
 		case POINTTWOFIVE:
 			sec *= slowMotionMultiplier;
