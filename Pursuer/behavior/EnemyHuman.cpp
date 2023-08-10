@@ -899,7 +899,7 @@ void EnemyHuman::Update()
 				else
 				{
 					nextDegree = initialDegree - XMConvertToRadians(290.0f);
-					timer = 0.0f;
+					timer = timerReset;
 					modelChange = true;
 					enumStatus = COOLDOWN;
 					break;
@@ -917,7 +917,7 @@ void EnemyHuman::Update()
 		case 0:
 			if (animationNo != 6)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				animationSet = false;
 				animationNo = 6;
 				modelChange = false;
@@ -928,7 +928,7 @@ void EnemyHuman::Update()
 			hypotenuse = sqrt((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 
 			if (timer == 0.0f)
 			{
@@ -957,18 +957,18 @@ void EnemyHuman::Update()
 				hypotenuse2 = sqrt((x2 * x2) + (y * y));
 			}
 
-			if (currentTime >= endTime && timer > 0.0f /*&& position.x == landingAttackPosition.x && position.z == landingAttackPosition.z*/)
+			if (currentTime >= endTime && timer > timerReset /*&& position.x == landingAttackPosition.x && position.z == landingAttackPosition.z*/)
 			{
 				jetStreamAttackStage = 1;
 			}
 
 			if (slowMotion)
 			{
-				timer += 60.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 
 			switch (xQuadrant)
