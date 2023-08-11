@@ -711,8 +711,8 @@ void EnemyHuman::Update()
 			if (timer == timerReset)
 			{
 				meetingPoint = meetingPointReset;
-				meetingPoint.x = objectPosition.x + cos(objectRotation.y - 180.0f) * 120.0f;
-				meetingPoint.z = objectPosition.z + sin(objectRotation.y - 180.0f) * 120.0f;
+				meetingPoint.x = objectPosition.x + cos(objectRotation.y - twoEnemySurroundYRotOffset) * twoEnemySurroundCircleRadius;
+				meetingPoint.z = objectPosition.z + sin(objectRotation.y - twoEnemySurroundYRotOffset) * twoEnemySurroundCircleRadius;
 				x = (0.0f - position.x);
 				if (patrolStatus == FRONT)
 				{
@@ -742,7 +742,7 @@ void EnemyHuman::Update()
 
 			if (timer >= 120.0f)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				nextPosition = { 0.0f, 0.0f };
 				midpoint.x = (objectPosition.x + position.x) / 2.0f;
 				midpoint.y = (objectPosition.z + position.z) / 2.0f;
@@ -796,7 +796,7 @@ void EnemyHuman::Update()
 			hypotenuse = sqrtf((x * x) + (z * z));
 			radians = atan2(z, x);
 			degrees = XMConvertToDegrees(radians);
-			SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
+			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 			if (slowMotion)
 			{
 				position.x += surroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x / hypotenuse);
@@ -851,7 +851,7 @@ void EnemyHuman::Update()
 				else
 				{
 					nextDegree = initialDegree + XMConvertToRadians(290.0f);
-					timer = 0.0f;
+					timer = timerReset;
 					modelChange = true;
 					enumStatus = COOLDOWN;
 					break;

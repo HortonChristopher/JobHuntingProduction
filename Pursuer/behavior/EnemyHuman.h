@@ -470,6 +470,9 @@ protected:
 	const float slowMotionOneAndHalfMultiplier = 1.5f;
 	const float slowMotionThreeQuartersMultiplier = 0.75f;
 
+	const float twoEnemySurroundYRotOffset = 180.0f;
+	const float twoEnemySurroundCircleRadius = 120.0f;
+
 	const float mapEdgeBoundary = 398.0f;
 
 	const XMFLOAT3 meetingPointReset = { 0.0f, 0.0f, 0.0f };
