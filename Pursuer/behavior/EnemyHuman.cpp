@@ -740,19 +740,19 @@ void EnemyHuman::Update()
 			}
 			SetPosition(position);
 
-			if (timer >= 120.0f)
+			if (timer >= twoEnemySurroundStage1TimerMax)
 			{
 				timer = timerReset;
-				nextPosition = { 0.0f, 0.0f };
-				midpoint.x = (objectPosition.x + position.x) / 2.0f;
-				midpoint.y = (objectPosition.z + position.z) / 2.0f;
-				circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
-				circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
+				nextPosition = nextPositionReset;
+				midpoint.x = (objectPosition.x + position.x) / half;
+				midpoint.y = (objectPosition.z + position.z) / half;
+				circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / half;
+				circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / half;
 				initialDegree = nextDegree = radians;
 				distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
 				origDistanceFloat = distanceFloat;
-				nextDegreeAngle = 100.0f;
-				surroundSpeed = 120.0f;
+				nextDegreeAngle = nextDegreeAngleReset;
+				surroundSpeed = surroundSpeedReset;
 				twoEnemySurroundStage = 1;
 				break;
 			}
@@ -769,23 +769,23 @@ void EnemyHuman::Update()
 		case 1:
 			if (patrolStatus == FRONT)
 			{
-				if (nextDegree < (initialDegree + XMConvertToRadians(270.0f)))
+				if (nextDegree < (initialDegree + XMConvertToRadians(twoEnemySurroundCase1RotOffset)))
 				{
-					midpoint.x = (objectPosition.x + position.x) / 2.0f;
-					midpoint.y = (objectPosition.z + position.z) / 2.0f;
-					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
-					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
+					midpoint.x = (objectPosition.x + position.x) / half;
+					midpoint.y = (objectPosition.z + position.z) / half;
+					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / half;
+					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / half;
 					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
 				}
 			}
 			else
 			{
-				if (nextDegree > (initialDegree - XMConvertToRadians(270.0f)))
+				if (nextDegree > (initialDegree - XMConvertToRadians(twoEnemySurroundCase1RotOffset)))
 				{
-					midpoint.x = (objectPosition.x + position.x) / 2.0f;
-					midpoint.y = (objectPosition.z + position.z) / 2.0f;
-					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / 2.0f;
-					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / 2.0f;
+					midpoint.x = (objectPosition.x + position.x) / half;
+					midpoint.y = (objectPosition.z + position.z) / half;
+					circleRadius.x = (abs(objectPosition.x) + abs(position.x)) / half;
+					circleRadius.y = (abs(objectPosition.z) + abs(position.z)) / half;
 					distanceFloat = sqrt((position.x - objectPosition.x) * (position.x - objectPosition.x) + (position.z - objectPosition.z) * (position.z - objectPosition.z));
 				}
 			}

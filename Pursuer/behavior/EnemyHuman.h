@@ -464,6 +464,11 @@ protected:
 	const float chargeAttackTimerMax = 45.0f;
 	const float chargeAttackYOffset = 8.0f;
 	const float twoEnemySurroundSpeed = 80.0f;
+	const float twoEnemySurroundStage1TimerMax = 120.0f;
+	const float half = 2.0f;
+	const float nextDegreeAngleReset = 100.0f;
+	const float surroundSpeedReset = 120.0f;
+	const float twoEnemySurroundCase1RotOffset = 270.0f;
 
 	const float slowMotionHalfMultiplier = 0.5f;
 	const float slowMotionDoubleMultiplier = 2.0f;
@@ -476,6 +481,7 @@ protected:
 	const float mapEdgeBoundary = 398.0f;
 
 	const XMFLOAT3 meetingPointReset = { 0.0f, 0.0f, 0.0f };
+	const XMFLOAT2 nextPositionReset = { 0.0f, 0.0f };
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;
