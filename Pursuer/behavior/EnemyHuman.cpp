@@ -817,22 +817,22 @@ void EnemyHuman::Update()
 					{
 						if (slowMotion)
 						{
-							surroundSpeed += 40.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += case1SurroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 						else
 						{
-							surroundSpeed += 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += case1SurroundSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 					}
 					else
 					{
 						if (slowMotion)
 						{
-							surroundSpeed = 180.0f * slowMotionMultiplier;
+							surroundSpeed = case1SurroundSpeedMax * slowMotionMultiplier;
 						}
 						else
 						{
-							surroundSpeed = 180.0f;
+							surroundSpeed = case1SurroundSpeedMax;
 						}
 					}
 				}
@@ -865,22 +865,22 @@ void EnemyHuman::Update()
 					{
 						if (slowMotion)
 						{
-							surroundSpeed += 40.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += case1SurroundSpeedDefault * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 						else
 						{
-							surroundSpeed += 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += case1SurroundSpeedDefault * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 					}
 					else
 					{
 						if (slowMotion)
 						{
-							surroundSpeed = 180.0f * slowMotionMultiplier;
+							surroundSpeed = case1SurroundSpeedMax * slowMotionMultiplier;
 						}
 						else
 						{
-							surroundSpeed = 180.0f;
+							surroundSpeed = case1SurroundSpeedMax;
 						}
 					}
 				}
