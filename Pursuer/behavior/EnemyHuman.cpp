@@ -713,7 +713,7 @@ void EnemyHuman::Update()
 				meetingPoint = meetingPointReset;
 				meetingPoint.x = objectPosition.x + cos(objectRotation.y - twoEnemySurroundYRotOffset) * twoEnemySurroundCircleRadius;
 				meetingPoint.z = objectPosition.z + sin(objectRotation.y - twoEnemySurroundYRotOffset) * twoEnemySurroundCircleRadius;
-				x = (0.0f - position.x);
+				x = (zeroDegrees - position.x);
 				if (patrolStatus == FRONT)
 				{
 					z = (10.0f - position.z);
@@ -813,15 +813,15 @@ void EnemyHuman::Update()
 			{
 				if (nextDegree > (initialDegree + XMConvertToRadians(90.0f)))
 				{
-					if (surroundSpeed < 180.0f)
+					if (surroundSpeed < oneEightyDegrees)
 					{
 						if (slowMotion)
 						{
-							surroundSpeed += case1SurroundSpeed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += case1SurroundSpeedDefault * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 						else
 						{
-							surroundSpeed += case1SurroundSpeed * deltaTime->DeltaTimeDividedByMiliseconds();
+							surroundSpeed += case1SurroundSpeedDefault * deltaTime->DeltaTimeDividedByMiliseconds();
 						}
 					}
 					else
@@ -861,7 +861,7 @@ void EnemyHuman::Update()
 			{
 				if (nextDegree < (initialDegree - XMConvertToRadians(90.0f)))
 				{
-					if (surroundSpeed < 180.0f)
+					if (surroundSpeed < oneEightyDegrees)
 					{
 						if (slowMotion)
 						{
@@ -930,7 +930,7 @@ void EnemyHuman::Update()
 			degrees = XMConvertToDegrees(radians);
 			SetRotation({ GetRotation().x, -degrees + yRotationOffset, GetRotation().z });
 
-			if (timer == 0.0f)
+			if (timer == timerReset)
 			{
 				if (objectPosition.x >= 0.0f)
 				{
@@ -1114,7 +1114,7 @@ void EnemyHuman::Update()
 
 			if (timer > 45.0f)
 			{
-				timer = 0.0f;
+				timer = timerReset;
 				modelChange = true;
 				SetPosition({ position.x, position.y + 8.0f, position.z });
 				enumStatus = COOLDOWN;

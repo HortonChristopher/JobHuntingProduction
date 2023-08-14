@@ -477,6 +477,10 @@ protected:
 	const float slowMotionOneAndHalfMultiplier = 1.5f;
 	const float slowMotionThreeQuartersMultiplier = 0.75f;
 
+	const float zeroDegrees = 0.0f;
+	const float ninetyDegrees = 90.0f;
+	const float oneEightyDegrees = 180.0f;
+
 	const float twoEnemySurroundYRotOffset = 180.0f;
 	const float twoEnemySurroundCircleRadius = 120.0f;
 
