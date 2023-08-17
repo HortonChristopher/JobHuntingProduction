@@ -86,6 +86,14 @@ public:
 
 	FrameSpeed frameSpeed = NORMAL;
 
+	enum Animation
+	{
+		STAND = 0,
+		WANDER = 1
+	};
+
+	Animation animation = Animation::STAND;
+
 public:
 	EnemyHuman();
 

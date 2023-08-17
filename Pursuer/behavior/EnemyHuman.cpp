@@ -99,7 +99,7 @@ void EnemyHuman::Update()
 				newPosition.z = frontPatrolPosition.z;
 			}
 			timer = timerReset;
-			enumStatus = WANDER;
+			enumStatus = status::WANDER;
 		}
 
 		if (!FirstRun)
@@ -133,7 +133,7 @@ void EnemyHuman::Update()
 			if (modelChange)
 			{
 				animationSet = false;
-				animationNo = 1;
+				animationNo = Animation::WANDER;
 				modelChange = false;
 			}
 		}
@@ -148,7 +148,7 @@ void EnemyHuman::Update()
 				if (modelChange)
 				{
 					animationSet = false;
-					animationNo = 0;
+					animationNo = Animation::STAND;
 					modelChange = false;
 				}
 				enumStatus = STAND;
