@@ -133,7 +133,7 @@ void EnemyHuman::Update()
 			if (modelChange)
 			{
 				animationSet = false;
-				animationNo = Animation::WANDER;
+				animationNo = Animation::WANDERANIMATION;
 				modelChange = false;
 			}
 		}
@@ -148,10 +148,10 @@ void EnemyHuman::Update()
 				if (modelChange)
 				{
 					animationSet = false;
-					animationNo = Animation::STAND;
+					animationNo = Animation::STANDANIMATION;
 					modelChange = false;
 				}
-				enumStatus = STAND;
+				enumStatus = status::STAND;
 			}
 			else
 			{
@@ -234,7 +234,7 @@ void EnemyHuman::Update()
 				set = false;
 				timer = timerReset;
 				aggroSwitch = false;
-				enumStatus = STAND;
+				enumStatus = status::STAND;
 			}
 		}
 		break;
@@ -692,7 +692,7 @@ void EnemyHuman::Update()
 			break;
 		default:
 			timer = timerReset;
-			enumStatus = STAND;
+			enumStatus = status::STAND;
 			break;
 		}
 		break;
@@ -1132,13 +1132,13 @@ void EnemyHuman::Update()
 			break;
 		default:
 			timer = timerReset;
-			enumStatus = STAND;
+			enumStatus = status::STAND;
 			break;
 		}
 		break;
 	default:
 		timer = timerReset;
-		enumStatus = STAND;
+		enumStatus = status::STAND;
 		break;
 	}
 
@@ -1596,7 +1596,7 @@ void EnemyHuman::Reset()
 	timer = 238.0f;
 	particleAttackStage = 0;
 	modelChange = true;
-	enumStatus = STAND;
+	enumStatus = status::STAND;
 }
 
 void EnemyHuman::PlayAnimation()

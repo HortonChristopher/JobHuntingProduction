@@ -88,11 +88,11 @@ public:
 
 	enum Animation
 	{
-		STAND = 0,
-		WANDER = 1
+		STANDANIMATION = 0,
+		WANDERANIMATION = 1
 	};
 
-	Animation animation = Animation::STAND;
+	Animation animation = Animation::STANDANIMATION;
 
 public:
 	EnemyHuman();
