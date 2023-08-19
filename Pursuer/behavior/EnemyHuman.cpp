@@ -193,7 +193,7 @@ void EnemyHuman::Update()
 			if (modelChange)
 			{
 				animationSet = false;
-				animationNo = 2;
+				animationNo = Animation::AGGROANIMATION;
 				modelChange = false;
 			}
 			aggroSet = true;
@@ -227,7 +227,7 @@ void EnemyHuman::Update()
 			if (aggroSwitch)
 			{
 				animationSet = false;
-				animationNo = 0;
+				animationNo = Animation::STANDANIMATION;
 				aggroSet = false;
 				aggro = false;
 				wander = false;
@@ -243,7 +243,7 @@ void EnemyHuman::Update()
 		{
 			attackTimer = timerReset;
 			animationSet = false;
-			animationNo = 3;
+			animationNo = Animation::BASICATTACKANIMATION;
 			attackAnimation = true;
 		}
 
@@ -317,7 +317,7 @@ void EnemyHuman::Update()
 		if (modelChange)
 		{
 			animationSet = false;
-			animationNo = 0;
+			animationNo = Animation::STANDANIMATION;
 			cooldownPosition = position;
 			modelChange = false;
 		}
@@ -343,7 +343,7 @@ void EnemyHuman::Update()
 		if (modelChange)
 		{
 			animationSet = false;
-			animationNo = 4;
+			animationNo = Animation::DAMAGEANIMATION;
 			modelChange = false;
 		}
 		if (slowMotion)
@@ -367,7 +367,7 @@ void EnemyHuman::Update()
 		if (modelChange)
 		{
 			animationSet = false;
-			animationNo = 5;
+			animationNo = Animation::DEATHANIMATION;
 			modelChange = false;
 		}
 		break;
