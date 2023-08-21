@@ -379,7 +379,7 @@ void EnemyHuman::Update()
 			{
 				timer = timerReset;
 				animationSet = false;
-				animationNo = 6;
+				animationNo = Animation::JUMPANIMATION;
 				modelChange = false;
 			}
 			x = objectPosition.x - position.x;
@@ -430,7 +430,7 @@ void EnemyHuman::Update()
 				timer = timerReset;
 				particleAttackPosition = { position.x, position.y + 8.0f, position.z };
 				animationSet = false;
-				animationNo = 7;
+				animationNo = Animation::PARTICLEATTACKANIMATION;
 				modelChange = false;
 			}
 			if (currentTime - startTime < (endTime - startTime) / 2 && !particleAttackActive)
@@ -512,7 +512,7 @@ void EnemyHuman::Update()
 		if (animationNo != 8)
 		{
 			animationSet = false;
-			animationNo = 8;
+			animationNo = Animation::FLEEANIMATION;
 			modelChange = false;
 		}
 		break;
