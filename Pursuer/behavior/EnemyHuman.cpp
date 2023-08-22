@@ -509,7 +509,7 @@ void EnemyHuman::Update()
 		}
 		break;
 	case FLEE:
-		if (animationNo != 8)
+		if (animationNo != Animation::FLEEANIMATION)
 		{
 			animationSet = false;
 			animationNo = Animation::FLEEANIMATION;
@@ -520,10 +520,10 @@ void EnemyHuman::Update()
 		switch (landingAttackStage)
 		{
 		case 0:
-			if (animationNo != 6)
+			if (animationNo != Animation::JUMPANIMATION)
 			{
 				animationSet = false;
-				animationNo = 6;
+				animationNo = Animation::JUMPANIMATION;
 				modelChange = false;
 			}
 
@@ -558,10 +558,10 @@ void EnemyHuman::Update()
 		case 1:
 			if (position.y > landingAttackPosition.y)
 			{
-				if (animationNo != 6)
+				if (animationNo != Animation::JUMPANIMATION)
 				{
 					animationSet = false;
-					animationNo = 6;
+					animationNo = Animation::JUMPANIMATION;
 					modelChange = false;
 					landed = true;
 				}
@@ -581,10 +581,10 @@ void EnemyHuman::Update()
 			}
 			else
 			{
-				if (animationNo != 9)
+				if (animationNo != Animation::LANDINGANIMATION)
 				{
 					animationSet = false;
-					animationNo = 9;
+					animationNo = Animation::LANDINGANIMATION;
 					modelChange = false;
 					if (position.y <= landingAttackPosition.y)
 					{
@@ -616,10 +616,10 @@ void EnemyHuman::Update()
 		switch (chargeAttackStage)
 		{
 		case 0:
-			if (animationNo != 10)
+			if (animationNo != Animation::CHARGEANIMATION)
 			{
 				animationSet = false;
-				animationNo = 10;
+				animationNo = Animation::CHARGEANIMATION;
 				modelChange = false;
 				timer = timerReset;
 				SetScale({ scale.x * chargeAttackScale, scale.y * chargeAttackScale, scale.z * chargeAttackScale });
@@ -697,11 +697,11 @@ void EnemyHuman::Update()
 		}
 		break;
 	case TWOENEMYSURROUND:
-		if (animationNo != 2)
+		if (animationNo != Animation::AGGROANIMATION)
 		{
 			timer = timerReset;
 			animationSet = false;
-			animationNo = 2;
+			animationNo = Animation::AGGROANIMATION;
 			modelChange = false;
 		}
 
@@ -915,11 +915,11 @@ void EnemyHuman::Update()
 		switch (jetStreamAttackStage)
 		{
 		case 0:
-			if (animationNo != 6)
+			if (animationNo != Animation::JUMPANIMATION)
 			{
 				timer = timerReset;
 				animationSet = false;
-				animationNo = 6;
+				animationNo = Animation::JUMPANIMATION;
 				modelChange = false;
 			}
 			
