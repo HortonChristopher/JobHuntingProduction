@@ -932,22 +932,22 @@ void EnemyHuman::Update()
 
 			if (timer == timerReset)
 			{
-				if (objectPosition.x >= 0.0f)
+				if (objectPosition.x >= objectPositionResetJetStreamAttack)
 				{
 					landingAttackPosition.x = (objectPosition.x - 120.0f - (20.0f * (agrooNumber - 1)));
 					xQuadrant = 0;
 				}
-				else if (objectPosition.x < 0.0f)
+				else if (objectPosition.x < objectPositionResetJetStreamAttack)
 				{
 					landingAttackPosition.x = (objectPosition.x + 120.0f + (20.0f * (agrooNumber - 1)));
 					xQuadrant = 1;
 				}
-				if (objectPosition.z < 0.0f)
+				if (objectPosition.z < objectPositionResetJetStreamAttack)
 				{
 					landingAttackPosition.z = (objectPosition.z + 120.0f);
 					yQuadrant = 1;
 				}
-				else if (objectPosition.z >= 0.0f)
+				else if (objectPosition.z >= objectPositionResetJetStreamAttack)
 				{
 					landingAttackPosition.z = (objectPosition.z - 120.0f);
 					yQuadrant = 0;
@@ -982,11 +982,11 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.x += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
+						position.x += jetStreamAttackSpeedStage0 * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
 					}
 					else
 					{
-						position.x += 240.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
+						position.x += jetStreamAttackSpeedStage0 * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
 					}
 				}
 				break;
@@ -999,11 +999,11 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.x += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
+						position.x += jetStreamAttackSpeedStage0 * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
 					}
 					else
 					{
-						position.x += 240.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
+						position.x += jetStreamAttackSpeedStage0 * deltaTime->DeltaTimeDividedByMiliseconds() * (x2 / hypotenuse2);
 					}
 				}
 				break;
@@ -1020,11 +1020,11 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.z += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
+						position.z += jetStreamAttackSpeedStage0 * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
 					}
 					else
 					{
-						position.z += 240.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
+						position.z += jetStreamAttackSpeedStage0 * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
 					}
 				}
 				break;
@@ -1037,11 +1037,11 @@ void EnemyHuman::Update()
 				{
 					if (slowMotion)
 					{
-						position.z += 240.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
+						position.z += jetStreamAttackSpeedStage0 * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
 					}
 					else
 					{
-						position.z += 240.0f * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
+						position.z += jetStreamAttackSpeedStage0 * deltaTime->DeltaTimeDividedByMiliseconds() * (y / hypotenuse2);
 					}
 				}
 				break;
@@ -1056,13 +1056,13 @@ void EnemyHuman::Update()
 			}
 			break;
 		case 1: // From here on it's the same as charge attack, but with a delay between each enemy doing the attack
-			if (animationNo != 10)
+			if (animationNo != Animation::CHARGEANIMATION)
 			{
 				animationSet = false;
-				animationNo = 10;
+				animationNo = Animation::CHARGEANIMATION;
 				modelChange = false;
 				timer = timerReset;
-				SetScale({ scale.x * 0.01f, scale.y * 0.01f, scale.z * 0.01f });
+				SetScale({ scale.x * landingAttackScale, scale.y * landingAttackScale, scale.z * landingAttackScale });
 				SetRotation({ rotation.x + yRotationOffset, rotation.y, rotation.z });
 				chargeAttackCheck = true;
 			}
