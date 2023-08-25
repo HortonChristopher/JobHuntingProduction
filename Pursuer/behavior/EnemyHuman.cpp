@@ -1103,13 +1103,13 @@ void EnemyHuman::Update()
 		case 2:
 			if (slowMotion)
 			{
-				position.x += x * 180.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
-				position.z += z * 180.0f * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.x += x * jetStreamAttackCase1Speed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.z += z * jetStreamAttackCase1Speed * slowMotionMultiplier * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 			else
 			{
-				position.x += x * 180.0f * deltaTime->DeltaTimeDividedByMiliseconds();
-				position.z += z * 180.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.x += x * jetStreamAttackCase1Speed * deltaTime->DeltaTimeDividedByMiliseconds();
+				position.z += z * jetStreamAttackCase1Speed * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 
 			if (timer > 45.0f)
@@ -1151,7 +1151,7 @@ void EnemyHuman::Update()
 		}
 	}
 
-	if (animationNo == 9 || animationNo == 10)
+	if (animationNo == Animation::LANDINGANIMATION || animationNo == Animation::CHARGEANIMATION)
 	{
 		SetScale({ 0.15f * 0.01f, 0.15f * 0.01f, 0.15f * 0.01f });
 		if (rotation.x != yRotationOffset)

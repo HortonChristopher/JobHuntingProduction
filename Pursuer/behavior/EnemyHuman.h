@@ -488,6 +488,7 @@ protected:
 	const float twoEnemySurroundCase1RotOffset = 270.0f;
 	const float case1SurroundSpeedDefault = 40.0f;
 	const float case1SurroundSpeedMax = 180.0f;
+	const float jetStreamAttackCase1Speed = 180.0f;
 
 	const float slowMotionHalfMultiplier = 0.5f;
 	const float slowMotionDoubleMultiplier = 2.0f;
