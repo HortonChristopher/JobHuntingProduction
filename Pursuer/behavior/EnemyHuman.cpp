@@ -1142,18 +1142,18 @@ void EnemyHuman::Update()
 		break;
 	}
 
-	if (animationNo != 9 && animationNo != 10)
+	if (animationNo != Animation::LANDINGANIMATION && animationNo != Animation::CHARGEANIMATION)
 	{
-		SetScale({ 0.15f, 0.15f, 0.15f });
-		if (rotation.x != 0.0f)
+		SetScale({ scaleReset, scaleReset, scaleReset });
+		if (rotation.x != initialDegree)
 		{
-			rotation.x = 0.0f;
+			rotation.x = initialDegree;
 		}
 	}
 
 	if (animationNo == Animation::LANDINGANIMATION || animationNo == Animation::CHARGEANIMATION)
 	{
-		SetScale({ 0.15f * 0.01f, 0.15f * 0.01f, 0.15f * 0.01f });
+		SetScale({ scaleReset * landingAttackScale, scaleReset * landingAttackScale, scaleReset * landingAttackScale });
 		if (rotation.x != yRotationOffset)
 		{
 			rotation.x = yRotationOffset;
@@ -1592,7 +1592,7 @@ void EnemyHuman::Reset()
 	ableToDamage = true;
 	set = false;
 	particleAttackActive = false;
-	attackTimer = 0.0f;
+	attackTimer = timerReset;
 	timer = 238.0f;
 	particleAttackStage = 0;
 	modelChange = true;

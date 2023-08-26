@@ -490,6 +490,8 @@ protected:
 	const float case1SurroundSpeedMax = 180.0f;
 	const float jetStreamAttackCase1Speed = 180.0f;
 
+	const float scaleReset = 0.15f;
+
 	const float slowMotionHalfMultiplier = 0.5f;
 	const float slowMotionDoubleMultiplier = 2.0f;
 	const float slowMotionOneAndHalfMultiplier = 1.5f;
