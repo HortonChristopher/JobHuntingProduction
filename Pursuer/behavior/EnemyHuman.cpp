@@ -1165,78 +1165,78 @@ void EnemyHuman::Update()
 		switch (animationNo)
 		{
 		case 0:
-			startFrame = 1;
-			endFrame = 359;
+			startFrame = standingStartFrame;
+			endFrame = standingEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 1:
-			startFrame = 361;
-			endFrame = 443;
+			startFrame = wanderStartFrame;
+			endFrame = wanderEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 2:
-			startFrame = 445;
-			endFrame = 474;
+			startFrame = aggroStartFrame;
+			endFrame = aggroEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 3:
-			startFrame = 476;
-			endFrame = 623;
+			startFrame = basicAttackStartFrame;
+			endFrame = basicAttackEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			startFrame = 625;
-			endFrame = 729;
+			startFrame = damageStartFrame;
+			endFrame = damageEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 5:
-			startFrame = 731;
-			endFrame = 946;
+			startFrame = deathStartFrame;
+			endFrame = deathEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 6:
-			startFrame = 948;
-			endFrame = 1027;
+			startFrame = jumpStartFrame;
+			endFrame = jumpEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 7:
-			startFrame = 1029;
-			endFrame = 1189;
+			startFrame = particleAttackStartFrame;
+			endFrame = particleAttackEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 8:
-			startFrame = 1191;
-			endFrame = 1226;
+			startFrame = fleeStartFrame;
+			endFrame = fleeEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 9:
-			startFrame = 1228;
-			endFrame = 1346;
+			startFrame = landingStartFrame;
+			endFrame = landingEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 10:
-			startFrame = 1228;
-			endFrame = 1281;
+			startFrame = chargeStartFrame;
+			endFrame = chargeEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;

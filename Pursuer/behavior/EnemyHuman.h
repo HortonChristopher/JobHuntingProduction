@@ -514,6 +514,30 @@ protected:
 
 	const float playerAttackDamage = 1.0f;
 	const float particleAttackJumpBackSpeed = 90.0f;
+
+	// Animation frames
+	const int standingStartFrame = 1;
+	const int standingEndFrame = 359;
+	const int wanderStartFrame = 361;
+	const int wanderEndFrame = 443;
+	const int aggroStartFrame = 445;
+	const int aggroEndFrame = 474;
+	const int basicAttackStartFrame = 476;
+	const int basicAttackEndFrame = 623;
+	const int damageStartFrame = 625;
+	const int damageEndFrame = 729;
+	const int deathStartFrame = 731;
+	const int deathEndFrame = 946;
+	const int jumpStartFrame = 948;
+	const int jumpEndFrame = 1027;
+	const int particleAttackStartFrame = 1029;
+	const int particleAttackEndFrame = 1189;
+	const int fleeStartFrame = 1191;
+	const int fleeEndFrame = 1226;
+	const int landingStartFrame = 1228;
+	const int landingEndFrame = 1346;
+	const int chargeStartFrame = 1228;
+	const int chargeEndFrame = 1281;
 public:
 	XMFLOAT3 cooldownPosition = { 0.0f, 0.0f, 0.0f };
 	XMFLOAT3 meetingPoint = { 0.0f, 0.0f, 0.0f };
