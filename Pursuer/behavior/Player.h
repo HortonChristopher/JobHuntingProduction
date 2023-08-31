@@ -78,6 +78,20 @@ public:
 
 	FrameSpeed frameSpeed = NORMAL;
 
+	enum AnimationName
+	{
+		STAND = 0,
+		WALK = 1,
+		RUN = 2,
+		STRAFEL = 3,
+		STRAFER = 4,
+		STRAFEB = 5,
+		DODGE = 6,
+		ATTACK = 7
+	};
+
+	AnimationName animationName = STAND;
+
 public:
 	/// <summary>
 	/// Initialization

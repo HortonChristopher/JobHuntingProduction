@@ -74,51 +74,51 @@ void Player::Update()
 	switch (enumStatus)
 	{
 	case STAND:
-		if (animationNo != 0)
+		if (animationNo != AnimationName::STAND)
 		{
-			animationNo = 0;
+			animationNo = AnimationName::STAND;
 			animationSet = false;
 		}
 		break;
 	case WALK:
-		if (animationNo != 1)
+		if (animationNo != AnimationName::WALK)
 		{
-			animationNo = 1;
+			animationNo = AnimationName::WALK;
 			animationSet = false;
 		}
 		break;
 	case RUN:
-		if (animationNo != 2)
+		if (animationNo != AnimationName::RUN)
 		{
-			animationNo = 2;
+			animationNo = AnimationName::RUN;
 			animationSet = false;
 		}
 		break;
 	case STRAFEL:
-		if (animationNo != 3)
+		if (animationNo != AnimationName::STRAFEL)
 		{
-			animationNo = 3;
+			animationNo = AnimationName::STRAFEL;
 			animationSet = false;
 		}
 		break;
 	case STRAFER:
-		if (animationNo != 4)
+		if (animationNo != AnimationName::STRAFER)
 		{
-			animationNo = 4;
+			animationNo = AnimationName::STRAFER;
 			animationSet = false;
 		}
 		break;
 	case STRAFEB:
-		if (animationNo != 5)
+		if (animationNo != AnimationName::STRAFEB)
 		{
-			animationNo = 5;
+			animationNo = AnimationName::STRAFEB;
 			animationSet = false;
 		}
 		break;
 	case DODGE:
-		if (animationNo != 6)
+		if (animationNo != AnimationName::DODGE)
 		{
-			animationNo = 6;
+			animationNo = AnimationName::DODGE;
 			animationSet = false;
 		}
 		if (dodgeStartPosition.x == 0.0f && dodgeStartPosition.y == 10.0f && dodgeStartPosition.z == 0.0f)
@@ -143,10 +143,10 @@ void Player::Update()
 		timer += dodgeCameraTime * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case ATTACK:
-		if (animationNo != 7)
+		if (animationNo != AnimationName::ATTACK)
 		{
 			timer = resetTime;
-			animationNo = 7;
+			animationNo = AnimationName::ATTACK;
 			animationSet = false;
 		}
 
