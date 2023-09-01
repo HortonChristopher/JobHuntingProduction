@@ -307,6 +307,7 @@ protected:
 
 	const float deltaTimeOneSecond = 60.0f;
 	const float resetTime = 0.0f;
+	const float zeroFloatReset = 0.0f;
 
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
