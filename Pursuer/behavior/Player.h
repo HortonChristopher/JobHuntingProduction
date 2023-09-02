@@ -80,14 +80,14 @@ public:
 
 	enum AnimationName
 	{
-		STAND = 0,
-		WALK = 1,
-		RUN = 2,
-		STRAFEL = 3,
-		STRAFER = 4,
-		STRAFEB = 5,
-		DODGE = 6,
-		ATTACK = 7
+		STANDANIMATION = 0,
+		WALKANIMATION = 1,
+		RUNANIMATION = 2,
+		STRAFELANIMATION = 3,
+		STRAFERANIMATION = 4,
+		STRAFEBANIMATION = 5,
+		DODGEANIMATION = 6,
+		ATTACKANIMATION = 7
 	};
 
 	AnimationName animationName = STAND;

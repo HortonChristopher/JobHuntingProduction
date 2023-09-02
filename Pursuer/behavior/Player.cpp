@@ -217,14 +217,14 @@ void Player::Update()
 	case DAMAGED:
 		if (animationNo != 8)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			frameSpeed = ONEPOINTFIVE;
 			animationNo = 8;
 			animationSet = false;
 		}
 		if (currentTime > endTime && timer > 0.0f)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			frameSpeed = NORMAL;
 			enumStatus = STAND;
 		}
@@ -233,13 +233,13 @@ void Player::Update()
 	case DEAD:
 		if (animationNo != 9)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			animationNo = 9;
 			animationSet = false;
 		}
 		if (currentTime - startTime > endTime - startTime && timer > 0.0f)
 		{
-			timer = 0.0f;
+			timer = resetTime;
 			isPlayerDead = true;
 		}
 		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
