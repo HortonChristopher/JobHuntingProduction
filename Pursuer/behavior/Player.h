@@ -90,7 +90,7 @@ public:
 		ATTACKANIMATION = 7
 	};
 
-	AnimationName animationName = STAND;
+	AnimationName animationName = STANDANIMATION;
 
 public:
 	/// <summary>
