@@ -309,6 +309,10 @@ protected:
 	const float resetTime = 0.0f;
 	const float zeroFloatReset = 0.0f;
 
+	float staminaMax = 100.0f;
+	float staminaRecharge = 25.0f;
+	float dodgeStaminaUse = 40.0f;
+
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
 	bool movementAllowed = false;

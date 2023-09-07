@@ -565,7 +565,7 @@ void Player::Update()
 
 		if (input->TriggerKey(DIK_LCONTROL) && !dodge && stamina >= 40.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina >= 40.0f)
 		{
-			stamina -= 40.0f;
+			stamina -= dodgeStaminaUse;
 			enumStatus = DODGE;
 		}
 		else if (input->TriggerKey(DIK_LCONTROL) && !dodge && stamina < 40.0f || input->TriggerControllerButton(XINPUT_GAMEPAD_B) && !dodge && stamina < 40.0f)
@@ -602,9 +602,9 @@ void Player::Update()
 
 		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
 		{
-			if (stamina < 100.0f)
+			if (stamina < staminaMax)
 			{
-				stamina += 25.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				stamina += staminaRecharge * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 		}
 	}
