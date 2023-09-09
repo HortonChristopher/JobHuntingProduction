@@ -575,15 +575,15 @@ void Player::Update()
 
 		if (slowMotion)
 		{
-			powerRemaining -= 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			powerRemaining -= slowMotionPowerUse * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
 
 		if (lowStaminaWarningActivation)
 		{
-			staminaWarningSpriteAlpha = 1.0f;
+			staminaWarningSpriteAlpha = maxStaminaWarningSpriteAlpha;
 			lowStaminaWarningActivation = false;
 		}
-		else if (!lowStaminaWarningActivation && staminaWarningSpriteAlpha > 0.0f)
+		else if (!lowStaminaWarningActivation && staminaWarningSpriteAlpha > floatZero)
 		{
 			if (lowStaminaWarningTimer >= 15.0f)
 			{
@@ -591,13 +591,13 @@ void Player::Update()
 			}
 			else
 			{
-				lowStaminaWarningTimer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+				lowStaminaWarningTimer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			}
 		}
 		else
 		{
-			staminaWarningSpriteAlpha = 0.0f;
-			lowStaminaWarningTimer = 0.0f;
+			staminaWarningSpriteAlpha = floatZero;
+			lowStaminaWarningTimer = floatZero;
 		}
 
 		if (!input->PushKey(DIK_LSHIFT) && !input->PushControllerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) && !input->PushControllerButton(XINPUT_GAMEPAD_LEFT_SHOULDER))

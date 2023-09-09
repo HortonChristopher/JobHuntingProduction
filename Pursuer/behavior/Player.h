@@ -313,6 +313,14 @@ protected:
 	float staminaRecharge = 25.0f;
 	float dodgeStaminaUse = 40.0f;
 
+	const float slowMotionPowerUse = 40.0f;
+
+	const float maxStaminaWarningSpriteAlpha = 1.0f;
+
+	const float timerOneSecond = 60.0f;
+
+	const float floatZero = 0.0f;
+
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
 	bool movementAllowed = false;
