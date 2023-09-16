@@ -150,7 +150,7 @@ void Player::Update()
 			animationSet = false;
 		}
 
-		if (timer < 48.0f || timer > 68.0f && timer < 84.0f || timer > 104.0f && timer < 146.0f || timer > 166.0f)
+		if (timer < attackFirstStart || timer > attackFirstEnd && timer < attackSecondStart || timer > attackSecondEnd && timer < attackThirdStart || timer > attackThirdEnd)
 		{
 			frameSpeed = ONEPOINTFIVE;
 		}
@@ -164,7 +164,7 @@ void Player::Update()
 		case 0:
 			break;
 		case 1:
-			if (currentTime - startTime > (endTime - startTime) / 3 && timer > 0.0f)
+			if (currentTime - startTime > (endTime - startTime) / 3 && timer > floatZero)
 			{
 				timer = resetTime;
 				attackCombo = 0;
@@ -173,18 +173,18 @@ void Player::Update()
 			}
 			break;
 		case 2:
-			if (currentTime - startTime > (endTime - startTime) / 2 && timer > 0.0f)
+			if (currentTime - startTime > (endTime - startTime) / 2 && timer > floatZero)
 			{
-				timer = 0.0f;
+				timer = floatZero;
 				attackCombo = 0;
 				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
 			break;
 		case 3:
-			if (currentTime - startTime > endTime - startTime && timer > 0.0f)
+			if (currentTime - startTime > endTime - startTime && timer > floatZero)
 			{
-				timer = 0.0f;
+				timer = floatZero;
 				attackCombo = 0;
 				frameSpeed = NORMAL;
 				enumStatus = STAND;
@@ -195,7 +195,7 @@ void Player::Update()
 		switch (frameSpeed)
 		{
 		case NORMAL:
-			timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case HALF:
 			timer += 30.0f * deltaTime->DeltaTimeDividedByMiliseconds();

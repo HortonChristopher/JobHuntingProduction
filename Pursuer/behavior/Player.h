@@ -321,6 +321,13 @@ protected:
 
 	const float floatZero = 0.0f;
 
+	const float attackFirstStart = 48.0f;
+	const float attackFirstEnd = 68.0f;
+	const float attackSecondStart = 84.0f;
+	const float attackSecondEnd = 104.0f;
+	const float attackThirdStart = 146.0f;
+	const float attackThirdEnd = 166.0f;
+
 	float debugTimer = 0.0f;
 	float dodgeCameraTime = 0.0f;
 	bool movementAllowed = false;
