@@ -318,8 +318,13 @@ protected:
 	const float maxStaminaWarningSpriteAlpha = 1.0f;
 
 	const float timerOneSecond = 60.0f;
+	const float timerHalfSecond = 30.0f;
+	const float timerTwoSeconds = 120.0f;
+	const float timerOneAndHalfSecond = 90.0f;
+	const float timerThreeQuartersSecond = 45.0f;
 
 	const float floatZero = 0.0f;
+	const int intZero = 0;
 
 	const float attackFirstStart = 48.0f;
 	const float attackFirstEnd = 68.0f;

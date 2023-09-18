@@ -167,7 +167,7 @@ void Player::Update()
 			if (currentTime - startTime > (endTime - startTime) / 3 && timer > floatZero)
 			{
 				timer = resetTime;
-				attackCombo = 0;
+				attackCombo = intZero;
 				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
@@ -176,7 +176,7 @@ void Player::Update()
 			if (currentTime - startTime > (endTime - startTime) / 2 && timer > floatZero)
 			{
 				timer = floatZero;
-				attackCombo = 0;
+				attackCombo = intZero;
 				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
@@ -185,7 +185,7 @@ void Player::Update()
 			if (currentTime - startTime > endTime - startTime && timer > floatZero)
 			{
 				timer = floatZero;
-				attackCombo = 0;
+				attackCombo = intZero;
 				frameSpeed = NORMAL;
 				enumStatus = STAND;
 			}
@@ -198,19 +198,19 @@ void Player::Update()
 			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case HALF:
-			timer += 30.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerHalfSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case DOUBLE:
-			timer += 120.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerTwoSeconds * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case ONEPOINTFIVE:
-			timer += 90.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneAndHalfSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		case POINTSEVENFIVE:
-			timer += 45.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerThreeQuartersSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		default:
-			timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 			break;
 		}
 		break;
@@ -222,13 +222,13 @@ void Player::Update()
 			animationNo = 8;
 			animationSet = false;
 		}
-		if (currentTime > endTime && timer > 0.0f)
+		if (currentTime > endTime && timer > floatZero)
 		{
 			timer = resetTime;
 			frameSpeed = NORMAL;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+		timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case DEAD:
 		if (animationNo != 9)
