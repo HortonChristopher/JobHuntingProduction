@@ -280,26 +280,26 @@ void Player::Update()
 		if (currentTime > endTime && timer > 0.0f)
 		{
 			debugTimer = timer;
-			timer = 0.0f;
+			timer = floatZero;
 			healed = false;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+		timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	case PARRY:
 		if (animationNo != 11)
 		{
-			timer = 0.0f;
+			timer = floatZero;
 			animationNo = 11;
 			animationSet = false;
 		}
 
 		if (currentTime > endTime && timer > 0.0f)
 		{
-			timer = 0.0f;
+			timer = floatZero;
 			enumStatus = STAND;
 		}
-		timer += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+		timer += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 		break;
 	}
 
@@ -308,7 +308,7 @@ void Player::Update()
 		SetScale({ 0.075f, 0.075f, 0.075f });
 		if (rotation.x != 0.0f)
 		{
-			rotation.x = 0.0f;
+			rotation.x = floatZero;
 		}
 	}
 	else if (animationNo == 11)
@@ -355,13 +355,13 @@ void Player::Update()
 
 		if (input->TriggerMouseMiddle() && enumStatus != ATTACK || input->TriggerControllerButton(XINPUT_GAMEPAD_X))
 		{
-			timer = 0.0f;
+			timer = floatZero;
 			enumStatus = PARRY;
 		}
 
 		if (parryActive && powerRemaining < 100.0f)
 		{
-			powerRemaining += 60.0f * deltaTime->DeltaTimeDividedByMiliseconds();
+			powerRemaining += timerOneSecond * deltaTime->DeltaTimeDividedByMiliseconds();
 
 			if (powerRemaining >= 100.0f)
 			{
@@ -369,7 +369,7 @@ void Player::Update()
 			}
 		}
 
-		if (input->TriggerKey(DIK_H) && healRemaining > 0 && enumStatus != HEAL||
+		if (input->TriggerKey(DIK_H) && healRemaining > intZero && enumStatus != HEAL||
 			input->TriggerControllerButton(XINPUT_GAMEPAD_Y) && healRemaining > 0 && enumStatus != HEAL)
 		{
 			enumStatus = HEAL;
@@ -383,7 +383,7 @@ void Player::Update()
 			{
 				if (enumStatus == ATTACK)
 				{
-					if (timer < 48.0f || timer > 68.0f && timer < 84.0f || timer > 104.0f && timer < 146.0f || timer > 166.0f)
+					if (timer < attackFirstStart || timer > attackFirstEnd && timer < attackSecondStart || timer > attackSecondEnd && timer < attackThirdStart || timer > attackThirdEnd)
 					{
 						movementAllowed = true;
 					}
@@ -554,10 +554,10 @@ void Player::Update()
 					cosA = -1.0f;
 				radY = acos(cosA);
 				const Vector3 CrossVec = Vector3(0, 0, 1).Cross(camDirectionZ);
-				if (CrossVec.y < 0)
+				if (CrossVec.y < intZero)
 					radY *= -1;
 
-				cameraMoveCounter = 0.0f;
+				cameraMoveCounter = floatZero;
 
 				cameraResetActive = true;
 			}
