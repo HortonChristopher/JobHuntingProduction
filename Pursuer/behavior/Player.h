@@ -326,6 +326,13 @@ protected:
 	const float floatZero = 0.0f;
 	const int intZero = 0;
 
+	const int standStartFrame = 1;
+	const int standEndFrame = 359;
+	const int walkStartFrame = 361;
+	const int walkEndFrame = 416;
+	const int runStartFrame = 418;
+	const int runEndFrame = 447;
+
 	const float attackFirstStart = 48.0f;
 	const float attackFirstEnd = 68.0f;
 	const float attackSecondStart = 84.0f;

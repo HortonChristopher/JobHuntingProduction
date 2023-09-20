@@ -614,22 +614,22 @@ void Player::Update()
 		switch (animationNo)
 		{
 		case 0:
-			startFrame = 1;
-			endFrame = 359;
+			startFrame = standStartFrame;
+			endFrame = standEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 1:
-			startFrame = 361;
-			endFrame = 416;
+			startFrame = walkStartFrame;
+			endFrame = walkEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 2:
-			startFrame = 418;
-			endFrame = 447;
+			startFrame = runStartFrame;
+			endFrame = runEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
