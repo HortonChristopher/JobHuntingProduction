@@ -332,6 +332,12 @@ protected:
 	const int walkEndFrame = 416;
 	const int runStartFrame = 418;
 	const int runEndFrame = 447;
+	const int strafeLStartFrame = 449;
+	const int strafeLEndFrame = 487;
+	const int strafeRStartFrame = 489;
+	const int strafeREndFrame = 527;
+	const int strafeBStartFrame = 529;
+	const int strafeBEndFrame = 566;
 
 	const float attackFirstStart = 48.0f;
 	const float attackFirstEnd = 68.0f;

@@ -635,22 +635,22 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 3:
-			startFrame = 449;
-			endFrame = 487;
+			startFrame = strafeLStartFrame;
+			endFrame = strafeLEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 4:
-			startFrame = 489;
-			endFrame = 527;
+			startFrame = strafeRStartFrame;
+			endFrame = strafeREndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 5:
-			startFrame = 529;
-			endFrame = 566;
+			startFrame = strafeBStartFrame;
+			endFrame = strafeBEndFrame;
 			repeatAnimation = true;
 			isPlay = false;
 			animationSet = true;
