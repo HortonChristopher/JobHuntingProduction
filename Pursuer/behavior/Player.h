@@ -338,6 +338,14 @@ protected:
 	const int strafeREndFrame = 527;
 	const int strafeBStartFrame = 529;
 	const int strafeBEndFrame = 566;
+	const int dodgeStartFrame = 926;
+	const int dodgeEndFrame = 998;
+	const int attackStartFrame = 568;
+	const int attackEndFrame = 818;
+	const int damagedStartFrame = 820;
+	const int damagedEndFrame = 924;
+	const int deadStartFrame = 1000;
+	const int deadEndFrame = 1139;
 
 	const float attackFirstStart = 48.0f;
 	const float attackFirstEnd = 68.0f;

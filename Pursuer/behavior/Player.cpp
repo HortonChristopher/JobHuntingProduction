@@ -656,29 +656,29 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 6:
-			startFrame = 926;
-			endFrame = 998;
+			startFrame = dodgeStartFrame;
+			endFrame = dodgeEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 7:
-			startFrame = 568;
-			endFrame = 818;
+			startFrame = attackStartFrame;
+			endFrame = attackEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 8:
-			startFrame = 820;
-			endFrame = 924;
+			startFrame = damagedStartFrame;
+			endFrame = damagedEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 9:
-			startFrame = 1000;
-			endFrame = 1139;
+			startFrame = deadStartFrame;
+			endFrame = deadEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
