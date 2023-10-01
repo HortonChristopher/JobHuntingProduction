@@ -346,6 +346,10 @@ protected:
 	const int damagedEndFrame = 924;
 	const int deadStartFrame = 1000;
 	const int deadEndFrame = 1139;
+	const int healStartFrame = 1141;
+	const int healEndFrame = 1299;
+	const int parryStartFrame = 1301;
+	const int parryEndFrame = 1339;
 
 	const float attackFirstStart = 48.0f;
 	const float attackFirstEnd = 68.0f;

@@ -237,7 +237,7 @@ void Player::Update()
 			animationNo = 9;
 			animationSet = false;
 		}
-		if (currentTime - startTime > endTime - startTime && timer > 0.0f)
+		if (currentTime - startTime > endTime - startTime && timer > floatZero)
 		{
 			timer = resetTime;
 			isPlayerDead = true;
@@ -277,7 +277,7 @@ void Player::Update()
 		{
 			healParticlePosition[2].y += 40.0f * deltaTime->DeltaTimeDividedByMiliseconds();
 		}
-		if (currentTime > endTime && timer > 0.0f)
+		if (currentTime > endTime && timer > floatZero)
 		{
 			debugTimer = timer;
 			timer = floatZero;
@@ -306,7 +306,7 @@ void Player::Update()
 	if (animationNo != 11)
 	{
 		SetScale({ 0.075f, 0.075f, 0.075f });
-		if (rotation.x != 0.0f)
+		if (rotation.x != floatZero)
 		{
 			rotation.x = floatZero;
 		}
@@ -684,15 +684,15 @@ void Player::Update()
 			animationSet = true;
 			break;
 		case 10:
-			startFrame = 1141;
-			endFrame = 1299;
+			startFrame = healStartFrame;
+			endFrame = healEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
 			break;
 		case 11:
-			startFrame = 1301;
-			endFrame = 1339;
+			startFrame = parryStartFrame;
+			endFrame = parryEndFrame;
 			repeatAnimation = false;
 			isPlay = false;
 			animationSet = true;
